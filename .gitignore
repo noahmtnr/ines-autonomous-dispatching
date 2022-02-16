@@ -1,2 +1,5 @@
 .ipynb_checkpoints
 */.ipynb_checkpoints/*
+.cache
+*/.cache/*
+.DS_Store
