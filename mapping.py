@@ -5,12 +5,12 @@ import time
 
 
 def setup_graph() -> pd.DataFrame():
-    graph = ox.io.load_graphml("data/full.graphml")
+    graph = ox.io.load_graphml("data/graph/full.graphml")
     # graph = ox.graph_from_place('Manhattan, New York City, New York, USA', network_type='drive', simplify=False)
     # graph = ox.add_edge_speeds(graph)
     # graph = ox.add_edge_travel_times(graph)
     # ox.add_edge_travel_times(graph)
-    # ox.save_graphml(graph, filepath="./data/full.graphml")
+    # ox.save_graphml(graph, filepath="./data/graph/full.graphml")
     return graph
 
 
