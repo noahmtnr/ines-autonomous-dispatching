@@ -95,8 +95,8 @@ def map_routes_to_trips(graph: nx.MultiDiGraph, trips: pd.DataFrame):
 graph = setup_graph()
 # trips = setup_trips(5000)
 # trips_with_nodes = map_trips_to_nodes(graph, trips)
-# trips_with_nodes.to_csv("trips_with_nodes.csv")
+# trips_with_nodes.to_csv("data/trips/trips_with_nodes.csv")
 
-trips = pd.read_csv("trips_with_nodes.csv")
+trips = pd.read_csv("data/trips/trips_with_nodes.csv")
 trips_eith_routes = map_routes_to_trips(graph, trips)
-trips_eith_routes.to_csv("trips_with_routes.csv")
+trips_eith_routes.to_csv("data/trips/trips_with_routes.csv")
