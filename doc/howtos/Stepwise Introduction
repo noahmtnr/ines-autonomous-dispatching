@@ -8,7 +8,7 @@
 5. install Anaconda (see "Anaconda Installation")
 6. make yourself familiar with Jupyter Notebook / Google Colab (see "Introduction to Python")
 7. install packages (see "Readme")
-8. make familiar with Pandas, Geopandas, OSMnx, PyTorch
+8. make familiar with Pandas, Geopandas, OSMnx, PyTorch, RLlib
 
 9. read papers/articles/books about graphs, Reinforcement Learning and Deep Reinforcement Learning
 10. read the "Structure of Report/Project" until "Data Overview, Pre-Processing and ..."
