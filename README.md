@@ -14,8 +14,8 @@ Donwload Anaconda: https://www.anaconda.com/products/individual
 4) Install pytorch within teamproject environment
   - $ pip3 install torch torchvision torchaudio
 5) Install open AI gym
-  - $ pip install gym
-  - $ pip install pygame
+ - $ pip install pygame
+ - $ pip install gym
 6) Install RLlib within teamproject env
   - $ pip install -U ray
   - $ pip install ray[rllib]
