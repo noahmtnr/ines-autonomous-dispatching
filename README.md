@@ -20,5 +20,9 @@ $ conda activate ines-ad
   - open anaconda navigator, select environment teamproject in the drop down menu and install Jupyter Notebook
 4) Install pytorch within teamproject environment
   - $ pip3 install torch torchvision torchaudio
-5) Install RLlib within teamproject env
-  - $ pip install ray[rllib] --user
+5) Install open AI gym
+  - $ pip install gym
+  - $ pip install pygame
+6) Install RLlib within teamproject env
+  - $ pip install -U ray
+  - $ pip install ray[rllib]
