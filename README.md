@@ -1,15 +1,8 @@
 # ines-autonomous-dispatching
 InES Team Project SS22 - Autonomous Dispatching System
 
-<b>To create conda environment based on spec file</b><br/>
-$ conda env create -f win_env.yaml <br/>
-OR <br>
-$ conda env create -f mac_env.yaml <br/><br/>
-
-<b/>To activate conda environment, use</b><br/>
-$ conda activate ines-ad
-
 ## Package Installation process:
+Donwload Anaconda: https://www.anaconda.com/products/individual
 1) Install Python version 3.9 in anaconda prompt
   - $ conda install python = 3.9
 3) create new environment
