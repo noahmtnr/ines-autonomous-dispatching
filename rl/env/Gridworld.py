@@ -22,11 +22,6 @@ class Environment:
         self.board_cols = board_cols
         #self.determine = DETERMINISTIC
 
-    def updateReward(self, reward):
-        if self.position == self.final_hub:
-            self.reward += 1
-        else:
-            self.reward -= 0.1 
 
     # def isEndFunc(self):
     #     if (self.position == self.final_hub):
