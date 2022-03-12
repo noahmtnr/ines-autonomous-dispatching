@@ -15,7 +15,16 @@ from folium.plugins import MarkerCluster
 
 class Environment:
 
-    def __init__(self, graph, start_hub, final_hub): # TODO: add action space -> import gym.spaces -> action_space = Discrete(3)
+    def __init__(self, graph: nx.MultiDiGraph, start_hub: int, final_hub: int): # TODO: add action space -> import gym.spaces -> action_space = Discrete(3)
+        """_summary_
+
+        Args:
+            graph (nx.MultiDiGraph): graph
+            start_hub (int): nodeId
+            final_hub (int): nodeId
+
+        """
+
         self.graph = graph.graph
 
         if self.graph.has_node(start_hub):
@@ -29,29 +38,33 @@ class Environment:
         else:
             return 'Initialized final hub was not found in graph'
 
-    def makeMove(self, action):
-        #TODO
-        #need to determine what object (if any) is in the new grid spot the player is moving to
-        #actions in {u,d,l,r}
-        oldposition = self.position
+    def step(self, action):
+        """ Executes an action based on the index passed as a parameter
 
-        if action == 'u': #up
-            nxtposition = (self.position[0] - 1, self.position[1])
-        elif action == 'd': #down
-            nxtposition = (self.position[0] + 1, self.position[1])
-        elif action == 'l': #left
-            nxtposition = (self.position[0], self.position[1] - 1)
-        elif action == 'r': #right
-            nxtposition = (self.position[0], self.position[1] + 1)
+        Args:
+            action (int): index of action to be taken from availableActions
+
+        Returns:
+            int: new position
+            int: new reward
+            boolean: isDone
+        """
+        old_position = self.position
+        neighbors = self.availableActions()
+
+        if self.validateAction(action):
+            self.position = neighbors[action]
         else:
             pass
 
-        if (nxtposition[0] >= 0) and (nxtposition[0] <= (self.board_rows -1)):
-            if (nxtposition[1] >= 0) and (nxtposition[1] <= (self.board_cols -1)):
-                if nxtposition != (1, 1):
-                    self.position = nxtposition
-
         return self.position, self.reward(), self.isDone()
+
+    def availableActions(self):
+        neighbors = list(self.graph.neighbors(self.position))
+        return neighbors
+
+    def validateAction(self, action):
+        return action < len(self.availableActions())
 
     def isDone(self):
         return self.position == self.final_hub
@@ -64,7 +77,15 @@ class Environment:
         else:
             return -1
 
-    def visualize(self):
+    def render(self, visualize_actionspace: bool = False):
+        """_summary_
+
+        Args:
+            visualize_actionspace (bool, optional): _description_. Defaults to False.
+
+        Returns:
+            _type_: _description_
+        """
         current_pos_x = self.graph.nodes[self.position]['x']
         current_pos_y = self.graph.nodes[self.position]['y']
         final_hub_x = self.graph.nodes[self.final_hub]['x']
@@ -76,17 +97,24 @@ class Environment:
         plot = ox.plot_graph_folium(self.graph,fit_bounds=True, weight=2, color="#333333")
 
         # Place markers for start, final and current position
-        folium.Marker(location=[final_hub_y, final_hub_x], icon=folium.Icon(color='gray', prefix='fa', icon='flag-checkered')).add_to(plot)
+        folium.Marker(location=[final_hub_y + 10, final_hub_x], icon=folium.Icon(color='red', prefix='fa', icon='flag-checkered')).add_to(plot)
+        folium.Marker(location=[start_hub_y, start_hub_x], icon=folium.Icon(color='lightblue', prefix='fa', icon='caret-right')).add_to(plot)
         folium.Marker(location=[current_pos_y, current_pos_x], icon=folium.Icon(color='lightgreen', prefix='fa',icon='cube')).add_to(plot)
-        folium.Marker(location=[start_hub_y, start_hub_x], icon=folium.Icon(color='beige', prefix='fa', icon='caret-right')).add_to(plot)
-        
+
+        if(visualize_actionspace):
+            for i, target_node in enumerate(self.availableActions()):
+                target_node_x = self.graph.nodes[target_node]['x']
+                target_node_y = self.graph.nodes[target_node]['y']
+                popup = "%s: go to node %d" % (i, target_node)
+                folium.Marker(location=[target_node_y, target_node_x], popup = popup, tooltip=str(i)).add_to(plot)
+
         # Plot
         pos_to_final = nx.shortest_path(self.graph, self.position, self.final_hub, weight="travel_time")
-        ox.plot_route_folium(G=self.graph,route=pos_to_final,route_map=plot)
-
+        print(pos_to_final)
+        if(not len(pos_to_final)< 2):
+            ox.plot_route_folium(G=self.graph,route=pos_to_final,route_map=plot)
 
         return plot
-
 
     def reset(self):
         # self.isDone = False
