@@ -3,7 +3,7 @@ from gym.utils import seeding
 import numpy as np
 import random
 
-class Gridworld_v1(gym.Env): # define custom environment as subclass of gym.Env
+class Gridworld_v0(gym.Env): # define custom environment as subclass of gym.Env
     # GLOBAL VARIABLES:
 
 
@@ -12,26 +12,32 @@ class Gridworld_v1(gym.Env): # define custom environment as subclass of gym.Env
     MAX_STEPS = 10
     REWARD_AWAY = -1
     REWARD_GOAL = MAX_STEPS
+
+    metadata = {
+    "render.modes": ["human"]
+  }
     
-    def _init_(self):
+    def __init__(self):
         self.action_space = gym.spaces.Discrete(4) # 4 valid actions (1- up, 2-down, 3-left, 4-right)
         self.observation_space = gym.spaces.Box(low=0, high=9,
                                         shape=(10,10), dtype=np.int) #the grid with 10x10 dimensions
         self.final_hub = (4, 3)
         self.hubs = [(random.randrange(0, 9), random.randrange(0, 9)) for i in range(5)] 
-        self.hubs.remove(self.final_hub)
+        if self.final_hub in self.hubs:
+            self.hubs.remove(self.final_hub)
 
-        #self.seed()
-        pass
+        self.seed()
+        self.reset()
 
     def step(self, action):
+        nxtposition=(-1,-1)
         if self.done:
             # should never reach this point
             print("EPISODE DONE!!!")
         elif self.count == self.MAX_STEPS:
             self.done = True
         else:
-            assert self.action_space.contains(action)
+            #assert self.action_space.contains(action)
             self.count += 1
             
             if action == 'u' or action == 1: #up
@@ -42,9 +48,11 @@ class Gridworld_v1(gym.Env): # define custom environment as subclass of gym.Env
                 nxtposition = (self.position[0], self.position[1] - 1)
             elif action == 'r' or action == 4: #right
                 nxtposition = (self.position[0], self.position[1] + 1)
+            else:
+                pass
 
-            if (nxtposition[0] >= 0) and (nxtposition[0] <= (self.board_rows -1)):
-                if (nxtposition[1] >= 0) and (nxtposition[1] <= (self.board_cols -1)):
+            if (nxtposition[0] >= 0) and (nxtposition[0] <= (self.RT_MAX)):
+                if (nxtposition[1] >= 0) and (nxtposition[1] <= (self.RT_MAX)):
                     if nxtposition != (1, 1):
                         self.position = nxtposition
             
@@ -59,14 +67,15 @@ class Gridworld_v1(gym.Env): # define custom environment as subclass of gym.Env
     
 
     
-        return [self.position, self.reward, self.done]
+        return [self.state, self.reward, self.done, "self.info"]
 
-    def render(self): # method for visualization; optional
-        s = "position: {:2d}  reward: {:2d}"
-        print(s.format(self.position, self.reward))
+    def render(self, mode="human"): # method for visualization; optional
+        s = "position: {:2d}, {:2d}  reward: {:2d}"
+        print(s.format(self.position[0],self.position[1], self.reward))
 
     def reset(self):
-        self.position = self.np_random.choice(self.hubs)
+        
+        self.position = self.hubs[random.randint(0, 4)]
         self.count = 0
         self.state = self.position # needed ? 
         self.reward = 0
@@ -76,8 +85,10 @@ class Gridworld_v1(gym.Env): # define custom environment as subclass of gym.Env
         
 
     def seed(self, seed=None): # optional
-        self.np_random, seed = seeding.np_random(seed)
-        return [seed]
+        # self.np_random, seed = seeding.np_random(seed)
+        # print(self.np_random)
+        # return [seed]
+        pass
 
     def close(self): # optional
         pass
