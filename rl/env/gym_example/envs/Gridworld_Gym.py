@@ -3,6 +3,7 @@ import gym
 from gym.utils import seeding
 import numpy as np
 import random
+import pandas as pd
 
 class Gridworld_v0(gym.Env): # define custom environment as subclass of gym.Env
     # GLOBAL VARIABLES:
@@ -32,7 +33,7 @@ class Gridworld_v0(gym.Env): # define custom environment as subclass of gym.Env
         self.reset()
         random_number = np.random.randint(31536000) # random seconds number in order to generate a random date
         self.time=datetime(2021,1,1,12,0,0)+timedelta(seconds=random_number)
-
+   
 
     def step(self, action):
         nxtposition=(-1,-1)
@@ -75,10 +76,35 @@ class Gridworld_v0(gym.Env): # define custom environment as subclass of gym.Env
     
         return [self.state, self.reward, self.done, "self.info"]
 
+    def availableActions(self):
+        position=str(self.position)
+        start_timestamp=str(self.time)
+        list=[]
+        time_window=5
+        end_timestamp = str(start_timestamp + timedelta(minutes=time_window))
+        grid=pd.read_csv('rl\env\data_gridworld_timestamps.csv')
+        #grid=grid.head(10)
+        paths=grid['Path Timestamp']
+        for index in range(len(paths)):
+            #print(grid['Path Timestamp'][index])
+            dict = eval(grid['Path Timestamp'][index])
+            for tupel_position in dict:
+                #print(tupel_position ,dict[tupel_position])
+                position_timestamp=dict[tupel_position]
+                if str(tupel_position) == position and start_timestamp <= position_timestamp \
+                and end_timestamp >= dict[tupel_position] and str(tupel_position) != grid['Dropoff Coordinates'][index]:
+                   list.append([position_timestamp,grid['Dropoff Coordinates'][index]])
+                   # TODO slice and retrun dictionary in order to get only the route to the final node from the current node
+        return list
+
+
+
     def render(self, mode="human"): # method for visualization; optional
         #s = "position: {:2d}  reward: {:2d} "
         # print(s.format(self.position, self.reward))
-        print("Position: "+ str(self.position)+ " Reward: "+ str(self.reward)+ " Time: "+str(self.time))
+        
+        # print("Position: "+ str(self.position)+ " Reward: "+ str(self.reward)+ " Time: "+str(self.time))
+        pass
 
 
     def reset(self):
