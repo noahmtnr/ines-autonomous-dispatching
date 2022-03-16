@@ -4,6 +4,7 @@ import osmnx as ox
 import networkx as nx
 import folium
 from folium.plugins import MarkerCluster
+from datetime import datetime, timedelta
 
 # global variables
 #board_rows = 3
@@ -15,7 +16,7 @@ from folium.plugins import MarkerCluster
 
 class Environment:
 
-    def __init__(self, graph: nx.MultiDiGraph, start_hub: int, final_hub: int): # TODO: add action space -> import gym.spaces -> action_space = Discrete(3)
+    def __init__(self, graph: nx.MultiDiGraph, start_hub: int, final_hub: int, pickup_time: datetime): # TODO: add action space -> import gym.spaces -> action_space = Discrete(3)
         """_summary_
 
         Args:
@@ -23,9 +24,11 @@ class Environment:
             start_hub (int): nodeId
             final_hub (int): nodeId
 
-        """
-
+        """  
         self.graph = graph.graph
+        self.time = pickup_time
+        self.pickup_time = pickup_time
+        self.rel_time = 0
 
         if self.graph.has_node(start_hub):
             self.start_hub = start_hub
@@ -54,10 +57,17 @@ class Environment:
 
         if self.validateAction(action):
             self.position = neighbors[action]
+            travel_time= self.graph.edges[(old_position, self.position, 0)]['travel_time']
+
+            # Increase global time state by travelled time (does not include waiting yet, in this case it should be +xx seconds)
+            self.time += timedelta(seconds=travel_time)
+
+            # Instead of cumulating trip duration here we return travel_time 
+            # self.rel_time += timedelta(seconds=travel_time)
         else:
             pass
 
-        return self.position, self.reward(), self.isDone()
+        return self.position, self.reward(), travel_time, self.isDone()
 
     def availableActions(self):
         neighbors = list(self.graph.neighbors(self.position))
@@ -98,8 +108,8 @@ class Environment:
 
         # Place markers for start, final and current position
         folium.Marker(location=[final_hub_y + 10, final_hub_x], icon=folium.Icon(color='red', prefix='fa', icon='flag-checkered')).add_to(plot)
-        folium.Marker(location=[start_hub_y, start_hub_x], icon=folium.Icon(color='lightblue', prefix='fa', icon='caret-right')).add_to(plot)
-        folium.Marker(location=[current_pos_y, current_pos_x], icon=folium.Icon(color='lightgreen', prefix='fa',icon='cube')).add_to(plot)
+        folium.Marker(location=[start_hub_y, start_hub_x], popup = f"Current timestamp: {self.pickup_time.strftime('%m/%d/%Y, %H:%M:%S')}", icon=folium.Icon(color='lightblue', prefix='fa', icon='caret-right')).add_to(plot)
+        folium.Marker(location=[current_pos_y, current_pos_x], popup = f"Current timestamp: {self.time.strftime('%m/%d/%Y, %H:%M:%S')}", icon=folium.Icon(color='lightgreen', prefix='fa',icon='cube')).add_to(plot)
 
         if(visualize_actionspace):
             for i, target_node in enumerate(self.availableActions()):
