@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 import gym
 from gym.utils import seeding
 import numpy as np
@@ -23,11 +24,15 @@ class Gridworld_v0(gym.Env): # define custom environment as subclass of gym.Env
                                         shape=(10,10), dtype=np.int) #the grid with 10x10 dimensions
         self.final_hub = (4, 3)
         self.hubs = [(random.randrange(0, 9), random.randrange(0, 9)) for i in range(5)] 
+
         if self.final_hub in self.hubs:
             self.hubs.remove(self.final_hub)
 
         self.seed()
         self.reset()
+        random_number = np.random.randint(31536000) # random seconds number in order to generate a random date
+        self.time=datetime(2021,1,1,12,0,0)+timedelta(seconds=random_number)
+
 
     def step(self, action):
         nxtposition=(-1,-1)
@@ -55,6 +60,7 @@ class Gridworld_v0(gym.Env): # define custom environment as subclass of gym.Env
                 if (nxtposition[1] >= 0) and (nxtposition[1] <= (self.RT_MAX)):
                     if nxtposition != (1, 1):
                         self.position = nxtposition
+                        self.time=self.time+timedelta(minutes=1)
             
             
             if self.position == self.final_hub:
@@ -70,8 +76,10 @@ class Gridworld_v0(gym.Env): # define custom environment as subclass of gym.Env
         return [self.state, self.reward, self.done, "self.info"]
 
     def render(self, mode="human"): # method for visualization; optional
-        s = "position: {:2d}, {:2d}  reward: {:2d}"
-        print(s.format(self.position[0],self.position[1], self.reward))
+        #s = "position: {:2d}  reward: {:2d} "
+        # print(s.format(self.position, self.reward))
+        print("Position: "+ str(self.position)+ " Reward: "+ str(self.reward)+ " Time: "+str(self.time))
+
 
     def reset(self):
         
