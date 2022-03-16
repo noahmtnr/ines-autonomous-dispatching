@@ -54,6 +54,7 @@ class Environment:
         """
         old_position = self.position
         neighbors = self.availableActions()
+        travel_time = 0
 
         if self.validateAction(action):
             self.position = neighbors[action]
@@ -107,9 +108,9 @@ class Environment:
         plot = ox.plot_graph_folium(self.graph,fit_bounds=True, weight=2, color="#333333")
 
         # Place markers for start, final and current position
-        folium.Marker(location=[final_hub_y + 10, final_hub_x], icon=folium.Icon(color='red', prefix='fa', icon='flag-checkered')).add_to(plot)
-        folium.Marker(location=[start_hub_y, start_hub_x], popup = f"Current timestamp: {self.pickup_time.strftime('%m/%d/%Y, %H:%M:%S')}", icon=folium.Icon(color='lightblue', prefix='fa', icon='caret-right')).add_to(plot)
-        folium.Marker(location=[current_pos_y, current_pos_x], popup = f"Current timestamp: {self.time.strftime('%m/%d/%Y, %H:%M:%S')}", icon=folium.Icon(color='lightgreen', prefix='fa',icon='cube')).add_to(plot)
+        folium.Marker(location=[final_hub_y, final_hub_x], icon=folium.Icon(color='red', prefix='fa', icon='flag-checkered')).add_to(plot)
+        folium.Marker(location=[start_hub_y, start_hub_x], popup = f"Pickup time: {self.pickup_time.strftime('%m/%d/%Y, %H:%M:%S')}", icon=folium.Icon(color='lightblue', prefix='fa', icon='caret-right')).add_to(plot)
+        folium.Marker(location=[current_pos_y, current_pos_x], popup = f"Current time: {self.time.strftime('%m/%d/%Y, %H:%M:%S')}", icon=folium.Icon(color='lightgreen', prefix='fa',icon='cube')).add_to(plot)
 
         if(visualize_actionspace):
             for i, target_node in enumerate(self.availableActions()):
