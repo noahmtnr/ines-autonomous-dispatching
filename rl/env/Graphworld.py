@@ -5,15 +5,6 @@ import networkx as nx
 import folium
 from folium.plugins import MarkerCluster
 from datetime import datetime, timedelta
-
-# global variables
-#board_rows = 3
-#board_colsboard_cols = 4
-
-#LOSE_position = (1, 3)
-#start_hub = (2, 0)
-#DETERMINISTIC = True
-
 class Environment:
 
     def __init__(self, graph: nx.MultiDiGraph, start_hub: int, final_hub: int, pickup_time: datetime): # TODO: add action space -> import gym.spaces -> action_space = Discrete(3)
@@ -26,6 +17,7 @@ class Environment:
 
         """  
         self.graph = graph.graph
+        self.graph.trips = graph.trips
         self.time = pickup_time
         self.pickup_time = pickup_time
         self.rel_time = 0
@@ -73,6 +65,28 @@ class Environment:
     def availableActions(self):
         neighbors = list(self.graph.neighbors(self.position))
         return neighbors
+
+    def availableTrips(self):
+        position=str(self.position)
+        start_timestamp=self.time
+        time_window=5
+        end_timestamp = self.time + timedelta(minutes=time_window)
+        grid=self.graph.trips
+        list=[]
+        paths=grid['node_timestamps']
+        
+        for index in range(len(paths)):
+            dict = grid['node_timestamps'][index]
+            for tupel_position in dict:
+                position_timestamp= datetime.strptime(dict[tupel_position], "%Y-%m-%d %H:%M:%S")
+                inTimeframe = start_timestamp <= position_timestamp and end_timestamp >= position_timestamp
+                samePosition = str(tupel_position) == str(position)
+                isNotFinalNode = str(tupel_position) != grid['dropoff_node'][index]
+
+                if samePosition and inTimeframe and isNotFinalNode:
+                   list.append([position_timestamp,grid['dropoff_node'][index]])
+                   # TODO slice and retrun dictionary in order to get only the route to the final node from the current node
+        return list
 
     def validateAction(self, action):
         return action < len(self.availableActions())
@@ -131,79 +145,3 @@ class Environment:
         # self.isDone = False
         self.position = self.start_hub
         pass
-
-# class Agent:
-
-#     def __init__(self):
-#         self.positions = []
-#         self.actions = ["up", "down", "left", "right"]
-#         self.position = position()
-#         # self.lr = 0.2
-#         # self.exp_rate = 0.3
-
-#         # initial position self.reward
-#         self.position_values = {}
-#         for i in range(board_rows):
-#             for j in range(board_colsboard_cols):
-#                 self.position_values[(i, j)] = 0  # set initial value to 0
-
-#     # def chooseAction(self):
-#     #     # choose action with most expected value
-#     #     mx_nxt_reward = 0
-#     #     action = ""
-
-#     #     if np.random.uniform(0, 1) <= self.exp_rate:
-#     #         action = np.random.choice(self.actions)
-#     #     else:
-#     #         # greedy action
-#     #         for a in self.actions:
-#     #             # if the action is deterministic
-#     #             nxt_reward = self.position_values[self.position.nxtPosition(a)]
-#     #             if nxt_reward >= mx_nxt_reward:
-#     #                 action = a
-#     #                 mx_nxt_reward = nxt_reward
-#     #     return action
-
-#     def takeAction(self, action):
-#         position = self.position.nxtPosition(action)
-#         return position(position=position)
-
-#     def reset(self):
-#         self.positions = []
-#         self.position = position()
-
-#     def play(self, rounds=10):
-#         i = 0
-#         while i < rounds:
-#             # to the end of game back propagate self.reward
-#             if self.position.isEnd:
-#                 # back propagate
-#                 self.reward = self.position.giveReward()
-#                 # explicitly assign end position to self.reward values
-#                 self.position_values[self.position.position] = self.reward  # this is optional
-#                 print("Game End Reward", self.reward)
-#                 for s in reversed(self.positions):
-#                     self.reward = self.position_values[s] + self.lr * (self.reward - self.position_values[s])
-#                     self.position_values[s] = round(self.reward, 3)
-#                 self.reset()
-#                 i += 1
-#             else:
-#                 action = self.chooseAction()
-#                 # append trace
-#                 self.positions.append(self.position.nxtPosition(action))
-#                 print("current position {} action {}".format(self.position.position, action))
-#                 # by taking the action, it reaches the next position
-#                 self.position = self.takeAction(action)
-#                 # mark is end
-#                 self.position.isEndFunc()
-#                 print("nxt position", self.position.position)
-#                 print("---------------------")
-
-#     def showValues(self):
-#         for i in range(0, board_rows):
-#             print('----------------------------------')
-#             out = '| '
-#             for j in range(0,board_cols):
-#                 out += str(self.position_values[(i, j)]).ljust(6) + ' | '
-#             print(out)
-#         print('----------------------------------')
