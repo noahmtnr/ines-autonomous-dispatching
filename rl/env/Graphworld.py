@@ -34,7 +34,7 @@ class Environment:
             return 'Initialized final hub was not found in graph'
 
     def step(self, action):
-        """ Executes an action based on the index passed as a parameter
+        """ Executes an action based on the index passed as a parameter (only works with moves to direct neighbors as of now)
 
         Args:
             action (int): index of action to be taken from availableActions
@@ -63,10 +63,20 @@ class Environment:
         return self.position, self.reward(), travel_time, self.isDone()
 
     def availableActions(self):
+        """ Returns the available actions at the current position. Uses a simplified action space with moves to all direct neighbors allowed.
+
+        Returns:
+            list: list of nodeIds of direct neighbors
+        """
         neighbors = list(self.graph.neighbors(self.position))
         return neighbors
 
     def availableTrips(self):
+        """ Returns a list of all available trips at the current node and within the next 5 minutes. Includes the time of departure from the current node as well as the target node of the trip.
+
+        Returns:
+            list: [departure_time,target_node]
+        """
         position=str(self.position)
         start_timestamp=self.time
         time_window=5
@@ -142,6 +152,7 @@ class Environment:
         return plot
 
     def reset(self):
-        # self.isDone = False
         self.position = self.start_hub
+        self.time = self.pickup_time
+        self.rel_time = 0
         pass

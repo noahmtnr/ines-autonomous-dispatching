@@ -20,6 +20,11 @@ class StreetGraph:
 
 
     def generateRandomTrips(self, n: int = 1000):
+        """Generates random trips within the graph and stores them in self.trips. The trips are randomly spread across January 2022.
+
+        Args:
+            n (int, optional): Number of trips to be generated. Defaults to 1000.
+        """
         
         graph = self.graph
 
