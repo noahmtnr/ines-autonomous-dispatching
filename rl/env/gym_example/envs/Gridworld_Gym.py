@@ -6,7 +6,6 @@ import random
 class Gridworld_v0(gym.Env): # define custom environment as subclass of gym.Env
     # GLOBAL VARIABLES:
 
-
     LF_MIN = 0
     RT_MAX = 9
     MAX_STEPS = 10
