@@ -5,6 +5,7 @@ import numpy as np
 import random
 import pandas as pd
 from gym import spaces
+import itertools
 
 class Gridworld_v1(gym.Env): # define custom environment as subclass of gym.Env
     # GLOBAL VARIABLES:
@@ -78,23 +79,28 @@ class Gridworld_v1(gym.Env): # define custom environment as subclass of gym.Env
     def availableActions(self):
         position=str(self.position)
         start_timestamp=str(self.time)
-        list=[]
+        possible_routes=[]
         time_window=5
         end_timestamp = str(start_timestamp + timedelta(minutes=time_window))
         grid=pd.read_csv('rl\env\data_gridworld_timestamps.csv')
-        #grid=grid.head(10)
         paths=grid['Path Timestamp']
+        
         for index in range(len(paths)):
-            #print(grid['Path Timestamp'][index])
-            dict = eval(grid['Path Timestamp'][index])
-            for tupel_position in dict:
-                #print(tupel_position ,dict[tupel_position])
-                position_timestamp=dict[tupel_position]
-                if str(tupel_position) == position and start_timestamp <= position_timestamp \
-                and end_timestamp >= dict[tupel_position] and str(tupel_position) != grid['Dropoff Coordinates'][index]:
-                   list.append([position_timestamp,grid['Dropoff Coordinates'][index]])
-                   # TODO slice and retrun dictionary in order to get only the route to the final node from the current node
-        return list
+            route_dict = eval(grid['Path Timestamp'][index])
+
+            for tupel_position in route_dict:
+                position_timestamp= route_dict[tupel_position]
+
+                if tupel_position == position and start_timestamp <= position_timestamp \
+                and end_timestamp >= route_dict[tupel_position] and tupel_position != grid['Dropoff Coordinates'][index]:
+                  
+                    route_dict_keys = list(route_dict)
+                    current_node_index = route_dict_keys.index(position)
+                    current_to_final_route_node=dict(itertools.islice(route_dict.items(),current_node_index,None))
+                    #print("sliced",current_to_final_route_node)
+                    possible_routes.append(current_to_final_route_node)
+
+        return possible_routes
 
 
 
