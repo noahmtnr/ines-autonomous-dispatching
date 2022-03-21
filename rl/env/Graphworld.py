@@ -5,6 +5,7 @@ import networkx as nx
 import folium
 from folium.plugins import MarkerCluster
 from datetime import datetime, timedelta
+from array import array
 class Environment:
 
     def __init__(self, graph: nx.MultiDiGraph, start_hub: int, final_hub: int, pickup_time: datetime): # TODO: add action space -> import gym.spaces -> action_space = Discrete(3)
@@ -77,7 +78,8 @@ class Environment:
         Returns:
             list: [departure_time,target_node]
         """
-        position=str(self.position)
+        position=self.position
+        position_str=str(self.position)
         start_timestamp=self.time
         time_window=5
         end_timestamp = self.time + timedelta(minutes=time_window)
@@ -88,14 +90,18 @@ class Environment:
         for index in range(len(paths)):
             dict = grid['node_timestamps'][index]
             for tupel_position in dict:
-                position_timestamp= datetime.strptime(dict[tupel_position], "%Y-%m-%d %H:%M:%S")
+                position_timestamp= datetime.strptime(str(dict[tupel_position]), "%Y-%m-%d %H:%M:%S")
                 inTimeframe = start_timestamp <= position_timestamp and end_timestamp >= position_timestamp
-                samePosition = str(tupel_position) == str(position)
+                samePosition = str(tupel_position) == position_str
                 isNotFinalNode = str(tupel_position) != grid['dropoff_node'][index]
 
                 if samePosition and inTimeframe and isNotFinalNode:
-                   list.append([position_timestamp,grid['dropoff_node'][index]])
-                   # TODO slice and retrun dictionary in order to get only the route to the final node from the current node
+                    trip_target_node = grid['dropoff_node'][index]
+                    route = grid['route'][index]
+                    index_in_route = route.index(position)
+                    route_to_target_node=route[index_in_route::]
+                    trip = {'departure': position_timestamp, 'target_node': trip_target_node, 'route': route_to_target_node}
+                    list.append(trip)
         return list
 
     def validateAction(self, action):

@@ -16,10 +16,10 @@ class StreetGraph:
         self.graph = ox.add_edge_speeds(self.graph,fallback=30)
         self.graph = ox.add_edge_travel_times(self.graph)
         ox.utils_graph.remove_isolated_nodes(self.graph)
-        self.generateRandomTrips(1000)
+        self.generateRandomTrips(3000)
 
 
-    def generateRandomTrips(self, n: int = 1000):
+    def generateRandomTrips(self, n: int = 2000):
         """Generates random trips within the graph and stores them in self.trips. The trips are randomly spread across January 2022.
 
         Args:
@@ -45,33 +45,32 @@ class StreetGraph:
         trip_id = []
         nodeA = []
         nodeB = []
+        for i in range(n):
+            if random_nodes[i]==random_nodes2[i]:
+                random_nodes2[i]=random.choice(sequence)
+            trip_id.append(i)
 
-        for node1 in random_nodes:
-            for node2 in random_nodes2:
-                if node1 != node2:
-                    if count < n:
-                        trip_id.append(count)
-                        nodeA.append(node1)
-                        nodeB.append(node2)
-                        count += 1
-
+        
+        print(random_nodes)
+        print(random_nodes2)
+        
         trips["tripid"] = trip_id
-        trips["pickup_node"] = nodeA
-        trips["dropoff_node"] = nodeB
+        trips["pickup_node"] = random_nodes
+        trips["dropoff_node"] = random_nodes2
 
-        pickup_day = np.random.randint(1,31, size=n)
+        pickup_day = [1 for i in range(n)]
         pickup_hour =  np.random.randint(24, size=n)
         pickup_minute = np.random.randint(60, size=n)
         pickup_datetimes = []
 
         for i in range(len(pickup_hour)):
-            pickup_datetime=datetime(2022,1,pickup_day[i],pickup_hour[i],pickup_minute[i],0)
+            pickup_datetime=datetime(2022,1,1,pickup_hour[i],pickup_minute[i],0)
             pickup_datetimes.append(pickup_datetime)
 
         trips['pickup_day'] = pickup_day
         trips['pickup_hour'] = pickup_hour
         trips['pickup_minute'] = pickup_minute
-        trips['pickup_datetime'] = pickup_datetime
+        trips['pickup_datetime'] = pickup_datetimes
 
         routes = []
         dropoff_datetimes = []
@@ -102,6 +101,7 @@ class StreetGraph:
         trips["dropoff_datetime"] = dropoff_datetimes
         trips["trip_duration"] = trip_durations
         trips["node_timestamps"] = node_timestamps
+        trips.to_csv("trips_meinheim.csv")
         self.trips = trips
 
 
