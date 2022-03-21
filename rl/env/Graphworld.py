@@ -143,10 +143,11 @@ class Environment:
         folium.Marker(location=[current_pos_y, current_pos_x], popup = f"Current time: {self.time.strftime('%m/%d/%Y, %H:%M:%S')}", icon=folium.Icon(color='lightgreen', prefix='fa',icon='cube')).add_to(plot)
 
         if(visualize_actionspace):
-            for i, target_node in enumerate(self.availableActions()):
-                target_node_x = self.graph.nodes[target_node]['x']
-                target_node_y = self.graph.nodes[target_node]['y']
-                popup = "%s: go to node %d" % (i, target_node)
+            for i, trip in enumerate(self.availableTrips()):
+                print(i, trip)
+                target_node_x = self.graph.nodes[trip['target_node']]['x']
+                target_node_y = self.graph.nodes[trip['target_node']]['y']
+                popup = "%s: go to node %d" % (i, trip['target_node'])
                 folium.Marker(location=[target_node_y, target_node_x], popup = popup, tooltip=str(i)).add_to(plot)
 
         # Plot
