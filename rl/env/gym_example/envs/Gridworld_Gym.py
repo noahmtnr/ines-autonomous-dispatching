@@ -77,14 +77,14 @@ class Gridworld_v0(gym.Env): # define custom environment as subclass of gym.Env
         return [self.state, self.reward, self.done, "self.info"]
 
     def availableActions(self):
-        position=str(self.position)
+        position=self.position
         start_timestamp=str(self.time)
         possible_routes=[]
         time_window=5
         end_timestamp = str(start_timestamp + timedelta(minutes=time_window))
         grid=pd.read_csv('rl\env\data_gridworld_timestamps.csv')
         paths=grid['Path Timestamp']
-        
+
         for index in range(len(paths)):
             route_dict = eval(grid['Path Timestamp'][index])
 
