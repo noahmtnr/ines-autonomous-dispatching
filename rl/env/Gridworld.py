@@ -22,11 +22,6 @@ class Environment:
         self.board_cols = board_cols
         #self.determine = DETERMINISTIC
 
-    def updateReward(self, reward):
-        if self.position == self.final_hub:
-            self.reward += 1
-        else:
-            self.reward -= 0.1 
 
     # def isEndFunc(self):
     #     if (self.position == self.final_hub):
@@ -38,13 +33,13 @@ class Environment:
         #actions in {u,d,l,r}
         oldposition = self.position
 
-        if action == 'u': #up
+        if action == 'u' or action == 1: #up
             nxtposition = (self.position[0] - 1, self.position[1])
-        elif action == 'd': #down
+        elif action == 'd' or action == 2: #down
             nxtposition = (self.position[0] + 1, self.position[1])
-        elif action == 'l': #left
+        elif action == 'l' or action == 3: #left
             nxtposition = (self.position[0], self.position[1] - 1)
-        elif action == 'r': #right
+        elif action == 'r' or action == 4: #right
             nxtposition = (self.position[0], self.position[1] + 1)
         else:
             pass
