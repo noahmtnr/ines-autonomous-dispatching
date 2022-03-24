@@ -49,10 +49,6 @@ class StreetGraph:
             if random_nodes[i]==random_nodes2[i]:
                 random_nodes2[i]=random.choice(sequence)
             trip_id.append(i)
-
-        
-        print(random_nodes)
-        print(random_nodes2)
         
         trips["tripid"] = trip_id
         trips["pickup_node"] = random_nodes
