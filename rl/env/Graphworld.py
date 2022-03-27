@@ -1,15 +1,30 @@
 from xml.dom.pulldom import parseString
 import numpy as np
-import StreetGraph
+from StreetGraph import StreetGraph
 import osmnx as ox
 import networkx as nx
 import folium
 from folium.plugins import MarkerCluster
 from datetime import datetime, timedelta
 from array import array
-class Environment:
+from datetime import datetime, timedelta
+import gym
+from gym.utils import seeding
+import random
+import pandas as pd
+from gym import spaces
 
-    def __init__(self, graph: nx.MultiDiGraph, start_hub: int, final_hub: int, pickup_time: datetime): # TODO: add action space -> import gym.spaces -> action_space = Discrete(3)
+graph_meinheim=StreetGraph('meinheim')
+graph_meinheim_trips = StreetGraph('meinheim').trips
+
+class GraphEnv(gym.Env):
+
+    MAX_STEPS = 30000
+    REWARD_AWAY = -1
+    REWARD_GOAL = MAX_STEPS
+    
+    def __init__(self,env_config = None):
+        env_config = env_config or {}
         """_summary_
 
         Args:
@@ -18,23 +33,50 @@ class Environment:
             final_hub (int): nodeId
 
         """  
-        self.graph = graph.graph
-        self.graph.trips = graph.trips
-        self.time = pickup_time
-        self.pickup_time = pickup_time
+        self.final_hub = 3
+        self.start_hub = 6
+        self.position = self.start_hub
+        
+        reward=0
+        
+        pickup_day = 1
+        pickup_hour =  np.random.randint(24)
+        pickup_minute = np.random.randint(60)
+        self.pickup_time = datetime(2022,1,pickup_day,pickup_hour,pickup_minute,0)
+        #self.pickup_time = datetime(2022,1,1,1,1,0)
+
+        self.time = self.pickup_time
         self.total_travel_time = 0
 
-        if self.graph.has_node(start_hub):
-            self.start_hub = start_hub
-            self.position = start_hub
-        else:
-            return 'Initialized start hub was not found in graph'
 
-        if self.graph.has_node(final_hub):
-            self.final_hub = final_hub
-        else:
-            return 'Initialized final hub was not found in graph'
+        self.graph = graph_meinheim
+        self.graph.trips = graph_meinheim_trips
 
+
+        
+        self.seed()
+        self.reset()
+
+        # if self.graph.has_node(self.start_hub):
+        #     self.position = self.start_hub
+        # else:
+        #     return 'Initialized start hub was not found in graph'
+
+        # if self.graph.has_node(final_hub):
+        #     self.final_hub = final_hub
+        # else:
+        #     return 'Initialized final hub was not found in graph'
+       
+
+        #self.action_space = gym.spaces.Discrete(num_actions) 
+        self.observation_space = gym.spaces.Discrete(len(list(self.graph.graph.nodes()))) #num of nodes in the graph
+    
+    @property
+    def action_space(self):
+            num_actions = len(self.availableActions())
+            return gym.spaces.Discrete(num_actions) 
+
+    
     def step(self, action: int):
         """ Executes an action based on the index passed as a parameter (only works with moves to direct neighbors as of now)
 
@@ -45,33 +87,41 @@ class Environment:
             int: new reward
             boolean: isDone
         """
-        old_position = self.position
+        print(self.position)
+        print(self.availableActions())
+        self.count += 1
+        done = self.count >= self.MAX_STEPS
+
+        old_position = list(self.graph.graph.nodes())[self.position]
         availableActions = self.availableActions()
         step_duration = 0
 
         if self.validateAction(action):
-            if(action == 0):
-                step_duration = 300
-                pass
-            else:
+             if(action == 0):
+                 step_duration = 300
+                 print("action == 0 ")
+                 pass
+             else:
                 selected_trip = availableActions[action-1]
 
-                if(self.final_hub in selected_trip['route']):
+                if( list(self.graph.graph.nodes())[self.final_hub] in selected_trip['route']):
                     route = selected_trip['route']
 
                     self.position = self.final_hub
-                    index_in_route = route.index(self.final_hub)
+                    index_in_route = route.index( list(self.graph.graph.nodes())[self.final_hub])
                     route_to_final_hub=route[:index_in_route]
-                    print(route_to_final_hub)
-                    print(route)
+                    #print(route_to_final_hub)
+                    #print(route)
                     print(self.final_hub)
-                    route_travel_time_to_final_hub = ox.utils_graph.get_route_edge_attributes(self.graph,route_to_final_hub,attribute='travel_time')
+                    route_travel_time_to_final_hub = ox.utils_graph.get_route_edge_attributes(self.graph.graph,route_to_final_hub,attribute='travel_time')
                     step_duration = sum(route_travel_time_to_final_hub)
+                    print("final node: ",self.position)
 
                 else:
-                    self.position = selected_trip['target_node']
-                    route_travel_time = ox.utils_graph.get_route_edge_attributes(self.graph,selected_trip['route'],attribute='travel_time')
+                    self.position = list(self.graph.graph.nodes()).index(selected_trip['target_node'])
+                    route_travel_time = ox.utils_graph.get_route_edge_attributes(self.graph.graph,selected_trip['route'],attribute='travel_time')
                     step_duration = sum(route_travel_time)
+                    print("not final node: ",self.position)
                 
                 # Increase global time state by travelled time (does not include waiting yet, in this case it should be +xx seconds)
                 self.time = selected_trip['departure_time']
@@ -79,11 +129,20 @@ class Environment:
                 # Instead of cumulating trip duration here we return travel_time 
                 # self.total_travel_time += timedelta(seconds=travel_time)
 
-            self.time += timedelta(seconds=step_duration)
-        else:
-            pass
+        self.time += timedelta(seconds=step_duration)
+            #else:
+             #   pass
+            #reward function
 
-        return self.position, self.reward(), step_duration, self.isDone()
+        if (self.position == self.final_hub):
+                reward = self.REWARD_GOAL
+                done = True
+        else:
+                reward = self.REWARD_AWAY
+
+        
+
+        return self.position, reward,  done, {}
 
     def availableActions(self):
         """ Returns the available actions at the current position. Uses a simplified action space with moves to all direct neighbors allowed.
@@ -94,52 +153,53 @@ class Environment:
         rides = list(self.availableTrips())
         return rides
 
-    def availableTrips(self):
+    def availableTrips(self, time_window=5):
         """ Returns a list of all available trips at the current node and within the next 5 minutes. Includes the time of departure from the current node as well as the target node of the trip.
 
         Returns:
             list: [departure_time,target_node]
         """
-        position=self.position
-        position_str=str(self.position)
-        start_timestamp=self.time
-        time_window=5
-        end_timestamp = self.time + timedelta(minutes=time_window)
-        grid=self.graph.trips
-        list=[]
-        paths=grid['node_timestamps']
+        list_trips=[]
+        time_window=0
+        while(len(list_trips)==0):
+            time_window+=5
+            position=list(self.graph.graph.nodes())[self.position]
+            position_str=str(list(self.graph.graph.nodes())[self.position])
+            start_timestamp=self.time
+            end_timestamp = self.time + timedelta(minutes=time_window)
+            grid=self.graph.trips
+
+            final_hub_postion=list(self.graph.graph.nodes())[self.final_hub]
         
-        for index in range(len(paths)):
-            dict = grid['node_timestamps'][index]
-            for tupel_position in dict:
-                position_timestamp= datetime.strptime(str(dict[tupel_position]), "%Y-%m-%d %H:%M:%S")
-                inTimeframe = start_timestamp <= position_timestamp and end_timestamp >= position_timestamp
-                startsInCurrentPosition = str(tupel_position) == position_str
-                trip_target_node = grid['dropoff_node'][index]
-                isNotFinalNode = str(tupel_position) != str(trip_target_node)
-                
-                if startsInCurrentPosition and inTimeframe and isNotFinalNode:
-                    route = grid['route'][index]
-                    index_in_route = route.index(position)
-                    route_to_target_node=route[index_in_route::]
-                    trip = {'departure_time': position_timestamp, 'target_node': trip_target_node, 'route': route_to_target_node}
-                    list.append(trip)
-        return list
+            paths=grid['node_timestamps']
+            
+            for index in range(len(paths)):
+                dict = grid['node_timestamps'][index]
+                for tupel_position in dict:
+                    position_timestamp= datetime.strptime(str(dict[tupel_position]), "%Y-%m-%d %H:%M:%S")
+                    inTimeframe = start_timestamp <= position_timestamp and end_timestamp >= position_timestamp
+                    startsInCurrentPosition = str(tupel_position) == position_str
+                    trip_target_node = grid['dropoff_node'][index]
+                    isNotFinalNode = str(tupel_position) != str(trip_target_node)
+                    
+
+                    if startsInCurrentPosition and inTimeframe and isNotFinalNode:
+                        route = grid['route'][index]
+                        index_in_route = route.index(position)
+                        route_to_target_node=route[index_in_route::]
+                        #if final_hub_postion in route_to_target_node:
+                        trip = {'departure_time': position_timestamp, 'target_node': trip_target_node, 'route': route_to_target_node}
+                        list_trips.append(trip)
+
+
+        return list_trips
+    
 
     def validateAction(self, action):
         return action < len(self.availableTrips()) + 1
 
-    def isDone(self):
-        return self.position == self.final_hub
     
-    def reward(self): # TODO: extend function: should not return 0 reward if position is a second time on start_hub
         
-        if self.isDone():
-            return 10
-        elif self.position == self.start_hub: 
-            return 0
-        else:
-            return -1
 
     def render(self, visualize_actionspace: bool = False):
         """_summary_
@@ -150,12 +210,12 @@ class Environment:
         Returns:
             _type_: _description_
         """
-        current_pos_x = self.graph.nodes[self.position]['x']
-        current_pos_y = self.graph.nodes[self.position]['y']
-        final_hub_x = self.graph.nodes[self.final_hub]['x']
-        final_hub_y = self.graph.nodes[self.final_hub]['y']
-        start_hub_x = self.graph.nodes[self.start_hub]['x']
-        start_hub_y = self.graph.nodes[self.start_hub]['y']
+        current_pos_x = self.graph.nodes[list(self.graph.graph.nodes())[self.position]]['x']
+        current_pos_y = self.graph.nodes[list(self.graph.graph.nodes())[self.position]]['y']
+        final_hub_x = self.graph.nodes[list(self.graph.graph.nodes())[self.final_hub]]['x']
+        final_hub_y = self.graph.nodes[list(self.graph.graph.nodes())[self.final_hub]]['y']
+        start_hub_x = self.graph.nodes[list(self.graph.graph.nodes())[self.start_hub]]['x']
+        start_hub_y = self.graph.nodes[list(self.graph.graph.nodes())[self.start_hub]]['y']
 
         # Create plot
         plot = ox.plot_graph_folium(self.graph,fit_bounds=True, weight=2, color="#333333")
@@ -180,7 +240,20 @@ class Environment:
         return plot
 
     def reset(self):
+        self.count = 0
+        self.final_hub = 3
+        self.start_hub = 6
         self.position = self.start_hub
+        
+        pickup_day = 1
+        pickup_hour =  np.random.randint(24)
+        pickup_minute = np.random.randint(60)
+        
+        self.pickup_time = datetime(2022,1,pickup_day,pickup_hour,pickup_minute,0)
+        #self.pickup_time = datetime(2022,1,1,1,1,0)
         self.time = self.pickup_time
         self.total_travel_time = 0
-        pass
+
+
+        return self.position
+    
