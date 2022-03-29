@@ -28,7 +28,8 @@ class Environment:
         
         #Creates a list of 5 random hubs
         self.hubs = rd.sample(self.graph.nodes,5) 
-        print(self.hubs)
+        self.hubs.append(final_hub)
+        # print(self.hubs)
 
 
         if self.graph.has_node(start_hub):
@@ -124,13 +125,17 @@ class Environment:
                 startsInCurrentPosition = str(tupel_position) == position_str
                 trip_target_node = grid['dropoff_node'][index]
                 isNotFinalNode = str(tupel_position) != str(trip_target_node)
+                route = grid['route'][index]
                 
                 if startsInCurrentPosition and inTimeframe and isNotFinalNode:
-                    route = grid['route'][index]
                     index_in_route = route.index(position)
                     route_to_target_node=route[index_in_route::]
-                    trip = {'departure_time': position_timestamp, 'target_node': trip_target_node, 'route': route_to_target_node}
-                    list.append(trip)
+                    hubsOnRoute = any(node in route_to_target_node for node in self.hubs)
+                    
+                    if hubsOnRoute:
+                        # print("Route:",route_to_target_node, "Hubs: ", self.hubs )
+                        trip = {'departure_time': position_timestamp, 'target_node': trip_target_node, 'route': route_to_target_node}
+                        list.append(trip)
         return list
 
     def validateAction(self, action):
@@ -168,7 +173,6 @@ class Environment:
         # Create plot
         plot = ox.plot_graph_folium(self.graph,fit_bounds=True, weight=2, color="#333333")
 
-        
 
         # Place markers for start, final and current position
         folium.Marker(location=[final_hub_y, final_hub_x], icon=folium.Icon(color='red', prefix='fa', icon='flag-checkered')).add_to(plot)
