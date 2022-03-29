@@ -87,8 +87,9 @@ class GraphEnv(gym.Env):
             int: new reward
             boolean: isDone
         """
-        print(self.position)
-        print(self.availableActions())
+        print("position: ",self.position)
+        print("available actions: ",self.availableActions())
+        print("action space: ",self.action_space)
         self.count += 1
         done = self.count >= self.MAX_STEPS
 
@@ -97,11 +98,11 @@ class GraphEnv(gym.Env):
         step_duration = 0
 
         if self.validateAction(action):
-             if(action == 0):
-                 step_duration = 300
-                 print("action == 0 ")
-                 pass
-             else:
+             if(action >= 0):
+            #      step_duration = 300
+            #      print("action == 0 ")
+            #      pass
+            #  else:
                 selected_trip = availableActions[action-1]
 
                 if( list(self.graph.graph.nodes())[self.final_hub] in selected_trip['route']):
@@ -115,13 +116,13 @@ class GraphEnv(gym.Env):
                     print(self.final_hub)
                     route_travel_time_to_final_hub = ox.utils_graph.get_route_edge_attributes(self.graph.graph,route_to_final_hub,attribute='travel_time')
                     step_duration = sum(route_travel_time_to_final_hub)
-                    print("final node: ",self.position)
+                    print("next node (final): ",self.position)
 
                 else:
                     self.position = list(self.graph.graph.nodes()).index(selected_trip['target_node'])
                     route_travel_time = ox.utils_graph.get_route_edge_attributes(self.graph.graph,selected_trip['route'],attribute='travel_time')
                     step_duration = sum(route_travel_time)
-                    print("not final node: ",self.position)
+                    print("next node (not final): ",self.position)
                 
                 # Increase global time state by travelled time (does not include waiting yet, in this case it should be +xx seconds)
                 self.time = selected_trip['departure_time']
