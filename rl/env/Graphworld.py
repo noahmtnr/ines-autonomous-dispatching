@@ -48,17 +48,16 @@ class GraphEnv(gym.Env):
         self.time = self.pickup_time
         self.total_travel_time = 0
         
-        #Creates a list of 5 random hubs
-        self.hubs = random.sample(self.graph.nodes,5) 
-        self.hubs.append(final_hub)
-        # print(self.hubs)
 
 
 
         self.graph = graph_meinheim
         self.graph.trips = graph_meinheim_trips
 
-
+        #Creates a list of 5 random hubs
+        self.hubs = random.sample(self.graph.graph.nodes,5) 
+        self.hubs.append(self.final_hub)
+        # print(self.hubs)
         
         self.seed()
         self.reset()
