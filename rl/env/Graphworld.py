@@ -50,7 +50,8 @@ class GraphEnv(gym.Env):
         
         #Creates a list of 5 random hubs
         self.hubs = rd.sample(self.graph.nodes,5) 
-        print(self.hubs)
+        self.hubs.append(final_hub)
+        # print(self.hubs)
 
 
 
@@ -177,29 +178,26 @@ class GraphEnv(gym.Env):
 
             final_hub_postion=list(self.graph.graph.nodes())[self.final_hub]
         
-            paths=grid['node_timestamps']
-            
-            for index in range(len(paths)):
-                dict = grid['node_timestamps'][index]
-                for tupel_position in dict:
-                    position_timestamp= datetime.strptime(str(dict[tupel_position]), "%Y-%m-%d %H:%M:%S")
-                    inTimeframe = start_timestamp <= position_timestamp and end_timestamp >= position_timestamp
-                    startsInCurrentPosition = str(tupel_position) == position_str
-                    trip_target_node = grid['dropoff_node'][index]
-                    isNotFinalNode = str(tupel_position) != str(trip_target_node)
+        for index in range(len(paths)):
+            dict = grid['node_timestamps'][index]
+            for tupel_position in dict:
+                position_timestamp= datetime.strptime(str(dict[tupel_position]), "%Y-%m-%d %H:%M:%S")
+                inTimeframe = start_timestamp <= position_timestamp and end_timestamp >= position_timestamp
+                startsInCurrentPosition = str(tupel_position) == position_str
+                trip_target_node = grid['dropoff_node'][index]
+                isNotFinalNode = str(tupel_position) != str(trip_target_node)
+                route = grid['route'][index]
+                
+                if startsInCurrentPosition and inTimeframe and isNotFinalNode:
+                    index_in_route = route.index(position)
+                    route_to_target_node=route[index_in_route::]
+                    hubsOnRoute = any(node in route_to_target_node for node in self.hubs)
                     
-
-                    if startsInCurrentPosition and inTimeframe and isNotFinalNode:
-                        route = grid['route'][index]
-                        index_in_route = route.index(position)
-                        route_to_target_node=route[index_in_route::]
-                        #if final_hub_postion in route_to_target_node:
+                    if hubsOnRoute:
+                        # print("Route:",route_to_target_node, "Hubs: ", self.hubs )
                         trip = {'departure_time': position_timestamp, 'target_node': trip_target_node, 'route': route_to_target_node}
-                        list_trips.append(trip)
-
-
-        return list_trips
-    
+                        list.append(trip)
+        return list
 
     def validateAction(self, action):
         return action < len(self.availableTrips()) + 1
@@ -227,7 +225,6 @@ class GraphEnv(gym.Env):
         # Create plot
         plot = ox.plot_graph_folium(self.graph,fit_bounds=True, weight=2, color="#333333")
 
-        
 
         # Place markers for start, final and current position
         folium.Marker(location=[final_hub_y, final_hub_x], icon=folium.Icon(color='red', prefix='fa', icon='flag-checkered')).add_to(plot)
