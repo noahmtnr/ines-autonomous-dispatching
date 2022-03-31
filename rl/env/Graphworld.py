@@ -44,6 +44,12 @@ class GraphEnv(gym.Env):
 
         self.time = self.pickup_time
         self.total_travel_time = 0
+        
+        #Creates a list of 5 random hubs
+        self.hubs = rd.sample(self.graph.nodes,5) 
+        self.hubs.append(final_hub)
+        # print(self.hubs)
+
 
         graph_meinheim=StreetGraph('meinheim')
         graph_meinheim_trips = StreetGraph('meinheim').trips
@@ -178,7 +184,6 @@ class GraphEnv(gym.Env):
                 trip_target_node = grid['dropoff_node'][index]
                 isNotFinalNode = str(tupel_position) != str(trip_target_node)
                 route = grid['route'][index]
-
                 if startsInCurrentPosition and inTimeframe and isNotFinalNode:
                     index_in_route = route.index(position)
                     route_to_target_node=route[index_in_route::]
@@ -221,6 +226,7 @@ class GraphEnv(gym.Env):
         
         # Create plot
         plot = ox.plot_graph_folium(self.graph.inner_graph,fit_bounds=True, weight=2, color="#333333")
+
 
 
         # Place markers for start, final and current position
