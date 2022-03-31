@@ -6,27 +6,24 @@ import numpy as np
 from datetime import datetime, timedelta
 
 
-
-
 class StreetGraph:
 
     def __init__(self, filename):
         filepath = ("../../data/graph/%s.graphml") % (filename)
-        self.graph = ox.load_graphml(filepath)
-        self.graph = ox.add_edge_speeds(self.graph,fallback=30)
-        self.graph = ox.add_edge_travel_times(self.graph)
-        ox.utils_graph.remove_isolated_nodes(self.graph)
-        self.generateRandomTrips(3000)
+        self.inner_graph = ox.load_graphml(filepath)
+        self.inner_graph = ox.add_edge_speeds(self.inner_graph,fallback=30)
+        self.inner_graph = ox.add_edge_travel_times(self.inner_graph)
+        ox.utils_graph.remove_isolated_nodes(self.inner_graph)
+        self.generate_random_trips(4000)
 
 
-    def generateRandomTrips(self, n: int = 2000):
+    def generate_random_trips(self, n: int = 2000):
         """Generates random trips within the graph and stores them in self.trips. The trips are randomly spread across January 2022.
 
         Args:
             n (int, optional): Number of trips to be generated. Defaults to 1000.
         """
-        
-        graph = self.graph
+        graph = self.inner_graph
 
         gdf_nodes, gdf_edges = ox.graph_to_gdfs(graph)
 
@@ -100,7 +97,26 @@ class StreetGraph:
         trips.to_csv("trips_meinheim.csv")
         self.trips = trips
 
+    def nodes(self):
+        return self.inner_graph.nodes()
 
+    def edges(self):
+        return self.inner_graph.edges()
+
+    def get_nodeids_list(self):
+        return list(self.nodes())
+
+    def get_node_by_nodeid(self, nodeid: int):
+        return self.nodes()[nodeid]
+
+    def get_node_by_index(self, index: int):
+        return self.get_node_by_nodeid(self.get_nodeids_list()[index])
+
+    def get_nodeid_by_index(self, index: int):
+        return self.get_nodeids_list()[index]
+
+    def get_index_by_nodeid(self, nodeid: int):
+        return self.get_nodeids_list().index(nodeid)
 
 def map_nodes_to_timestaps(route_nodes, pickup_time, dropoff_time, duration):
     timestamps = []
