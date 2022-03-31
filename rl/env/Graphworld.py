@@ -46,7 +46,7 @@ class GraphEnv(gym.Env):
         self.total_travel_time = 0
         
         #Creates a list of 5 random hubs
-        self.hubs = rd.sample(self.graph.nodes,5) 
+        self.hubs = random.sample(self.graph.nodes,5) 
         self.hubs.append(final_hub)
         # print(self.hubs)
 
