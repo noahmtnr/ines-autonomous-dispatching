@@ -45,12 +45,6 @@ class GraphEnv(gym.Env):
         self.time = self.pickup_time
         self.total_travel_time = 0
         
-        #Creates a list of 5 random hubs
-        self.hubs = random.sample(self.graph.nodes,5) 
-        self.hubs.append(final_hub)
-        # print(self.hubs)
-
-
         graph_meinheim=StreetGraph('meinheim')
         graph_meinheim_trips = StreetGraph('meinheim').trips
 
