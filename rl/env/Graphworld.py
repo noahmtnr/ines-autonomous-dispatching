@@ -16,9 +16,8 @@ from gym import spaces
 
 class GraphEnv(gym.Env):
 
-    MAX_STEPS = 30000
     REWARD_AWAY = -1
-    REWARD_GOAL = MAX_STEPS
+    REWARD_GOAL = 100
     
     def __init__(self,env_config = None):
         env_config = env_config or {}
@@ -30,21 +29,24 @@ class GraphEnv(gym.Env):
             final_hub (int): nodeId
 
         """  
-        self.final_hub = 2
-        self.start_hub = 8
-        self.position = self.start_hub
+        # self.final_hub = 2
+        # self.start_hub = 8
+        # self.position = self.start_hub
         
-        reward=0
-        
-        pickup_day = 1
-        pickup_hour =  np.random.randint(24)
-        pickup_minute = np.random.randint(60)
-        self.pickup_time = datetime(2022,1,pickup_day,pickup_hour,pickup_minute,0)
-        #self.pickup_time = datetime(2022,1,1,1,1,0)
+        # pickup_day = 1
+        # pickup_hour =  np.random.randint(24)
+        # pickup_minute = np.random.randint(60)
+        # self.pickup_time = datetime(2022,1,pickup_day,pickup_hour,pickup_minute,0)
+        # #self.pickup_time = datetime(2022,1,1,1,1,0)
 
-        self.time = self.pickup_time
-        self.total_travel_time = 0
+        # self.time = self.pickup_time
+        # self.total_travel_time = 0
+        # self.deadline=self.pickup_time+timedelta(hours=3)
         
+        self.seed()
+        self.reset()
+
+        random.seed(42)
         graph_meinheim=StreetGraph('meinheim')
         graph_meinheim_trips = StreetGraph('meinheim').trips
 
@@ -57,9 +59,6 @@ class GraphEnv(gym.Env):
         if(final_hub not in self.hubs):
             self.hubs.append(final_hub)
         
-        self.seed()
-        self.reset()
-
         # if self.graph.inner_graph.has_node(self.start_hub):
         #     self.position = self.start_hub
         # else:
@@ -73,7 +72,31 @@ class GraphEnv(gym.Env):
 
         #self.action_space = gym.spaces.Discrete(num_actions) 
         self.observation_space = gym.spaces.Discrete(len(self.graph.get_nodeids_list())) #num of nodes in the graph
+
+       
     
+    def reset(self):
+        self.count = 0
+        self.final_hub = 3
+        self.start_hub = 6
+        self.position = self.start_hub
+
+        pickup_day = 1
+        pickup_hour =  np.random.randint(24)
+        pickup_minute = np.random.randint(60)
+        self.pickup_time = datetime(2022,1,pickup_day,pickup_hour,pickup_minute,0)
+      
+        self.time = self.pickup_time
+        self.total_travel_time = 0
+        self.deadline=self.pickup_time+timedelta(hours=3)
+
+        reward=0
+
+
+        return self.position
+    
+
+
     @property
     def action_space(self):
             num_actions = len(self.availableActions())
@@ -92,17 +115,29 @@ class GraphEnv(gym.Env):
         """
 
         self.count += 1
-        done = self.count >= self.MAX_STEPS
+        done =  False
 
         old_position = self.graph.get_nodeids_list()[self.position]
         availableActions = self.availableActions()
         step_duration = 0
+        print(availableActions)
 
         if self.validateAction(action):
              if(action == 0):
                  step_duration = 300
                  print("action == wait ")
                  pass
+             elif(action==1):
+                 
+                 
+                 #create route to final hub
+                 route = ox.shortest_path(self.graph.inner_graph, self.graph.get_nodeids_list()[self.position],  self.graph.get_nodeids_list()[self.final_hub], weight='travel_time')
+                 route_travel_time = ox.utils_graph.get_route_edge_attributes(self.graph.inner_graph,route,attribute='travel_time')
+                 step_duration = sum(route_travel_time)+300 #we add 5 minutes (300 seconds) so the taxi can arrive
+                 self.position=self.final_hub
+                 print("action ==  ownRide ")
+                 pass 
+
              else:
                 selected_trip = availableActions[action]
 
@@ -117,7 +152,7 @@ class GraphEnv(gym.Env):
 
                 else:
                     self.position = self.graph.get_nodeids_list().index(selected_trip['target_node'])
-                    route_travel_time = ox.utils_graph.get_route_edge_attributes(self.graph.graph,selected_trip['route'],attribute='travel_time')
+                    route_travel_time = ox.utils_graph.get_route_edge_attributes(self.graph.inner_graph,selected_trip['route'],attribute='travel_time')
                     step_duration = sum(route_travel_time)
                 
                 # Increase global time state by travelled time (does not include waiting yet, in this case it should be +xx seconds)
@@ -133,7 +168,13 @@ class GraphEnv(gym.Env):
             #reward function
 
         if (self.position == self.final_hub):
-                reward = self.REWARD_GOAL
+                if (self.time>self.deadline):
+                    overtime=self.time-self.deadline
+                    overtime=round(overtime.total_seconds()/60)
+                    penalty_reward= self.REWARD_GOAL-overtime
+                    reward=penalty_reward
+                else:
+                    reward = self.REWARD_GOAL
                 done = True
         else:
                 reward = self.REWARD_AWAY
@@ -147,8 +188,9 @@ class GraphEnv(gym.Env):
             list: list of nodeIds of direct neighbors
         """
         wait = [{'type': 'wait'}]
+        ownRide = [{'type': 'ownRide'}]
         available_rides = list(self.availableTrips())
-        return [wait,*available_rides]
+        return [wait,ownRide,*available_rides]
 
     def availableTrips(self, time_window=5):
         """ Returns a list of all available trips at the current node and within the next 5 minutes. Includes the time of departure from the current node as well as the target node of the trip.
@@ -157,7 +199,6 @@ class GraphEnv(gym.Env):
             list: [departure_time,target_node]
         """
         list_trips=[]
-        time_window=0
 
         position=self.graph.get_nodeid_by_index(self.position)
         position_str=str(position)
@@ -192,7 +233,9 @@ class GraphEnv(gym.Env):
     def validateAction(self, action):
         return action < len(self.availableActions())
 
-    
+
+
+
         
 
     def render(self, visualize_actionspace: bool = False):
@@ -250,21 +293,3 @@ class GraphEnv(gym.Env):
 
         return plot
 
-    def reset(self):
-        self.count = 0
-        self.final_hub = 3
-        self.start_hub = 6
-        self.position = self.start_hub
-        
-        pickup_day = 1
-        pickup_hour =  np.random.randint(24)
-        pickup_minute = np.random.randint(60)
-        
-        self.pickup_time = datetime(2022,1,pickup_day,pickup_hour,pickup_minute,0)
-        #self.pickup_time = datetime(2022,1,1,1,1,0)
-        self.time = self.pickup_time
-        self.total_travel_time = 0
-
-
-        return self.position
-    

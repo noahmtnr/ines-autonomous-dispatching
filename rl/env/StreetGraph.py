@@ -23,6 +23,8 @@ class StreetGraph:
         Args:
             n (int, optional): Number of trips to be generated. Defaults to 1000.
         """
+        random.seed(42)
+
         graph = self.inner_graph
 
         gdf_nodes, gdf_edges = ox.graph_to_gdfs(graph)
