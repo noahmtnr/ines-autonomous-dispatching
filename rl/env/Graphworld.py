@@ -128,8 +128,7 @@ class GraphEnv(gym.Env):
                  print("action == wait ")
                  pass
              elif(action==1):
-                 
-                 
+                 own_ride = True
                  #create route to final hub
                  route = ox.shortest_path(self.graph.inner_graph, self.graph.get_nodeids_list()[self.position],  self.graph.get_nodeids_list()[self.final_hub], weight='travel_time')
                  route_travel_time = ox.utils_graph.get_route_edge_attributes(self.graph.inner_graph,route,attribute='travel_time')
@@ -163,23 +162,40 @@ class GraphEnv(gym.Env):
                 print("action == ", action, " New Position", self.position)
 
         self.time += timedelta(seconds=step_duration)
-            #else:
-             #   pass
-            #reward function
 
-        if (self.position == self.final_hub):
-                if (self.time>self.deadline):
-                    overtime=self.time-self.deadline
-                    overtime=round(overtime.total_seconds()/60)
-                    penalty_reward= self.REWARD_GOAL-overtime
-                    reward=penalty_reward
-                else:
-                    reward = self.REWARD_GOAL
-                done = True
-        else:
-                reward = self.REWARD_AWAY
+        reward, done = compute_reward(own_ride)
 
         return self.position, reward,  done, {}
+
+    
+    def compute_reward(self, own_ride):
+        """ Computes the reward for each step
+        Args:
+            bool: own_ride
+        Returns:
+            int: reward
+            bool: done
+        """
+        reward = 0
+        # if we reach the final hub
+        if (self.position == self.final_hub):
+            reward = self.REWARD_GOAL
+            # if the agent books an own ride, penalize reward by 50
+            if own_ride:
+                reward -= 50
+            # if the box is not delivered in time, penalize reward by 1 for every minute over deadline
+            if (self.time > self.deadline):
+                overtime = self.time-self.deadline
+                overtime = round(overtime.total_seconds()/60)
+                reward -= overtime
+            done = True
+        # if we do not reach the final hub, reward is -1
+        else:
+            reward = self.REWARD_AWAY
+
+        return reward, done
+
+
 
     def availableActions(self):
         """ Returns the available actions at the current position. Uses a simplified action space with moves to all direct neighbors allowed.
