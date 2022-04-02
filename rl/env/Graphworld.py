@@ -124,21 +124,21 @@ class GraphEnv(gym.Env):
         print(availableActions)
 
         if self.validateAction(action):
-             if(action == 0):
-                 step_duration = 300
-                 print("action == wait ")
-                 pass
-             elif(action==1):
-                 self.own_ride = True
-                 #create route to final hub
-                 route = ox.shortest_path(self.graph.inner_graph, self.graph.get_nodeids_list()[self.position],  self.graph.get_nodeids_list()[self.final_hub], weight='travel_time')
-                 route_travel_time = ox.utils_graph.get_route_edge_attributes(self.graph.inner_graph,route,attribute='travel_time')
-                 step_duration = sum(route_travel_time)+300 #we add 5 minutes (300 seconds) so the taxi can arrive
-                 self.position=self.final_hub
-                 print("action ==  ownRide ")
-                 pass 
+            if(action == 0):
+                step_duration = 300
+                print("action == wait ")
+                pass
+            elif(action==1):
+                self.own_ride = True
+                #create route to final hub
+                route = ox.shortest_path(self.graph.inner_graph, self.graph.get_nodeids_list()[self.position],  self.graph.get_nodeids_list()[self.final_hub], weight='travel_time')
+                route_travel_time = ox.utils_graph.get_route_edge_attributes(self.graph.inner_graph,route,attribute='travel_time')
+                step_duration = sum(route_travel_time)+300 #we add 5 minutes (300 seconds) so the taxi can arrive
+                self.position=self.final_hub
+                print("action ==  ownRide ")
+                pass 
 
-             else:
+            else:
                 selected_trip = availableActions[action]
 
                 if( self.graph.get_nodeids_list()[self.final_hub] in selected_trip['route']):
@@ -161,13 +161,19 @@ class GraphEnv(gym.Env):
                 # Instead of cumulating trip duration here we avel_time 
                 # self.total_travel_time += timedelta(seconds=travel_time)
                 print("action == ", action, " New Position", self.position)
+        else:
+            print("invalid action")
+            print("avail actions: ",self.availableActions())
+            print("action: ",action)
+            print("action space: ",self.action_space)
+
 
         self.time += timedelta(seconds=step_duration)
 
         reward, done = self.compute_reward(done)
 
         return self.position, reward,  done, {}
-
+        
     
     def compute_reward(self, done):
         """ Computes the reward for each step
