@@ -12,11 +12,11 @@ import random
 # Slightly bigger graph
 # location_point = (40.7704797, -73.9838597)
 # graph = ox.graph_from_point(location_point, dist=180)
-# ox.save_graphml(graph, filepath="./data/small_manhattan.graphml")
+# ox.save_graphml(graph, filepath="./data/graph/small_manhattan.graphml")
 
 # Import local graphml
-graph = ox.io.load_graphml("data/meinheim.graphml")
-# graph = ox.io.load_graphml("data/small_manhattan.graphml")
+graph = ox.io.load_graphml("data/graph/meinheim.graphml")
+# graph = ox.io.load_graphml("data/graph/small_manhattan.graphml")
 
 ox.utils_graph.remove_isolated_nodes(graph)
 
