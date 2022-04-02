@@ -46,17 +46,18 @@ class GraphEnv(gym.Env):
         self.seed()
         self.reset()
 
-        graph_meinheim=StreetGraph('meinheim')
-        graph_meinheim_trips = StreetGraph('meinheim').trips
+        # Creates an instance of StreetGraph with random trips and hubs
+        graph_meinheim = StreetGraph(filename='meinheim', num_trips=4000, fin_hub=self.final_hub, num_hubs=5)
+        graph_meinheim_trips = graph_meinheim.trips
 
         self.graph = graph_meinheim
-        self.graph.trips = graph_meinheim_trips
+        #self.graph.trips = graph_meinheim_trips
 
         #Creates a list of 5 random hubs
-        self.hubs = random.sample(self.graph.nodes(),5) 
-        final_hub = self.graph.get_nodeid_by_index(self.final_hub)
-        if(final_hub not in self.hubs):
-            self.hubs.append(final_hub)
+        #self.graph.generate_hubs(number, fin_hub)
+        # self.hubs = random.sample(self.graph.nodes(),5) 
+        # if(final_hub not in self.hubs):
+        #     self.hubs.append(final_hub)
         
         # if self.graph.inner_graph.has_node(self.start_hub):
         #     self.position = self.start_hub
