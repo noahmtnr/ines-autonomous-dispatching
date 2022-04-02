@@ -8,20 +8,40 @@ from datetime import datetime, timedelta
 
 class StreetGraph:
 
-    def __init__(self, filename):
+    def __init__(self, filename, num_trips, fin_hub, num_hubs):
         filepath = ("../../data/graph/%s.graphml") % (filename)
         self.inner_graph = ox.load_graphml(filepath)
         self.inner_graph = ox.add_edge_speeds(self.inner_graph,fallback=30)
         self.inner_graph = ox.add_edge_travel_times(self.inner_graph)
         ox.utils_graph.remove_isolated_nodes(self.inner_graph)
-        self.generate_random_trips(4000)
+        self.generate_random_trips(num_trips)
+        self.generate_hubs(fin_hub, num_hubs)
 
+
+    def generate_hubs(self, fin_hub, num_hubs: int = 5):
+        """Generates random bubs within the graph
+
+        Args:
+            fin_hub (int): index_id of final hub
+            num_hubs (int, optional): Number of hubs to create. Defaults to 5.
+
+        Returns:
+            self.hubs(list): List of hubs in graph
+        """
+        random.seed(42)
+        hubs = random.sample(self.nodes(),num_hubs) 
+        final_hub = self.get_nodeid_by_index(fin_hub)
+        if(final_hub not in hubs):
+            hubs.append(final_hub)
+        self.hubs = hubs
+
+        return self.hubs
 
     def generate_random_trips(self, n: int = 2000):
         """Generates random trips within the graph and stores them in self.trips. The trips are randomly spread across January 2022.
 
         Args:
-            n (int, optional): Number of trips to be generated. Defaults to 1000.
+            n (int, optional): Number of trips to be generated. Defaults to 2000.
         """
         random.seed(42)
 
@@ -98,6 +118,8 @@ class StreetGraph:
         trips["node_timestamps"] = node_timestamps
         trips.to_csv("trips_meinheim.csv")
         self.trips = trips
+
+        return self.trips
 
     def nodes(self):
         return self.inner_graph.nodes()
