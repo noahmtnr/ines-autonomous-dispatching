@@ -89,6 +89,8 @@ class GraphEnv(gym.Env):
         self.total_travel_time = 0
         self.deadline=self.pickup_time+timedelta(hours=3)
 
+        self.own_ride = False
+
         reward=0
 
 
@@ -127,7 +129,7 @@ class GraphEnv(gym.Env):
                  print("action == wait ")
                  pass
              elif(action==1):
-                 own_ride = True
+                 self.own_ride = True
                  #create route to final hub
                  route = ox.shortest_path(self.graph.inner_graph, self.graph.get_nodeids_list()[self.position],  self.graph.get_nodeids_list()[self.final_hub], weight='travel_time')
                  route_travel_time = ox.utils_graph.get_route_edge_attributes(self.graph.inner_graph,route,attribute='travel_time')
@@ -162,12 +164,12 @@ class GraphEnv(gym.Env):
 
         self.time += timedelta(seconds=step_duration)
 
-        reward, done = compute_reward(own_ride)
+        reward, done = self.compute_reward(done)
 
         return self.position, reward,  done, {}
 
     
-    def compute_reward(self, own_ride):
+    def compute_reward(self, done):
         """ Computes the reward for each step
         Args:
             bool: own_ride
@@ -180,7 +182,7 @@ class GraphEnv(gym.Env):
         if (self.position == self.final_hub):
             reward = self.REWARD_GOAL
             # if the agent books an own ride, penalize reward by 50
-            if own_ride:
+            if self.own_ride:
                 reward -= 50
             # if the box is not delivered in time, penalize reward by 1 for every minute over deadline
             if (self.time > self.deadline):
