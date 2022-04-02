@@ -151,7 +151,7 @@ class GraphEnv(gym.Env):
                     step_duration = sum(route_travel_time_to_final_hub)
 
                 else:
-                    self.position = self.graph.get_nodeids_list().index(selected_trip['target_node'])
+                    self.position = self.graph.get_nodeids_list().index(selected_trip['target_hub'])
                     route_travel_time = ox.utils_graph.get_route_edge_attributes(self.graph.inner_graph,selected_trip['route'],attribute='travel_time')
                     step_duration = sum(route_travel_time)
                 
@@ -228,9 +228,9 @@ class GraphEnv(gym.Env):
         paths=grid['node_timestamps']
         
         for index in range(len(paths)):
-            dict = grid['node_timestamps'][index]
-            for tupel_position in dict:
-                position_timestamp= datetime.strptime(str(dict[tupel_position]), "%Y-%m-%d %H:%M:%S")
+            dict_route = grid['node_timestamps'][index]
+            for tupel_position in dict_route:
+                position_timestamp= datetime.strptime(str(dict_route[tupel_position]), "%Y-%m-%d %H:%M:%S")
                 inTimeframe = start_timestamp <= position_timestamp and end_timestamp >= position_timestamp
                 startsInCurrentPosition = str(tupel_position) == position_str
                 trip_target_node = grid['dropoff_node'][index]
@@ -241,10 +241,15 @@ class GraphEnv(gym.Env):
                     route_to_target_node=route[index_in_route::]
                     hubsOnRoute = any(node in route_to_target_node for node in self.hubs)
                     
-                    # COMMENTED IF OUT UNTIL WE ALLOW MOVES TO ALL HUBS ON THE ROUTE TO FIND MORE TRIPS
-                    #if hubsOnRoute:
-                    trip = {'departure_time': position_timestamp, 'target_node': trip_target_node, 'route': route_to_target_node}
-                    list_trips.append(trip)
+                    if hubsOnRoute:
+                        list_hubs = [node for node in route_to_target_node if node in self.hubs]
+                        hubs_dict = dict((node, dict_route[node]) for node in list_hubs)
+                        for hub in hubs_dict:
+                            index_hub_in_route = route.index(hub)
+                            index_hub_in_route += 1
+                            route_to_target_hub = route[index_in_route:index_hub_in_route]
+                            trip = {'departure_time': position_timestamp, 'target_hub': hub, 'route': route_to_target_hub}
+                            list_trips.append(trip)
         return list_trips
 
     def validateAction(self, action):
@@ -298,9 +303,10 @@ class GraphEnv(gym.Env):
 
         if(visualize_actionspace):
             for i, trip in enumerate(self.availableTrips()):
-                target_node_x = self.graph.nodes[trip['target_node']]['x']
-                target_node_y = self.graph.nodes[trip['target_node']]['y']
-                popup = "%s: go to node %d" % (i, trip['target_node'])
+                target_hub=self.graph.get_node_by_nodeid(trip['target_hub'])
+                target_node_x = target_hub['x']
+                target_node_y = target_hub['y']
+                popup = "%s: go to node %d" % (i, trip['target_hub'])
                 folium.Marker(location=[target_node_y, target_node_x], popup = popup, tooltip=str(i)).add_to(plot)
 
         # Plot
