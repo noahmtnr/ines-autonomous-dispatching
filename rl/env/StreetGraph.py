@@ -1,3 +1,6 @@
+import sys
+sys.path.insert(0,"../..")
+
 import osmnx as ox
 import networkx as nx
 import pandas as pd
@@ -5,6 +8,7 @@ import random
 import numpy as np
 from datetime import datetime, timedelta
 
+from preprocessing.data_preprocessing import DataPreProcessing
 
 class StreetGraph:
 
@@ -82,7 +86,7 @@ class StreetGraph:
                 dropoff_datetime = pickup_datetime + timedelta(seconds=sum(travel_times))
                 trip_duration = (dropoff_datetime-pickup_datetime).total_seconds()
                 
-                timestamps_dict = map_nodes_to_timestaps(route, pickup_datetime, dropoff_datetime, trip_duration)
+                timestamps_dict = DataPreProcessing.map_nodes_to_timestaps(route, pickup_datetime, dropoff_datetime, trip_duration)
 
                 dropoff_datetimes.append(dropoff_datetime)
                 trip_durations.append(trip_duration)
@@ -119,36 +123,3 @@ class StreetGraph:
 
     def get_index_by_nodeid(self, nodeid: int):
         return self.get_nodeids_list().index(nodeid)
-
-def map_nodes_to_timestaps(route_nodes, pickup_time, dropoff_time, duration):
-    timestamps = []
-    date_format_str = '%Y-%m-%d %H:%M:%S.%f'
-    start_time = pd.to_datetime(pickup_time, format=date_format_str)
-    end_time = pd.to_datetime(dropoff_time, format=date_format_str)
-
-    if (len(route_nodes) > 1):
-        time_between_nodes = duration / (len(route_nodes) - 1)
-        delta = timedelta(seconds=time_between_nodes)
-        timestamps = timestamp_range(start_time, end_time, delta, route_nodes)
-    else:
-        timestamps.append(dropoff_time)
-
-    timestamps_mapping = dict(zip(route_nodes, timestamps))
-    return timestamps_mapping
-
-
-def timestamp_range(start_time, end_time, delta, route_nodes):
-    timestamps = []
-
-    while start_time < end_time:
-        start_time_formatted = str(start_time.strftime("%Y-%m-%d %H:%M:%S"))
-        timestamps.append(start_time_formatted)
-        start_time += delta
-
-    if len(timestamps) == len(route_nodes):
-        end_time_formatted = str(end_time.strftime("%Y-%m-%d %H:%M:%S"))
-        timestamps[-1] = str(end_time_formatted)
-    else:
-        end_time_formatted = str(end_time.strftime("%Y-%m-%d %H:%M:%S"))
-        timestamps.append(end_time_formatted)
-    return timestamps

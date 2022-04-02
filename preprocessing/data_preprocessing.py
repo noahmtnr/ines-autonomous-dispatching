@@ -6,22 +6,18 @@ from datetime import timedelta
 
 class DataPreProcessing:
 
-    def __init__(self,graph,trips):
-        self.graph = graph
-        self.trips = trips
-
-    def setup_graph(self):
+    def setup_graph():
         graph = ox.io.load_graphml("data/graph/full.graphml")
         return graph
 
-    def setup_trips(self,nrows: int = None) -> pd.DataFrame():
+    def setup_trips(nrows: int = None) -> pd.DataFrame():
         df = pd.read_csv(
             r"/Users/noah/OneDrive - Universität Mannheim/Uni/Mannheim/Team Project/nyc-taxi-trip-duration/train.csv",
             nrows=nrows,
         )
         return df
 
-    def map_trips_to_nodes(self):
+    def map_trips_to_nodes(trips, graph):
 
         start_time = time.time()
         print("MAPPING STARTED")
@@ -31,57 +27,54 @@ class DataPreProcessing:
         pickup_distance = []
         dropoff_distance = []
 
-        total_rows = len(self.trips)
+        total_rows = len(trips)
 
-        for index, row in self.trips.iterrows():
-            p_lat = self.trips.loc[index, "pickup_latitude"]
-            p_long = self.trips.loc[index, "pickup_longitude"]
-            d_lat = self.trips.loc[index, "dropoff_latitude"]
-            d_long = self.trips.loc[index, "dropoff_longitude"]
+        for index, row in trips.iterrows():
+            p_lat = trips.loc[index, "pickup_latitude"]
+            p_long = trips.loc[index, "pickup_longitude"]
+            d_lat = trips.loc[index, "dropoff_latitude"]
+            d_long = trips.loc[index, "dropoff_longitude"]
             p_node, p_dist = ox.distance.nearest_nodes(
-                self.graph, p_long, p_lat, return_dist=True
+                graph, p_long, p_lat, return_dist=True
             )
             d_node, d_dist = ox.distance.nearest_nodes(
-                self.graph, d_long, d_lat, return_dist=True
+                graph, d_long, d_lat, return_dist=True
             )
 
-            # print("Coordinates: Lat ",p_lat,"; Long", p_long)
-            # print("Pickup Node: ",p_node,"; Pickup Distance",p_dist,"Dropoff Node: ",d_node,"; Dropoff Distance",d_dist)
-            # print(" ")
             pickup_node.append(p_node)
             dropoff_node.append(d_node)
             pickup_distance.append(p_dist)
             dropoff_distance.append(d_dist)
             print("Rows mapped: ", round((index + 1) / total_rows * 100, 2), "%")
 
-        self.trips["pickup_node"] = pickup_node
-        self.trips["dropoff_node"] = dropoff_node
-        self.trips["pickup_distance"] = pickup_distance
-        self.trips["dropoff_distance"] = dropoff_distance
+        trips["pickup_node"] = pickup_node
+        trips["dropoff_node"] = dropoff_node
+        trips["pickup_distance"] = pickup_distance
+        trips["dropoff_distance"] = dropoff_distance
 
         print(
             "MAPPING DONE: ",
-            str(len(self.trips)),
+            str(len(trips)),
             "trips took --- %s seconds ---" % round((time.time() - start_time), 2),
         )
-        return self.trips
+        return trips
 
-    def map_routes_to_trips(self):
+    def map_routes_to_trips(trips, graph):
 
         routes = []
-        for index, row in self.trips.iterrows():
+        for index, row in trips.iterrows():
             try:
                 route = nx.shortest_path(
-                    self.graph, self.trips.loc[index, "pickup_node"], self.trips.loc[index, "dropoff_node"]
+                    graph, trips.loc[index, "pickup_node"], trips.loc[index, "dropoff_node"]
                 )
                 routes.append(route)
             except Exception as e:
-                self.trips.drop(index, inplace=True)
+                trips.drop(index, inplace=True)
 
-        self.trips["route"] = routes
-        return self.trips
+        trips["route"] = routes
+        return trips
 
-    def timestamp_range(self,start_time, end_time, delta, route_nodes):
+    def timestamp_range(start_time, end_time, delta, route_nodes):
         """
         Generates a list of timestamps for the list of route_nodes between start_time and end_time
 
@@ -106,7 +99,7 @@ class DataPreProcessing:
             timestamps.append(end_time_formatted)
         return timestamps
 
-    def map_nodes_to_timestaps(self, route_nodes, pickup_time, dropoff_time, duration):
+    def map_nodes_to_timestaps(route_nodes, pickup_time, dropoff_time, duration):
         """
         Maps the timestamp list with the route nodes to have for each route node the time when a particular node is reached
 
@@ -125,14 +118,14 @@ class DataPreProcessing:
         if (len(route_nodes) > 1):
             time_between_nodes = duration / (len(route_nodes) - 1)
             delta = timedelta(seconds=time_between_nodes)
-            timestamps = self.timestamp_range(start_time, end_time, delta, route_nodes)
+            timestamps = DataPreProcessing.timestamp_range(start_time, end_time, delta, route_nodes)
         else:
             timestamps.append(dropoff_time)
 
         timestamps_mapping = dict(zip(route_nodes, timestamps))
         return timestamps_mapping
 
-    def map_routes_to_trips_with_timestamps(self):
+    def map_routes_to_trips_with_timestamps(trips, graph):
         """
         Adds for the trips data the route and the timestamp for each node
 
@@ -142,22 +135,22 @@ class DataPreProcessing:
         """
         routes = []
         node_timestamps = []
-        for index, row in self.trips.iterrows():
+        for index, row in trips.iterrows():
             try:
                 route = nx.shortest_path(
-                    self.graph, self.trips.loc[index, "pickup_node"], self.trips.loc[index, "dropoff_node"]
+                    graph, trips.loc[index, "pickup_node"], trips.loc[index, "dropoff_node"]
                 )
                 routes.append(route)
 
-                timestamps_dict = self.map_nodes_to_timestaps(route, self.trips.loc[index, "pickup_datetime"],
-                                                         self.trips.loc[index, "dropoff_datetime"]
-                                                         , self.trips.loc[index, "trip_duration"])
+                timestamps_dict = DataPreProcessing.map_nodes_to_timestaps(route, trips.loc[index, "pickup_datetime"],
+                                                         trips.loc[index, "dropoff_datetime"]
+                                                         , trips.loc[index, "trip_duration"])
 
                 node_timestamps.append(timestamps_dict)
 
             except Exception as e:
-                self.trips.drop(index, inplace=True)
+                trips.drop(index, inplace=True)
 
-        self.trips["route"] = routes
-        self.trips["route_timestamps"] = node_timestamps
-        return self.trips
+        trips["route"] = routes
+        trips["route_timestamps"] = node_timestamps
+        return trips
