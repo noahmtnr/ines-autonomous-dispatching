@@ -121,24 +121,23 @@ class GraphEnv(gym.Env):
         old_position = self.graph.get_nodeids_list()[self.position]
         availableActions = self.availableActions()
         step_duration = 0
-        print(availableActions)
 
         if self.validateAction(action):
-             if(action == 0):
-                 step_duration = 300
-                 print("action == wait ")
-                 pass
-             elif(action==1):
-                 self.own_ride = True
-                 #create route to final hub
-                 route = ox.shortest_path(self.graph.inner_graph, self.graph.get_nodeids_list()[self.position],  self.graph.get_nodeids_list()[self.final_hub], weight='travel_time')
-                 route_travel_time = ox.utils_graph.get_route_edge_attributes(self.graph.inner_graph,route,attribute='travel_time')
-                 step_duration = sum(route_travel_time)+300 #we add 5 minutes (300 seconds) so the taxi can arrive
-                 self.position=self.final_hub
-                 print("action ==  ownRide ")
-                 pass 
+            if(action == 0):
+                step_duration = 300
+                print("action == wait ")
+                pass
+            elif(action==1):
+                self.own_ride = True
+                #create route to final hub
+                route = ox.shortest_path(self.graph.inner_graph, self.graph.get_nodeids_list()[self.position],  self.graph.get_nodeids_list()[self.final_hub], weight='travel_time')
+                route_travel_time = ox.utils_graph.get_route_edge_attributes(self.graph.inner_graph,route,attribute='travel_time')
+                step_duration = sum(route_travel_time)+300 #we add 5 minutes (300 seconds) so the taxi can arrive
+                self.position=self.final_hub
+                print("action ==  ownRide ")
+                pass 
 
-             else:
+            else:
                 selected_trip = availableActions[action]
 
                 if( self.graph.get_nodeids_list()[self.final_hub] in selected_trip['route']):
@@ -151,7 +150,7 @@ class GraphEnv(gym.Env):
                     step_duration = sum(route_travel_time_to_final_hub)
 
                 else:
-                    self.position = self.graph.get_nodeids_list().index(selected_trip['target_node'])
+                    self.position = self.graph.get_nodeids_list().index(selected_trip['target_hub'])
                     route_travel_time = ox.utils_graph.get_route_edge_attributes(self.graph.inner_graph,selected_trip['route'],attribute='travel_time')
                     step_duration = sum(route_travel_time)
                 
@@ -161,13 +160,19 @@ class GraphEnv(gym.Env):
                 # Instead of cumulating trip duration here we avel_time 
                 # self.total_travel_time += timedelta(seconds=travel_time)
                 print("action == ", action, " New Position", self.position)
+        else:
+            print("invalid action")
+            print("avail actions: ",self.availableActions())
+            print("action: ",action)
+            print("action space: ",self.action_space)
+
 
         self.time += timedelta(seconds=step_duration)
 
         reward, done = self.compute_reward(done)
 
         return self.position, reward,  done, {}
-
+        
     
     def compute_reward(self, done):
         """ Computes the reward for each step
@@ -183,7 +188,7 @@ class GraphEnv(gym.Env):
             reward = self.REWARD_GOAL
             # if the agent books an own ride, penalize reward by 50
             if self.own_ride:
-                reward -= 50
+                reward -= 80
             # if the box is not delivered in time, penalize reward by 1 for every minute over deadline
             if (self.time > self.deadline):
                 overtime = self.time-self.deadline
@@ -228,9 +233,9 @@ class GraphEnv(gym.Env):
         paths=grid['node_timestamps']
         
         for index in range(len(paths)):
-            dict = grid['node_timestamps'][index]
-            for tupel_position in dict:
-                position_timestamp= datetime.strptime(str(dict[tupel_position]), "%Y-%m-%d %H:%M:%S")
+            dict_route = grid['node_timestamps'][index]
+            for tupel_position in dict_route:
+                position_timestamp= datetime.strptime(str(dict_route[tupel_position]), "%Y-%m-%d %H:%M:%S")
                 inTimeframe = start_timestamp <= position_timestamp and end_timestamp >= position_timestamp
                 startsInCurrentPosition = str(tupel_position) == position_str
                 trip_target_node = grid['dropoff_node'][index]
@@ -241,16 +246,25 @@ class GraphEnv(gym.Env):
                     route_to_target_node=route[index_in_route::]
                     hubsOnRoute = any(node in route_to_target_node for node in self.hubs)
                     
-                    # COMMENTED IF OUT UNTIL WE ALLOW MOVES TO ALL HUBS ON THE ROUTE TO FIND MORE TRIPS
-                    #if hubsOnRoute:
-                    trip = {'departure_time': position_timestamp, 'target_node': trip_target_node, 'route': route_to_target_node}
-                    list_trips.append(trip)
+                    if hubsOnRoute:
+                        list_hubs = [node for node in route_to_target_node if node in self.hubs]
+                        hubs_dict = dict((node, dict_route[node]) for node in list_hubs)
+                        for hub in hubs_dict:
+                            index_hub_in_route = route.index(hub)
+                            index_hub_in_route += 1
+                            route_to_target_hub = route[index_in_route:index_hub_in_route]
+                            if(str(hub) != position_str):
+                                trip = {'departure_time': position_timestamp, 'target_hub': hub, 'route': route_to_target_hub}
+                                list_trips.append(trip)
         return list_trips
 
     def validateAction(self, action):
         return action < len(self.availableActions())
 
 
+
+
+        
 
     def render(self, visualize_actionspace: bool = False):
         """_summary_
@@ -279,12 +293,6 @@ class GraphEnv(gym.Env):
         plot = ox.plot_graph_folium(self.graph.inner_graph,fit_bounds=True, weight=2, color="#333333")
 
 
-
-        # Place markers for start, final and current position
-        folium.Marker(location=[final_hub_y, final_hub_x], icon=folium.Icon(color='red', prefix='fa', icon='flag-checkered')).add_to(plot)
-        folium.Marker(location=[start_hub_y, start_hub_x], popup = f"Pickup time: {self.pickup_time.strftime('%m/%d/%Y, %H:%M:%S')}", icon=folium.Icon(color='lightblue', prefix='fa', icon='caret-right')).add_to(plot)
-        folium.Marker(location=[current_pos_y, current_pos_x], popup = f"Current time: {self.time.strftime('%m/%d/%Y, %H:%M:%S')}", icon=folium.Icon(color='lightgreen', prefix='fa',icon='cube')).add_to(plot)
-        
         #Place markers for the random hubs
         for hub in self.hubs:
             hub_node = self.graph.get_node_by_nodeid(hub)
@@ -293,17 +301,23 @@ class GraphEnv(gym.Env):
             popup = "HUB %d" % (hub)
             folium.Marker(location=[hub_pos_y, hub_pos_x],popup=popup, icon=folium.Icon(color='orange', prefix='fa', icon='cube')).add_to(plot)
 
+        # Place markers for start, final and current position
+        folium.Marker(location=[final_hub_y, final_hub_x], icon=folium.Icon(color='red', prefix='fa', icon='flag-checkered')).add_to(plot)
+        folium.Marker(location=[start_hub_y, start_hub_x], popup = f"Pickup time: {self.pickup_time.strftime('%m/%d/%Y, %H:%M:%S')}", icon=folium.Icon(color='lightblue', prefix='fa', icon='caret-right')).add_to(plot)
+        folium.Marker(location=[current_pos_y, current_pos_x], popup = f"Current time: {self.time.strftime('%m/%d/%Y, %H:%M:%S')}", icon=folium.Icon(color='lightgreen', prefix='fa',icon='cube')).add_to(plot)
+        
+
         if(visualize_actionspace):
             for i, trip in enumerate(self.availableTrips()):
-                target_node_x = self.graph.nodes[trip['target_node']]['x']
-                target_node_y = self.graph.nodes[trip['target_node']]['y']
-                popup = "%s: go to node %d" % (i, trip['target_node'])
+                target_hub=self.graph.get_node_by_nodeid(trip['target_hub'])
+                target_node_x = target_hub['x']
+                target_node_y = target_hub['y']
+                popup = "%s: go to node %d" % (i, trip['target_hub'])
                 folium.Marker(location=[target_node_y, target_node_x], popup = popup, tooltip=str(i)).add_to(plot)
-
+                ox.plot_route_folium(G=self.graph.inner_graph,route=trip['route'],route_map=plot)
         # Plot
-        pos_to_final = nx.shortest_path(self.graph.inner_graph, self.graph.get_nodeid_by_index(self.start_hub), self.graph.get_nodeid_by_index(self.final_hub), weight="travel_time")
-        if(not len(pos_to_final)< 2):
-            ox.plot_route_folium(G=self.graph.inner_graph,route=pos_to_final,route_map=plot)
+        # pos_to_final = nx.shortest_path(self.graph.inner_graph, self.graph.get_nodeid_by_index(self.start_hub), self.graph.get_nodeid_by_index(self.final_hub), weight="travel_time")
+        # if(not len(pos_to_final)< 2):
 
         return plot
 
