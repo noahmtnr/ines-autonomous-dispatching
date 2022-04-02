@@ -46,7 +46,6 @@ class GraphEnv(gym.Env):
         self.seed()
         self.reset()
 
-        random.seed(42)
         graph_meinheim=StreetGraph('meinheim')
         graph_meinheim_trips = StreetGraph('meinheim').trips
 
