@@ -5,7 +5,6 @@ import random
 import numpy as np
 from datetime import datetime, timedelta
 
-
 class StreetGraph:
 
     def __init__(self, filename, num_trips, fin_hub, num_hubs):
