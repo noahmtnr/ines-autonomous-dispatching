@@ -53,11 +53,11 @@ class GraphEnv(gym.Env):
         self.graph = graph_meinheim
         #self.graph.trips = graph_meinheim_trips
 
-        #Creates a list of 5 random hubs
-        #self.graph.generate_hubs(number, fin_hub)
-        # self.hubs = random.sample(self.graph.nodes(),5) 
-        # if(final_hub not in self.hubs):
-        #     self.hubs.append(final_hub)
+           #Creates a list of 5 random hubs
+        self.hubs = random.sample(self.graph.nodes(),5) 
+        final_hub = self.graph.get_nodeid_by_index(self.final_hub)
+        if(final_hub not in self.hubs):
+            self.hubs.append(final_hub)
         
         # if self.graph.inner_graph.has_node(self.start_hub):
         #     self.position = self.start_hub
@@ -115,7 +115,8 @@ class GraphEnv(gym.Env):
             int: new reward
             boolean: isDone
         """
-
+        print("Available actions: ",self.availableActions())
+        print("Action space: ", self.action_space)
         self.count += 1
         done =  False
 
@@ -162,10 +163,8 @@ class GraphEnv(gym.Env):
                 # self.total_travel_time += timedelta(seconds=travel_time)
                 print("action == ", action, " New Position", self.position)
         else:
-            print("invalid action")
-            print("avail actions: ",self.availableActions())
-            print("action: ",action)
-            print("action space: ",self.action_space)
+            print("invalid action, action to be taken is: ",action, " but the action space is: ",self.action_space)
+    
 
 
         self.time += timedelta(seconds=step_duration)
