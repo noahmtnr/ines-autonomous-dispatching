@@ -29,6 +29,7 @@ class DataPreProcessing:
 
         total_rows = len(trips)
 
+        # Potentially optimizable by using nearest_nodes() with the entire trips list instead of this for loop (doc: https://osmnx.readthedocs.io/en/stable/osmnx.html#osmnx.distance.nearest_nodes)
         for index, row in trips.iterrows():
             p_lat = trips.loc[index, "pickup_latitude"]
             p_long = trips.loc[index, "pickup_longitude"]
