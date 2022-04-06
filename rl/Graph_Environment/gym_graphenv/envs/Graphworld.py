@@ -71,9 +71,7 @@ class GraphEnv(gym.Env):
        
 
         #self.action_space = gym.spaces.Discrete(num_actions) 
-        self.observation_space = gym.spaces.Discrete(len(self.graph.get_nodeids_list())) #num of nodes in the graph
-
-       
+        self.observation_space = gym.spaces.Discrete(len(self.graph.get_nodeids_list())) #num of nodes in the graph  
     
     def reset(self):
         self.count = 0
@@ -94,16 +92,12 @@ class GraphEnv(gym.Env):
 
         reward=0
 
-
         return self.position
-    
-
 
     @property
     def action_space(self):
             num_actions = len(self.availableActions())
             return gym.spaces.Discrete(num_actions) 
-
     
     def step(self, action: int):
         """ Executes an action based on the index passed as a parameter (only works with moves to direct neighbors as of now)
@@ -143,6 +137,7 @@ class GraphEnv(gym.Env):
                 selected_trip = availableActions[action]
 
                 # If order dropoff node is on the route of the taxi we get out there 
+
                 if( self.graph.get_nodeids_list()[self.final_hub] in selected_trip['route']):
                     route = selected_trip['route']
 
@@ -153,8 +148,8 @@ class GraphEnv(gym.Env):
                 # Else we get out at the final hub of the taxi trip
                 else: 
                     self.position = self.graph.get_nodeids_list().index(selected_trip['target_hub'])
-                    step_duration = (selected_trip['arrival_time_at_target_hub'] - selected_trip['departure_time']).seconds
-
+                    step_duration = (selected_trip['arrival_time_at_target_hub'] - selected_trip['departure_time']).second
+                
                 # Increase global time state by travelled time (does not include waiting yet, in this case it should be +xx seconds)
                 self.time = selected_trip['departure_time']
 
@@ -164,11 +159,11 @@ class GraphEnv(gym.Env):
         else:
             print("invalid action, action to be taken is: ",action, " but the action space is: ",self.action_space)
     
-
         # Adds the step duration to the global time variable: 
         #  In case of wait: 5 mins
         #  In case of order own rides: trip duration + 5 mins of time waiting for taxi to arrive
         #  In case of taking available ride: trip duration + time waiting for taxi to arrive
+
         self.time += timedelta(seconds=step_duration)
 
         reward, done = self.compute_reward(done)
@@ -202,8 +197,6 @@ class GraphEnv(gym.Env):
             reward = self.REWARD_AWAY
 
         return reward, done
-
-
 
     def availableActions(self):
         """ Returns the available actions at the current position. Uses a simplified action space with moves to all direct neighbors allowed.
@@ -239,6 +232,7 @@ class GraphEnv(gym.Env):
             for tupel_position in dict_route:
                 departure_time= datetime.strptime(str(dict_route[tupel_position]), "%Y-%m-%d %H:%M:%S")
                 inTimeframe = start_timestamp <= departure_time and end_timestamp >= departure_time
+
                 startsInCurrentPosition = str(tupel_position) == position_str
                 trip_target_node = grid['dropoff_node'][index]
                 isNotFinalNode = str(tupel_position) != str(trip_target_node)
@@ -255,19 +249,16 @@ class GraphEnv(gym.Env):
                             index_hub_in_route = route.index(hub)
                             index_hub_in_route += 1
                             route_to_target_hub = route[index_in_route:index_hub_in_route]
+
                             arrival_at_target_hub = datetime.strptime(str(dict_route[hub]), "%Y-%m-%d %H:%M:%S")
                             if(str(hub) != position_str):
                                 trip = {'departure_time': departure_time, 'target_hub': hub, 'arrival_time_at_target_hub': arrival_at_target_hub,'route': route_to_target_hub}
+
                                 list_trips.append(trip)
         return list_trips
 
     def validateAction(self, action):
         return action < len(self.availableActions())
-
-
-
-
-        
 
     def render(self, visualize_actionspace: bool = False):
         """_summary_
@@ -294,7 +285,6 @@ class GraphEnv(gym.Env):
         
         # Create plot
         plot = ox.plot_graph_folium(self.graph.inner_graph,fit_bounds=True, weight=2, color="#333333")
-
 
         #Place markers for the random hubs
         for hub in self.hubs:
