@@ -142,6 +142,7 @@ class GraphEnv(gym.Env):
             else:
                 selected_trip = availableActions[action]
 
+                # If order dropoff node is on the route of the taxi we get out there 
                 if( self.graph.get_nodeids_list()[self.final_hub] in selected_trip['route']):
                     route = selected_trip['route']
 
@@ -151,7 +152,8 @@ class GraphEnv(gym.Env):
                     route_travel_time_to_final_hub = ox.utils_graph.get_route_edge_attributes(self.graph.inner_graph,route_to_final_hub,attribute='travel_time')
                     step_duration = sum(route_travel_time_to_final_hub)
 
-                else:
+                # Else we get out at the final hub of the taxi trip
+                else: 
                     self.position = self.graph.get_nodeids_list().index(selected_trip['target_hub'])
                     route_travel_time = ox.utils_graph.get_route_edge_attributes(self.graph.inner_graph,selected_trip['route'],attribute='travel_time')
                     step_duration = sum(route_travel_time)
