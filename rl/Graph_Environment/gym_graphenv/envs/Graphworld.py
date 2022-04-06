@@ -148,16 +148,13 @@ class GraphEnv(gym.Env):
 
                     self.position = self.final_hub
                     index_in_route = route.index( self.graph.get_nodeids_list()[self.final_hub])
-                    route_to_final_hub=route[:index_in_route]
-                    route_travel_time_to_final_hub = ox.utils_graph.get_route_edge_attributes(self.graph.inner_graph,route_to_final_hub,attribute='travel_time')
-                    step_duration = sum(route_travel_time_to_final_hub)
+                    step_duration = (selected_trip['arrival_time_at_target_hub'] - selected_trip['departure_time']).seconds
 
                 # Else we get out at the final hub of the taxi trip
                 else: 
                     self.position = self.graph.get_nodeids_list().index(selected_trip['target_hub'])
-                    route_travel_time = ox.utils_graph.get_route_edge_attributes(self.graph.inner_graph,selected_trip['route'],attribute='travel_time')
-                    step_duration = sum(route_travel_time)
-                
+                    step_duration = (selected_trip['arrival_time_at_target_hub'] - selected_trip['departure_time']).seconds
+
                 # Increase global time state by travelled time (does not include waiting yet, in this case it should be +xx seconds)
                 self.time = selected_trip['departure_time']
 
@@ -240,8 +237,8 @@ class GraphEnv(gym.Env):
         for index in range(len(paths)):
             dict_route = grid['node_timestamps'][index]
             for tupel_position in dict_route:
-                position_timestamp= datetime.strptime(str(dict_route[tupel_position]), "%Y-%m-%d %H:%M:%S")
-                inTimeframe = start_timestamp <= position_timestamp and end_timestamp >= position_timestamp
+                departure_time= datetime.strptime(str(dict_route[tupel_position]), "%Y-%m-%d %H:%M:%S")
+                inTimeframe = start_timestamp <= departure_time and end_timestamp >= departure_time
                 startsInCurrentPosition = str(tupel_position) == position_str
                 trip_target_node = grid['dropoff_node'][index]
                 isNotFinalNode = str(tupel_position) != str(trip_target_node)
@@ -258,8 +255,9 @@ class GraphEnv(gym.Env):
                             index_hub_in_route = route.index(hub)
                             index_hub_in_route += 1
                             route_to_target_hub = route[index_in_route:index_hub_in_route]
+                            arrival_at_target_hub = datetime.strptime(str(dict_route[hub]), "%Y-%m-%d %H:%M:%S")
                             if(str(hub) != position_str):
-                                trip = {'departure_time': position_timestamp, 'target_hub': hub, 'route': route_to_target_hub}
+                                trip = {'departure_time': departure_time, 'target_hub': hub, 'arrival_time_at_target_hub': arrival_at_target_hub,'route': route_to_target_hub}
                                 list_trips.append(trip)
         return list_trips
 
