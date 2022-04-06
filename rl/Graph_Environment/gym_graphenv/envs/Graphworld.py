@@ -166,7 +166,10 @@ class GraphEnv(gym.Env):
             print("invalid action, action to be taken is: ",action, " but the action space is: ",self.action_space)
     
 
-
+        # Adds the step duration to the global time variable: 
+        #  In case of wait: 5 mins
+        #  In case of order own rides: trip duration + 5 mins of time waiting for taxi to arrive
+        #  In case of taking available ride: trip duration + time waiting for taxi to arrive
         self.time += timedelta(seconds=step_duration)
 
         reward, done = self.compute_reward(done)
