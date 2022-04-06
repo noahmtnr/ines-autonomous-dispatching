@@ -226,11 +226,11 @@ class GraphEnv(gym.Env):
             df_id = self.current_trip['trip_row_id']
 
             # if action was own ride
-             if (self.own_ride):
+            if self.own_ride:
                  # punishment is the price for own ride and the emission costs for the distance
                 path_travelled = ox.shortest_path(self.graph.inner_graph, self.graph.get_nodeids_list()[self.old_position],  self.graph.get_nodeids_list()[self.position], weight='travel_time')
                 dist_travelled_list = ox.utils_graph.get_route_edge_attributes(self.graph.inner_graph,path_travelled,attribute='length')
-                part_length = = sum(dist_travelled_list)
+                part_length = sum(dist_travelled_list)
                 dist_travelled = 1000/part_length
                 # choose random mobility provider (hereby modelling random availability for an own ride) and calculate trip costs
                 providers = pd.read_csv("Provider.csv")
@@ -254,7 +254,7 @@ class GraphEnv(gym.Env):
                 # minimize route distance travelled (calculate length of current (part-)trip and divide by total length of respective trip from dataframe)
                 path_travelled = ox.shortest_path(self.graph.inner_graph, self.graph.get_nodeids_list()[self.old_position],  self.graph.get_nodeids_list()[self.position], weight='travel_time')
                 dist_travelled_list = ox.utils_graph.get_route_edge_attributes(self.graph.inner_graph,path_travelled,attribute='length')
-                part_length = = sum(dist_travelled_list)
+                part_length = sum(dist_travelled_list)
                 dist_travelled = 1000/part_length
 
                 # minimize distance to final hub (calculate difference between distance to final hub from the old position and the new position)

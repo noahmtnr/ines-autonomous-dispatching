@@ -1,7 +1,8 @@
 import osmnx as ox
 import pandas as pd
 import random
-
+#graph to be used: full.graphml (all nodes)
+#if we use small_manhattan.graphml, we do not have all nodes which are in the trips and then we get Key Error
 class ManhattenGraph:
 
     def __init__(self, filename, num_hubs):
@@ -27,7 +28,6 @@ class ManhattenGraph:
         """
         random.seed(42)
         hubs = random.sample(self.nodes(),num_hubs) 
-        #final_hub = self.get_nodeid_by_index(fin_hub)
         if(fin_hub not in hubs):
             hubs.append(fin_hub)
         self.hubs = hubs
@@ -42,6 +42,46 @@ class ManhattenGraph:
         """
         
         self.trips = pd.read_csv('../../data/trips/trips_with_routes_timestamps.csv')
+
+        #compute trip length and add to csv
+        #generate random passenger count between 1 and 4 and add to csv
+        route_length_column=[]
+        for i in self.trips.index:
+            current_route_string = self.trips.iloc[i]["route"]
+            string_split = current_route_string.replace('[','').replace(']','').split(',')
+            current_route = [int(el) for el in string_split]
+            #print(current_route)
+            route_length = 0
+            for j in range(len(current_route)-1):
+                #print(self.inner_graph.nodes()[current_route[j]])
+                #print(current_route[j])
+                #print(self.get_node_by_nodeid(current_route[j]))
+                #print(self.nodes())
+                route_length += ox.distance.great_circle_vec(self.nodes()[current_route[j]]['y'], self.nodes()[current_route[j]]['x'],
+                self.nodes()[current_route[j+1]]['y'], self.nodes()[current_route[j+1]]['x'])
+            route_length_column.append(route_length)
+
+        self.trips["route_length"]=route_length_column
+
+        # add mobility providers randomly
+        provider_column=[]
+        totalprice_column=[]
+        x = pd.read_csv("Provider.csv")
+        for i in self.trips.index:
+            provider_id = x['id'].sample(n=1).iloc[0]
+            provider_column.append(provider_id)
+            selected_row = x[x['id']==provider_id]
+            basic_price = selected_row['basic_cost']
+            km_price = selected_row['cost_per_km']
+            leng = self.trips.iloc[0]['route_length']
+            # note that internal distance unit is meters in OSMnx
+            total_price = basic_price + km_price*leng/1000
+            totalprice_column.append(total_price.iloc[0])
+        self.trips["provider"]=provider_column
+        self.trips["total_price"]=totalprice_column
+
+
+        self.trips.to_csv("trips_kaggle_providers.csv")
 
         return self.trips
 
