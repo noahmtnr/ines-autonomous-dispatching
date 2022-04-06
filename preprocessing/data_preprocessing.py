@@ -75,7 +75,27 @@ class DataPreProcessing:
         trips["route"] = routes
         return trips
 
-    def timestamp_range(start_time, end_time, delta, route_nodes):
+    def timestamp_range(graph, route_nodes, start_time, end_time):
+        """
+        Generates a list of timestamps for the list of route_nodes between start_time and end_time using the relative proportion of edge speed to the actual traxi trip duration
+
+        :param graph: graph in which the route takes place
+        :param route_nodes: all the nodes that are reached from starting point to destination
+        :param start_time: stat time and the fime for the fist node of the route
+        :param end_time: the end time for the route, time of last node of the route
+
+        :return: a list of timestamps where each timestamp represents the time when a specific node is reached
+        """
+        timestamps = [start_time]
+
+        edge_travel_times = DataPreProcessing.relative_edge_travel_time(graph, route_nodes, start_time, end_time)
+
+        for delta in edge_travel_times:
+            timestamps.append(timestamps[-1] + timedelta(seconds=round(delta)))
+
+        return timestamps
+
+    def relative_edge_travel_time(graph, route_nodes, start_time, end_time):
         """
         Generates a list of timestamps for the list of route_nodes between start_time and end_time
 
@@ -85,22 +105,26 @@ class DataPreProcessing:
         :param route_nodes: all the nodes that are reached from starting point to destination
         :return: a list of timestamps where each timestamp represents the time when a specific node is reached
         """
-        timestamps = []
+        timestamps = [start_time]
 
-        while start_time < end_time:
-            start_time_formatted = str(start_time.strftime("%Y-%m-%d %H:%M:%S"))
-            timestamps.append(start_time_formatted)
-            start_time += delta
+        route_edge_travel_times = ox.utils_graph.get_route_edge_attributes(graph,route_nodes,attribute='travel_time')
 
-        if len(timestamps) == len(route_nodes):
-            end_time_formatted = str(end_time.strftime("%Y-%m-%d %H:%M:%S"))
-            timestamps[-1] = str(end_time_formatted)
-        else:
-            end_time_formatted = str(end_time.strftime("%Y-%m-%d %H:%M:%S"))
-            timestamps.append(end_time_formatted)
-        return timestamps
+        actual_travel_time = end_time-start_time
+        free_flow_travel_time = round(sum(route_edge_travel_times))
+        
+        # work around for preventing division by zero
+        if free_flow_travel_time == 0:
+            free_flow_travel_time = 1
 
-    def map_nodes_to_timestaps(route_nodes, pickup_time, dropoff_time, duration):
+        actual_edge_travel_speed = []
+
+        for x in route_edge_travel_times:
+            def proportion_of_actual_travel_time(x): return x/free_flow_travel_time * actual_travel_time
+            actual_edge_travel_speed.append(proportion_of_actual_travel_time(x).total_seconds())
+
+        return actual_edge_travel_speed
+
+    def map_nodes_to_timestaps(graph, route_nodes, pickup_time, dropoff_time, duration):
         """
         Maps the timestamp list with the route nodes to have for each route node the time when a particular node is reached
 
@@ -117,9 +141,7 @@ class DataPreProcessing:
         end_time = pd.to_datetime(dropoff_time, format=date_format_str)
 
         if (len(route_nodes) > 1):
-            time_between_nodes = duration / (len(route_nodes) - 1)
-            delta = timedelta(seconds=time_between_nodes)
-            timestamps = DataPreProcessing.timestamp_range(start_time, end_time, delta, route_nodes)
+            timestamps = DataPreProcessing.timestamp_range(graph, route_nodes, start_time, end_time)
         else:
             timestamps.append(dropoff_time)
 
@@ -143,7 +165,7 @@ class DataPreProcessing:
                 )
                 routes.append(route)
 
-                timestamps_dict = DataPreProcessing.map_nodes_to_timestaps(route, trips.loc[index, "pickup_datetime"],
+                timestamps_dict = DataPreProcessing.map_nodes_to_timestaps(graph, route, trips.loc[index, "pickup_datetime"],
                                                          trips.loc[index, "dropoff_datetime"]
                                                          , trips.loc[index, "trip_duration"])
 
