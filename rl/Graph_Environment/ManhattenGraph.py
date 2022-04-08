@@ -17,6 +17,7 @@ class ManhattenGraph:
 
 
     def generate_hubs(self, fin_hub, num_hubs: int = 5):
+        # the code below is for generating random hubs 
         """Generates random bubs within the graph
 
         Args:
@@ -26,12 +27,22 @@ class ManhattenGraph:
         Returns:
             self.hubs(list): List of hubs in graph
         """
+        """
         random.seed(42)
         hubs = random.sample(self.nodes(),num_hubs) 
         if(fin_hub not in hubs):
             hubs.append(fin_hub)
         self.hubs = hubs
 
+        return self.hubs
+        """
+
+        # the code below is for mapping the pre-defined hubs (customer/store/trips) to nodes in the graph
+        hubs_file = pd.read_csv("../data/hubs/manual_hubs.csv")
+        hubs = []
+        for hub in hubs_file:
+            hubs.append(ox.get_nearest_node(self.inner_graph,(hub[0], hub[1])
+        self.hubs = hubs
         return self.hubs
 
     def generate_random_trips(self):
