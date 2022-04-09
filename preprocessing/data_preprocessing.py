@@ -2,7 +2,7 @@ import osmnx as ox
 import networkx as nx
 import pandas as pd
 from datetime import timedelta
-
+import time
 
 class DataPreProcessing:
 

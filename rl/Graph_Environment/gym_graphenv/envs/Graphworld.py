@@ -53,7 +53,7 @@ class GraphEnv(gym.Env):
         self.graph = graph_meinheim
         #self.graph.trips = graph_meinheim_trips
 
-           #Creates a list of 5 random hubs
+        #Creates a list of 5 random hubs
         self.hubs = random.sample(self.graph.nodes(),5) 
         final_hub = self.graph.get_nodeid_by_index(self.final_hub)
         if(final_hub not in self.hubs):
@@ -215,45 +215,54 @@ class GraphEnv(gym.Env):
         Returns:
             list: [departure_time,target_node]
         """
+        
         list_trips=[]
-
+        # get current position and the time
         position=self.graph.get_nodeid_by_index(self.position)
         position_str=str(position)
         final_hub_postion=self.graph.get_nodeid_by_index(self.final_hub)
-
         start_timestamp=self.time
         end_timestamp = self.time + timedelta(minutes=time_window)
-
+        #get the route nodes with timestamps
         grid=self.graph.trips
         paths=grid['node_timestamps']
         
         for index in range(len(paths)):
             dict_route = grid['node_timestamps'][index]
-            for tupel_position in dict_route:
-                departure_time= datetime.strptime(str(dict_route[tupel_position]), "%Y-%m-%d %H:%M:%S")
+            for route_node in dict_route:
+                #get for each node check if the trip arrives in the time window and if the node is the current position
+                departure_time= datetime.strptime(str(dict_route[route_node]), "%Y-%m-%d %H:%M:%S")
                 inTimeframe = start_timestamp <= departure_time and end_timestamp >= departure_time
-
-                startsInCurrentPosition = str(tupel_position) == position_str
+                startsInCurrentPosition = str(route_node) == position_str
                 trip_target_node = grid['dropoff_node'][index]
-                isNotFinalNode = str(tupel_position) != str(trip_target_node)
+                isNotFinalNode = str(route_node) != str(trip_target_node)
                 route = grid['route'][index]
+
+                # check if the trip is within the time window at the current position and the that the current position is not the target node of the trip 
                 if startsInCurrentPosition and inTimeframe and isNotFinalNode:
                     index_in_route = route.index(position)
+                    # route of the trip starts from the current node until the target node
                     route_to_target_node=route[index_in_route::]
+                    # check if the trip contains hubs
                     hubsOnRoute = any(node in route_to_target_node for node in self.hubs)
                     
+                    # only if the trip contains hubs will be taken into account as a possible route for travel
                     if hubsOnRoute:
+                        # get the hubs on the route and create a dictionay with the hubs on route and the timestamp when the taxi arrives at the hub
                         list_hubs = [node for node in route_to_target_node if node in self.hubs]
                         hubs_dict = dict((node, dict_route[node]) for node in list_hubs)
+
+                        # for each hub on the route create a trip starting from current position until the hub
                         for hub in hubs_dict:
                             index_hub_in_route = route.index(hub)
                             index_hub_in_route += 1
+                            # get the route from current position to a hub and the arrival time at this hub
                             route_to_target_hub = route[index_in_route:index_hub_in_route]
 
                             arrival_at_target_hub = datetime.strptime(str(dict_route[hub]), "%Y-%m-%d %H:%M:%S")
                             if(str(hub) != position_str):
+                                # add the trip to a hub into the possible trips list
                                 trip = {'departure_time': departure_time, 'target_hub': hub, 'arrival_time_at_target_hub': arrival_at_target_hub,'route': route_to_target_hub}
-
                                 list_trips.append(trip)
         return list_trips
 
@@ -300,6 +309,7 @@ class GraphEnv(gym.Env):
         folium.Marker(location=[current_pos_y, current_pos_x], popup = f"Current time: {self.time.strftime('%m/%d/%Y, %H:%M:%S')}", icon=folium.Icon(color='lightgreen', prefix='fa',icon='cube')).add_to(plot)
         
 
+        # Place markers for the possible hubs where the agent can go from the current position
         if(visualize_actionspace):
             for i, trip in enumerate(self.availableTrips()):
                 target_hub=self.graph.get_node_by_nodeid(trip['target_hub'])
