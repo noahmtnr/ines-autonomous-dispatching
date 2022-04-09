@@ -223,14 +223,14 @@ class GraphEnv(gym.Env):
         final_hub_postion=self.graph.get_nodeid_by_index(self.final_hub)
         start_timestamp=self.time
         end_timestamp = self.time + timedelta(minutes=time_window)
-        #get the route nodes with timestamps
+        # get the route nodes with timestamps
         grid=self.graph.trips
         paths=grid['node_timestamps']
         
         for index in range(len(paths)):
             dict_route = grid['node_timestamps'][index]
             for route_node in dict_route:
-                #get for each node check if the trip arrives in the time window and if the node is the current position
+                # for each node check if the trip arrives in the time window and if the node is equal to the current position
                 departure_time= datetime.strptime(str(dict_route[route_node]), "%Y-%m-%d %H:%M:%S")
                 inTimeframe = start_timestamp <= departure_time and end_timestamp >= departure_time
                 startsInCurrentPosition = str(route_node) == position_str
@@ -246,7 +246,7 @@ class GraphEnv(gym.Env):
                     # check if the trip contains hubs
                     hubsOnRoute = any(node in route_to_target_node for node in self.hubs)
                     
-                    # only if the trip contains hubs will be taken into account as a possible route for travel
+                    # only if the trip contains hubs, will it be taken into account as a possible route for travel
                     if hubsOnRoute:
                         # get the hubs on the route and create a dictionay with the hubs on route and the timestamp when the taxi arrives at the hub
                         list_hubs = [node for node in route_to_target_node if node in self.hubs]
