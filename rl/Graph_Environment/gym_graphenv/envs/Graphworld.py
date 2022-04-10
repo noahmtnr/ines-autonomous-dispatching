@@ -148,7 +148,7 @@ class GraphEnv(gym.Env):
                 # Else we get out at the final hub of the taxi trip
                 else: 
                     self.position = self.graph.get_nodeids_list().index(selected_trip['target_hub'])
-                    step_duration = (selected_trip['arrival_time_at_target_hub'] - selected_trip['departure_time']).second
+                    step_duration = (selected_trip['arrival_time_at_target_hub'] - selected_trip['departure_time']).seconds
                 
                 # Increase global time state by travelled time (does not include waiting yet, in this case it should be +xx seconds)
                 self.time = selected_trip['departure_time']
