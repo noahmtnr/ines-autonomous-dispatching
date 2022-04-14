@@ -12,7 +12,7 @@ class ManhattenGraph:
         self.inner_graph = ox.add_edge_travel_times(self.inner_graph)
         ox.utils_graph.remove_isolated_nodes(self.inner_graph)
         fin_hub = random.sample(self.nodes(),1)
-        self.generate_hubs(fin_hub, num_hubs)
+        #self.generate_hubs(fin_hub, num_hubs)
         self.generate_random_trips()
 
 
@@ -41,7 +41,7 @@ class ManhattenGraph:
         hubs_file = pd.read_csv("../data/hubs/manual_hubs.csv")
         hubs = []
         for hub in hubs_file:
-            hubs.append(ox.get_nearest_node(self.inner_graph,(hub[0], hub[1])
+            hubs.append(ox.get_nearest_node(self.inner_graph,(hub[0], hub[1])))
         self.hubs = hubs
         return self.hubs
 
@@ -52,7 +52,8 @@ class ManhattenGraph:
             n (int, optional): Number of trips to be generated. Defaults to 2000.
         """
         
-        self.trips = pd.read_csv('../../data/trips/trips_with_routes_timestamps.csv')
+        #trips for simple graph, only the first 5000 rows
+        self.trips = pd.read_csv('../../data/trips/simple_graph_trips_reduced.csv')
 
         #compute trip length and add to csv
         #generate random passenger count between 1 and 4 and add to csv
