@@ -154,6 +154,7 @@ class GraphEnv(gym.Env):
                 pass 
 
             else:
+                print("action ==  take taxi trip ")
                 self.has_waited=False
                 self.own_ride = False
                 self.count_hubs += 1
