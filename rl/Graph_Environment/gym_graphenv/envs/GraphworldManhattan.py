@@ -46,15 +46,18 @@ class GraphEnv(gym.Env):
         # self.total_travel_time = 0
         # self.deadline=self.pickup_time+timedelta(hours=3)
         
-        self.seed()
-        self.reset()
+       
 
         # Creates an instance of StreetGraph with random trips and hubs
         # graph_meinheim = StreetGraph(filename='meinheim', num_trips=4000, fin_hub=self.final_hub, num_hubs=5)
         graph_meinheim = ManhattanGraph(filename='simple', num_hubs=52)
-        graph_meinheim_trips = graph_meinheim.trips
+        self.graph_meinheim_trips = graph_meinheim.trips
+        self.graph_meinheim_hubs = graph_meinheim.hubs
 
         self.graph = graph_meinheim
+
+        self.seed()
+        self.reset()
         #self.graph.trips = graph_meinheim_trips
 
         #Creates a list of 5 random hubs
@@ -81,8 +84,8 @@ class GraphEnv(gym.Env):
     
     def reset(self):
         self.count_hubs = 0
-        self.final_hub = 3
-        self.start_hub = 6
+        self.final_hub = self.graph.get_nodeids_list().index(random.sample(self.graph_meinheim_hubs,1)[0])
+        self.start_hub = self.graph.get_nodeids_list().index(random.sample(self.graph_meinheim_hubs,1)[0])
         self.position = self.start_hub
         # old position is current position
         self.old_position = self.start_hub
@@ -317,7 +320,6 @@ class GraphEnv(gym.Env):
             list: [departure_time,target_node]
         """
         list_trips=[]
-
         position=self.graph.get_nodeid_by_index(self.position)
         position_str=str(position)
         final_hub_postion=self.graph.get_nodeid_by_index(self.final_hub)
@@ -343,10 +345,10 @@ class GraphEnv(gym.Env):
                 if startsInCurrentPosition and inTimeframe and isNotFinalNode:
                     index_in_route = route.index(position)
                     route_to_target_node=route[index_in_route::]
-                    hubsOnRoute = any(node in route_to_target_node for node in self.hubs)
+                    hubsOnRoute = any(node in route_to_target_node for node in self.meinheim)
                     
                     if hubsOnRoute:
-                        list_hubs = [node for node in route_to_target_node if node in self.hubs]
+                        list_hubs = [node for node in route_to_target_node if node in self.graph_meinheim_hubs]
                         hubs_dict = dict((node, dict_route[node]) for node in list_hubs)
                         for hub in hubs_dict:
                             index_hub_in_route = route.index(hub)
@@ -393,7 +395,7 @@ class GraphEnv(gym.Env):
 
 
         #Place markers for the random hubs
-        for hub in self.hubs:
+        for hub in self.graph_meinheim_hubs:
             hub_node = self.graph.get_node_by_nodeid(hub)
             hub_pos_x = hub_node['x']
             hub_pos_y = hub_node['y']
