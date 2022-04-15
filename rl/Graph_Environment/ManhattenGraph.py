@@ -38,7 +38,7 @@ class ManhattenGraph:
         """
 
         # the code below is for mapping the pre-defined hubs (customer/store/trips) to nodes in the graph
-        hubs_file = pd.read_csv("../data/hubs/manual_hubs.csv")
+        hubs_file = pd.read_csv("../../data/hubs/manual_hubs.csv")
         hubs = []
         for hub in hubs_file:
             hubs.append(ox.get_nearest_node(self.inner_graph,(hub[0], hub[1])))
@@ -69,8 +69,8 @@ class ManhattenGraph:
                 #print(current_route[j])
                 #print(self.get_node_by_nodeid(current_route[j]))
                 #print(self.nodes())
-                route_length += ox.distance.great_circle_vec(self.nodes()[current_route[j]]['y'], self.nodes()[current_route[j]]['x'],
-                self.nodes()[current_route[j+1]]['y'], self.nodes()[current_route[j+1]]['x'])
+                route_length += ox.distance.great_circle_vec(self.inner_graph.nodes()[current_route[j]]['y'], self.inner_graph.nodes()[current_route[j]]['x'],
+                self.inner_graph.nodes()[current_route[j+1]]['y'], self.inner_graph.nodes()[current_route[j+1]]['x'])
             route_length_column.append(route_length)
 
         self.trips["route_length"]=route_length_column
