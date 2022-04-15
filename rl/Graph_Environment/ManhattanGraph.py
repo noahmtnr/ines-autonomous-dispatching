@@ -3,7 +3,7 @@ import pandas as pd
 import random
 #graph to be used: full.graphml (all nodes)
 #if we use small_manhattan.graphml, we do not have all nodes which are in the trips and then we get Key Error
-class ManhattenGraph:
+class ManhattanGraph:
 
     def __init__(self, filename, num_hubs):
         filepath = ("../../data/graph/%s.graphml") % (filename)

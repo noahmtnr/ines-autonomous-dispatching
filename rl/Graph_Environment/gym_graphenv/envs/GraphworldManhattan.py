@@ -15,7 +15,7 @@ import pandas as pd
 from gym import spaces
 from pandas import Timestamp
 
-from ManhattenGraph import ManhattenGraph
+from ManhattanGraph import ManhattanGraph
 
 class GraphEnv(gym.Env):
 
@@ -51,7 +51,7 @@ class GraphEnv(gym.Env):
 
         # Creates an instance of StreetGraph with random trips and hubs
         # graph_meinheim = StreetGraph(filename='meinheim', num_trips=4000, fin_hub=self.final_hub, num_hubs=5)
-        graph_meinheim = ManhattenGraph(filename='simple', num_hubs=52)
+        graph_meinheim = ManhattanGraph(filename='simple', num_hubs=52)
         graph_meinheim_trips = graph_meinheim.trips
 
         self.graph = graph_meinheim
