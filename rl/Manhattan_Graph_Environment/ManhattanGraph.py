@@ -13,7 +13,7 @@ class ManhattanGraph:
         ox.utils_graph.remove_isolated_nodes(self.inner_graph)
         fin_hub = random.sample(self.nodes(),1)
         self.generate_hubs(fin_hub, num_hubs)
-        self.generate_random_trips()
+        self.generate_trips()
 
 
     def generate_hubs(self, fin_hub, num_hubs: int = 5):
@@ -38,7 +38,7 @@ class ManhattanGraph:
         self.hubs = random.sample(hubs,num_hubs)
         return self.hubs
 
-    def generate_random_trips(self):
+    def generate_trips(self):
         """Read trips information of Kaggle file in self.trips.
 
         Args:
