@@ -213,6 +213,8 @@ class GraphEnv(gym.Env):
             int: reward
             bool: done
         """
+        startTime = time.time()
+
         # define weights for reward components
         # for the start: every component has the same weight
         num_comp = 6
@@ -304,7 +306,9 @@ class GraphEnv(gym.Env):
                 # later: take into account each individual weight
                 # reward += w1 * time_diff + w2 * dist + w3 * hops + w4 * wait_time + w5 * cost
 
-        return reward, done
+            executionTime = (time.time() - startTime)
+            print('Compute_reward() Execution time: ' + str(executionTime) + ' seconds')
+            return reward, done
 
 
 
