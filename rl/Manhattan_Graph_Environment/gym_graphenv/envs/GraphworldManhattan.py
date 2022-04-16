@@ -13,6 +13,7 @@ import random
 import pandas as pd
 from gym import spaces
 from pandas import Timestamp
+import time
 
 from ManhattanGraph import ManhattanGraph
 
@@ -125,9 +126,11 @@ class GraphEnv(gym.Env):
             action (int): index of action to be taken from availableActions
         Returns:
             int: new position
-            int: new reward
+            int: new reward 
             boolean: isDone
         """
+
+        startTime = time.time()
 
         done =  False
 
@@ -195,6 +198,9 @@ class GraphEnv(gym.Env):
         self.time += timedelta(seconds=step_duration)
 
         reward, done = self.compute_reward(done)
+
+        executionTime = (time.time() - startTime)
+        print('Step() Execution time: ' + str(executionTime) + ' seconds')
 
         return self.position, reward,  done, {}
         
@@ -308,9 +314,16 @@ class GraphEnv(gym.Env):
         Returns:
             list: list of nodeIds of direct neighbors
         """
+
+        startTime = time.time()
+
         wait = [{'type': 'wait'}]
         ownRide = [{'type': 'ownRide'}]
         available_rides = list(self.availableTrips())
+        
+        executionTime = (time.time() - startTime)
+        print('AvailableActions() Execution time: ' + str(executionTime) + ' seconds')
+
         return [wait,ownRide,*available_rides]
 
     def availableTrips(self, time_window=5):
