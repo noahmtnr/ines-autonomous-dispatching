@@ -54,10 +54,10 @@ class GraphEnv(gym.Env):
         #self.graph.trips = graph_meinheim_trips
 
         #Creates a list of 5 random hubs
-        #self.graph.generate_hubs(number, fin_hub)
-        # self.hubs = random.sample(self.graph.nodes(),5) 
-        # if(final_hub not in self.hubs):
-        #     self.hubs.append(final_hub)
+        self.hubs = random.sample(self.graph.nodes(),5) 
+        final_hub = self.graph.get_nodeid_by_index(self.final_hub)
+        if(final_hub not in self.hubs):
+            self.hubs.append(final_hub)
         
         # if self.graph.inner_graph.has_node(self.start_hub):
         #     self.position = self.start_hub
@@ -71,9 +71,7 @@ class GraphEnv(gym.Env):
        
 
         #self.action_space = gym.spaces.Discrete(num_actions) 
-        self.observation_space = gym.spaces.Discrete(len(self.graph.get_nodeids_list())) #num of nodes in the graph
-
-       
+        self.observation_space = gym.spaces.Discrete(len(self.graph.get_nodeids_list())) #num of nodes in the graph  
     
     def reset(self):
         self.count_hubs = 0
@@ -100,16 +98,12 @@ class GraphEnv(gym.Env):
 
         reward=0
 
-
         return self.position
-    
-
 
     @property
     def action_space(self):
             num_actions = len(self.availableActions())
             return gym.spaces.Discrete(num_actions) 
-
     
     def step(self, action: int):
         """ Executes an action based on the index passed as a parameter (only works with moves to direct neighbors as of now)
@@ -122,6 +116,9 @@ class GraphEnv(gym.Env):
             boolean: isDone
         """
 
+        print("Available actions: ",self.availableActions())
+        print("Action space: ", self.action_space)
+        self.count += 1
         done =  False
 
         # set old position to current position before changing current position
@@ -156,19 +153,19 @@ class GraphEnv(gym.Env):
                 selected_trip = availableActions[action]
                 self.current_trip = selected_trip
 
+                # If order dropoff node is on the route of the taxi we get out there 
+
                 if( self.graph.get_nodeids_list()[self.final_hub] in selected_trip['route']):
                     route = selected_trip['route']
 
                     self.position = self.final_hub
                     index_in_route = route.index( self.graph.get_nodeids_list()[self.final_hub])
-                    route_to_final_hub=route[:index_in_route]
-                    route_travel_time_to_final_hub = ox.utils_graph.get_route_edge_attributes(self.graph.inner_graph,route_to_final_hub,attribute='travel_time')
-                    step_duration = sum(route_travel_time_to_final_hub)
+                    step_duration = (selected_trip['arrival_time_at_target_hub'] - selected_trip['departure_time']).seconds
 
-                else:
+                # Else we get out at the final hub of the taxi trip
+                else: 
                     self.position = self.graph.get_nodeids_list().index(selected_trip['target_hub'])
-                    route_travel_time = ox.utils_graph.get_route_edge_attributes(self.graph.inner_graph,selected_trip['route'],attribute='travel_time')
-                    step_duration = sum(route_travel_time)
+                    step_duration = (selected_trip['arrival_time_at_target_hub'] - selected_trip['departure_time']).seconds
                 
                 # Increase global time state by the time waited for the taxi to arrive at our location
                 self.current_wait = selected_trip['departure_time']-self.time
@@ -178,11 +175,12 @@ class GraphEnv(gym.Env):
                 # self.total_travel_time += timedelta(seconds=travel_time)
                 print("action == ", action, " New Position", self.position)
         else:
-            print("invalid action")
-            print("avail actions: ",self.availableActions())
-            print("action: ",action)
-            print("action space: ",self.action_space)
-
+            print("invalid action, action to be taken is: ",action, " but the action space is: ",self.action_space)
+    
+        # Adds the step duration to the global time variable: 
+        #  In case of wait: 5 mins
+        #  In case of order own rides: trip duration + 5 mins of time waiting for taxi to arrive
+        #  In case of taking available ride: trip duration + time waiting for taxi to arrive
 
         self.time += timedelta(seconds=step_duration)
 
@@ -291,8 +289,6 @@ class GraphEnv(gym.Env):
 
         return reward, done
 
-
-
     def availableActions(self):
         """ Returns the available actions at the current position. Uses a simplified action space with moves to all direct neighbors allowed.
 
@@ -310,15 +306,15 @@ class GraphEnv(gym.Env):
         Returns:
             list: [departure_time,target_node]
         """
+        
         list_trips=[]
-
+        # get current position and the time
         position=self.graph.get_nodeid_by_index(self.position)
         position_str=str(position)
         final_hub_postion=self.graph.get_nodeid_by_index(self.final_hub)
-
         start_timestamp=self.time
         end_timestamp = self.time + timedelta(minutes=time_window)
-
+        # get the route nodes with timestamps
         grid=self.graph.trips
         paths=grid['node_timestamps']
         
@@ -326,37 +322,45 @@ class GraphEnv(gym.Env):
         for index in range(len(paths)):
             row_id += 1
             dict_route = grid['node_timestamps'][index]
-            for tupel_position in dict_route:
-                position_timestamp= datetime.strptime(str(dict_route[tupel_position]), "%Y-%m-%d %H:%M:%S")
-                inTimeframe = start_timestamp <= position_timestamp and end_timestamp >= position_timestamp
-                startsInCurrentPosition = str(tupel_position) == position_str
+            for route_node in dict_route:
+                # for each node check if the trip arrives in the time window and if the node is equal to the current position
+                departure_time= datetime.strptime(str(dict_route[route_node]), "%Y-%m-%d %H:%M:%S")
+                inTimeframe = start_timestamp <= departure_time and end_timestamp >= departure_time
+                startsInCurrentPosition = str(route_node) == position_str
                 trip_target_node = grid['dropoff_node'][index]
-                isNotFinalNode = str(tupel_position) != str(trip_target_node)
+                isNotFinalNode = str(route_node) != str(trip_target_node)
                 route = grid['route'][index]
+
+                # check if the trip is within the time window at the current position and the that the current position is not the target node of the trip 
                 if startsInCurrentPosition and inTimeframe and isNotFinalNode:
                     index_in_route = route.index(position)
+                    # route of the trip starts from the current node until the target node
                     route_to_target_node=route[index_in_route::]
+                    # check if the trip contains hubs
                     hubsOnRoute = any(node in route_to_target_node for node in self.hubs)
                     
+                    # only if the trip contains hubs, will it be taken into account as a possible route for travel
                     if hubsOnRoute:
+                        # get the hubs on the route and create a dictionay with the hubs on route and the timestamp when the taxi arrives at the hub
                         list_hubs = [node for node in route_to_target_node if node in self.hubs]
                         hubs_dict = dict((node, dict_route[node]) for node in list_hubs)
+
+                        # for each hub on the route create a trip starting from current position until the hub
                         for hub in hubs_dict:
                             index_hub_in_route = route.index(hub)
                             index_hub_in_route += 1
+                            # get the route from current position to a hub and the arrival time at this hub
                             route_to_target_hub = route[index_in_route:index_hub_in_route]
+
+                            arrival_at_target_hub = datetime.strptime(str(dict_route[hub]), "%Y-%m-%d %H:%M:%S")
                             if(str(hub) != position_str):
-                                trip = {'departure_time': position_timestamp, 'target_hub': hub, 'route': route_to_target_hub, 'trip_row_id': row_id}
+                                # add the trip to a hub into the possible trips list
+                                trip = {'departure_time': departure_time, 'target_hub': hub, 'arrival_time_at_target_hub': arrival_at_target_hub,'route': route_to_target_hub,'trip_row_id': row_id}
                                 list_trips.append(trip)
         return list_trips
 
     def validateAction(self, action):
         return action < len(self.availableActions())
-
-
-
-
-        
 
     def render(self, visualize_actionspace: bool = False):
         """_summary_
@@ -384,7 +388,6 @@ class GraphEnv(gym.Env):
         # Create plot
         plot = ox.plot_graph_folium(self.graph.inner_graph,fit_bounds=True, weight=2, color="#333333")
 
-
         #Place markers for the random hubs
         for hub in self.hubs:
             hub_node = self.graph.get_node_by_nodeid(hub)
@@ -399,6 +402,7 @@ class GraphEnv(gym.Env):
         folium.Marker(location=[current_pos_y, current_pos_x], popup = f"Current time: {self.time.strftime('%m/%d/%Y, %H:%M:%S')}", icon=folium.Icon(color='lightgreen', prefix='fa',icon='cube')).add_to(plot)
         
 
+        # Place markers for the possible hubs where the agent can go from the current position
         if(visualize_actionspace):
             for i, trip in enumerate(self.availableTrips()):
                 target_hub=self.graph.get_node_by_nodeid(trip['target_hub'])

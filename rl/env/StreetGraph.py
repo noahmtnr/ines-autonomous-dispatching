@@ -86,7 +86,7 @@ class StreetGraph:
                 dropoff_datetime = pickup_datetime + timedelta(seconds=sum(travel_times))
                 trip_duration = (dropoff_datetime-pickup_datetime).total_seconds()
                 
-                timestamps_dict = DataPreProcessing.map_nodes_to_timestaps(route, pickup_datetime, dropoff_datetime, trip_duration)
+                timestamps_dict = DataPreProcessing.map_nodes_to_timestaps(graph, route, pickup_datetime, dropoff_datetime, trip_duration)
 
                 dropoff_datetimes.append(dropoff_datetime)
                 trip_durations.append(trip_duration)
