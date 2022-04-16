@@ -13,6 +13,7 @@ import random
 import pandas as pd
 from gym import spaces
 from pandas import Timestamp
+import time
 
 from ManhattanGraph import ManhattanGraph
 
@@ -54,7 +55,7 @@ class GraphEnv(gym.Env):
         # Creates an instance of StreetGraph with random trips and hubs
         # graph_meinheim = StreetGraph(filename='meinheim', num_trips=4000, fin_hub=self.final_hub, num_hubs=5)
         graph_meinheim = ManhattanGraph(filename='simple', num_hubs=52)
-        self.graph_meinheim_trips = graph_meinheim.trips
+
         self.graph_meinheim_hubs = graph_meinheim.hubs
 
         self.graph = graph_meinheim
@@ -114,7 +115,7 @@ class GraphEnv(gym.Env):
 
     @property
     def action_space(self):
-            num_actions = len(self.availableActions())
+            num_actions = len(self.available_actions)
             return gym.spaces.Discrete(num_actions) 
 
     
@@ -125,15 +126,17 @@ class GraphEnv(gym.Env):
             action (int): index of action to be taken from availableActions
         Returns:
             int: new position
-            int: new reward
+            int: new reward 
             boolean: isDone
         """
+
+        startTime = time.time()
 
         done =  False
 
         # set old position to current position before changing current position
         self.old_position = self.graph.get_nodeids_list()[self.position]
-        availableActions = self.availableActions()
+        availableActions = self.available_actions
         step_duration = 0
 
         if self.validateAction(action):
@@ -187,7 +190,7 @@ class GraphEnv(gym.Env):
                 print("action == ", action, " New Position", self.position)
         else:
             print("invalid action")
-            print("avail actions: ",self.availableActions())
+            print("avail actions: ",self.available_actions)
             print("action: ",action)
             print("action space: ",self.action_space)
 
@@ -195,6 +198,9 @@ class GraphEnv(gym.Env):
         self.time += timedelta(seconds=step_duration)
 
         reward, done = self.compute_reward(done)
+
+        executionTime = (time.time() - startTime)
+        print('Step() Execution time: ' + str(executionTime) + ' seconds')
 
         return self.position, reward,  done, {}
         
@@ -207,6 +213,8 @@ class GraphEnv(gym.Env):
             int: reward
             bool: done
         """
+        startTime = time.time()
+
         # define weights for reward components
         # for the start: every component has the same weight
         num_comp = 6
@@ -298,19 +306,28 @@ class GraphEnv(gym.Env):
                 # later: take into account each individual weight
                 # reward += w1 * time_diff + w2 * dist + w3 * hops + w4 * wait_time + w5 * cost
 
+        executionTime = (time.time() - startTime)
+        print('Compute_reward() Execution time: ' + str(executionTime) + ' seconds')
         return reward, done
 
 
 
-    def availableActions(self):
+    def get_available_actions(self):
         """ Returns the available actions at the current position. Uses a simplified action space with moves to all direct neighbors allowed.
 
         Returns:
             list: list of nodeIds of direct neighbors
         """
+
+        startTime = time.time()
+
         wait = [{'type': 'wait'}]
         ownRide = [{'type': 'ownRide'}]
         available_rides = list(self.availableTrips())
+        
+        executionTime = (time.time() - startTime)
+        print('get_available_actions() Execution time: ' + str(executionTime) + ' seconds')
+
         return [wait,ownRide,*available_rides]
 
     def availableTrips(self, time_window=5):
@@ -357,10 +374,11 @@ class GraphEnv(gym.Env):
                             if(str(hub) != position_str):
                                 trip = {'departure_time': position_timestamp, 'target_hub': hub, 'route': route_to_target_hub, 'trip_row_id': index}
                                 list_trips.append(trip)
+        self.available_actions = list_trips
         return list_trips
 
     def validateAction(self, action):
-        return action < len(self.availableActions())
+        return action < len(self.available_actions)
 
 
 
