@@ -74,10 +74,14 @@ class GraphEnv(gym.Env):
         self.observation_space = gym.spaces.Discrete(len(self.graph.get_nodeids_list())) #num of nodes in the graph  
     
     def reset(self):
-        self.count = 0
+        self.count_hubs = 0
         self.final_hub = 3
         self.start_hub = 6
         self.position = self.start_hub
+        # old position is current position
+        self.old_position = self.start_hub
+        # current trip
+        self.current_trip = None
 
         pickup_day = 1
         pickup_hour =  np.random.randint(24)
@@ -87,8 +91,10 @@ class GraphEnv(gym.Env):
         self.time = self.pickup_time
         self.total_travel_time = 0
         self.deadline=self.pickup_time+timedelta(hours=3)
+        self.current_wait = 0
 
         self.own_ride = False
+        self.has_waited=False
 
         reward=0
 
@@ -109,32 +115,43 @@ class GraphEnv(gym.Env):
             int: new reward
             boolean: isDone
         """
+
         print("Available actions: ",self.availableActions())
         print("Action space: ", self.action_space)
         self.count += 1
         done =  False
 
-        old_position = self.graph.get_nodeids_list()[self.position]
+        # set old position to current position before changing current position
+        self.old_position = self.graph.get_nodeids_list()[self.position]
         availableActions = self.availableActions()
         step_duration = 0
 
         if self.validateAction(action):
             if(action == 0):
                 step_duration = 300
+                self.has_waited=True
+                self.own_ride = False
                 print("action == wait ")
                 pass
             elif(action==1):
+                self.has_waited=False
+                self.count_hubs += 1
                 self.own_ride = True
                 #create route to final hub
                 route = ox.shortest_path(self.graph.inner_graph, self.graph.get_nodeids_list()[self.position],  self.graph.get_nodeids_list()[self.final_hub], weight='travel_time')
                 route_travel_time = ox.utils_graph.get_route_edge_attributes(self.graph.inner_graph,route,attribute='travel_time')
                 step_duration = sum(route_travel_time)+300 #we add 5 minutes (300 seconds) so the taxi can arrive
+                self.old_position = self.position
                 self.position=self.final_hub
                 print("action ==  ownRide ")
                 pass 
 
             else:
+                self.has_waited=False
+                self.own_ride = False
+                self.count_hubs += 1
                 selected_trip = availableActions[action]
+                self.current_trip = selected_trip
 
                 # If order dropoff node is on the route of the taxi we get out there 
 
@@ -150,10 +167,11 @@ class GraphEnv(gym.Env):
                     self.position = self.graph.get_nodeids_list().index(selected_trip['target_hub'])
                     step_duration = (selected_trip['arrival_time_at_target_hub'] - selected_trip['departure_time']).seconds
                 
-                # Increase global time state by travelled time (does not include waiting yet, in this case it should be +xx seconds)
+                # Increase global time state by the time waited for the taxi to arrive at our location
+                self.current_wait = selected_trip['departure_time']-self.time
                 self.time = selected_trip['departure_time']
 
-                # Instead of cumulating trip duration here we avel_time 
+                # Instead of cumulating trip duration here we add travel_time 
                 # self.total_travel_time += timedelta(seconds=travel_time)
                 print("action == ", action, " New Position", self.position)
         else:
@@ -179,22 +197,95 @@ class GraphEnv(gym.Env):
             int: reward
             bool: done
         """
+        # define weights for reward components
+        # for the start: every component has the same weight
+        num_comp = 6
+        w = 1/num_comp
+        # later: every component individually
+        # w1 = ?, w2 = ?, ...
+
         reward = 0
         # if we reach the final hub
         if (self.position == self.final_hub):
-            reward = self.REWARD_GOAL
+            reward += self.REWARD_GOAL
             # if the agent books an own ride, penalize reward by 50
-            if self.own_ride:
-                reward -= 80
+            #if self.own_ride:
+            #    reward -= 80
             # if the box is not delivered in time, penalize reward by 1 for every minute over deadline
-            if (self.time > self.deadline):
-                overtime = self.time-self.deadline
-                overtime = round(overtime.total_seconds()/60)
-                reward -= overtime
+            #if (self.time > self.deadline):
+            #    overtime = self.time-self.deadline
+            #    overtime = round(overtime.total_seconds()/60)
+            #    reward -= overtime
             done = True
+
         # if we do not reach the final hub, reward is -1
         else:
-            reward = self.REWARD_AWAY
+            # old reward: reward = self.REWARD_AWAY
+            df_id = self.current_trip['trip_row_id']
+
+            # if action was own ride
+            if self.own_ride:
+                 # punishment is the price for own ride and the emission costs for the distance
+                path_travelled = ox.shortest_path(self.graph.inner_graph, self.graph.get_nodeids_list()[self.old_position],  self.graph.get_nodeids_list()[self.position], weight='travel_time')
+                dist_travelled_list = ox.utils_graph.get_route_edge_attributes(self.graph.inner_graph,path_travelled,attribute='length')
+                part_length = sum(dist_travelled_list)
+                dist_travelled = 1000/part_length
+                # choose random mobility provider (hereby modelling random availability for an own ride) and calculate trip costs
+                providers = pd.read_csv("Provider.csv")
+                id = random.randint(0,len(providers.index))
+                price = providers['basic_cost'][id] + dist_travelled/1000 * providers['cost_per_km'][id]
+                reward += dist_travelled - price
+
+            # if action was wait
+            elif (self.has_waited):
+                # punishment is the time wasted on waiting relative to overall time that is available
+                if self.time > self.deadline:
+                    reward = self.deadline - self.time
+                else:
+                    reward -= 300/(self.deadline-self.pickup_time)
+
+            # if action was to share ride
+            else:
+                # maximize difference between time constraint and relative travelled time
+                time_diff = self.deadline - self.time
+
+                # minimize route distance travelled (calculate length of current (part-)trip and divide by total length of respective trip from dataframe)
+                path_travelled = ox.shortest_path(self.graph.inner_graph, self.graph.get_nodeids_list()[self.old_position],  self.graph.get_nodeids_list()[self.position], weight='travel_time')
+                dist_travelled_list = ox.utils_graph.get_route_edge_attributes(self.graph.inner_graph,path_travelled,attribute='length')
+                part_length = sum(dist_travelled_list)
+                dist_travelled = 1000/part_length
+
+                # minimize distance to final hub (calculate difference between distance to final hub from the old position and the new position)
+                oldpath_to_final = ox.shortest_path(self.graph.inner_graph, self.graph.get_nodeids_list()[self.old_position],  self.graph.get_nodeids_list()[self.final_hub], weight='travel_time')
+                newpath_to_final = ox.shortest_path(self.graph.inner_graph, self.graph.get_nodeids_list()[self.position],  self.graph.get_nodeids_list()[self.final_hub], weight='travel_time')
+                olddist_tofinal = sum(ox.utils_graph.get_route_edge_attributes(self.graph.inner_graph,oldpath_to_final,attribute='length'))
+                newdist_tofinal = sum(ox.utils_graph.get_route_edge_attributes(self.graph.inner_graph,newpath_to_final,attribute='length'))
+                dist_gained = olddist_tofinal - newdist_tofinal
+
+                # minimize number of hops
+                hops = -self.count_hubs
+
+                # minimize waiting time (time between choosing ride and being picked up) 
+                wait_time = 1/self.current_wait
+
+                # minimize costs
+                # get total route length
+                total_length = self.graph.trips.iloc['route_length'][df_id]
+                # get part route length: access variable part_length
+                # calculate proportion
+                prop = part_length/total_length
+                # calculate price for this route part
+                price = self.graph.trips.iloc['total_price'][df_id]*prop
+                # if path length in dataframe is the same as path length of current trip -> get total costs, otherwise calculate partly costs
+
+                passenger_num = self.graph.trips.iloc['passenger_count'][df_id]
+                cost = -price/(passenger_num+1)
+                # in the case of multiagent: cost = price(passenger_num+box_num+1)
+
+                # add all to reward
+                reward += w * time_diff + w * dist_travelled + w * dist_gained + w * hops + w * wait_time + w * cost
+                # later: take into account each individual weight
+                # reward += w1 * time_diff + w2 * dist + w3 * hops + w4 * wait_time + w5 * cost
 
         return reward, done
 
@@ -227,7 +318,9 @@ class GraphEnv(gym.Env):
         grid=self.graph.trips
         paths=grid['node_timestamps']
         
+        row_id = -1
         for index in range(len(paths)):
+            row_id += 1
             dict_route = grid['node_timestamps'][index]
             for route_node in dict_route:
                 # for each node check if the trip arrives in the time window and if the node is equal to the current position
@@ -262,7 +355,7 @@ class GraphEnv(gym.Env):
                             arrival_at_target_hub = datetime.strptime(str(dict_route[hub]), "%Y-%m-%d %H:%M:%S")
                             if(str(hub) != position_str):
                                 # add the trip to a hub into the possible trips list
-                                trip = {'departure_time': departure_time, 'target_hub': hub, 'arrival_time_at_target_hub': arrival_at_target_hub,'route': route_to_target_hub}
+                                trip = {'departure_time': departure_time, 'target_hub': hub, 'arrival_time_at_target_hub': arrival_at_target_hub,'route': route_to_target_hub,'trip_row_id': row_id}
                                 list_trips.append(trip)
         return list_trips
 

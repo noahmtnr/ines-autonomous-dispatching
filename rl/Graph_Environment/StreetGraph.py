@@ -5,7 +5,6 @@ import random
 import numpy as np
 from datetime import datetime, timedelta
 
-
 class StreetGraph:
 
     def __init__(self, filename, num_trips, fin_hub, num_hubs):
@@ -116,6 +115,44 @@ class StreetGraph:
         trips["dropoff_datetime"] = dropoff_datetimes
         trips["trip_duration"] = trip_durations
         trips["node_timestamps"] = node_timestamps
+
+        # compute trip length and add to csv
+        # generate random passenger count between 1 and 4 and add to csv
+        route_length_column=[]
+        passenger_count_column=[]
+        for i in trips.index:
+            current_route = trips.iloc[i]["route"]
+            route_length = 0
+            for j in range(len(current_route)-1):
+                #print(self.inner_graph.nodes()[current_route[j]])
+                route_length += ox.distance.great_circle_vec(self.inner_graph.nodes()[current_route[j]]["y"], self.inner_graph.nodes()[current_route[j]]["x"],
+                self.inner_graph.nodes()[current_route[j+1]]["y"], self.inner_graph.nodes()[current_route[j+1]]["x"])
+            route_length_column.append(route_length)
+            passenger_count_column.append(random.randint(1,4))
+
+        trips["route_length"]=route_length_column
+        trips["passenger_count"]=passenger_count_column
+
+        
+        # add mobility providers randomly
+        provider_column=[]
+        totalprice_column=[]
+        x = pd.read_csv("Provider.csv")
+        for i in trips.index:
+            provider_id = x['id'].sample(n=1).iloc[0]
+            provider_column.append(provider_id)
+            selected_row = x[x['id']==provider_id]
+            basic_price = selected_row['basic_cost']
+            km_price = selected_row['cost_per_km']
+            leng = trips.iloc[0]['route_length']
+            # note that internal distance unit is meters in OSMnx
+            total_price = basic_price + km_price*leng/1000
+            totalprice_column.append(total_price.iloc[0])
+        trips["provider"]=provider_column
+        trips["total_price"]=totalprice_column
+
+
+
         trips.to_csv("trips_meinheim.csv")
         self.trips = trips
 
