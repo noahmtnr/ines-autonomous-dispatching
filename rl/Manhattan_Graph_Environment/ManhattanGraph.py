@@ -17,7 +17,7 @@ class ManhattanGraph:
 
 
     def generate_hubs(self, fin_hub, num_hubs: int = 5):
-        # the code below is for generating random hubs 
+        # the code below is for loading the hubs specified in data/trips/manual_hubs.csv
         """Generates random bubs within the graph
 
         Args:
@@ -26,15 +26,6 @@ class ManhattanGraph:
 
         Returns:
             self.hubs(list): List of hubs in graph
-        """
-        """
-        random.seed(42)
-        hubs = random.sample(self.nodes(),num_hubs) 
-        if(fin_hub not in hubs):
-            hubs.append(fin_hub)
-        self.hubs = hubs
-
-        return self.hubs
         """
 
         # the code below is for mapping the pre-defined hubs (customer/store/trips) to nodes in the graph
