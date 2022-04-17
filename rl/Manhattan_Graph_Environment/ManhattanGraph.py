@@ -1,6 +1,7 @@
 import osmnx as ox
 import pandas as pd
 import random
+from datetime import datetime, timedelta
 #graph to be used: full.graphml (all nodes)
 #if we use small_manhattan.graphml, we do not have all nodes which are in the trips and then we get Key Error
 class ManhattanGraph:
@@ -13,7 +14,6 @@ class ManhattanGraph:
         ox.utils_graph.remove_isolated_nodes(self.inner_graph)
         fin_hub = random.sample(self.nodes(),1)
         self.generate_hubs(fin_hub, num_hubs)
-        self.generate_trips()
 
 
     def generate_hubs(self, fin_hub, num_hubs: int = 5):
@@ -38,7 +38,7 @@ class ManhattanGraph:
         self.hubs = random.sample(hubs,num_hubs)
         return self.hubs
 
-    def generate_trips(self):
+    def setup_trips(self, start_time: datetime):
         """Read trips information of Kaggle file in self.trips.
 
         Args:
@@ -46,7 +46,8 @@ class ManhattanGraph:
         """
         
         #trips for simple graph, only the first 5000 rows
-        self.trips = pd.read_csv('../../data/trips/simple_graph_trips_reduced.csv')
+        all_trips = pd.read_csv('../../data/trips/preprocessed_trips.csv')
+        self.trips = self.prefilter_trips(all_trips, start_time).reset_index(drop=True)
 
         #compute trip length and add to csv
         #generate random passenger count between 1 and 4 and add to csv
@@ -90,6 +91,11 @@ class ManhattanGraph:
 
         return self.trips
 
+    def prefilter_trips(self, all_trips, start_time: datetime):
+        BOTTOM = str(start_time - timedelta(hours=2))
+        TOP = str(start_time + timedelta(hours=24))
+        return all_trips[(all_trips['pickup_datetime'] >= BOTTOM)&(all_trips['pickup_datetime'] <= TOP)]
+    
     def nodes(self):
         return self.inner_graph.nodes()
 
