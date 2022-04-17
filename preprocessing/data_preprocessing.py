@@ -153,6 +153,8 @@ class DataPreProcessing:
         :param trips: all the tips
         :return: the trips in addition having the route and the timestamp for each node from the route
         """
+        start_time = time.time()
+
         routes = []
         node_timestamps = []
         for index, row in trips.iterrows():
@@ -173,4 +175,11 @@ class DataPreProcessing:
 
         trips["route"] = routes
         trips["route_timestamps"] = node_timestamps
+
+        print(
+            "MAPPING ROUTES TO TRIPS WITH TIMESTAMPS DONE: ",
+            str(len(trips)),
+            "trips took --- %s seconds ---" % round((time.time() - start_time), 2),
+        )
+
         return trips
