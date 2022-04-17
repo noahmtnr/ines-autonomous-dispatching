@@ -6,11 +6,10 @@ import folium
 from folium.plugins import MarkerCluster
 from datetime import datetime, timedelta
 from array import array
-from datetime import datetime, timedelta
 import gym
 from gym.utils import seeding
 import random
-import pandas as pd
+import modin.pandas as pd
 from gym import spaces
 from pandas import Timestamp
 import time
@@ -54,11 +53,12 @@ class GraphEnv(gym.Env):
 
         # Creates an instance of StreetGraph with random trips and hubs
         # graph_meinheim = StreetGraph(filename='meinheim', num_trips=4000, fin_hub=self.final_hub, num_hubs=5)
-        graph_meinheim = ManhattanGraph(filename='simple', num_hubs=52)
+        manhattan_graph = ManhattanGraph(filename='simple', num_hubs=52)
+        manhattan_graph.setup_trips(self.START_TIME)
 
-        self.graph_meinheim_hubs = graph_meinheim.hubs
+        self.hubs = manhattan_graph.hubs
 
-        self.graph = graph_meinheim
+        self.graph = manhattan_graph
 
         self.seed()
         self.reset()
@@ -88,8 +88,8 @@ class GraphEnv(gym.Env):
     
     def reset(self):
         self.count_hubs = 0
-        self.final_hub = self.graph.get_nodeids_list().index(random.sample(self.graph_meinheim_hubs,1)[0])
-        self.start_hub = self.graph.get_nodeids_list().index(random.sample(self.graph_meinheim_hubs,1)[0])
+        self.final_hub = self.graph.get_nodeids_list().index(random.sample(self.hubs,1)[0])
+        self.start_hub = self.graph.get_nodeids_list().index(random.sample(self.hubs,1)[0])
         self.position = self.start_hub
         # old position is current position
         self.old_position = self.start_hub
@@ -108,6 +108,7 @@ class GraphEnv(gym.Env):
 
         reward=0
 
+        self.available_actions = self.get_available_actions()
 
         return self.position
     
@@ -187,7 +188,7 @@ class GraphEnv(gym.Env):
 
                 # Instead of cumulating trip duration here we add travel_time 
                 # self.total_travel_time += timedelta(seconds=travel_time)
-                print("action == ", action, " New Position", self.position)
+                print("action == ", action, " New Position", self.position)     
         else:
             print("invalid action")
             print("avail actions: ",self.available_actions)
@@ -360,12 +361,12 @@ class GraphEnv(gym.Env):
                 isNotFinalNode = str(tupel_position) != str(trip_target_node)
                 route = grid['route'][index]
                 if startsInCurrentPosition and inTimeframe and isNotFinalNode:
-                    index_in_route = route.index(position)
+                    index_in_route = route.index(position_str)
                     route_to_target_node=route[index_in_route::]
-                    hubsOnRoute = any(node in route_to_target_node for node in self.meinheim)
-                    
+                    hubsOnRoute = any(str(node) in route_to_target_node for node in self.hubs)
+                    print(hubsOnRoute)
                     if hubsOnRoute:
-                        list_hubs = [node for node in route_to_target_node if node in self.graph_meinheim_hubs]
+                        list_hubs = [node for node in route_to_target_node if node in self.hubs]
                         hubs_dict = dict((node, dict_route[node]) for node in list_hubs)
                         for hub in hubs_dict:
                             index_hub_in_route = route.index(hub)
@@ -413,7 +414,7 @@ class GraphEnv(gym.Env):
 
 
         #Place markers for the random hubs
-        for hub in self.graph_meinheim_hubs:
+        for hub in self.hubs:
             hub_node = self.graph.get_node_by_nodeid(hub)
             hub_pos_x = hub_node['x']
             hub_pos_y = hub_node['y']
