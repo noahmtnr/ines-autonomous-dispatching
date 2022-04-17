@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" autoUpload="Always" serverName="ines-tp2204@dws-student-01.informatik.uni-mannheim.de:22" remoteFilesAllowedToDisappearOnAutoupload="false">
+    <serverData>
+      <paths name="ines-tp2204@dws-student-01.informatik.uni-mannheim.de:22">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/work/ines-tp2204/pycharm" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+    <option name="myAutoUpload" value="ALWAYS" />
+  </component>
+</project>
