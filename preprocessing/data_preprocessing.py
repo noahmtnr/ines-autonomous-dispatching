@@ -1,13 +1,13 @@
 import osmnx as ox
 import networkx as nx
 import pandas as pd
-from datetime import timedelta
+from datetime import timedelta,datetime
 import time
 
 class DataPreProcessing:
 
     def setup_graph():
-        graph = ox.io.load_graphml("data/graph/full.graphml")
+        graph = ox.io.load_graphml("data/graph/simple.graphml")
         return graph
 
     def setup_trips(nrows: int = None) -> pd.DataFrame():
@@ -20,7 +20,6 @@ class DataPreProcessing:
     def map_trips_to_nodes(trips, graph):
 
         start_time = time.time()
-        print("MAPPING STARTED")
 
         pickup_node = []
         dropoff_node = []
@@ -40,9 +39,6 @@ class DataPreProcessing:
         )
         pickup_nodes, pickup_distances = ox.distance.nearest_nodes(
                 graph, p_long, p_lat, return_dist=True
-            )
-            d_node, d_dist = ox.distance.nearest_nodes(
-                graph, d_long, d_lat, return_dist=True
             )
 
         trips["pickup_node"] = pickup_nodes
@@ -90,7 +86,10 @@ class DataPreProcessing:
         for delta in edge_travel_times:
             timestamps.append(timestamps[-1] + timedelta(seconds=round(delta)))
 
-        return timestamps
+        def to_string(timestamp):
+            return timestamp.strftime('%Y-%m-%d %X')
+
+        return list(map( to_string, timestamps))
 
     def relative_edge_travel_time(graph, route_nodes, start_time, end_time):
         """
