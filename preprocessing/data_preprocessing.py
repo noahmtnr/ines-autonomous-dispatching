@@ -1,13 +1,13 @@
 import osmnx as ox
 import networkx as nx
 import pandas as pd
-from datetime import timedelta
+from datetime import timedelta,datetime
 import time
 
 class DataPreProcessing:
 
     def setup_graph():
-        graph = ox.io.load_graphml("data/graph/full.graphml")
+        graph = ox.io.load_graphml("data/graph/simple.graphml")
         return graph
 
     def setup_trips(nrows: int = None) -> pd.DataFrame():
@@ -20,7 +20,6 @@ class DataPreProcessing:
     def map_trips_to_nodes(trips, graph):
 
         start_time = time.time()
-        print("MAPPING STARTED")
 
         pickup_node = []
         dropoff_node = []
@@ -30,31 +29,25 @@ class DataPreProcessing:
         total_rows = len(trips)
 
         # Potentially optimizable by using nearest_nodes() with the entire trips list instead of this for loop (doc: https://osmnx.readthedocs.io/en/stable/osmnx.html#osmnx.distance.nearest_nodes)
-        for index, row in trips.iterrows():
-            p_lat = trips.loc[index, "pickup_latitude"]
-            p_long = trips.loc[index, "pickup_longitude"]
-            d_lat = trips.loc[index, "dropoff_latitude"]
-            d_long = trips.loc[index, "dropoff_longitude"]
-            p_node, p_dist = ox.distance.nearest_nodes(
+        p_long = trips["pickup_longitude"]
+        p_lat = trips["pickup_latitude"]
+        d_lat = trips["dropoff_latitude"]
+        d_long = trips["dropoff_longitude"]
+        
+        dropoff_nodes, dropoff_distances = ox.distance.nearest_nodes(
+            graph, d_long, d_lat, return_dist=True
+        )
+        pickup_nodes, pickup_distances = ox.distance.nearest_nodes(
                 graph, p_long, p_lat, return_dist=True
             )
-            d_node, d_dist = ox.distance.nearest_nodes(
-                graph, d_long, d_lat, return_dist=True
-            )
 
-            pickup_node.append(p_node)
-            dropoff_node.append(d_node)
-            pickup_distance.append(p_dist)
-            dropoff_distance.append(d_dist)
-            print("Rows mapped: ", round((index + 1) / total_rows * 100, 2), "%")
-
-        trips["pickup_node"] = pickup_node
-        trips["dropoff_node"] = dropoff_node
-        trips["pickup_distance"] = pickup_distance
-        trips["dropoff_distance"] = dropoff_distance
+        trips["pickup_node"] = pickup_nodes
+        trips["dropoff_node"] = dropoff_nodes
+        trips["pickup_distance"] = pickup_distances
+        trips["dropoff_distance"] = dropoff_distances
 
         print(
-            "MAPPING DONE: ",
+            "MAPPING TRIPS TO NODES DONE: ",
             str(len(trips)),
             "trips took --- %s seconds ---" % round((time.time() - start_time), 2),
         )
@@ -93,7 +86,10 @@ class DataPreProcessing:
         for delta in edge_travel_times:
             timestamps.append(timestamps[-1] + timedelta(seconds=round(delta)))
 
-        return timestamps
+        def to_string(timestamp):
+            return timestamp.strftime('%Y-%m-%d %X')
+
+        return list(map( to_string, timestamps))
 
     def relative_edge_travel_time(graph, route_nodes, start_time, end_time):
         """
@@ -156,6 +152,8 @@ class DataPreProcessing:
         :param trips: all the tips
         :return: the trips in addition having the route and the timestamp for each node from the route
         """
+        start_time = time.time()
+
         routes = []
         node_timestamps = []
         for index, row in trips.iterrows():
@@ -176,4 +174,11 @@ class DataPreProcessing:
 
         trips["route"] = routes
         trips["route_timestamps"] = node_timestamps
+
+        print(
+            "MAPPING ROUTES TO TRIPS WITH TIMESTAMPS DONE: ",
+            str(len(trips)),
+            "trips took --- %s seconds ---" % round((time.time() - start_time), 2),
+        )
+
         return trips
