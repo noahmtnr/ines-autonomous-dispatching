@@ -329,7 +329,9 @@ class GraphEnv(gym.Env):
         executionTime = (time.time() - startTime)
         print('get_available_actions() Execution time: ' + str(executionTime) + ' seconds')
 
-        return [wait,ownRide,*available_rides]
+        available_actions = [wait,ownRide,*available_rides]
+        self.available_actions = available_actions
+        return available_actions
 
     def availableTrips(self, time_window=5):
         """ Returns a list of all available trips at the current node and within the next 5 minutes. Includes the time of departure from the current node as well as the target node of the trip.
