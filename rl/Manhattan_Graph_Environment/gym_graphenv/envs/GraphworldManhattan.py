@@ -136,7 +136,7 @@ class GraphEnv(gym.Env):
         done =  False
 
         # set old position to current position before changing current position
-        self.old_position = self.graph.get_nodeids_list()[self.position]
+        self.old_position = self.position
         availableActions = self.available_actions
         step_duration = 0
 
@@ -267,7 +267,7 @@ class GraphEnv(gym.Env):
             else:
                 df_id = self.current_trip['trip_row_id']
                 # maximize difference between time constraint and relative travelled time
-                time_diff = self.deadline - self.time
+                time_diff = (self.deadline - self.time).seconds
 
                 # minimize route distance travelled (calculate length of current (part-)trip and divide by total length of respective trip from dataframe)
                 path_travelled = ox.shortest_path(self.graph.inner_graph, self.graph.get_nodeids_list()[self.old_position],  self.graph.get_nodeids_list()[self.position], weight='travel_time')
@@ -290,15 +290,15 @@ class GraphEnv(gym.Env):
 
                 # minimize costs
                 # get total route length
-                total_length = self.graph.trips.iloc['route_length'][df_id]
+                total_length = self.graph.trips['route_length'][df_id]
                 # get part route length: access variable part_length
                 # calculate proportion
                 prop = part_length/total_length
                 # calculate price for this route part
-                price = self.graph.trips.iloc['total_price'][df_id]*prop
+                price = self.graph.trips['total_price'][df_id]*prop
                 # if path length in dataframe is the same as path length of current trip -> get total costs, otherwise calculate partly costs
 
-                passenger_num = self.graph.trips.iloc['passenger_count'][df_id]
+                passenger_num = self.graph.trips['passenger_count'][df_id]
                 cost = -price/(passenger_num+1)
                 # in the case of multiagent: cost = price(passenger_num+box_num+1)
 
