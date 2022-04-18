@@ -183,7 +183,7 @@ class GraphEnv(gym.Env):
                     step_duration = sum(route_travel_time)
                 
                 # Increase global time state by the time waited for the taxi to arrive at our location
-                self.current_wait = selected_trip['departure_time']-self.time
+                self.current_wait = (selected_trip['departure_time']-self.time).seconds
                 self.time = selected_trip['departure_time']
 
                 # Instead of cumulating trip duration here we add travel_time 
