@@ -356,27 +356,29 @@ class GraphEnv(gym.Env):
             dict_route = grid['route_timestamps'][index]
             dict_route= eval(dict_route)
             for tupel_position in dict_route:
-                position_timestamp= datetime.strptime(str(dict_route[tupel_position]), "%Y-%m-%d %H:%M:%S")
-                inTimeframe = start_timestamp <= position_timestamp and end_timestamp >= position_timestamp
                 startsInCurrentPosition = str(tupel_position) == position_str
-                trip_target_node = grid['dropoff_node'][index]
-                isNotFinalNode = str(tupel_position) != str(trip_target_node)
-                route = grid['route'][index]
-                if startsInCurrentPosition and inTimeframe and isNotFinalNode:
-                    index_in_route = route.index(position_str)
-                    route_to_target_node=route[index_in_route::]
-                    hubsOnRoute = any(str(node) in route_to_target_node for node in self.hubs)
-                    print(hubsOnRoute)
-                    if hubsOnRoute:
-                        list_hubs = [node for node in route_to_target_node if node in self.hubs]
-                        hubs_dict = dict((node, dict_route[node]) for node in list_hubs)
-                        for hub in hubs_dict:
-                            index_hub_in_route = route.index(hub)
-                            index_hub_in_route += 1
-                            route_to_target_hub = route[index_in_route:index_hub_in_route]
-                            if(str(hub) != position_str):
-                                trip = {'departure_time': position_timestamp, 'target_hub': hub, 'route': route_to_target_hub, 'trip_row_id': index}
-                                list_trips.append(trip)
+                if(startsInCurrentPosition):
+                    position_timestamp= datetime.strptime(str(dict_route[tupel_position]), "%Y-%m-%d %H:%M:%S")
+                    inTimeframe = start_timestamp <= position_timestamp and end_timestamp >= position_timestamp
+                    if inTimeframe:
+                        trip_target_node = grid['dropoff_node'][index]
+                        isNotFinalNode = str(tupel_position) != str(trip_target_node)
+                        if(isNotFinalNode):
+                            string_split = grid['route'][index].replace('[','').replace(']','').split(',')
+                            route = [int(el) for el in string_split]
+                            index_in_route = route.index(position)
+                            route_to_target_node=route[index_in_route::]
+                            hubsOnRoute = any(node in route_to_target_node for node in self.hubs)
+                            if hubsOnRoute:
+                                list_hubs = [node for node in self.hubs if node in route_to_target_node]
+                                hubs_dict = dict((node, dict_route[node]) for node in list_hubs)
+                                for hub in hubs_dict:
+                                    index_hub_in_route = route.index(hub)
+                                    index_hub_in_route += 1
+                                    route_to_target_hub = route[index_in_route:index_hub_in_route]
+                                    if(hub != position):
+                                        trip = {'departure_time': position_timestamp, 'target_hub': hub, 'route': route_to_target_hub, 'trip_row_id': index}
+                                        list_trips.append(trip)
         self.available_actions = list_trips
         return list_trips
 
