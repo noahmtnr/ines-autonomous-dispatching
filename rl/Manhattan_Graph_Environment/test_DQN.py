@@ -19,8 +19,15 @@ env=GraphEnv()
 
 file_name = "tmp/dqn/graphworld"
 
+trainer_config = DEFAULT_CONFIG.copy()
+trainer_config['num_workers'] = 1
+trainer_config["train_batch_size"] = 400
+trainer_config["gamma"] = 0.95
+trainer_config["n_step"] = 10
+trainer_config["framework"] = "torch"
+#num_gpus and other gpu parameters in order to train with gpu
 
-
+trainer = DQNTrainer(trainer_config,GraphEnv )
 trainer.restore(file_name)
 env = gym.make("graphworld-v0")
 state = env.reset()
