@@ -1,0 +1,24 @@
+1. Mit VPN verbinden
+2. In PyCharm: Settings/Preferences > Build, Execution, Deployment > Deployment
+3. Add new Connection 
+    1. Type SFTP
+    2. SSH Config > Add new SSH Config
+        1. Host dws-student-01.informatik.uni-mannheim.de
+        2. Port 22
+        3. Password: x6765d89
+    3. Web Server URL: http:///
+4. Tab: Mappings
+    1. Deployment path auf einen Ordner mit eurem Namen abändern (müsst ihr erstellen)
+5. Connection Fenster schließen
+6. Ganz unten rechts den Python Interpreter anklicken
+7. Add Interpreter
+    1. SSH Interpreter links im Menü wählen
+    2. Host = dws-student-01.informatik.uni-mannheim.de
+    3. Username = ines-tp2204
+    4. Next
+    5. Password: x6765d89
+    6. Next
+    7. Interpreter: work/ines-tp2204/ines-ad<dein Name>/bin/python auswählen
+    8. Sync Folder: work/ines-tp2204/pycharm-<deinName> auswählen (solltest du in Schritt 3 erstellt haben)
+    9. Done
+8. Pycharm cloned jetzt das Repo, was vor allem mit der 2.5gb großen Trip Datei ein bisschen dauern kann. Wenn das abgeschlossen ist einfach in der train_DQN.py file auf Run klicken
