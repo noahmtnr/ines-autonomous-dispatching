@@ -11,3 +11,5 @@ rl/env/__pycache__
 .vscode/
 
 data/trips/preprocessed_trips.csv
+
+.idea/
