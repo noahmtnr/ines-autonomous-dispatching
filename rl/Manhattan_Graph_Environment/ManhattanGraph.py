@@ -16,7 +16,7 @@ class ManhattanGraph:
         self.generate_hubs(fin_hub, num_hubs)
 
 
-    def generate_hubs(self, fin_hub, num_hubs: int = 5):
+    def generate_hubs(self, fin_hub, num_hubs: int = 70):#, opt: int = 0):
         # the code below is for loading the hubs specified in data/trips/manual_hubs.csv
         """Generates random bubs within the graph
 
@@ -27,15 +27,29 @@ class ManhattanGraph:
         Returns:
             self.hubs(list): List of hubs in graph
         """
-
         # the code below is for mapping the pre-defined hubs (customer/store/trips) to nodes in the graph
-        hubs_file = pd.read_csv("data/hubs/manual_hubs.CSV")
+        hubs_file = pd.read_csv("data/hubs/new_hubs.CSV")
         hubs = []
         i=0
         for row in hubs_file.index:    
             hubs.append(ox.get_nearest_node(self.inner_graph,(hubs_file.loc[row,"latitude"], hubs_file.loc[row,"longitude"])))
+        # if opt == 0:
+        #     # the code below is for mapping the pre-defined hubs (customer/store/trips) to nodes in the graph
+        #     hubs_file = pd.read_csv("data/hubs/manual_hubs.CSV")
+        #     hubs = []
+        #     i=0
+        #     for row in hubs_file.index:    
+        #         hubs.append(ox.get_nearest_node(self.inner_graph,(hubs_file.loc[row,"latitude"], hubs_file.loc[row,"longitude"])))
+        #         #hubs.append(hubs_file.loc[row])
+        # else:
+        #     hubs_file = pd.read_csv('rl/Manhattan_Graph_Environment/top_nodes.csv')
+        #     hubs = []
+        #     i=0
+        #     for row in hubs_file.index:    
+        #         hubs.append(hubs_file.loc[row])
          
         self.hubs = random.sample(hubs,num_hubs)
+        #self.hubs = hubs
         return self.hubs
 
     def setup_trips(self, start_time: datetime):
