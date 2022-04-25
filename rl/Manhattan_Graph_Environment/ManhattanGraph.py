@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 class ManhattanGraph:
 
     def __init__(self, filename, num_hubs):
-        filepath = ("../../data/graph/%s.graphml") % (filename)
+        filepath = ("data/graph/%s.graphml") % (filename)
         self.inner_graph = ox.load_graphml(filepath)
         self.inner_graph = ox.add_edge_speeds(self.inner_graph,fallback=30)
         self.inner_graph = ox.add_edge_travel_times(self.inner_graph)
@@ -29,7 +29,7 @@ class ManhattanGraph:
         """
 
         # the code below is for mapping the pre-defined hubs (customer/store/trips) to nodes in the graph
-        hubs_file = pd.read_csv("../../data/hubs/manual_hubs.CSV")
+        hubs_file = pd.read_csv("data/hubs/manual_hubs.CSV")
         hubs = []
         i=0
         for row in hubs_file.index:    
