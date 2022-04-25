@@ -29,7 +29,7 @@ class ManhattanGraph:
         """
 
         # the code below is for mapping the pre-defined hubs (customer/store/trips) to nodes in the graph
-        hubs_file = pd.read_csv("../../data/hubs/manual_hubs.csv")
+        hubs_file = pd.read_csv("../../data/hubs/manual_hubs.CSV")
         hubs = []
         i=0
         for row in hubs_file.index:    
