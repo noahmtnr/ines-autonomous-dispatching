@@ -53,7 +53,7 @@ class GraphEnv(gym.Env):
 
         # Creates an instance of StreetGraph with random trips and hubs
         # graph_meinheim = StreetGraph(filename='meinheim', num_trips=4000, fin_hub=self.final_hub, num_hubs=5)
-        manhattan_graph = ManhattanGraph(filename='simple', num_hubs=52)
+        manhattan_graph = ManhattanGraph(filename='simple', num_hubs=70)
         manhattan_graph.setup_trips(self.START_TIME)
 
         self.hubs = manhattan_graph.hubs
