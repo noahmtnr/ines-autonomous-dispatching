@@ -207,12 +207,6 @@ class GraphEnv(gym.Env):
             int: reward
             bool: done
         """
-        # define weights for reward components
-        # for the start: every component has the same weight
-        num_comp = 6
-        w = 1/num_comp
-        # later: every component individually
-        # w1 = ?, w2 = ?, ...
 
         reward = 0
         # if we reach the final hub
@@ -231,7 +225,19 @@ class GraphEnv(gym.Env):
         # if we do not reach the final hub, reward is -1
         else:
             # old reward: reward = self.REWARD_AWAY
-            # 
+            
+            num_comp_ownride = 3
+            w_ownride = 1/num_comp_ownride
+
+            num_comp_wait = 1
+            w_wait = 1 /num_comp_wait
+
+            #define weights for reward components of share ride
+            # for the start: every component has the same weight
+            num_comp = 6
+            w_shareride = 1/num_comp
+            # later: every component individually
+            # w1 = ?, w2 = ?, ...
 
             # if action was own ride
             if self.own_ride:
@@ -239,20 +245,26 @@ class GraphEnv(gym.Env):
                 path_travelled = ox.shortest_path(self.graph.inner_graph, self.graph.get_nodeids_list()[self.old_position],  self.graph.get_nodeids_list()[self.position], weight='travel_time')
                 dist_travelled_list = ox.utils_graph.get_route_edge_attributes(self.graph.inner_graph,path_travelled,attribute='length')
                 part_length = sum(dist_travelled_list)
-                dist_travelled = 1000/part_length
+                dist_travelled = part_length/1000 # km travelled
                 # choose random mobility provider (hereby modelling random availability for an own ride) and calculate trip costs
                 providers = pd.read_csv("Provider.csv")
                 id = random.randint(0,len(providers.index))
-                price = providers['basic_cost'][id] + dist_travelled/1000 * providers['cost_per_km'][id]
-                reward += dist_travelled - price
+                price = providers['basic_cost'][id] + dist_travelled * providers['cost_per_km'][id]
+                environment_cost = dist_travelled
+
+                difference = self.deadline - self.time
+                if self.time > self.deadline:
+                    reward += - w_ownride*(difference.total_seconds()/60)*10 - w_ownride*(environment_cost + price) # punish late deliveries hard
+                else:
+                    reward += w_ownride*(difference.total_seconds()/60) - w_ownride*(environment_cost + price)
 
             # if action was wait
             elif (self.has_waited):
                 # punishment is the time wasted on waiting relative to overall time that is available
                 if self.time > self.deadline:
-                    reward = self.deadline - self.time
+                    reward -= (self.deadline - self.time).total_seconds()/60 * 10
                 else:
-                    reward -= 300/((self.deadline-self.pickup_time).total_seconds())
+                    reward -= w_wait * 5 # + w_wait* ((self.deadline-self.pickup_time).total_seconds()/60)
 
             # if action was to share ride
             else:
@@ -264,7 +276,7 @@ class GraphEnv(gym.Env):
                 path_travelled = ox.shortest_path(self.graph.inner_graph, self.graph.get_nodeids_list()[self.old_position],  self.graph.get_nodeids_list()[self.position], weight='travel_time')
                 dist_travelled_list = ox.utils_graph.get_route_edge_attributes(self.graph.inner_graph,path_travelled,attribute='length')
                 part_length = sum(dist_travelled_list)
-                dist_travelled = 1000/part_length
+                dist_travelled = part_length/1000
 
                 # minimize distance to final hub (calculate difference between distance to final hub from the old position and the new position)
                 oldpath_to_final = ox.shortest_path(self.graph.inner_graph, self.graph.get_nodeids_list()[self.old_position],  self.graph.get_nodeids_list()[self.final_hub], weight='travel_time')
@@ -294,7 +306,7 @@ class GraphEnv(gym.Env):
                 # in the case of multiagent: cost = price(passenger_num+box_num+1)
 
                 # add all to reward
-                reward += w * time_diff + w * dist_travelled + w * dist_gained + w * hops + w * wait_time + w * cost
+                reward += -w_shareride * time_diff.total_seconds()/60 - w_shareride * dist_travelled + w_shareride * dist_gained - w_shareride * hops - w_shareride * wait_time - w_shareride * cost
                 # later: take into account each individual weight
                 # reward += w1 * time_diff + w2 * dist + w3 * hops + w4 * wait_time + w5 * cost
 
