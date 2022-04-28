@@ -53,7 +53,7 @@ class GraphEnv(gym.Env):
 
         # Creates an instance of StreetGraph with random trips and hubs
         # graph_meinheim = StreetGraph(filename='meinheim', num_trips=4000, fin_hub=self.final_hub, num_hubs=5)
-        manhattan_graph = ManhattanGraph(filename='simple', num_hubs=52)
+        manhattan_graph = ManhattanGraph(filename='simple', num_hubs=70)
         manhattan_graph.setup_trips(self.START_TIME)
 
         self.hubs = manhattan_graph.hubs
@@ -324,7 +324,7 @@ class GraphEnv(gym.Env):
 
         wait = [{'type': 'wait'}]
         ownRide = [{'type': 'ownRide'}]
-        available_rides = list(self.availableTrips())
+        available_rides = list(self.availableTrips(10))
         
         executionTime = (time.time() - startTime)
         print('get_available_actions() Execution time: ' + str(executionTime) + ' seconds')
@@ -380,6 +380,7 @@ class GraphEnv(gym.Env):
                                         trip = {'departure_time': position_timestamp, 'target_hub': hub, 'route': route_to_target_hub, 'trip_row_id': index}
                                         list_trips.append(trip)
         self.available_actions = list_trips
+        print(list_trips)
         return list_trips
 
     def validateAction(self, action):
