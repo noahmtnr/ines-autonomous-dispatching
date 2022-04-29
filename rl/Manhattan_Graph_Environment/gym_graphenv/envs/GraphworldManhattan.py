@@ -9,12 +9,14 @@ from array import array
 import gym
 from gym.utils import seeding
 import random
-import modin.pandas as pd
+import pandas as pd
 from gym import spaces
 from pandas import Timestamp
 import time
+import database_connection
 
 from ManhattanGraph import ManhattanGraph
+from rl.Manhattan_Graph_Environment.database_connection import getAvailableTrips, getRouteFromTrip
 
 class GraphEnv(gym.Env):
 
@@ -54,7 +56,7 @@ class GraphEnv(gym.Env):
         # Creates an instance of StreetGraph with random trips and hubs
         # graph_meinheim = StreetGraph(filename='meinheim', num_trips=4000, fin_hub=self.final_hub, num_hubs=5)
         manhattan_graph = ManhattanGraph(filename='simple', num_hubs=70)
-        manhattan_graph.setup_trips(self.START_TIME)
+        #manhattan_graph.setup_trips(self.START_TIME)
 
         self.hubs = manhattan_graph.hubs
 
@@ -346,39 +348,31 @@ class GraphEnv(gym.Env):
 
         start_timestamp=self.time
         end_timestamp = self.time + timedelta(minutes=time_window)
-
-        grid=self.graph.trips
-        paths=grid['route_timestamps']
         
-        row_id = -1
-        for index in range(len(paths)):
-            row_id += 1
-            dict_route = grid['route_timestamps'][index]
-            dict_route= eval(dict_route)
-            for tupel_position in dict_route:
-                startsInCurrentPosition = str(tupel_position) == position_str
-                if(startsInCurrentPosition):
-                    position_timestamp= datetime.strptime(str(dict_route[tupel_position]), "%Y-%m-%d %H:%M:%S")
-                    inTimeframe = start_timestamp <= position_timestamp and end_timestamp >= position_timestamp
-                    if inTimeframe:
-                        trip_target_node = grid['dropoff_node'][index]
-                        isNotFinalNode = str(tupel_position) != str(trip_target_node)
-                        if(isNotFinalNode):
-                            string_split = grid['route'][index].replace('[','').replace(']','').split(',')
-                            route = [int(el) for el in string_split]
-                            index_in_route = route.index(position)
-                            route_to_target_node=route[index_in_route::]
-                            hubsOnRoute = any(node in route_to_target_node for node in self.hubs)
-                            if hubsOnRoute:
-                                list_hubs = [node for node in self.hubs if node in route_to_target_node]
-                                hubs_dict = dict((node, dict_route[node]) for node in list_hubs)
-                                for hub in hubs_dict:
-                                    index_hub_in_route = route.index(hub)
-                                    index_hub_in_route += 1
-                                    route_to_target_hub = route[index_in_route:index_hub_in_route]
-                                    if(hub != position):
-                                        trip = {'departure_time': position_timestamp, 'target_hub': hub, 'route': route_to_target_hub, 'trip_row_id': index}
-                                        list_trips.append(trip)
+        #list of trip id's that are in current position in that timewindow
+        trips = getAvailableTrips(position, start_timestamp, end_timestamp)
+        for tripId in trips:
+        
+            #trip_target_node = grid['dropoff_node'][index]
+            #isNotFinalNode = str(tupel_position) != str(trip_target_node)
+
+            route, times = getRouteFromTrip(tripId)
+            isNotFinalNode = True
+            if isNotFinalNode:
+            
+                index_in_route = route.index(position)
+                position_timestamp = times[index_in_route]
+                route_to_target_node=route[index_in_route::]
+                hubsOnRoute = any(node in route_to_target_node for node in self.hubs)
+                if hubsOnRoute:
+                    route_hubs = [node for node in route_to_target_node if node in self.hubs]
+                    for hub in route_hubs:
+                        index_hub_in_route = route.index(hub)
+                        index_hub_in_route += 1
+                        route_to_target_hub = route[index_in_route:index_hub_in_route]
+                        if(hub != position):
+                            trip = {'departure_time': position_timestamp, 'target_hub': hub, 'route': route_to_target_hub, 'trip_row_id': tripId}
+                            list_trips.append(trip)
         self.available_actions = list_trips
         print(list_trips)
         return list_trips
