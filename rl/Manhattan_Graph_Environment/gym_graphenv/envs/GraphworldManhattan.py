@@ -16,7 +16,7 @@ import time
 import database_connection
 
 from ManhattanGraph import ManhattanGraph
-from rl.Manhattan_Graph_Environment.database_connection import getAvailableTrips, getRouteFromTrip
+from database_connection import getAvailableTrips, getRouteFromTrip
 
 class GraphEnv(gym.Env):
 
