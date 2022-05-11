@@ -10,13 +10,11 @@ class LearnGraph:
         for node in self.G.nodes():
             self.G.add_edge(node, node)
 
+        self.add_travel_cost_layer()
         ox.save_graphml(self.G, filepath="./data/graph/learn.graphml")
 
     def adjacency_matrix(self, layer: str = None):
         return nx.to_numpy_array(self.G, weight=layer)
-
-    def get_adjacency_matrix_row(self, layer: str, row: int):
-        return nx.to_numpy_array(self.G, weight=layer, nodelist=[row])
 
     def add_travel_distance_layer(self):
         self.manhattan_graph = ManhattanGraph(filename='simple')
@@ -35,8 +33,7 @@ class LearnGraph:
                 elif(i==j):
                     edges[(i,j,0)] = 20
                 else:
-                    edges[(i,j,0)] =100
+                    edges[(i,j,0)] =60
         nx.set_edge_attributes(self.G, edges, "cost")       
 
 graph = LearnGraph(70)
-graph.add_travel_cost_layer()
