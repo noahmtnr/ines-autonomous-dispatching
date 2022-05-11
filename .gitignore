@@ -10,6 +10,8 @@ rl/env/__pycache__
 
 .vscode/
 
+data/trips/preprocessed_trips/preprocessed_trips.csv
+
 data/trips/preprocessed_trips.csv
 
 rl/Manhattan_Graph_Environment/trips_kaggle_providers.csv
