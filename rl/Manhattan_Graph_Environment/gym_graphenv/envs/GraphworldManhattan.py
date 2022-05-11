@@ -13,6 +13,7 @@ import modin.pandas as pd
 from gym import spaces
 from pandas import Timestamp
 import time
+import pickle
 
 from ManhattanGraph import ManhattanGraph
 from LearnGraph import LearnGraph
@@ -37,7 +38,7 @@ class GraphEnv(gym.Env):
             final_hub (int): nodeId
 
         """  
-        self.env_config = env_config
+        self.env_config = self.read_config()
         self.n_hubs = 70
 
         # Creates an instance of StreetGraph with random trips and hubs
@@ -95,7 +96,7 @@ class GraphEnv(gym.Env):
     def reset(self):
         # two cases depending if we have env config 
         #super().reset()
-        print(self.env_config)
+
         if (self.env_config == None or self.env_config == {}):
             print("Reset without config")
             #self.final_hub = self.manhattan_graph.get_nodeids_list().index(random.sample(self.hubs,1)[0])
@@ -190,24 +191,23 @@ class GraphEnv(gym.Env):
             else:
                 self.has_waited=False
                 self.count_hubs += 1
-                #self.own_ride = True
-                #create route to final hub
-                
-                
+                #self.own_ride = True                
                 # Step Zeit vorrübergehend auskommentiert bis Zeit im State vorhanden ist
-                # route = ox.shortest_path(self.manhattan_graph.inner_graph, self.manhattan_graph.get_nodeids_list()[self.position],  self.manhattan_graph.get_nodeids_list()[self.final_hub], weight='travel_time')
-                # route_travel_time = ox.utils_graph.get_route_edge_attributes(self.manhattan_graph.inner_graph,route,attribute='travel_time')
-                # step_duration = sum(route_travel_time)#+300 #we add 5 minutes (300 seconds) so the taxi can arrive
+                pickup_nodeid = self.manhattan_graph.get_nodeid_by_hub_index(self.position)
+                dropoff_nodeid = self.manhattan_graph.get_nodeid_by_hub_index(action)
+                # pickup_node_index = self.manhattan_graph.get_index_by_nodeid(pickup_nodeid)
+                # dropoff_node_index = self.manhattan_graph.get_index_by_nodeid(dropoff_nodeid)
+                route = ox.shortest_path(self.manhattan_graph.inner_graph, pickup_nodeid,  dropoff_nodeid, weight='travel_time')
+                route_travel_time = ox.utils_graph.get_route_edge_attributes(self.manhattan_graph.inner_graph,route,attribute='travel_time')
+                step_duration = sum(route_travel_time)#+300 #we add 5 minutes (300 seconds) so the taxi can arrive
                 
                 self.old_position = self.position
-                #self.position=self.final_hub
                 self.position = action
-                #print("action ==  ownRide ")
                 
                 
                 # Increase global time state by the time waited for the taxi to arrive at our location
-                #self.current_wait = (selected_trip['departure_time']-self.time).seconds
-                #self.time = selected_trip['departure_time']
+                # self.current_wait = (selected_trip['departure_time']-self.time).seconds
+                # self.time = selected_trip['departure_time']
 
                 # Instead of cumulating trip duration here we add travel_time 
                 # self.total_travel_time += timedelta(seconds=travel_time)
@@ -222,7 +222,7 @@ class GraphEnv(gym.Env):
             print("action space: ",self.action_space)
 
 
-        #self.time += timedelta(seconds=step_duration)
+        self.time += timedelta(seconds=step_duration)
 
         reward, done = self.compute_reward(action)
 
@@ -470,9 +470,11 @@ class GraphEnv(gym.Env):
     def validateAction(self, action):
         return action < self.n_hubs
 
-
-
-
+    def read_config(self):
+        with open('env_config.pkl', 'rb') as f:
+            loaded_dict = pickle.load(f)
+        self.env_config = loaded_dict
+        return loaded_dict
         
 
     def render(self, visualize_actionspace: bool = False):
