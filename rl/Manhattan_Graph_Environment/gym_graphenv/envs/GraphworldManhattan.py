@@ -15,6 +15,7 @@ from pandas import Timestamp
 import time
 
 from ManhattanGraph import ManhattanGraph
+from LearnGraph import LearnGraph
 
 class GraphEnv(gym.Env):
 
@@ -53,36 +54,24 @@ class GraphEnv(gym.Env):
 
         # Creates an instance of StreetGraph with random trips and hubs
         # graph_meinheim = StreetGraph(filename='meinheim', num_trips=4000, fin_hub=self.final_hub, num_hubs=5)
-        manhattan_graph = ManhattanGraph(filename='simple', num_hubs=70)
-        manhattan_graph.setup_trips(self.START_TIME)
+        # manhattan_graph = ManhattanGraph(filename='simple', num_hubs=70)
+        # manhattan_graph.setup_trips(self.START_TIME)
 
         self.hubs = manhattan_graph.hubs
+        learn_graph = LearnGraph(n_hubs=70)
 
-        self.graph = manhattan_graph
+        self.graph = learn_graph
 
         self.seed()
         self.reset()
-        #self.graph.trips = graph_meinheim_trips
-
-        #Creates a list of 5 random hubs
-        #self.graph.generate_hubs(number, fin_hub)
-        # self.hubs = random.sample(self.graph.nodes(),5) 
-        # if(final_hub not in self.hubs):
-        #     self.hubs.append(final_hub)
-        
-        # if self.graph.inner_graph.has_node(self.start_hub):
-        #     self.position = self.start_hub
-        # else:
-        #     return 'Initialized start hub was not found in graph'
-
-        # if self.graph.inner_graph.has_node(final_hub):
-        #     self.final_hub = final_hub
-        # else:
-        #     return 'Initialized final hub was not found in graph'
-       
+      
 
         #self.action_space = gym.spaces.Discrete(num_actions) 
-        self.observation_space = gym.spaces.Discrete(len(self.graph.get_nodeids_list())) #num of nodes in the graph
+        observation_dict = {}
+        observation_dict['layer_one'] = learn_graph.adjacency_matrix('cost')
+        observation_dict['start_hub'] = learn_graph.adjacency_matrix('cost')
+        print(observation_dict)
+        self.observation_space = observation_dict
 
        
     
