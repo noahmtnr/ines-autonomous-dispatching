@@ -80,7 +80,7 @@ class GraphEnv(gym.Env):
             #'current_hub': OneHotVector(self.n_hubs),
             #'final_hub': OneHotVector(self.n_hubs)
             'cost': gym.spaces.Box(low=np.zeros(70), high=np.zeros(70)+100, shape=(70,), dtype=np.int64),
-            #'current_hub': gym.spaces.Box(low=0, high=1, shape=(70,), dtype=np.int64),
+            'current_hub': gym.spaces.Box(low=0, high=1, shape=(70,), dtype=np.int64),
             'final_hub': gym.spaces.Box(low=0, high=1, shape=(70,), dtype=np.int64)
             #'current_hub': gym.spaces.Discrete(self.n_hubs),
             #'final_hub': gym.spaces.Discrete(self.n_hubs)
