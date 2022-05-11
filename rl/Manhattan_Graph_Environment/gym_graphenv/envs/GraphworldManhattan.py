@@ -15,10 +15,13 @@ from pandas import Timestamp
 import time
 import pickle
 
+import sys
+sys.path.insert(0,"")
+
 from ManhattanGraph import ManhattanGraph
 from LearnGraph import LearnGraph
 from OneHotVector import OneHotVector
-from rl.Manhattan_Graph_Environment.database_connection import getAvailableTrips,getRouteFromTrip
+from database_connection import DBConnection
 
 class GraphEnv(gym.Env):
 
@@ -41,6 +44,8 @@ class GraphEnv(gym.Env):
         self.env_config = self.read_config()
         self.n_hubs = 70
 
+        self.DB = DBConnection()
+
         # Creates an instance of StreetGraph with random trips and hubs
         # graph_meinheim = StreetGraph(filename='meinheim', num_trips=4000, fin_hub=self.final_hub, num_hubs=5)
 
@@ -51,16 +56,8 @@ class GraphEnv(gym.Env):
         self.hubs = manhattan_graph.hubs
 
 
-        learn_graph = LearnGraph(n_hubs=self.n_hubs)
-        self.learn_graph = learn_graph
-
-
         self.state = None
 
-
-        learn_graph = LearnGraph(n_hubs=self.n_hubs)
-
-        self.learn_graph = learn_graph
       
         self.action_space = gym.spaces.Discrete(self.n_hubs) 
         
@@ -130,6 +127,10 @@ class GraphEnv(gym.Env):
             self.deadline=self.env_config['delivery_timestamp']
             self.current_wait = 0
             # self.manhattan_graph.setup_trips(self.pickup_time)
+
+        learn_graph = LearnGraph(n_hubs=self.n_hubs, manhattan_graph=self.manhattan_graph)
+        learn_graph.add_travel_cost_layer(self.availableTrips())
+        self.learn_graph = learn_graph
 
 
         self.count_hubs = 0
@@ -434,21 +435,21 @@ class GraphEnv(gym.Env):
             list: [departure_time,target_node]
         """
         list_trips=[]
-        position=self.graph.get_nodeid_by_index(self.position)
+        position=self.manhattan_graph.get_nodeid_by_index(self.position)
         position_str=str(position)
-        final_hub_postion=self.graph.get_nodeid_by_index(self.final_hub)
+        final_hub_postion=self.manhattan_graph.get_nodeid_by_index(self.final_hub)
 
         start_timestamp=self.time
         end_timestamp = self.time + timedelta(minutes=time_window)
         
         #list of trip id's that are in current position in that timewindow
-        trips = getAvailableTrips(position, start_timestamp, end_timestamp)
+        trips = self.DB.getAvailableTrips(position, start_timestamp, end_timestamp)
         for tripId in trips:
         
             #trip_target_node = grid['dropoff_node'][index]
             #isNotFinalNode = str(tupel_position) != str(trip_target_node)
 
-            route, times = getRouteFromTrip(tripId)
+            route, times = self.DB.getRouteFromTrip(tripId)
             isNotFinalNode = True
             if isNotFinalNode:
             
