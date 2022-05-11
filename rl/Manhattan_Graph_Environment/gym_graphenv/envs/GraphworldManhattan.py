@@ -26,8 +26,7 @@ class GraphEnv(gym.Env):
     pickup_minute = np.random.randint(60) 
     START_TIME = datetime(2016,1,pickup_day,pickup_hour,pickup_minute,0)
     
-    def __init__(self,env_config = None):
-        env_config = env_config or {}
+    def __init__(self ,env_config = None):
         """_summary_
 
         Args:
@@ -36,24 +35,11 @@ class GraphEnv(gym.Env):
             final_hub (int): nodeId
 
         """  
-        # self.final_hub = 2
-        # self.start_hub = 8
-        # self.position = self.start_hub
-        
-        # pickup_day = 1
-        # pickup_hour =  np.random.randint(24)
-        # pickup_minute = np.random.randint(60)
-        # self.pickup_time = datetime(2022,1,pickup_day,pickup_hour,pickup_minute,0)
-        # #self.pickup_time = datetime(2022,1,1,1,1,0)
-
-        # self.time = self.pickup_time
-        # self.total_travel_time = 0
-        # self.deadline=self.pickup_time+timedelta(hours=3)
-        
-       
+        self.env_config = env_config or {}
 
         # Creates an instance of StreetGraph with random trips and hubs
         # graph_meinheim = StreetGraph(filename='meinheim', num_trips=4000, fin_hub=self.final_hub, num_hubs=5)
+
         # manhattan_graph = ManhattanGraph(filename='simple', num_hubs=70)
         # manhattan_graph.setup_trips(self.START_TIME)
 
@@ -73,35 +59,76 @@ class GraphEnv(gym.Env):
         print(observation_dict)
         self.observation_space = observation_dict
 
+        self.manhattan_graph = ManhattanGraph(filename='simple', num_hubs=70)
+        self.manhattan_graph.setup_trips(self.START_TIME)
+        self.hubs = self.manhattan_graph.hubs
+        self.graph = self.manhattan_graph
+
+        self.seed()
+        self.reset()
+        #self.graph.trips = graph_meinheim_trips
+
+        #Creates a list of 5 random hubs
+        #self.graph.generate_hubs(number, fin_hub)
+        # self.hubs = random.sample(self.graph.nodes(),5) 
+        # if(final_hub not in self.hubs):
+        #     self.hubs.append(final_hub)
+        
+        # if self.graph.inner_graph.has_node(self.start_hub):
+        #     self.position = self.start_hub
+        # else:
+        #     return 'Initialized start hub was not found in graph'
+
+        # if self.graph.inner_graph.has_node(final_hub):
+        #     self.final_hub = final_hub
+        # else:
+        #     return 'Initialized final hub was not found in graph'
+       
+        self.observation_space = gym.spaces.Discrete(len(self.graph.get_nodeids_list())) #num of nodes in the graph
        
     
     def reset(self):
+        # two cases depending if we have env config 
+       
+        if (self.env_config == {}):
+            self.final_hub = self.graph.get_nodeids_list().index(random.sample(self.hubs,1)[0])
+            self.start_hub = self.graph.get_nodeids_list().index(random.sample(self.hubs,1)[0])
+            self.position = self.start_hub
+
+        # time for pickup
+            self.pickup_time = self.START_TIME
+            self.time = self.pickup_time
+            self.total_travel_time = 0
+            self.deadline=self.pickup_time+timedelta(hours=12)
+            self.current_wait = 1 ## to avoid dividing by 0
+            self.manhattan_graph.setup_trips(self.START_TIME)
+        else:
+            
+            self.final_hub= self.graph.get_index_by_nodeid(self.env_config['delivery_node_id'])
+            self.start_hub= self.graph.get_index_by_nodeid(self.env_config['pickup_node_id'])
+            self.position = self.start_hub
+
+            self.pickup_time = self.env_config['pickup_timestamp']
+            self.time = self.pickup_time
+            self.total_travel_time = 0
+            self.deadline=self.env_config['delivery_timestamp']
+            self.current_wait = 0
+            self.manhattan_graph.setup_trips(self.pickup_time)
+
+
         self.count_hubs = 0
-        self.final_hub = self.graph.get_nodeids_list().index(random.sample(self.hubs,1)[0])
-        self.start_hub = self.graph.get_nodeids_list().index(random.sample(self.hubs,1)[0])
-        self.position = self.start_hub
         # old position is current position
         self.old_position = self.start_hub
         # current trip
         self.current_trip = None
 
-        # time for pickup
-        self.pickup_time = self.START_TIME
-        self.time = self.pickup_time
-        self.total_travel_time = 0
-        self.deadline=self.pickup_time+timedelta(hours=3)
-        self.current_wait = 0
 
         self.own_ride = False
         self.has_waited=False
-
         reward=0
-
         self.available_actions = self.get_available_actions()
-
         return self.position
     
-
 
     @property
     def action_space(self):
