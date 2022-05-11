@@ -29,8 +29,6 @@ def initialiazeTables():
       trip_duration int,
       pickup_node bigint,
       dropoff_node bigint,
-      pickup_distance float,
-      dropoff_distance float,
       route_length float,
       provider int,
       total_price float)""")
@@ -56,9 +54,9 @@ def insertIntoTripsRoutes(tripId, listTrips):
       mycursor.execute(sql, val)
   mydb.commit()
 
-def insertIntoTrips(id, vendor_id, pickup_datetime, dropoff_datetime, passenger_count, pickup_longitude, pickup_latitude, dropoff_longitude, dropoff_latitude, store_and_fwd_flag, trip_duration, pickup_node, dropoff_node, pickup_distance, dropoff_distance, route_length, provider, total_price):
-  sql = "INSERT INTO TRIPS VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-  val = (id, vendor_id, pickup_datetime, dropoff_datetime, passenger_count, pickup_longitude, pickup_latitude, dropoff_longitude, dropoff_latitude, store_and_fwd_flag, trip_duration, pickup_node, dropoff_node, pickup_distance, dropoff_distance, route_length, provider, total_price)
+def insertIntoTrips(id, vendor_id, pickup_datetime, dropoff_datetime, passenger_count, pickup_longitude, pickup_latitude, dropoff_longitude, dropoff_latitude, store_and_fwd_flag, trip_duration, pickup_node, dropoff_node, route_length, provider, total_price):
+  sql = "INSERT INTO TRIPS VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+  val = (id, vendor_id, pickup_datetime, dropoff_datetime, passenger_count, pickup_longitude, pickup_latitude, dropoff_longitude, dropoff_latitude, store_and_fwd_flag, trip_duration, pickup_node, dropoff_node, route_length, provider, total_price)
   mycursor.execute(sql, val)
   mydb.commit()
 
@@ -84,23 +82,27 @@ def getRouteFromTrip(trip_id):
 
 def populateDatabase():
   initialiazeTables()
-  full_df = pd.read_csv('rl/Graph_Environment/trips_kaggle_providers.csv')
+  full_df = pd.read_csv('rl/Manhattan_Graph_Environment/trips_kaggle_providers.csv')
   
   #data for each trip
-  trips_df = full_df[['id','vendor_id','pickup_datetime','dropoff_datetime','passenger_count','pickup_longitude','pickup_latitude','dropoff_longitude','dropoff_latitude','store_and_fwd_flag','trip_duration','pickup_node','dropoff_node','pickup_distance','dropoff_distance','route_length','provider','total_price']]
+  trips_df = full_df[['id','vendor_id','pickup_datetime','dropoff_datetime','passenger_count','pickup_longitude','pickup_latitude','dropoff_longitude','dropoff_latitude','store_and_fwd_flag','trip_duration','pickup_node','dropoff_node','route_length','provider','total_price']]
   
   trips_df.apply(lambda row: insertIntoTrips(row['id'], row['vendor_id'], row['pickup_datetime'], 
   row['dropoff_datetime'], row['passenger_count'], row['pickup_longitude'], row['pickup_latitude'],
   row['dropoff_longitude'], row['dropoff_latitude'], row['store_and_fwd_flag'], row['trip_duration'],
-  row['pickup_node'], row['dropoff_node'], row['pickup_distance'], row['dropoff_distance'], row['route_length'],
+  row['pickup_node'], row['dropoff_node'], row['route_length'],
   row['provider'], row['total_price']), axis=1)
   #trip with route and timestamps
   rest_df = full_df[['id','route_timestamps']]
+  print(rest_df)
   rest_df['route_timestamps'] = rest_df['route_timestamps'].apply(lambda x: x.replace(': \'',' : \''))
+  print(rest_df['route_timestamps'])
   rest_df['route_timestamps'] = (rest_df['route_timestamps'].apply(lambda x: x.strip("{}")))
+  print(rest_df['route_timestamps'])
   rest_df.apply(lambda row: insertIntoTripsRoutes(row['id'], row['route_timestamps']), axis=1)
 
 def main():
     #print(getAvailableTrips(42430063, '2016-01-03 19:50:10', '2016-01-03 19:55:10'))
-    print(getRouteFromTrip('id0000569'))
+    #print(getRouteFromTrip('id0000569')
+    populateDatabase()
 main()

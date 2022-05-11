@@ -182,3 +182,35 @@ class DataPreProcessing:
         )
 
         return trips
+    
+    def map_oneRoute_to_oneTrip_with_timestamps(pickup_longitude, pickup_latitude, dropoff_longitude, dropoff_latitude, pickup_datetime, dropoff_datetime, trip_duration):
+        """
+        Adds for the trips data the route and the timestamp for each node
+
+        :param graph: the graph representing the roads and junctions
+        :param trips: all the tips
+        :return: the trips in addition having the route and the timestamp for each node from the route
+        """
+        graph = ox.io.load_graphml("data/graph/simple.graphml")
+        
+        pickup_node = (pickup_longitude, pickup_latitude)
+        dropoff_node = (dropoff_longitude, dropoff_latitude)
+        pickup_node_id = ox.distance.nearest_nodes(graph,pickup_longitude, pickup_latitude)
+        print(pickup_node_id)
+        dropoff_node_id = ox.distance.nearest_nodes(graph, dropoff_longitude, dropoff_latitude)
+        print(dropoff_node_id)
+        route = nx.shortest_path(
+            graph, pickup_node_id, dropoff_node_id
+        )
+
+        timestamps_dict = DataPreProcessing.map_nodes_to_timestaps(graph, route, pickup_datetime, dropoff_datetime, trip_duration)
+
+        route_length = 0
+        for j in range(len(route)-1):
+                #print(self.inner_graph.nodes()[current_route[j]])
+                route_length += ox.distance.great_circle_vec(graph.nodes()[route[j]]["y"], graph.nodes()[route[j]]["x"],
+                graph.nodes()[route[j+1]]["y"], graph.nodes()[route[j+1]]["x"])
+        print(route)
+        print(timestamps_dict)
+
+        return route, str(timestamps_dict), route_length, pickup_node_id, dropoff_node_id

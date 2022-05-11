@@ -60,9 +60,10 @@ class ManhattanGraph:
         """
         
         #trips for simple graph, only the first 5000 rows
-        all_trips = pd.read_csv('../../data/trips/preprocessed_trips.csv')
-        self.trips = self.prefilter_trips(all_trips, start_time).reset_index(drop=True)
-
+        all_trips = pd.read_csv('../../data/trips/preprocessed_trips.csv', nrows=100)
+        print(all_trips.head())
+        #self.trips = self.prefilter_trips(all_trips, start_time).reset_index(drop=True)
+        self.trips =  all_trips
         #compute trip length and add to csv
         #generate random passenger count between 1 and 4 and add to csv
         route_length_column=[]
