@@ -81,15 +81,13 @@ class GraphEnv(gym.Env):
         self.reset()
       
         self.action_space = gym.spaces.Discrete(n_hubs) 
-
-  return 'Initialized final hub was not found in graph'
        
         self.observation_space = gym.spaces.Discrete(len(self.graph.get_nodeids_list())) #num of nodes in the graph
        
         observation_dict = {}
         observation_dict['layer_one'] = learn_graph.adjacency_matrix('cost')
         observation_dict['start_hub'] = learn_graph.adjacency_matrix('cost')
-        print(observation_dict)
+        #print(observation_dict)
 
         self.observation_space = gym.spaces.Dict(observation_dict)       
     
