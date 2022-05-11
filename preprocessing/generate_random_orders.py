@@ -6,6 +6,7 @@ import csv
 
 sys.path.insert(0,"")
 
+#here sth needs to be fixed
 from rl.Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv
 env=GraphEnv()
 
@@ -15,8 +16,8 @@ for i in range(1000):
     final_hub = env.graph.get_nodeids_list().index(random.sample(env.hubs,1)[0])
     start_hub = env.graph.get_nodeids_list().index(random.sample(env.hubs,1)[0])
     
-    pickup_month = np.random(6)
-    pickup_day = np.random.randint(31)
+    pickup_month =  np.random.randint(5)+1
+    pickup_day = np.random.randint(28)+1
     pickup_hour =  np.random.randint(24)
     pickup_minute = np.random.randint(60) 
 
