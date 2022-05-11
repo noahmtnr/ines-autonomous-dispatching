@@ -64,28 +64,34 @@ class GraphEnv(gym.Env):
         self.hubs = self.manhattan_graph.hubs
         self.graph = self.manhattan_graph
 
+        # Creates an instance of StreetGraph with random trips and hubs, just used for feeding the learn graph with real taxi trips later on
+        # self.manhattan_graph = ManhattanGraph(filename='simple', num_hubs=70)
+        # self.manhattan_graph.setup_trips(self.START_TIME)
+        # self.hubs = manhattan_graph.hubs
+
+        # n_hubs = len(self.hubs)
+
+
+        learn_graph = LearnGraph(n_hubs=70)
+
+        self.graph = learn_graph
+
+        # These two lines required?
         self.seed()
         self.reset()
-        #self.graph.trips = graph_meinheim_trips
+      
+        self.action_space = gym.spaces.Discrete(n_hubs) 
 
-        #Creates a list of 5 random hubs
-        #self.graph.generate_hubs(number, fin_hub)
-        # self.hubs = random.sample(self.graph.nodes(),5) 
-        # if(final_hub not in self.hubs):
-        #     self.hubs.append(final_hub)
-        
-        # if self.graph.inner_graph.has_node(self.start_hub):
-        #     self.position = self.start_hub
-        # else:
-        #     return 'Initialized start hub was not found in graph'
-
-        # if self.graph.inner_graph.has_node(final_hub):
-        #     self.final_hub = final_hub
-        # else:
-        #     return 'Initialized final hub was not found in graph'
+  return 'Initialized final hub was not found in graph'
        
         self.observation_space = gym.spaces.Discrete(len(self.graph.get_nodeids_list())) #num of nodes in the graph
        
+        observation_dict = {}
+        observation_dict['layer_one'] = learn_graph.adjacency_matrix('cost')
+        observation_dict['start_hub'] = learn_graph.adjacency_matrix('cost')
+        print(observation_dict)
+
+        self.observation_space = gym.spaces.Dict(observation_dict)       
     
     def reset(self):
         # two cases depending if we have env config 
