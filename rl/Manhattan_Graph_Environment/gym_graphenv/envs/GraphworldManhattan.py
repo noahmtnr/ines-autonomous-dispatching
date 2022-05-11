@@ -17,6 +17,7 @@ import time
 from ManhattanGraph import ManhattanGraph
 from LearnGraph import LearnGraph
 from OneHotVector import OneHotVector
+from rl.Manhattan_Graph_Environment.database_connection import getAvailableTrips,getRouteFromTrip
 
 class GraphEnv(gym.Env):
 
@@ -374,12 +375,13 @@ class GraphEnv(gym.Env):
         self.available_actions = available_actions
         return available_actions
 
+    """
     def availableTrips(self, time_window=5):
-        """ Returns a list of all available trips at the current node and within the next 5 minutes. Includes the time of departure from the current node as well as the target node of the trip.
+        Returns a list of all available trips at the current node and within the next 5 minutes. Includes the time of departure from the current node as well as the target node of the trip.
 
         Returns:
             list: [departure_time,target_node]
-        """
+        
         list_trips=[]
         position=self.manhattan_graph.get_nodeid_by_index(self.position)
         position_str=str(position)
@@ -422,6 +424,47 @@ class GraphEnv(gym.Env):
                                         list_trips.append(trip)
         self.available_actions = list_trips
         print(list_trips)
+        return list_trips
+    """
+    def availableTrips(self, time_window=5):
+        """ Returns a list of all available trips at the current node and within the next 5 minutes. Includes the time of departure from the current node as well as the target node of the trip.
+
+        Returns:
+            list: [departure_time,target_node]
+        """
+        list_trips=[]
+        position=self.graph.get_nodeid_by_index(self.position)
+        position_str=str(position)
+        final_hub_postion=self.graph.get_nodeid_by_index(self.final_hub)
+
+        start_timestamp=self.time
+        end_timestamp = self.time + timedelta(minutes=time_window)
+        
+        #list of trip id's that are in current position in that timewindow
+        trips = getAvailableTrips(position, start_timestamp, end_timestamp)
+        for tripId in trips:
+        
+            #trip_target_node = grid['dropoff_node'][index]
+            #isNotFinalNode = str(tupel_position) != str(trip_target_node)
+
+            route, times = getRouteFromTrip(tripId)
+            isNotFinalNode = True
+            if isNotFinalNode:
+            
+                index_in_route = route.index(position)
+                position_timestamp = times[index_in_route]
+                route_to_target_node=route[index_in_route::]
+                hubsOnRoute = any(node in route_to_target_node for node in self.hubs)
+                if hubsOnRoute:
+                    route_hubs = [node for node in route_to_target_node if node in self.hubs]
+                    for hub in route_hubs:
+                        index_hub_in_route = route.index(hub)
+                        index_hub_in_route += 1
+                        route_to_target_hub = route[index_in_route:index_hub_in_route]
+                        if(hub != position):
+                            trip = {'departure_time': position_timestamp, 'target_hub': hub, 'route': route_to_target_hub, 'trip_row_id': tripId}
+                            list_trips.append(trip)
+        self.available_actions = list_trips
         return list_trips
 
     def validateAction(self, action):
