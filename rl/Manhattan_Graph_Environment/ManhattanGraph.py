@@ -144,4 +144,4 @@ class ManhattanGraph:
         return self.get_node_by_nodeid(self.get_nodeid_by_hub_index(hub_index))
 
     def get_node_index_by_hub_index(self, hub_index: int):
-        return self.get_nodeids_list().index(self.get_nodeid_by_hub_index(hub_index))
+        return self.get_index_by_nodeid(self.get_nodeid_by_hub_index(hub_index))
