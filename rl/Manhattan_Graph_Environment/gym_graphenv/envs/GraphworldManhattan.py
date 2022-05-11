@@ -16,6 +16,7 @@ import time
 
 from ManhattanGraph import ManhattanGraph
 from LearnGraph import LearnGraph
+from OneHotVector import OneHotVector
 
 class GraphEnv(gym.Env):
 
@@ -44,52 +45,38 @@ class GraphEnv(gym.Env):
         # manhattan_graph.setup_trips(self.START_TIME)
 
         self.hubs = manhattan_graph.hubs
-        learn_graph = LearnGraph(n_hubs=70)
+        learn_graph = LearnGraph(n_hubs=self.n_hubs)
 
         self.graph = learn_graph
 
-        self.seed()
-        self.reset()
-      
-
-        #self.action_space = gym.spaces.Discrete(num_actions) 
-        observation_dict = {}
-        observation_dict['layer_one'] = learn_graph.adjacency_matrix('cost')
-        observation_dict['start_hub'] = learn_graph.adjacency_matrix('cost')
-        print(observation_dict)
-        self.observation_space = observation_dict
-
-        self.manhattan_graph = ManhattanGraph(filename='simple', num_hubs=70)
-        self.manhattan_graph.setup_trips(self.START_TIME)
+        # self.manhattan_graph = ManhattanGraph(filename='simple', num_hubs=70)
+        # self.manhattan_graph.setup_trips(self.START_TIME)
         self.hubs = self.manhattan_graph.hubs
         self.graph = self.manhattan_graph
+
+        self.state = None
 
         # Creates an instance of StreetGraph with random trips and hubs, just used for feeding the learn graph with real taxi trips later on
         # self.manhattan_graph = ManhattanGraph(filename='simple', num_hubs=70)
         # self.manhattan_graph.setup_trips(self.START_TIME)
         # self.hubs = manhattan_graph.hubs
 
-        # n_hubs = len(self.hubs)
+        self.n_hubs = 70
 
 
-        learn_graph = LearnGraph(n_hubs=70)
+        learn_graph = LearnGraph(n_hubs=self.n_hubs)
 
         self.graph = learn_graph
-
-        # These two lines required?
-        self.seed()
-        self.reset()
       
-        self.action_space = gym.spaces.Discrete(n_hubs) 
-       
-        self.observation_space = gym.spaces.Discrete(len(self.graph.get_nodeids_list())) #num of nodes in the graph
-       
-        observation_dict = {}
-        observation_dict['layer_one'] = learn_graph.adjacency_matrix('cost')
-        observation_dict['start_hub'] = learn_graph.adjacency_matrix('cost')
-        #print(observation_dict)
+        self.action_space = gym.spaces.Discrete(self.n_hubs) 
+        
+        self.observation_space = spaces.Dict(dict(
+            #layer_one = spaces.Box(low=0, high=100, shape=(1,self.n_hubs), dtype=np.int32),
+            layer_one = gym.spaces.Discrete(self.n_hubs),
+            current_hub = OneHotVector(self.n_hubs),
+            final_hub = OneHotVector(self.n_hubs)
+        ))
 
-        self.observation_space = gym.spaces.Dict(observation_dict)       
     
     def reset(self):
         # two cases depending if we have env config 
@@ -131,8 +118,14 @@ class GraphEnv(gym.Env):
         self.has_waited=False
         reward=0
         self.available_actions = self.get_available_actions()
-        return self.position
-    
+
+        self.state = (self.learn_graph.adjacency_matrix('cost')[self.position],one_hot(self.position),one_hot(self.final_hub))
+        return self.state
+
+    def one_hot(pos):
+        one_hot_vector = np.zeros(len(self.hubs))
+        one_hot_vector[pos] = 1
+        return one_hot_vector
 
     @property
     def action_space(self):
@@ -161,13 +154,14 @@ class GraphEnv(gym.Env):
         step_duration = 0
 
         if self.validateAction(action):
-            if(action == 0):
+            if(action == self.position):
                 step_duration = 300
                 self.has_waited=True
                 self.own_ride = False
                 print("action == wait ")
+                self.state = (self.learn_graph.adjacency_matrix('cost')[self.position],one_hot(self.position),one_hot(self.final_hub))
                 pass
-            elif(action==1):
+            else
                 self.has_waited=False
                 self.count_hubs += 1
                 self.own_ride = True
@@ -178,6 +172,7 @@ class GraphEnv(gym.Env):
                 self.old_position = self.position
                 self.position=self.final_hub
                 print("action ==  ownRide ")
+                self.state = (self.learn_graph.adjacency_matrix('cost')[self.position],one_hot(self.position),one_hot(self.final_hub))
                 pass 
 
             else:
@@ -209,6 +204,8 @@ class GraphEnv(gym.Env):
                 # Instead of cumulating trip duration here we add travel_time 
                 # self.total_travel_time += timedelta(seconds=travel_time)
                 print("action == ", action, " New Position", self.position)     
+                
+                self.state = (self.learn_graph.adjacency_matrix('cost')[self.position],one_hot(self.position),one_hot(self.final_hub))
         else:
             print("invalid action")
             print("avail actions: ",self.available_actions)
@@ -223,7 +220,7 @@ class GraphEnv(gym.Env):
         executionTime = (time.time() - startTime)
         print('Step() Execution time: ' + str(executionTime) + ' seconds')
 
-        return self.position, reward,  done, {}
+        return self.state, reward,  done, {}
         
     
     def compute_reward(self, done):
@@ -404,7 +401,7 @@ class GraphEnv(gym.Env):
         return list_trips
 
     def validateAction(self, action):
-        return action < len(self.available_actions)
+        return action < self.n_hubs
 
 
 

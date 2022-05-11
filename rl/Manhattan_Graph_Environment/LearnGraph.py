@@ -1,18 +1,22 @@
 import networkx as nx
 import osmnx as ox
 from ManhattanGraph import ManhattanGraph
+import numpy as np
 
 class LearnGraph:
         
     def __init__(self, n_hubs: int):
-        self.G=nx.complete_graph(n,nx.MultiDiGraph)
+        self.G=nx.complete_graph(n_hubs,nx.MultiDiGraph)
         for node in self.G.nodes():
             self.G.add_edge(node, node)
 
         ox.save_graphml(self.G, filepath="./data/graph/learn.graphml")
 
     def adjacency_matrix(self, layer: str = None):
-        return nx.adjacency_matrix(self.G, weight=layer)
+        return nx.to_numpy_array(self.G, weight=layer)
+
+    def get_adjacency_matrix_row(self, layer: str, row: int):
+        return nx.to_numpy_array(self.G, weight=layer, nodelist=[row])
 
     def add_travel_distance_layer(self):
         self.manhattan_graph = ManhattanGraph(filename='simple')
@@ -36,4 +40,3 @@ class LearnGraph:
 
 graph = LearnGraph(70)
 graph.add_travel_cost_layer()
-print(graph.adjacency_matrix('cost'))
