@@ -236,6 +236,7 @@ class GraphEnv(gym.Env):
         cost_of_action = self.learn_graph.adjacency_matrix('cost')[self.old_position][action]
         print(self.old_position, "->", action, cost_of_action)
         if self.position == self.final_hub:
+            print("DELIVERED")
             reward = 1000
             reward -= cost_of_action
             done = True
