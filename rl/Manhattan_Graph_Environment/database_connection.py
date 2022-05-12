@@ -78,6 +78,7 @@ class DBConnection:
     executionTime = (time.time() - startTime)
     print('DB: getAvailableTrips() Execution time: ' + str(executionTime) + ' seconds')
     return tripsId_list
+
   def getRouteFromTrip(self,trip_id):
     startTime = time.time()
     sql = "select route_node, date_time from mannheimprojekt.TRIPS_ROUTES where id = %s order by date_time"
@@ -111,6 +112,17 @@ class DBConnection:
     rest_df['route_timestamps'] = (rest_df['route_timestamps'].apply(lambda x: x.strip("{}")))
     rest_df.apply(lambda row: self.insertIntoTripsRoutes(row['id'], row['route_timestamps']), axis=1)
 
+
+  def writeHubsToDB(self, hubs):
+    sql = "INSERT INTO HUBS VALUES ( %s )"
+    print(hubs)
+    for hub in hubs:
+      
+        values = (int(hub),)
+        self.mycursor.execute(sql, values)
+    
+    self.mydb.commit()
+
   def close_connection(self):
     self.cursor.close()
     self.mydb.close()
@@ -119,5 +131,5 @@ class DBConnection:
 
 DB = DBConnection()
   
-print(DB.getAvailableTrips(42430063, '2016-01-03 19:50:10', '2016-01-03 19:55:10'))
-print(DB.getRouteFromTrip('id0000569'))
+# print(DB.getAvailableTrips(42430063, '2016-01-03 19:50:10', '2016-01-03 19:55:10'))
+# print(DB.getRouteFromTrip('id0000569'))

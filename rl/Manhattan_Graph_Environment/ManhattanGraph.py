@@ -12,16 +12,14 @@ class ManhattanGraph:
         self.inner_graph = ox.add_edge_speeds(self.inner_graph,fallback=30)
         self.inner_graph = ox.add_edge_travel_times(self.inner_graph)
         ox.utils_graph.remove_isolated_nodes(self.inner_graph)
-        fin_hub = random.sample(self.nodes(),1)
-        self.generate_hubs(fin_hub, num_hubs)
+        self.generate_hubs(num_hubs)
 
 
-    def generate_hubs(self, fin_hub, num_hubs: int = 70):#, opt: int = 0):
+    def generate_hubs(self, num_hubs: int = 70):#, opt: int = 0):
         # the code below is for loading the hubs specified in data/trips/manual_hubs.csv
         """Generates random bubs within the graph
 
         Args:
-            fin_hub (int): index_id of final hub
             num_hubs (int, optional): Number of hubs to create. Defaults to 5.
 
         Returns:
@@ -49,6 +47,7 @@ class ManhattanGraph:
         #         hubs.append(hubs_file.loc[row])
          
         self.hubs = random.sample(hubs,num_hubs)
+        pd.DataFrame(self.hubs).to_csv("hub_nodeids.csv")
         #self.hubs = hubs
         return self.hubs
 
