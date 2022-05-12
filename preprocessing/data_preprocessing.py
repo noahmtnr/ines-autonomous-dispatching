@@ -5,7 +5,7 @@ from datetime import timedelta,datetime
 import time
 
 class DataPreProcessing:
-
+    
     def setup_graph():
         graph = ox.io.load_graphml("data/graph/simple.graphml")
         return graph
@@ -17,7 +17,7 @@ class DataPreProcessing:
         )
         return df
 
-    def map_trips_to_nodes(trips, graph):
+    def map_trips_to_nodes(graph, trips):
 
         start_time = time.time()
 
@@ -53,7 +53,7 @@ class DataPreProcessing:
         )
         return trips
 
-    def map_routes_to_trips(trips, graph):
+    def map_routes_to_trips(graph, trips):
 
         routes = []
         for index, row in trips.iterrows():
@@ -214,3 +214,15 @@ class DataPreProcessing:
         print(timestamps_dict)
 
         return route, str(timestamps_dict), route_length, pickup_node_id, dropoff_node_id
+
+    def get_coordinates_of_node(node_id): 
+        # manhattangraph = ManhattanGraph(filename='simple', num_hubs=70)
+        graph = ox.io.load_graphml("data/graph/simple.graphml")
+        nodes = graph.nodes()
+        coordinates = [nodes[node_id]['x'], nodes[node_id]['y']]
+        return coordinates
+    
+    def getNearestNodeId(pickup_longitude, pickup_latitude):
+        graph = ox.io.load_graphml("data/graph/simple.graphml")
+        pickup_node_id = ox.distance.nearest_nodes(graph, pickup_longitude, pickup_latitude)
+        return pickup_node_id

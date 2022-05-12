@@ -1,9 +1,16 @@
+from asyncio.windows_events import NULL
 import sys
+import matplotlib.pyplot as plot
+import osmnx as ox
+import os
+import urllib
+from datetime import datetime, timedelta
+from folium import plugins, folium
 sys.path.insert(0,"")
 from preprocessing.data_preprocessing import DataPreProcessing
 # Using flask to make an api
 # import necessary libraries and functions
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template, redirect
 import pandas as pd
 # from database_connection import getAvailableTrips
 # from rl.Manhattan_Graph_Environment.database_connection import getAvailableTrips
@@ -19,6 +26,7 @@ password="Denisa_1700",
 database="mannheimprojekt",
 auth_plugin='mysql_native_password')
 mycursor = mydb.cursor()
+
 
 def getTrips(start_node, start_date, end_date):
    
@@ -59,21 +67,89 @@ def insertIntoTrips(id, vendor_id, pickup_datetime, dropoff_datetime, passenger_
 
 app = Flask(__name__)
   
+@app.route('/')
+def index():
+  return render_template('index.html')
+
 @app.route('/search', methods=['GET'])
 def search():
     answear = {}
-    args = request.args
-    start_node = request.args.get('start_node')
-    start_date = request.args.get('start_date')
-    end_date = request.args.get('end_date')
-    myList = getTrips(start_node, start_date, end_date)
 
+    args = request.args
+    start_node_long = args.get('pickup_long')
+    start_node_lat = args.get('pickup_lat')
+    start_date = args.get('start_date')
+    
+
+  
+    new_start_node_long = float(start_node_long or 0)
+    print(new_start_node_long)
+    new_start_node_lat = float(start_node_lat or 0) 
+    print(new_start_node_lat)
+    new_start_node = DataPreProcessing.getNearestNodeId(new_start_node_long, new_start_node_lat)
+    print(new_start_node)
+
+
+    new_start_date = urllib.parse.unquote(start_date)
+  
+
+    start_date_format = datetime.strptime(new_start_date, "%Y-%m-%d %H:%M:%S")
+    end_date_format = start_date_format + timedelta(minutes=10)
+    print(new_start_node, new_start_date, end_date_format)
+    myList = getTrips(new_start_node, new_start_date, end_date_format)
+
+    route = []
+    times = []
     for trip in myList:
         route, times = getRouteFromTrip(trip)
         answear[trip] = {'route': route, 'timestamps': times}
     print(myList)
-    buildLines(route, times)
-    return answear
+    lines = buildLines(route, times)
+    return buildFolium(lines)
+
+def buildFolium(lines):
+  graph = ox.io.load_graphml("data/graph/simple.graphml")
+  plot = ox.plot_graph_folium(graph,fit_bounds=True, weight=2, color="#333333")
+  m_events = folium.Map(
+    location=[-73.971321,40.776676],control_scale=True,
+    zoom_start=12,
+)
+
+  dir = r"templates\m_events.html"
+  dirname = os.path.dirname(__file__)
+  save_location = os.path.join(dirname, dir)
+  features = [
+    {
+        "type": "Feature",
+        "geometry": {
+            "type": "LineString",
+            "coordinates": line["coordinates"],
+        },
+        "properties": {
+            "times": line["dates"],
+            "style": {
+                "color": line["color"],
+                "weight": line["weight"] if "weight" in line else 5,
+            },
+            'icon': 'marker',
+            # time must be like the following format : '2018-12-01T05:53:00'
+            'popup': '<html> <head></head>  <body> comments </body> </html>'
+        },
+    }
+    for line in lines]
+
+  plugins.TimestampedGeoJson(
+    {
+        "type": "FeatureCollection",
+        "features": features,
+    },
+    period="PT1M",
+    add_last_point=True,
+  ).add_to(m_events)
+  m_events.save(save_location)
+  return render_template("m_events.html")
+  #m_events
+
 
 @app.route('/addTrip', methods=['POST'])
 def addTrip():
@@ -97,8 +173,18 @@ def addTrip():
         return "Success"
     else:
         return 'Content-Type not supported!'
+
 def buildLines(routes, timestamps):
-  for i in range(len(routes)-1):
+    element = {}
+    list_elements = []
+    for i in range(len(routes)-1):
+      element = {}
+      element["coordinates"]= [DataPreProcessing.get_coordinates_of_node(routes[i]), DataPreProcessing.get_coordinates_of_node(routes[i+1])]
+      element["dates"] = [timestamps[i], timestamps[i+1]]
+      element["color"] =  "blue"
+      list_elements.append(element)
+    #print(list_elements)
+    return list_elements
     
 
 @app.route('/addOrder', methods=['POST'])
