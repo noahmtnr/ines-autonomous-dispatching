@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 class ManhattanGraph:
 
     def __init__(self, filename, num_hubs):
-        filepath = ("data/graph/%s.graphml") % (filename)
+        filepath = ("../../data/graph/%s.graphml") % (filename)
         self.inner_graph = ox.load_graphml(filepath)
         self.inner_graph = ox.add_edge_speeds(self.inner_graph,fallback=30)
         self.inner_graph = ox.add_edge_travel_times(self.inner_graph)
@@ -28,7 +28,7 @@ class ManhattanGraph:
             self.hubs(list): List of hubs in graph
         """
         # the code below is for mapping the pre-defined hubs (customer/store/trips) to nodes in the graph
-        hubs_file = pd.read_csv("data/hubs/new_hubs.CSV")
+        hubs_file = pd.read_csv("../../data/hubs/new_hubs.CSV")
         hubs = []
         i=0
         for row in hubs_file.index:    
@@ -131,3 +131,17 @@ class ManhattanGraph:
     def get_index_by_nodeid(self, nodeid: int):
         return self.get_nodeids_list().index(nodeid)
 
+    def get_hub_index_by_nodeid(self, nodeid: int):
+        return self.hubs.index(nodeid)
+
+    def get_hub_index_by_node_index(self, node_index: int):
+        return self.get_hub_index_by_nodeid(self.get_nodeid_by_index(node_index))
+
+    def get_nodeid_by_hub_index(self, hub_index: int):
+        return self.hubs[hub_index]
+
+    def get_node_by_hub_index(self, hub_index: int):
+        return self.get_node_by_nodeid(self.get_nodeid_by_hub_index(hub_index))
+
+    def get_node_index_by_hub_index(self, hub_index: int):
+        return self.get_index_by_nodeid(self.get_nodeid_by_hub_index(hub_index))
