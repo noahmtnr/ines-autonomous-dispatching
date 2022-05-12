@@ -6,13 +6,38 @@
 </head>
 <body>
   <h1>Welcome!Add a new taxi trip</h1>
-  <form action="http://127.0.0.1:5000//addTrip">
+  <form action="http://127.0.0.1:5000//addTrip" method="POST">
     <label for="pickup_long">Pickup longitude:</label>
     <input type="text" id="pickup_long" name="pickup_long" /><br /><br />
     <label for="pickup_lat">Pickup latitude:</label>
     <input type="text" id="pickup_lat" name="pickup_lat" /><br /><br />
-    <label for="start_date">Pickup time:</label>
-    <input type="text" id="start_date" name="start_date" /><br /><br />
+
+    <label for="dropoff_long">Dropoff longitude:</label>
+    <input type="text" id="dropoff_long" name="dropoff_long" /><br /><br />
+    <label for="dropoff_lat">Dropoff latitude:</label>
+    <input type="text" id="dropoff_lat" name="dropoff_lat" /><br /><br />
+
+    <label for="pickup_date">Pickup time:</label>
+    <input type="text" id="pickup_date" name="pickup_date" /><br /><br />
+
+    <label for="dropoff_date"></label>Dropoff time:</label>
+    <input type="text" id="dropoff_date" name="dropoff_date" /><br /><br />
+
+    <label for="id"></label>New Id: </label>
+    <input type="text" id="id" name="id" /><br /><br />
+
+    <label for="vendor_id"></label>Vendor Id: </label>
+    <input type="text" id="vendor_id" name="vendor_id" /><br /><br />
+
+    <label for="passenger_count"></label>Passenger count: </label>
+    <input type="number" id="passenger_count" name="passenger_count" /><br /><br />
+
+    <label for="provider"></label>Provider id: </label>
+    <input type="number" id="provider" name="provider" /><br /><br />
+
+    <label for="total_price"></label>Total price: </label>
+    <input type="text" id="total_price" name="total_price" /><br /><br />
+
     <input type="submit" value="Submit" />
   </form>
 

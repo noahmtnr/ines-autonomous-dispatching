@@ -1,19 +1,17 @@
 from asyncio.windows_events import NULL
 import sys
 import matplotlib.pyplot as plot
+from numpy import double
 import osmnx as ox
 import os
+from datetime import datetime
 import urllib
 from datetime import datetime, timedelta
 from folium import plugins, folium
 sys.path.insert(0,"")
 from preprocessing.data_preprocessing import DataPreProcessing
-# Using flask to make an api
-# import necessary libraries and functions
 from flask import Flask, jsonify, request, render_template, redirect
 import pandas as pd
-# from database_connection import getAvailableTrips
-# from rl.Manhattan_Graph_Environment.database_connection import getAvailableTrips
 import mysql.connector
 import json
 
@@ -79,8 +77,7 @@ def search():
     start_node_long = args.get('pickup_long')
     start_node_lat = args.get('pickup_lat')
     start_date = args.get('start_date')
-    
-
+  
   
     new_start_node_long = float(start_node_long or 0)
     print(new_start_node_long)
@@ -89,22 +86,19 @@ def search():
     new_start_node = DataPreProcessing.getNearestNodeId(new_start_node_long, new_start_node_lat)
     print(new_start_node)
 
-
     new_start_date = urllib.parse.unquote(start_date)
   
-
     start_date_format = datetime.strptime(new_start_date, "%Y-%m-%d %H:%M:%S")
     end_date_format = start_date_format + timedelta(minutes=10)
     print(new_start_node, new_start_date, end_date_format)
     myList = getTrips(new_start_node, new_start_date, end_date_format)
-
     route = []
     times = []
     for trip in myList:
         route, times = getRouteFromTrip(trip)
         answear[trip] = {'route': route, 'timestamps': times}
-    print(myList)
     lines = buildLines(route, times)
+
     return buildFolium(lines)
 
 def buildFolium(lines):
@@ -151,29 +145,6 @@ def buildFolium(lines):
   #m_events
 
 
-@app.route('/addTrip', methods=['POST'])
-def addTrip():
-    content_type = request.headers.get('Content-Type')
-    if (content_type == 'application/json'):
-        jsonObj = request.json
-        pickup_longitude = jsonObj['pickup_longitude']
-        pickup_latitude = jsonObj['pickup_latitude']
-        dropoff_longitude = jsonObj['dropoff_longitude']
-        dropoff_latitude = jsonObj['dropoff_latitude']
-        pickup_datetime = jsonObj['pickup_datetime']
-        dropoff_datetime = jsonObj['dropoff_datetime']
-        trip_duration = (datetime.strptime(dropoff_datetime,"%Y-%m-%d %H:%M:%S") - datetime.strptime(pickup_datetime,"%Y-%m-%d %H:%M:%S")).total_seconds()
-        route, timestamps, route_length, pickup_node, dropoff_node = DataPreProcessing.map_oneRoute_to_oneTrip_with_timestamps(pickup_longitude, pickup_latitude, dropoff_longitude, dropoff_latitude, pickup_datetime, dropoff_datetime, trip_duration)
-        
-        insertIntoTrips(jsonObj['id'], jsonObj['vendor_id'], jsonObj['pickup_datetime'], jsonObj['dropoff_datetime'], jsonObj['passenger_count'], jsonObj['pickup_longitude'], jsonObj['pickup_latitude'], jsonObj['dropoff_longitude'], jsonObj['dropoff_latitude'], jsonObj['store_and_fwd_flag'], trip_duration, pickup_node, dropoff_node, route_length, jsonObj['provider'], jsonObj['total_price'])
-        timestamps = timestamps.replace(': \'',' : \'')
-        timestamps = timestamps.strip("{}")
-        insertIntoTripsRoutes(jsonObj['id'], timestamps)
-  
-        return "Success"
-    else:
-        return 'Content-Type not supported!'
-
 def buildLines(routes, timestamps):
     element = {}
     list_elements = []
@@ -185,29 +156,31 @@ def buildLines(routes, timestamps):
       list_elements.append(element)
     #print(list_elements)
     return list_elements
-    
 
-@app.route('/addOrder', methods=['POST'])
-def addOrder():
-    content_type = request.headers.get('Content-Type')
-    if (content_type == 'application/json'):
-        jsonObj = request.json
-        pickup_longitude = jsonObj['pickup_longitude']
-        pickup_latitude = jsonObj['pickup_latitude']
-        dropoff_longitude = jsonObj['dropoff_longitude']
-        dropoff_latitude = jsonObj['dropoff_latitude']
-        pickup_datetime = jsonObj['pickup_datetime']
-        dropoff_datetime = jsonObj['dropoff_datetime']
-        trip_duration = (datetime.strptime(dropoff_datetime,"%Y-%m-%d %H:%M:%S") - datetime.strptime(pickup_datetime,"%Y-%m-%d %H:%M:%S")).total_seconds()
-        route, timestamps, route_length, pickup_node, dropoff_node = DataPreProcessing.map_oneRoute_to_oneTrip_with_timestamps(pickup_longitude, pickup_latitude, dropoff_longitude, dropoff_latitude, pickup_datetime, dropoff_datetime, trip_duration)
-        
-        insertIntoTrips(jsonObj['id'], jsonObj['vendor_id'], jsonObj['pickup_datetime'], jsonObj['dropoff_datetime'], jsonObj['passenger_count'], jsonObj['pickup_longitude'], jsonObj['pickup_latitude'], jsonObj['dropoff_longitude'], jsonObj['dropoff_latitude'], jsonObj['store_and_fwd_flag'], trip_duration, pickup_node, dropoff_node, route_length, jsonObj['provider'], jsonObj['total_price'])
-        timestamps = timestamps.replace(': \'',' : \'')
-        timestamps = timestamps.strip("{}")
-        insertIntoTripsRoutes(jsonObj['id'], timestamps)
-        return "Success"
-    else:
-        return 'Content-Type not supported!'
+@app.route('/addTrip', methods=['POST'])
+def addTrip():
+    #content_type = request.headers.get('Content-Type')
+  
+    data = request.form
+    pickup_longitude = double(data.get('pickup_long') or 0)
+    pickup_latitude = double(data.get('pickup_lat') or 0)
+    dropoff_longitude = double(data.get('dropoff_long') or 0)
+    dropoff_latitude = double(data.get('dropoff_lat') or 0)
+    print(pickup_longitude, pickup_latitude, dropoff_longitude, dropoff_latitude)
+    pickup_datetime = datetime.strptime(data.get('pickup_date') or "", "%Y-%m-%d %H:%M:%S")
+    dropoff_datetime = datetime.strptime(data.get('dropoff_date') or "", "%Y-%m-%d %H:%M:%S")
+    trip_duration = (dropoff_datetime - pickup_datetime).total_seconds()
+    route, timestamps, route_length, pickup_node, dropoff_node = DataPreProcessing.map_oneRoute_to_oneTrip_with_timestamps(pickup_longitude, pickup_latitude, dropoff_longitude, dropoff_latitude, pickup_datetime, dropoff_datetime, trip_duration)
+    
+    insertIntoTrips(data.get('id'), data.get('vendor_id'), pickup_datetime, dropoff_datetime, data.get('passenger_count'), pickup_longitude, pickup_latitude, dropoff_longitude, dropoff_latitude, "N", trip_duration, pickup_node, dropoff_node, route_length, data.get('provider'), (float(data.get('total_price') or 0)))
+    timestamps = timestamps.replace(': \'',' : \'')
+    timestamps = timestamps.strip("{}")
+    print("Timestamps: ", timestamps)
+    insertIntoTripsRoutes(data.get('id'), timestamps)
+    return "Success"
+
+
+    
     
 
   
