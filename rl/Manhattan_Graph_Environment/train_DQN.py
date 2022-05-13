@@ -43,7 +43,7 @@ shutil.rmtree(checkpoint_root, ignore_errors=True, onerror=None)   # clean up ol
 results = []
 episode_data = []
 episode_json = []
-n_iter = 10
+n_iter = 1
 
 for n in range(n_iter):
     result = trainer.train()
