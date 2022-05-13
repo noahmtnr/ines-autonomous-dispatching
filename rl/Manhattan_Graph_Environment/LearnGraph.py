@@ -87,7 +87,7 @@ class LearnGraph:
         total_distance_array = dist_current_to_intermediate + dist_intermediate_to_final
 
         for i in range(len(total_distance_array)):
-            distance_edges[(current_hub,i)] = total_distance_array[i]
+            distance_edges[(current_hub,i,0)] = total_distance_array[i]
 
         nx.set_edge_attributes(self.G, distance_edges, "remaining_distance") 
 
