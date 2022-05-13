@@ -2,6 +2,7 @@ from time import time
 import pandas as pd
 from datetime import datetime
 import mysql.connector
+import time
 
 
 class DBConnection:
@@ -66,14 +67,20 @@ class DBConnection:
     self.mydb.commit()
 
   def getAvailableTrips(self,start_node, start_date, end_date):
+    startTime = time.time()
     sql = "select id from TRIPS_ROUTES where route_node = %s and date_time between %s and %s"
     val = (start_node, start_date, end_date)
     tripsId_list=[]
     self.mycursor.execute(sql, val)
     for result in self.mycursor: 
       tripsId_list.append(result[0])
+    
+    executionTime = (time.time() - startTime)
+    print('DB: getAvailableTrips() Execution time: ' + str(executionTime) + ' seconds')
     return tripsId_list
+
   def getRouteFromTrip(self,trip_id):
+    startTime = time.time()
     sql = "select route_node, date_time from mannheimprojekt.TRIPS_ROUTES where id = %s order by date_time"
     val = (trip_id,)
     nodes_list=[]
@@ -82,6 +89,8 @@ class DBConnection:
     for result in self.mycursor: 
       nodes_list.append(result[0])
       time_list.append(result[1].strftime("%Y-%m-%d %H:%M:%S"))
+    executionTime = (time.time() - startTime)
+    print('DB: getRouteFromTrip() Execution time: ' + str(executionTime) + ' seconds')
     return nodes_list, time_list
 
 
@@ -103,6 +112,17 @@ class DBConnection:
     rest_df['route_timestamps'] = (rest_df['route_timestamps'].apply(lambda x: x.strip("{}")))
     rest_df.apply(lambda row: self.insertIntoTripsRoutes(row['id'], row['route_timestamps']), axis=1)
 
+
+  def writeHubsToDB(self, hubs):
+    sql = "INSERT INTO HUBS VALUES ( %s )"
+    print(hubs)
+    for hub in hubs:
+      
+        values = (int(hub),)
+        self.mycursor.execute(sql, values)
+    
+    self.mydb.commit()
+
   def close_connection(self):
     self.cursor.close()
     self.mydb.close()
@@ -111,5 +131,5 @@ class DBConnection:
 
 DB = DBConnection()
   
-print(DB.getAvailableTrips(42430063, '2016-01-03 19:50:10', '2016-01-03 19:55:10'))
-print(DB.getRouteFromTrip('id0000569'))
+# print(DB.getAvailableTrips(42430063, '2016-01-03 19:50:10', '2016-01-03 19:55:10'))
+# print(DB.getRouteFromTrip('id0000569'))

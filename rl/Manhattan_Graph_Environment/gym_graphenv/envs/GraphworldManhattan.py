@@ -41,8 +41,10 @@ class GraphEnv(gym.Env):
             final_hub (int): nodeId
 
         """  
+        self.LEARNGRAPH_FIRST_INIT_DONE = False
         self.env_config = self.read_config()
         self.n_hubs = 70
+        self.distance_matrix = None
 
         self.DB = DBConnection()
 
@@ -79,6 +81,7 @@ class GraphEnv(gym.Env):
             #'current_hub': OneHotVector(self.n_hubs),
             #'final_hub': OneHotVector(self.n_hubs)
             'cost': gym.spaces.Box(low=np.zeros(70), high=np.zeros(70)+100, shape=(70,), dtype=np.int64),
+            'remaining_distance': gym.spaces.Box(low=np.zeros(70), high=np.zeros(70)+500, shape=(70,), dtype=np.int64),
             'current_hub': gym.spaces.Box(low=0, high=1, shape=(70,), dtype=np.int64),
             'final_hub': gym.spaces.Box(low=0, high=1, shape=(70,), dtype=np.int64)
             #'current_hub': gym.spaces.Discrete(self.n_hubs),
@@ -128,10 +131,16 @@ class GraphEnv(gym.Env):
             self.current_wait = 0
             # self.manhattan_graph.setup_trips(self.pickup_time)
 
-        learn_graph = LearnGraph(n_hubs=self.n_hubs, manhattan_graph=self.manhattan_graph)
+        learn_graph = LearnGraph(n_hubs=self.n_hubs, manhattan_graph=self.manhattan_graph, final_hub=self.final_hub)
         learn_graph.add_travel_cost_layer(self.availableTrips())
         self.learn_graph = learn_graph
 
+        if(self.LEARNGRAPH_FIRST_INIT_DONE == False):
+            self.distance_matrix = self.learn_graph.fill_distance_matrix()
+
+        self.LEARNGRAPH_FIRST_INIT_DONE = True
+
+        self.learn_graph.add_remaining_distance_layer(current_hub=self.position, distance_matrix=self.distance_matrix)
 
         self.count_hubs = 0
         # old position is current position
@@ -147,6 +156,7 @@ class GraphEnv(gym.Env):
 
         self.state = {
             'cost' : self.learn_graph.adjacency_matrix('cost')[self.position].astype(int),
+            'remaining_distance': self.learn_graph.adjacency_matrix('remaining_distance')[self.position].astype(int),
             'current_hub' : self.one_hot(self.position).astype(int), 
             'final_hub' : self.one_hot(self.final_hub).astype(int)
             }
@@ -179,17 +189,20 @@ class GraphEnv(gym.Env):
         step_duration = 0
 
         if self.validateAction(action):
+            startTimeWait = time.time()
             if(action == self.position):
             # action = wait
                 step_duration = 300
                 self.has_waited=True
                 self.own_ride = False
                 print("action == wait ")
-                self.state = self.state = {'cost' : self.learn_graph.adjacency_matrix('cost')[self.position].astype(int),'current_hub' : self.one_hot(self.position).astype(int), 'final_hub' : self.one_hot(self.final_hub).astype(int)}
+                executionTimeWait = (time.time() - startTimeWait)
+                print(f"Time Wait: {str(executionTimeWait)}")
                 pass
 
             # action = share ride or book own ride
             else:
+                startTimeRide = time.time()
                 self.has_waited=False
                 self.count_hubs += 1
                 #self.own_ride = True                
@@ -200,7 +213,14 @@ class GraphEnv(gym.Env):
                 # dropoff_node_index = self.manhattan_graph.get_index_by_nodeid(dropoff_nodeid)
                 route = ox.shortest_path(self.manhattan_graph.inner_graph, pickup_nodeid,  dropoff_nodeid, weight='travel_time')
                 route_travel_time = ox.utils_graph.get_route_edge_attributes(self.manhattan_graph.inner_graph,route,attribute='travel_time')
-                step_duration = sum(route_travel_time)#+300 #we add 5 minutes (300 seconds) so the taxi can arrive
+
+                if(self.learn_graph.wait_till_departure_times[(self.position,action)] == 300):
+                    step_duration = sum(route_travel_time)+300 #we add 5 minutes (300 seconds) so the taxi can arrive
+                elif(self.learn_graph.wait_till_departure_times[(self.position,action)] != 300 and self.learn_graph.wait_till_departure_times[(self.position,action)] != 0):
+                    step_duration = sum(route_travel_time)
+                    self.current_wait = (self.learn_graph.wait_till_departure_times[(self.position,action)] - self.time).seconds
+                    step_duration += self.current_wait
+                    self.time = self.learn_graph.wait_till_departure_times[(self.position,action)]
                 
                 self.old_position = self.position
                 self.position = action
@@ -211,10 +231,12 @@ class GraphEnv(gym.Env):
                 # self.time = selected_trip['departure_time']
 
                 # Instead of cumulating trip duration here we add travel_time 
-                # self.total_travel_time += timedelta(seconds=travel_time)
-                print("action == ", action, " New Position", self.position)     
-                
-                self.state = self.state = {'cost' : self.learn_graph.adjacency_matrix('cost')[self.position].astype(int),'current_hub' : self.one_hot(self.position).astype(int), 'final_hub' : self.one_hot(self.final_hub).astype(int)}
+                # self.total_travel_time += timedelta(seconds=travel_time)     
+                # refresh travel cost layer after each step
+                # self.learn_graph.add_travel_cost_layer(self.availableTrips())
+                # self.state = {'cost' : self.learn_graph.adjacency_matrix('cost')[self.position].astype(int),'current_hub' : self.one_hot(self.position).astype(int), 'final_hub' : self.one_hot(self.final_hub).astype(int)}
+                executionTimeRide = (time.time() - startTimeRide)
+                print(f"Time Ride: {str(executionTimeRide)}")
                 pass 
         else:
             print("invalid action")
@@ -222,13 +244,20 @@ class GraphEnv(gym.Env):
             print("action: ",action)
             print("action space: ",self.action_space)
 
+        
+        # refresh travel cost layer after each step
+        self.learn_graph.add_travel_cost_layer(self.availableTrips())
+        startTimeLearn = time.time()
+        self.state = {'cost' : self.learn_graph.adjacency_matrix('cost')[self.position].astype(int),'remaining_distance': self.learn_graph.adjacency_matrix('remaining_distance')[self.position].astype(int),'current_hub' : self.one_hot(self.position).astype(int), 'final_hub' : self.one_hot(self.final_hub).astype(int)}
+        executionTimeLearn = (time.time() - startTimeLearn)
+        # print(f"Time Adj Matrix: {str(executionTimeLearn)}")
 
         self.time += timedelta(seconds=step_duration)
 
         reward, done = self.compute_reward(action)
 
         executionTime = (time.time() - startTime)
-        print('Step() Execution time: ' + str(executionTime) + ' seconds')
+        # print('Step() Execution time: ' + str(executionTime) + ' seconds')
 
         return self.state, reward,  done, {}
 
@@ -236,9 +265,16 @@ class GraphEnv(gym.Env):
     def compute_reward(self, action):
         cost_of_action = self.learn_graph.adjacency_matrix('cost')[self.old_position][action]
         print(self.old_position, "->", action, cost_of_action)
-        if self.position == self.final_hub:
-            print("DELIVERED")
+        if (self.position == self.final_hub and self.time <= self.deadline):
+            print("DELIVERED IN TIME")
             reward = 1000
+            reward -= cost_of_action
+            done = True
+        elif(self.position == self.final_hub and self.time > self.deadline):
+            overtime = self.time-self.deadline
+            print(f"DELIVERED WITH DELAY: {overtime}")
+            overtime = round(overtime.total_seconds()/60)
+            reward = 1000 - overtime
             reward -= cost_of_action
             done = True
         else:
@@ -435,7 +471,7 @@ class GraphEnv(gym.Env):
             list: [departure_time,target_node]
         """
         list_trips=[]
-        position=self.manhattan_graph.get_nodeid_by_index(self.position)
+        position=self.manhattan_graph.get_nodeid_by_hub_index(self.position)
         position_str=str(position)
         final_hub_postion=self.manhattan_graph.get_nodeid_by_index(self.final_hub)
 
