@@ -218,13 +218,10 @@ class GraphEnv(gym.Env):
                 elif(self.learn_graph.wait_till_departure_times[(self.position,action)] != 300 and self.learn_graph.wait_till_departure_times[(self.position,action)] != 0):
                     step_duration = sum(route_travel_time)
                     # TODO: String conversion von departure time besser direkt beim erstellen der Matrix
-                    departure_time = datetime.strptime(self.learn_graph.wait_till_departure_times[(self.position,action)], '%d/%m/%y %H:%M:%S')
-                    current_time = self.time
-                    print(type(departure_time))
-                    print(type(current_time))
-                    self.current_wait = ( departure_time - current_time).seconds
+                    departure_time = datetime.strptime(self.learn_graph.wait_till_departure_times[(self.position,action)], '%Y-%m-%d %H:%M:%S')
+                    self.current_wait = ( departure_time - self.time).seconds
                     step_duration += self.current_wait
-                    self.time = self.learn_graph.wait_till_departure_times[(self.position,action)]
+                    self.time = departure_time
                 
                 self.old_position = self.position
                 self.position = action
