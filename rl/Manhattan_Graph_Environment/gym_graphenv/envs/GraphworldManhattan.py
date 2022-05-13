@@ -81,7 +81,7 @@ class GraphEnv(gym.Env):
             #'current_hub': OneHotVector(self.n_hubs),
             #'final_hub': OneHotVector(self.n_hubs)
             'cost': gym.spaces.Box(low=np.zeros(70), high=np.zeros(70)+100, shape=(70,), dtype=np.int64),
-            'remaining_distance': gym.spaces.Box(low=np.zeros(70), high=np.zeros(70)+500, shape=(70,), dtype=np.int64),
+            'remaining_distance': gym.spaces.Box(low=np.zeros(70), high=np.zeros(70)+500000, shape=(70,), dtype=np.int64),
             'current_hub': gym.spaces.Box(low=0, high=1, shape=(70,), dtype=np.int64),
             'final_hub': gym.spaces.Box(low=0, high=1, shape=(70,), dtype=np.int64)
             #'current_hub': gym.spaces.Discrete(self.n_hubs),
@@ -131,6 +131,13 @@ class GraphEnv(gym.Env):
             self.current_wait = 0
             # self.manhattan_graph.setup_trips(self.pickup_time)
 
+        start_timestamp = self.pickup_time - timedelta(hours=2)
+        end_timestamp = start_timestamp + timedelta(hours=48)
+
+        self.trips = self.DB.getAvailableTrips(start_timestamp, end_timestamp)
+        print("Reset() loaded trips within 48 hrs into memory:", len(self.trips))
+        
+
         learn_graph = LearnGraph(n_hubs=self.n_hubs, manhattan_graph=self.manhattan_graph, final_hub=self.final_hub)
         learn_graph.add_travel_cost_layer(self.availableTrips())
         self.learn_graph = learn_graph
@@ -148,7 +155,6 @@ class GraphEnv(gym.Env):
         # current trip
         self.current_trip = None
 
-
         self.own_ride = False
         self.has_waited=False
         reward=0
@@ -160,12 +166,6 @@ class GraphEnv(gym.Env):
             'current_hub' : self.one_hot(self.position).astype(int), 
             'final_hub' : self.one_hot(self.final_hub).astype(int)
             }
-        # print (f"Does space contain state: {self.observation_space.contains(self.state)}")
-        # print(f"State: {self.state}")
-        # print(type(self.state['cost'][0]))
-        # print(type(self.state['current_hub'][0]))
-        # print(type(self.state['final_hub'][0]))
-        # print(f"Observation space: {self.observation_space}")
         return self.state
 
     def step(self, action: int):
@@ -218,7 +218,12 @@ class GraphEnv(gym.Env):
                     step_duration = sum(route_travel_time)+300 #we add 5 minutes (300 seconds) so the taxi can arrive
                 elif(self.learn_graph.wait_till_departure_times[(self.position,action)] != 300 and self.learn_graph.wait_till_departure_times[(self.position,action)] != 0):
                     step_duration = sum(route_travel_time)
-                    self.current_wait = (self.learn_graph.wait_till_departure_times[(self.position,action)] - self.time).seconds
+                    # TODO: String conversion von departure time besser direkt beim erstellen der Matrix
+                    departure_time = datetime.strptime(self.learn_graph.wait_till_departure_times[(self.position,action)], '%d/%m/%y %H:%M:%S')
+                    current_time = self.time
+                    print(type(departure_time))
+                    print(type(current_time))
+                    self.current_wait = ( departure_time - current_time).seconds
                     step_duration += self.current_wait
                     self.time = self.learn_graph.wait_till_departure_times[(self.position,action)]
                 
@@ -470,6 +475,7 @@ class GraphEnv(gym.Env):
         Returns:
             list: [departure_time,target_node]
         """
+        startTime = time.time()
         list_trips=[]
         position=self.manhattan_graph.get_nodeid_by_hub_index(self.position)
         position_str=str(position)
@@ -479,37 +485,48 @@ class GraphEnv(gym.Env):
         end_timestamp = self.time + timedelta(minutes=time_window)
         
         #list of trip id's that are in current position in that timewindow
-        trips = self.DB.getAvailableTrips(position, start_timestamp, end_timestamp)
-        for tripId in trips:
-        
-            #trip_target_node = grid['dropoff_node'][index]
-            #isNotFinalNode = str(tupel_position) != str(trip_target_node)
-
-            route, times = self.DB.getRouteFromTrip(tripId)
-            isNotFinalNode = True
-            if isNotFinalNode:
+        trips = self.trips
+        # print("Trips about to be filtered:")
+        # print(trips)
+        for tripId, nodeId, timestamp in trips:
+            if(nodeId == position):
+                if timestamp <= end_timestamp and timestamp >= start_timestamp:
             
-                index_in_route = route.index(position)
-                position_timestamp = times[index_in_route]
-                route_to_target_node=route[index_in_route::]
-                hubsOnRoute = any(node in route_to_target_node for node in self.hubs)
-                if hubsOnRoute:
-                    route_hubs = [node for node in route_to_target_node if node in self.hubs]
-                    for hub in route_hubs:
-                        index_hub_in_route = route.index(hub)
-                        index_hub_in_route += 1
-                        route_to_target_hub = route[index_in_route:index_hub_in_route]
-                        if(hub != position):
-                            trip = {'departure_time': position_timestamp, 'target_hub': hub, 'route': route_to_target_hub, 'trip_row_id': tripId}
-                            list_trips.append(trip)
+                    #trip_target_node = grid['dropoff_node'][index]
+                    #isNotFinalNode = str(tupel_position) != str(trip_target_node)
+
+                    route, times = self.DB.getRouteFromTrip(tripId)
+                    isNotFinalNode = True
+                    if isNotFinalNode:
+                        print(route)
+                        print(nodeId)
+                        print(position)
+                        print(tripId)
+                        index_in_route = route.index(position)
+                        position_timestamp = times[index_in_route]
+                        route_to_target_node=route[index_in_route::]
+                        hubsOnRoute = any(node in route_to_target_node for node in self.hubs)
+                        if hubsOnRoute:
+                            route_hubs = [node for node in route_to_target_node if node in self.hubs]
+                            for hub in route_hubs:
+                                index_hub_in_route = route.index(hub)
+                                index_hub_in_route += 1
+                                route_to_target_hub = route[index_in_route:index_hub_in_route]
+                                if(hub != position):
+                                    trip = {'departure_time': position_timestamp, 'target_hub': hub, 'route': route_to_target_hub, 'trip_row_id': tripId}
+                                    list_trips.append(trip)
         self.available_actions = list_trips
+
+        executionTime = (time.time() - startTime)
+        print('in_step_available_trips() Execution time: ' + str(executionTime) + ' seconds')
+        print('Available rides for share found in step:', len(list_trips))
         return list_trips
 
     def validateAction(self, action):
         return action < self.n_hubs
 
     def read_config(self):
-        with open('env_config.pkl', 'rb') as f:
+        with open('/Users/noah/Desktop/Repositories/ines-autonomous-dispatching/rl/Manhattan_Graph_Environment/env_config.pkl', 'rb') as f:
             loaded_dict = pickle.load(f)
         self.env_config = loaded_dict
         return loaded_dict
