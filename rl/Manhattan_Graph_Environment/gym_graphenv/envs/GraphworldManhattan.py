@@ -128,8 +128,9 @@ class GraphEnv(gym.Env):
             self.current_wait = 0
             # self.manhattan_graph.setup_trips(self.pickup_time)
 
-        learn_graph = LearnGraph(n_hubs=self.n_hubs, manhattan_graph=self.manhattan_graph)
+        learn_graph = LearnGraph(n_hubs=self.n_hubs, manhattan_graph=self.manhattan_graph, final_hub=self.final_hub)
         learn_graph.add_travel_cost_layer(self.availableTrips())
+        learn_graph.add_remaining_distance_layer()
         self.learn_graph = learn_graph
 
 
