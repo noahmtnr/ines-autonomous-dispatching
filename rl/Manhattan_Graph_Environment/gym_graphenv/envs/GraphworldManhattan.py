@@ -31,6 +31,7 @@ class GraphEnv(gym.Env):
     pickup_hour =  np.random.randint(24)
     pickup_minute = np.random.randint(60) 
     START_TIME = datetime(2016,1,pickup_day,pickup_hour,pickup_minute,0)
+    LEARNGRAPH_FIRST_INIT_DONE = False
     
     def __init__(self, env_config=None):
         """_summary_
@@ -79,6 +80,7 @@ class GraphEnv(gym.Env):
             #'current_hub': OneHotVector(self.n_hubs),
             #'final_hub': OneHotVector(self.n_hubs)
             'cost': gym.spaces.Box(low=np.zeros(70), high=np.zeros(70)+100, shape=(70,), dtype=np.int64),
+            'remaining_distance': gym.spaces.Box(low=np.zeros(70), high=np.zeros(70)+500, shape=(70,), dtype=np.int64),
             'current_hub': gym.spaces.Box(low=0, high=1, shape=(70,), dtype=np.int64),
             'final_hub': gym.spaces.Box(low=0, high=1, shape=(70,), dtype=np.int64)
             #'current_hub': gym.spaces.Discrete(self.n_hubs),
@@ -130,9 +132,14 @@ class GraphEnv(gym.Env):
 
         learn_graph = LearnGraph(n_hubs=self.n_hubs, manhattan_graph=self.manhattan_graph, final_hub=self.final_hub)
         learn_graph.add_travel_cost_layer(self.availableTrips())
-        learn_graph.add_remaining_distance_layer()
         self.learn_graph = learn_graph
 
+        if(LEARNGRAPH_FIRST_INIT_DONE == False):
+            distance_matrix = self.learn_graph.fill_distance_matrix()
+
+        LEARNGRAPH_FIRST_INIT_DONE = True
+
+        self.learn_graph.add_remaining_distance_layer(current_hub=self.position, distance_matrix=distance_matrix)
 
         self.count_hubs = 0
         # old position is current position
@@ -148,6 +155,7 @@ class GraphEnv(gym.Env):
 
         self.state = {
             'cost' : self.learn_graph.adjacency_matrix('cost')[self.position].astype(int),
+            'remaining_distance': self.learn_graph.adjacency_matrix('remaining_distance')[self.position].astype(int),
             'current_hub' : self.one_hot(self.position).astype(int), 
             'final_hub' : self.one_hot(self.final_hub).astype(int)
             }
@@ -239,7 +247,7 @@ class GraphEnv(gym.Env):
         # refresh travel cost layer after each step
         self.learn_graph.add_travel_cost_layer(self.availableTrips())
         startTimeLearn = time.time()
-        self.state = {'cost' : self.learn_graph.adjacency_matrix('cost')[self.position].astype(int),'current_hub' : self.one_hot(self.position).astype(int), 'final_hub' : self.one_hot(self.final_hub).astype(int)}
+        self.state = {'cost' : self.learn_graph.adjacency_matrix('cost')[self.position].astype(int),'remaining_distance': self.learn_graph.adjacency_matrix('remaining_distance')[self.position].astype(int),'current_hub' : self.one_hot(self.position).astype(int), 'final_hub' : self.one_hot(self.final_hub).astype(int)}
         executionTimeLearn = (time.time() - startTimeLearn)
         # print(f"Time Adj Matrix: {str(executionTimeLearn)}")
 

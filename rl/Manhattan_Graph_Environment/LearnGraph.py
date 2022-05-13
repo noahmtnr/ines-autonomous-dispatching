@@ -54,26 +54,41 @@ class LearnGraph:
         #print(f"cost_edges: {edges}")
         nx.set_edge_attributes(self.G, edges, "cost")     
 
-    def add_remaining_distance_layer(self):
-        distance_edges = {}
-        final_hub_nodeid = self.manhattan_graph.get_nodeid_by_hub_index(self.final_hub)
+    def fill_distance_matrix(self):
+        distances = np.zeros((70,70))
         for i in range(70):
             for j in range(70):
-                pickup_nodeid = self.manhattan_graph.get_nodeid_by_hub_index(i)
-                dropoff_nodeid = self.manhattan_graph.get_nodeid_by_hub_index(j)
                 if(i==j):
-                    path_travelled = ox.shortest_path(self.manhattan_graph.inner_graph, pickup_nodeid, final_hub_nodeid, weight='travel_time')
-                    dist_travelled = sum(ox.utils_graph.get_route_edge_attributes(self.manhattan_graph.inner_graph,path_travelled,attribute='length'))
-                    distance_edges[(i,j)] = dist_travelled
+                    distances[i,j] = 0
                 else:
-                    route_to_intermediate_hub = ox.shortest_path(self.manhattan_graph.inner_graph, pickup_nodeid, dropoff_nodeid, weight='travel_time')
-                    route_from_intermediate_to_final = ox.shortest_path(self.manhattan_graph.inner_graph, dropoff_nodeid, final_hub_nodeid, weight='travel_time')
-                    #total_route = route_to_intermediate_hub + route_from_intermediate_to_final
-                    dist_travelled_intermediate = ox.utils_graph.get_route_edge_attributes(self.manhattan_graph.inner_graph, route_to_intermediate_hub, attribute='length')
-                    dist_travelled_final = ox.utils_graph.get_route_edge_attributes(self.manhattan_graph.inner_graph, route_from_intermediate_to_final, attribute='length')
-                    dist_travelled = dist_travelled_intermediate + dist_travelled_final
-                    distance_edges[(i,j)] = dist_travelled
+                    pickup_nodeid = self.manhattan_graph.get_nodeid_by_hub_index(i)
+                    dropoff_nodeid = self.manhattan_graph.get_nodeid_by_hub_index(j)
+                    path = ox.shortest_path(self.manhattan_graph.inner_graph, pickup_nodeid, dropoff_nodeid, weight='travel_time')
+                    dist_travelled = sum(ox.utils_graph.get_route_edge_attributes(self.manhattan_graph.inner_graph,path,attribute='length'))
+                    distances[i,j] = dist_travelled
+                # else:
+                #     route_to_intermediate_hub = ox.shortest_path(self.manhattan_graph.inner_graph, pickup_nodeid, dropoff_nodeid, weight='travel_time')
+                #     route_from_intermediate_to_final = ox.shortest_path(self.manhattan_graph.inner_graph, dropoff_nodeid, final_hub_nodeid, weight='travel_time')
+                #     #total_route = route_to_intermediate_hub + route_from_intermediate_to_final
+                #     dist_travelled_intermediate = ox.utils_graph.get_route_edge_attributes(self.manhattan_graph.inner_graph, route_to_intermediate_hub, attribute='length')
+                #     dist_travelled_final = ox.utils_graph.get_route_edge_attributes(self.manhattan_graph.inner_graph, route_from_intermediate_to_final, attribute='length')
+                #     dist_travelled = dist_travelled_intermediate + dist_travelled_final
+                #     distance_edges[(i,j)] = dist_travelled
 
-        #nx.set_edge_attributes(self.G, distance_edges, "remaining_distance")
-        print(distance_edges)
+        
+        print(distances)
+        return distances
+    
+    def add_remaining_distance_layer(self, current_hub, distance_matrix):
+        distance_edges = {}
+        #final_hub_nodeid = self.manhattan_graph.get_nodeid_by_hub_index(self.final_hub)
+        dist_current_to_intermediate = distance_matrix[current_hub,:] # get row in distance matrix
+        dist_intermediate_to_final = distance_matrix[:,self.final_hub] # get column of final hub in distance matrix
+        total_distance_array = dist_current_to_intermediate + dist_intermediate_to_final
+
+        for i in range(len(total_distance_array)):
+            distance_edges[(current_hub,i)] = total_distance_array[i]
+
+        nx.set_edge_attributes(self.G, distance_edges, "remaining_distance") 
+
 
