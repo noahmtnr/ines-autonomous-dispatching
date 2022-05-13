@@ -31,7 +31,6 @@ class GraphEnv(gym.Env):
     pickup_hour =  np.random.randint(24)
     pickup_minute = np.random.randint(60) 
     START_TIME = datetime(2016,1,pickup_day,pickup_hour,pickup_minute,0)
-    LEARNGRAPH_FIRST_INIT_DONE = False
     
     def __init__(self, env_config=None):
         """_summary_
@@ -42,8 +41,10 @@ class GraphEnv(gym.Env):
             final_hub (int): nodeId
 
         """  
+        self.LEARNGRAPH_FIRST_INIT_DONE = False
         self.env_config = self.read_config()
         self.n_hubs = 70
+        self.distance_matrix = None
 
         self.DB = DBConnection()
 
@@ -134,12 +135,12 @@ class GraphEnv(gym.Env):
         learn_graph.add_travel_cost_layer(self.availableTrips())
         self.learn_graph = learn_graph
 
-        if(LEARNGRAPH_FIRST_INIT_DONE == False):
-            distance_matrix = self.learn_graph.fill_distance_matrix()
+        if(self.LEARNGRAPH_FIRST_INIT_DONE == False):
+            self.distance_matrix = self.learn_graph.fill_distance_matrix()
 
-        LEARNGRAPH_FIRST_INIT_DONE = True
+        self.LEARNGRAPH_FIRST_INIT_DONE = True
 
-        self.learn_graph.add_remaining_distance_layer(current_hub=self.position, distance_matrix=distance_matrix)
+        self.learn_graph.add_remaining_distance_layer(current_hub=self.position, distance_matrix=self.distance_matrix)
 
         self.count_hubs = 0
         # old position is current position
