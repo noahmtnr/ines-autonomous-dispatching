@@ -80,17 +80,17 @@ def search():
   
   
     new_start_node_long = float(start_node_long or 0)
-    print(new_start_node_long)
+    # print(new_start_node_long)
     new_start_node_lat = float(start_node_lat or 0) 
-    print(new_start_node_lat)
+    # print(new_start_node_lat)
     new_start_node = DataPreProcessing.getNearestNodeId(new_start_node_long, new_start_node_lat)
-    print(new_start_node)
+    # print(new_start_node)
 
     new_start_date = urllib.parse.unquote(start_date)
   
     start_date_format = datetime.strptime(new_start_date, "%Y-%m-%d %H:%M:%S")
     end_date_format = start_date_format + timedelta(minutes=10)
-    print(new_start_node, new_start_date, end_date_format)
+    # print(new_start_node, new_start_date, end_date_format)
     myList = getTrips(new_start_node, new_start_date, end_date_format)
     route = []
     times = []
@@ -166,7 +166,7 @@ def addTrip():
     pickup_latitude = double(data.get('pickup_lat') or 0)
     dropoff_longitude = double(data.get('dropoff_long') or 0)
     dropoff_latitude = double(data.get('dropoff_lat') or 0)
-    print(pickup_longitude, pickup_latitude, dropoff_longitude, dropoff_latitude)
+    # print(pickup_longitude, pickup_latitude, dropoff_longitude, dropoff_latitude)
     pickup_datetime = datetime.strptime(data.get('pickup_date') or "", "%Y-%m-%d %H:%M:%S")
     dropoff_datetime = datetime.strptime(data.get('dropoff_date') or "", "%Y-%m-%d %H:%M:%S")
     trip_duration = (dropoff_datetime - pickup_datetime).total_seconds()
@@ -175,7 +175,7 @@ def addTrip():
     insertIntoTrips(data.get('id'), data.get('vendor_id'), pickup_datetime, dropoff_datetime, data.get('passenger_count'), pickup_longitude, pickup_latitude, dropoff_longitude, dropoff_latitude, "N", trip_duration, pickup_node, dropoff_node, route_length, data.get('provider'), (float(data.get('total_price') or 0)))
     timestamps = timestamps.replace(': \'',' : \'')
     timestamps = timestamps.strip("{}")
-    print("Timestamps: ", timestamps)
+    # print("Timestamps: ", timestamps)
     insertIntoTripsRoutes(data.get('id'), timestamps)
     return "Success"
 
