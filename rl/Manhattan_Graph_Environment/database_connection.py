@@ -66,18 +66,33 @@ class DBConnection:
     self.mycursor.execute(sql, val)
     self.mydb.commit()
 
-  def getAvailableTrips(self,start_node, start_date, end_date):
+  def getAvailableTripsAtNode(self,start_node, start_date, end_date):
     startTime = time.time()
-    sql = "select id from TRIPS_ROUTES where route_node = %s and date_time between %s and %s"
+    sql = "select * from PREFILTERED_TRIPS_VIEW_01 where route_node = %s and date_time between %s and %s"
     val = (start_node, start_date, end_date)
     tripsId_list=[]
+    nodes_list=[]
+    timestamp_list=[]
     self.mycursor.execute(sql, val)
-    for result in self.mycursor: 
-      tripsId_list.append(result[0])
-    
+      
+    result = self.mycursor.fetchall()
     executionTime = (time.time() - startTime)
     print('DB: getAvailableTrips() Execution time: ' + str(executionTime) + ' seconds')
-    return tripsId_list
+    return result
+
+  def getAvailableTrips(self, start_date, end_date):
+    startTime = time.time()
+    sql = "select * from PREFILTERED_TRIPS_VIEW_01 where date_time between %s and %s"
+    val = (start_date, end_date)
+    tripsId_list=[]
+    nodes_list=[]
+    timestamp_list=[]
+    self.mycursor.execute(sql, val)
+      
+    result = self.mycursor.fetchall()
+    executionTime = (time.time() - startTime)
+    print('DB: getAvailableTrips() Execution time: ' + str(executionTime) + ' seconds')
+    return result
 
   def getRouteFromTrip(self,trip_id):
     startTime = time.time()
@@ -115,7 +130,6 @@ class DBConnection:
 
   def writeHubsToDB(self, hubs):
     sql = "INSERT INTO HUBS VALUES ( %s )"
-    print(hubs)
     for hub in hubs:
       
         values = (int(hub),)

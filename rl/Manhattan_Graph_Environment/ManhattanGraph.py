@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 class ManhattanGraph:
 
     def __init__(self, filename, num_hubs):
-        filepath = ("../../data/graph/%s.graphml") % (filename)
+        filepath = ("/Users/noah/Desktop/Repositories/ines-autonomous-dispatching/data/graph/%s.graphml") % (filename)
         self.inner_graph = ox.load_graphml(filepath)
         self.inner_graph = ox.add_edge_speeds(self.inner_graph,fallback=30)
         self.inner_graph = ox.add_edge_travel_times(self.inner_graph)
@@ -26,7 +26,7 @@ class ManhattanGraph:
             self.hubs(list): List of hubs in graph
         """
         # the code below is for mapping the pre-defined hubs (customer/store/trips) to nodes in the graph
-        hubs_file = pd.read_csv("../../data/hubs/new_hubs.CSV")
+        hubs_file = pd.read_csv("/Users/noah/Desktop/Repositories/ines-autonomous-dispatching/data/hubs/new_hubs.csv")
         hubs = []
         i=0
         for row in hubs_file.index:    
@@ -47,7 +47,7 @@ class ManhattanGraph:
         #         hubs.append(hubs_file.loc[row])
          
         self.hubs = random.sample(hubs,num_hubs)
-        pd.DataFrame(self.hubs).to_csv("hub_nodeids.csv")
+        # pd.DataFrame(self.hubs).to_csv("hub_nodeids.csv")
         #self.hubs = hubs
         return self.hubs
 
@@ -59,7 +59,7 @@ class ManhattanGraph:
         """
         
         #trips for simple graph, only the first 5000 rows
-        all_trips = pd.read_csv('../../data/trips/preprocessed_trips.csv')
+        all_trips = pd.read_csv('/Users/noah/Desktop/Repositories/ines-autonomous-dispatching/data/trips/preprocessed_trips.csv')
         self.trips = self.prefilter_trips(all_trips, start_time).reset_index(drop=True)
 
         #compute trip length and add to csv
