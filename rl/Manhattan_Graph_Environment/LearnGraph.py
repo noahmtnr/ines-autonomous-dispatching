@@ -56,17 +56,18 @@ class LearnGraph:
 
     def add_remaining_distance_layer(self):
         distance_edges = {}
+        final_hub_nodeid = self.manhattan_graph.get_nodeid_by_hub_index(self.final_hub)
         for i in range(70):
             for j in range(70):
                 pickup_nodeid = self.manhattan_graph.get_nodeid_by_hub_index(i)
                 dropoff_nodeid = self.manhattan_graph.get_nodeid_by_hub_index(j)
                 if(i==j):
-                    path_travelled = ox.shortest_path(self.manhattan_graph.inner_graph, pickup_nodeid, self.final_hub, weight='travel_time')
-                    dist_travelled = ox.utils_graph.get_route_edge_attributes(self.manhattan_graph.inner_graph,path_travelled,attribute='length')
+                    path_travelled = ox.shortest_path(self.manhattan_graph.inner_graph, pickup_nodeid, final_hub_nodeid, weight='travel_time')
+                    dist_travelled = sum(ox.utils_graph.get_route_edge_attributes(self.manhattan_graph.inner_graph,path_travelled,attribute='length'))
                     distance_edges[(i,j)] = dist_travelled
                 else:
                     route_to_intermediate_hub = ox.shortest_path(self.manhattan_graph.inner_graph, pickup_nodeid, dropoff_nodeid, weight='travel_time')
-                    route_from_intermediate_to_final = ox.shortest_path(self.manhattan_graph.inner_graph, dropoff_nodeid, self.final_hub, weight='travel_time')
+                    route_from_intermediate_to_final = ox.shortest_path(self.manhattan_graph.inner_graph, dropoff_nodeid, final_hub_nodeid, weight='travel_time')
                     #total_route = route_to_intermediate_hub + route_from_intermediate_to_final
                     dist_travelled_intermediate = ox.utils_graph.get_route_edge_attributes(self.manhattan_graph.inner_graph, route_to_intermediate_hub, attribute='length')
                     dist_travelled_final = ox.utils_graph.get_route_edge_attributes(self.manhattan_graph.inner_graph, route_from_intermediate_to_final, attribute='length')
