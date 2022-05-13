@@ -204,13 +204,13 @@ class GraphEnv(gym.Env):
                 route = ox.shortest_path(self.manhattan_graph.inner_graph, pickup_nodeid,  dropoff_nodeid, weight='travel_time')
                 route_travel_time = ox.utils_graph.get_route_edge_attributes(self.manhattan_graph.inner_graph,route,attribute='travel_time')
 
-                if(self.learn_graph.wait_till_departure_times[self.position,action] == 300):
+                if(self.learn_graph.wait_till_departure_times[(self.position,action)] == 300):
                     step_duration = sum(route_travel_time)+300 #we add 5 minutes (300 seconds) so the taxi can arrive
-                elif(self.learn_graph.wait_till_departure_times[self.position,action] != 300 and self.learn_graph.wait_till_departure_times[self.position,action] != 0):
+                elif(self.learn_graph.wait_till_departure_times[(self.position,action)] != 300 and self.learn_graph.wait_till_departure_times[(self.position,action)] != 0):
                     step_duration = sum(route_travel_time)
-                    self.current_wait = (self.learn_graph.wait_till_departure_times[self.position,action] - self.time).seconds
+                    self.current_wait = (self.learn_graph.wait_till_departure_times[(self.position,action)] - self.time).seconds
                     step_duration += self.current_wait
-                    self.time = self.learn_graph.wait_till_departure_times[self.position,action]
+                    self.time = self.learn_graph.wait_till_departure_times[(self.position,action)]
                 
                 self.old_position = self.position
                 self.position = action

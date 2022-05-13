@@ -10,7 +10,7 @@ class LearnGraph:
         self.manhattan_graph = manhattan_graph
         for node in self.G.nodes():
             self.G.add_edge(node, node)
-        self.wait_till_departure_times = np.zeros((70,70))
+        self.wait_till_departure_times = {}#np.zeros((70,70))
         ox.save_graphml(self.G, filepath="./data/graph/learn.graphml")
 
     def adjacency_matrix(self, layer: str = None):
@@ -32,11 +32,11 @@ class LearnGraph:
             for l in range(70):
                 if(k==l):
                     edges[(k,l,0)] = 2
-                    self.wait_till_departure_times[k,l] = 0
+                    self.wait_till_departure_times[(k,l)] = 0
                 # book own ride
                 else:
                     edges[(k,l,0)] = 50
-                    self.wait_till_departure_times[k,l] = 300 # 5 minutes for book own ride wait
+                    self.wait_till_departure_times[(k,l)] = 300 # 5 minutes for book own ride wait
 
         for i in range(len(available_trips)):
             for j in range(len(available_trips[i]['route'])):
@@ -48,8 +48,8 @@ class LearnGraph:
                     dropoff_nodeid = available_trips[i]['route'][j]
                     pickup_hub_index = self.manhattan_graph.get_hub_index_by_nodeid(pickup_nodeid)
                     dropoff_hub_index = self.manhattan_graph.get_hub_index_by_nodeid(dropoff_nodeid)
-                    # self.wait_till_departure_times[pickup_hub_index,dropoff_hub_index] = available_trips[i]['departure_time']
-                    self.wait_till_departure_times[pickup_hub_index,dropoff_hub_index] = 120
+                    self.wait_till_departure_times[(pickup_hub_index,dropoff_hub_index)] = available_trips[i]['departure_time']
+                    #self.wait_till_departure_times[pickup_hub_index,dropoff_hub_index] = 120
         
         #print(f"cost_edges: {edges}")
         nx.set_edge_attributes(self.G, edges, "cost")
