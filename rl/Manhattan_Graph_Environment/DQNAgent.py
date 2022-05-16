@@ -54,16 +54,15 @@ class DQNAgent:
             print("TEST", i)
 
             # get data from action
-            # print("Timestamps",info.get('timestamp') )
+            route.append(info.get('hub_index'))
             route_timestamps.append(info.get('timestamp'))
+
             sum_reward += reward
             sum_travel_time +=timedelta(seconds=info.get('step_travel_time'))
             delivey_time = datetime.strptime(env_config["delivery_timestamp"], '%Y-%m-%d %H:%M:%S')
             time_until_deadline= delivey_time-sum_travel_time
             sum_distance += info.get('distance')/1000
             number_hubs=info.get('count_hubs')
-            hub_index = info.get('hub_index')
-            action = info.get('action')
             
             # check if finished
             if done==1:
@@ -72,11 +71,10 @@ class DQNAgent:
                 print("DELIVERY DONE! Distance: ",sum_distance)
                 print("DELIVERY DONE! Hubs: ",number_hubs)
                 print("DELIVERY DONE! Route: ",route)
-                # berechnen mit timestamp (siehe Dict) und deadline (global)
-                print("DELIVERY DONE! unitl deadline: ",time_until_deadline)
+                print("DELIVERY DONE! until deadline: ",time_until_deadline)
                 break
 
-            print("sum_reward: ",sum_reward)
+            # print("sum_reward: ",sum_reward)
             # print("sum_reward: ",sum_reward, " time: ",env.time, "deadline time: ", env.deadline, "pickup time: ", env.pickup_time)
         reward_list={"pickup_hub":env_config['pickup_hub_index'],"delivery_hub":env_config['delivery_hub_index'],"reward":sum_reward, "hubs":number_hubs, "route":route, "time":str(sum_travel_time), "dist":sum_distance, "time_until_deadline":time_until_deadline, "timestamps":route_timestamps}
 
