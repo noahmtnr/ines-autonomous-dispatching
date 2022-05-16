@@ -61,6 +61,31 @@ def map_nodes_to_timestaps(route_nodes, pickup_time, dropoff_time, duration):
     timestamps_mapping = dict(zip(route_nodes, timestamps))
     return timestamps_mapping
 
+def map_nodes_to_timestaps_to_list(route_nodes, pickup_time, dropoff_time, duration):
+    """
+    Maps the timestamp list with the route nodes to have for each route node the time when a particular node is reached
+
+    :param route_nodes: list of nodes that are reached from starting point until destination
+    :param pickup_time: start time of the trip
+    :param dropoff_time: end time of the trip
+    :param duration: duration in seconds of the trip
+    :return: a dictionary mapping the list of nodes to the list of timestamps,
+            each being mapped to the time this node is reached
+    """
+    timestamps = []
+    date_format_str = '%Y-%m-%d %H:%M:%S.%f'
+    start_time = pd.to_datetime(pickup_time, format=date_format_str)
+    end_time = pd.to_datetime(dropoff_time, format=date_format_str)
+
+    if (len(route_nodes) > 1):
+        time_between_nodes = duration / (len(route_nodes) - 1)
+        delta = timedelta(seconds=time_between_nodes)
+        timestamps = timestamp_range(start_time, end_time, delta, route_nodes)
+    else:
+        timestamps.append(dropoff_time)
+
+    return timestamps
+
 
 def map_routes_to_trips(graph: nx.MultiDiGraph, trips: pd.DataFrame):
     """

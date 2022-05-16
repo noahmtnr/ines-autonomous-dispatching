@@ -40,7 +40,7 @@ class BenchmarkWrapper:
             orders=self.file_read()
             for index, row in orders.iterrows():
                 order={"pickup_node":row['pickup_node_id'],"delivery_node":row['delivery_node_id'],"pickup_timestamp":row['pickup_timestamp'] , "delivery_timestamp":row['delivery_timestamp']  }
-                reward_list.append(self.proceed_order_random(order))
+                reward_list.append(self.proceed_order(order))
             return reward_list
    
      def proceed_order(self, order):
@@ -81,4 +81,4 @@ def main():
     results = benchmark3.read_orders()
     print("DQN",results)
 
-main()
+# main()
