@@ -80,7 +80,7 @@ class GraphEnv(gym.Env):
             {#'cost': gym.spaces.Discrete(self.n_hubs), 
             #'current_hub': OneHotVector(self.n_hubs),
             #'final_hub': OneHotVector(self.n_hubs)
-            'cost': gym.spaces.Box(low=np.zeros(70), high=np.zeros(70)+100, shape=(70,), dtype=np.int64),
+            'cost': gym.spaces.Box(low=np.zeros(70), high=np.zeros(70)+500000, shape=(70,), dtype=np.int64),
             'remaining_distance': gym.spaces.Box(low=np.zeros(70), high=np.zeros(70)+500000, shape=(70,), dtype=np.int64),
             'current_hub': gym.spaces.Box(low=0, high=1, shape=(70,), dtype=np.int64),
             'final_hub': gym.spaces.Box(low=0, high=1, shape=(70,), dtype=np.int64)
@@ -139,14 +139,13 @@ class GraphEnv(gym.Env):
         
 
         learn_graph = LearnGraph(n_hubs=self.n_hubs, manhattan_graph=self.manhattan_graph, final_hub=self.final_hub)
-        learn_graph.add_travel_cost_layer(self.availableTrips())
         self.learn_graph = learn_graph
 
         if(self.LEARNGRAPH_FIRST_INIT_DONE == False):
             self.distance_matrix = self.learn_graph.fill_distance_matrix()
 
         self.LEARNGRAPH_FIRST_INIT_DONE = True
-
+        self.learn_graph.add_travel_cost_layer(self.availableTrips(), self.distance_matrix)
         self.learn_graph.add_remaining_distance_layer(current_hub=self.position, distance_matrix=self.distance_matrix)
 
         self.count_hubs = 0
@@ -219,13 +218,10 @@ class GraphEnv(gym.Env):
                 elif(self.learn_graph.wait_till_departure_times[(self.position,action)] != 300 and self.learn_graph.wait_till_departure_times[(self.position,action)] != 0):
                     step_duration = sum(route_travel_time)
                     # TODO: String conversion von departure time besser direkt beim erstellen der Matrix
-                    departure_time = datetime.strptime(self.learn_graph.wait_till_departure_times[(self.position,action)], '%d/%m/%y %H:%M:%S')
-                    current_time = self.time
-                    print(type(departure_time))
-                    print(type(current_time))
-                    self.current_wait = ( departure_time - current_time).seconds
+                    departure_time = datetime.strptime(self.learn_graph.wait_till_departure_times[(self.position,action)], '%Y-%m-%d %H:%M:%S')
+                    self.current_wait = ( departure_time - self.time).seconds
                     step_duration += self.current_wait
-                    self.time = self.learn_graph.wait_till_departure_times[(self.position,action)]
+                    self.time = departure_time
                 
                 self.old_position = self.position
                 self.position = action
@@ -251,7 +247,7 @@ class GraphEnv(gym.Env):
 
         
         # refresh travel cost layer after each step
-        self.learn_graph.add_travel_cost_layer(self.availableTrips())
+        self.learn_graph.add_travel_cost_layer(self.availableTrips(), self.distance_matrix)
         startTimeLearn = time.time()
         self.state = {'cost' : self.learn_graph.adjacency_matrix('cost')[self.position].astype(int),'remaining_distance': self.learn_graph.adjacency_matrix('remaining_distance')[self.position].astype(int),'current_hub' : self.one_hot(self.position).astype(int), 'final_hub' : self.one_hot(self.final_hub).astype(int)}
         executionTimeLearn = (time.time() - startTimeLearn)
