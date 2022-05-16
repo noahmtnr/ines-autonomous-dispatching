@@ -30,9 +30,11 @@ class GraphEnv(gym.Env):
     pickup_day = np.random.randint(low=1,high=14)
     pickup_hour =  np.random.randint(24)
     pickup_minute = np.random.randint(60) 
-    START_TIME = datetime(2016,1,pickup_day,pickup_hour,pickup_minute,0)
+    START_TIME = datetime(2016,1,pickup_day,pickup_hour,pickup_minute,0).strftime('%Y-%m-%d %H:%M:%S')
     
     def __init__(self, use_config: bool = False ):
+        DB_LOWER_BOUNDARY = '2016-01-01 00:00:00'
+        DB_UPPER_BOUNDARY = '2016-01-14 23:59:59'
         self.LEARNGRAPH_FIRST_INIT_DONE = False
 
         if(use_config):
@@ -53,6 +55,9 @@ class GraphEnv(gym.Env):
         self.manhattan_graph = manhattan_graph
 
         self.hubs = manhattan_graph.hubs
+
+        self.trips = self.DB.getAvailableTrips(DB_LOWER_BOUNDARY, DB_UPPER_BOUNDARY)
+        print(f"Initialized with {len(self.trips)} taxi rides within two weeks")
 
 
         self.state = None
@@ -110,8 +115,8 @@ class GraphEnv(gym.Env):
             self.position = self.start_hub
 
         # time for pickup
-            self.pickup_time = self.START_TIME
-            self.time = datetime.strptime(self.pickup_time, '%Y-%m-%d %H:%M:%S')
+            self.pickup_time = datetime.strptime(self.START_TIME,'%Y-%m-%d %H:%M:%S')
+            self.time = self.pickup_time
             self.total_travel_time = 0
             self.deadline=self.pickup_time+timedelta(hours=12)
             self.current_wait = 1 ## to avoid dividing by 0
@@ -130,12 +135,8 @@ class GraphEnv(gym.Env):
             self.deadline=datetime.strptime(self.env_config['delivery_timestamp'], '%Y-%m-%d %H:%M:%S')
             self.current_wait = 0
 
-        start_timestamp = datetime.strptime(self.pickup_time, '%Y-%m-%d %H:%M:%S') - timedelta(hours=2)
-        end_timestamp = start_timestamp + timedelta(hours=48)
 
-        self.trips = self.DB.getAvailableTrips(start_timestamp, end_timestamp)
 
-        print(f"Reset loaded {len(self.trips)} rides within a 48 hrs window")
         print(f"Reset initialized pickup: {self.position}")
         print(f"Reset initialized dropoff: {self.final_hub}")
         print(f"Reset initialized time: {self.time}")
@@ -146,6 +147,7 @@ class GraphEnv(gym.Env):
 
         if(self.LEARNGRAPH_FIRST_INIT_DONE == False):
             self.distance_matrix = self.learn_graph.fill_distance_matrix()
+        
 
         self.LEARNGRAPH_FIRST_INIT_DONE = True
         self.learn_graph.add_travel_cost_layer(self.availableTrips(), self.distance_matrix)
