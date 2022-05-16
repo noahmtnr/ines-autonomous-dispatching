@@ -104,6 +104,11 @@ class GraphEnv(gym.Env):
             print(f"final hub: {self.final_hub}")
             #self.start_hub = self.manhattan_graph.get_nodeids_list().index(random.sample(self.hubs,1)[0])
             self.start_hub = random.randint(0,self.n_hubs-1)
+
+            # just in case ;)
+            if(self.start_hub == self.final_hub):
+                self.start_hub = random.randint(0,self.n_hubs-1)
+
             self.position = self.start_hub
             print(f"current position: {self.position}")
 
