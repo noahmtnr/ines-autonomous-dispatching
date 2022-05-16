@@ -50,7 +50,6 @@ class CostAgent:
 
             # select action and show it
             #action = env.action_space[dest_hub]
-            route.append(action)
             print(f"Our destination hub is: {action}")
             state, reward, done, info = env.step(action)
             route.append(action)
@@ -71,6 +70,8 @@ class CostAgent:
                 print("DELIVERY DONE! Distance: ",sum_distance)
                 print("DELIVERY DONE! Hubs: ",number_hubs)
                 print("DELIVERY DONE! unitl deadline: ",time_until_deadline)
+                # if action!=env_config["delivery_hub_index"]:
+                #     raise Exception("DID NOT ARRIVE IN FINAL HUB")
                 break
 
         reward_list={"pickup_hub":env_config['pickup_hub_index'],"delivery_hub":env_config['delivery_hub_index'],"reward":sum_reward, "hubs":number_hubs, "route":route, "time":str(sum_travel_time), "dist":sum_distance, "time_until_deadline":time_until_deadline, "timestamps":route_timestamps}

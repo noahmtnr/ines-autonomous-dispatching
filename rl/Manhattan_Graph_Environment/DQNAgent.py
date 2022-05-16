@@ -32,9 +32,11 @@ class DQNAgent:
         #trainer_config["num_gpus"] = int(os.environ.get("RLLIB_NUM_GPUS", "0"))
 
     def run_one_episode (self,env,reward_list,env_config):
+        with open('env_config.pkl', 'wb') as f:
+            pickle.dump(env_config, f)
         
         # Initialize trainer
-        trainer = DQNTrainer(self.trainer_config,env)
+        trainer = DQNTrainer(self.trainer_config,GraphEnv)
         state = env.reset()
         print("reset done")
 
