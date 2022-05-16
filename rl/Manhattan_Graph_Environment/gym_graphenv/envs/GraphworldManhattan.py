@@ -27,22 +27,21 @@ class GraphEnv(gym.Env):
 
     REWARD_AWAY = -1
     REWARD_GOAL = 100
-    pickup_day = 1
+    pickup_day = np.random.randint(low=1,high=14)
     pickup_hour =  np.random.randint(24)
     pickup_minute = np.random.randint(60) 
-    START_TIME = datetime(2016,1,pickup_day,pickup_hour,pickup_minute,0)
+    START_TIME = datetime(2016,1,pickup_day,pickup_hour,pickup_minute,0).strftime('%Y-%m-%d %H:%M:%S')
     
-    def __init__(self, env_config=None):
-        """_summary_
-
-        Args:
-            graph (nx.MultiDiGraph): graph
-            start_hub (int): nodeId
-            final_hub (int): nodeId
-
-        """  
+    def __init__(self, use_config: bool = False ):
+        DB_LOWER_BOUNDARY = '2016-01-01 00:00:00'
+        DB_UPPER_BOUNDARY = '2016-01-14 23:59:59'
         self.LEARNGRAPH_FIRST_INIT_DONE = False
-        self.env_config = self.read_config()
+
+        if(use_config):
+            self.env_config = self.read_config()
+        else:
+             self.env_config = None
+    
         self.n_hubs = 70
         self.distance_matrix = None
 
@@ -56,6 +55,9 @@ class GraphEnv(gym.Env):
         self.manhattan_graph = manhattan_graph
 
         self.hubs = manhattan_graph.hubs
+
+        self.trips = self.DB.getAvailableTrips(DB_LOWER_BOUNDARY, DB_UPPER_BOUNDARY)
+        print(f"Initialized with {len(self.trips)} taxi rides within two weeks")
 
 
         self.state = None
@@ -80,7 +82,7 @@ class GraphEnv(gym.Env):
             {#'cost': gym.spaces.Discrete(self.n_hubs), 
             #'current_hub': OneHotVector(self.n_hubs),
             #'final_hub': OneHotVector(self.n_hubs)
-            'cost': gym.spaces.Box(low=np.zeros(70), high=np.zeros(70)+100, shape=(70,), dtype=np.int64),
+            'cost': gym.spaces.Box(low=np.zeros(70), high=np.zeros(70)+500000, shape=(70,), dtype=np.int64),
             'remaining_distance': gym.spaces.Box(low=np.zeros(70), high=np.zeros(70)+500000, shape=(70,), dtype=np.int64),
             'current_hub': gym.spaces.Box(low=0, high=1, shape=(70,), dtype=np.int64),
             'final_hub': gym.spaces.Box(low=0, high=1, shape=(70,), dtype=np.int64)
@@ -97,59 +99,62 @@ class GraphEnv(gym.Env):
         # two cases depending if we have env config 
         #super().reset()
 
+        resetExecutionStart = time.time()
+
         if (self.env_config == None or self.env_config == {}):
-            print("Reset without config")
+            print("Started Reset() without config")
             #self.final_hub = self.manhattan_graph.get_nodeids_list().index(random.sample(self.hubs,1)[0])
             self.final_hub = random.randint(0,self.n_hubs-1)
-            print(f"final hub: {self.final_hub}")
             #self.start_hub = self.manhattan_graph.get_nodeids_list().index(random.sample(self.hubs,1)[0])
             self.start_hub = random.randint(0,self.n_hubs-1)
+
+            # just in case ;)
+            if(self.start_hub == self.final_hub):
+                self.start_hub = random.randint(0,self.n_hubs-1)
+
             self.position = self.start_hub
-            print(f"current position: {self.position}")
 
         # time for pickup
-            self.pickup_time = self.START_TIME
+            self.pickup_time = datetime.strptime(self.START_TIME,'%Y-%m-%d %H:%M:%S')
             self.time = self.pickup_time
             self.total_travel_time = 0
             self.deadline=self.pickup_time+timedelta(hours=12)
             self.current_wait = 1 ## to avoid dividing by 0
             #self.manhattan_graph.setup_trips(self.START_TIME)
         else:
-            print("Reset with config")
+            print("Started Reset() with config")
             self.final_hub = self.env_config['delivery_hub_index']
-            print(f"final hub: {self.final_hub}")
+
             self.start_hub = self.env_config['pickup_hub_index']
-            #self.final_hub = self.manhattan_graph.get_node_index_by_hub_index(self.env_config['delivery_hub_index'])
-            #self.start_hub = self.manhattan_graph.get_node_index_by_hub_index(self.env_config['pickup_hub_index'])
+
             self.position = self.start_hub
-            print(f"current position: {self.position}")
 
             self.pickup_time = self.env_config['pickup_timestamp']
-            self.time = self.pickup_time
+            self.time = datetime.strptime(self.pickup_time, '%Y-%m-%d %H:%M:%S')
             self.total_travel_time = 0
-            self.deadline=self.env_config['delivery_timestamp']
+            self.deadline=datetime.strptime(self.env_config['delivery_timestamp'], '%Y-%m-%d %H:%M:%S')
             self.current_wait = 0
-            # self.manhattan_graph.setup_trips(self.pickup_time)
 
-        start_timestamp = self.pickup_time - timedelta(hours=2)
-        end_timestamp = start_timestamp + timedelta(hours=48)
 
-        self.trips = self.DB.getAvailableTrips(start_timestamp, end_timestamp)
-        print("Reset() loaded trips within 48 hrs into memory:", len(self.trips))
+
+        print(f"Reset initialized pickup: {self.position}")
+        print(f"Reset initialized dropoff: {self.final_hub}")
+        print(f"Reset initialized time: {self.time}")
         
 
         learn_graph = LearnGraph(n_hubs=self.n_hubs, manhattan_graph=self.manhattan_graph, final_hub=self.final_hub)
-        learn_graph.add_travel_cost_layer(self.availableTrips())
         self.learn_graph = learn_graph
 
         if(self.LEARNGRAPH_FIRST_INIT_DONE == False):
             self.distance_matrix = self.learn_graph.fill_distance_matrix()
+        
 
         self.LEARNGRAPH_FIRST_INIT_DONE = True
-
+        self.learn_graph.add_travel_cost_layer(self.availableTrips(), self.distance_matrix)
         self.learn_graph.add_remaining_distance_layer(current_hub=self.position, distance_matrix=self.distance_matrix)
 
         self.count_hubs = 0
+        self.count_actions = 0
         # old position is current position
         self.old_position = self.start_hub
         # current trip
@@ -166,6 +171,9 @@ class GraphEnv(gym.Env):
             'current_hub' : self.one_hot(self.position).astype(int), 
             'final_hub' : self.one_hot(self.final_hub).astype(int)
             }
+
+        resetExecutionTime = (time.time() - resetExecutionStart)
+        print(f"Reset() Execution Time: {str(resetExecutionTime)}")
         return self.state
 
     def step(self, action: int):
@@ -219,13 +227,10 @@ class GraphEnv(gym.Env):
                 elif(self.learn_graph.wait_till_departure_times[(self.position,action)] != 300 and self.learn_graph.wait_till_departure_times[(self.position,action)] != 0):
                     step_duration = sum(route_travel_time)
                     # TODO: String conversion von departure time besser direkt beim erstellen der Matrix
-                    departure_time = datetime.strptime(self.learn_graph.wait_till_departure_times[(self.position,action)], '%d/%m/%y %H:%M:%S')
-                    current_time = self.time
-                    print(type(departure_time))
-                    print(type(current_time))
-                    self.current_wait = ( departure_time - current_time).seconds
+                    departure_time = datetime.strptime(self.learn_graph.wait_till_departure_times[(self.position,action)], '%Y-%m-%d %H:%M:%S')
+                    self.current_wait = ( departure_time - self.time).seconds
                     step_duration += self.current_wait
-                    self.time = self.learn_graph.wait_till_departure_times[(self.position,action)]
+                    self.time = departure_time
                 
                 self.old_position = self.position
                 self.position = action
@@ -251,7 +256,7 @@ class GraphEnv(gym.Env):
 
         
         # refresh travel cost layer after each step
-        self.learn_graph.add_travel_cost_layer(self.availableTrips())
+        self.learn_graph.add_travel_cost_layer(self.availableTrips(), self.distance_matrix)
         startTimeLearn = time.time()
         self.state = {'cost' : self.learn_graph.adjacency_matrix('cost')[self.position].astype(int),'remaining_distance': self.learn_graph.adjacency_matrix('remaining_distance')[self.position].astype(int),'current_hub' : self.one_hot(self.position).astype(int), 'final_hub' : self.one_hot(self.final_hub).astype(int)}
         executionTimeLearn = (time.time() - startTimeLearn)
@@ -259,34 +264,42 @@ class GraphEnv(gym.Env):
 
         self.time += timedelta(seconds=step_duration)
 
+        self.count_actions += 1
+
         reward, done = self.compute_reward(action)
 
         executionTime = (time.time() - startTime)
         # print('Step() Execution time: ' + str(executionTime) + ' seconds')
 
-        return self.state, reward,  done, {}
+        return self.state, reward,  done, {"timestamp": self.time,"step_travel_time":step_duration,"distance":self.distance_matrix[self.old_position][self.position], "count_hubs":self.count_hubs}
 
     
     def compute_reward(self, action):
         cost_of_action = self.learn_graph.adjacency_matrix('cost')[self.old_position][action]
         print(self.old_position, "->", action, cost_of_action)
-        if (self.position == self.final_hub and self.time <= self.deadline):
-            print("DELIVERED IN TIME")
-            reward = 1000
-            reward -= cost_of_action
+        done = False
+        # if delay is greater than 12 hours (=720 minutes), terminate training episode
+        if((self.time-self.deadline).total_seconds()/60 >= 720):
             done = True
-        elif(self.position == self.final_hub and self.time > self.deadline):
-            overtime = self.time-self.deadline
-            print(f"DELIVERED WITH DELAY: {overtime}")
+            reward = -(cost_of_action / 1000) - 10000
+        # if box is delivered to final hub in time
+        if (self.position == self.final_hub and self.time <= self.deadline):
+            print(f"DELIVERED IN TIME AFTER {self.count_actions} ACTIONS")
+            reward = 1000
+            reward -= (cost_of_action / 1000)
+            done = True
+        # if box is delivered to final hub with delay
+        elif(self.position == self.final_hub and (self.time-self.deadline).total_seconds()/60 < 720): #self.time > self.deadline):
+            overtime = self.time - self.deadline
+            print(f"DELIVERED AFTER {self.count_actions} ACTIONS WITH DELAY: {overtime}")
             overtime = round(overtime.total_seconds()/60)
             reward = 1000 - overtime
-            reward -= cost_of_action
+            reward -= (cost_of_action / 1000)
             done = True
-        else:
-            reward = -(cost_of_action)
-            done = False
-
-        # TODO: include time!
+        # if box is not delivered to final hub
+        elif(done==False):
+            reward = -(cost_of_action / 1000)
+            #done = False
 
         return reward, done
         
@@ -498,10 +511,6 @@ class GraphEnv(gym.Env):
                     route, times = self.DB.getRouteFromTrip(tripId)
                     isNotFinalNode = True
                     if isNotFinalNode:
-                        print(route)
-                        print(nodeId)
-                        print(position)
-                        print(tripId)
                         index_in_route = route.index(position)
                         position_timestamp = times[index_in_route]
                         route_to_target_node=route[index_in_route::]
@@ -518,15 +527,14 @@ class GraphEnv(gym.Env):
         self.available_actions = list_trips
 
         executionTime = (time.time() - startTime)
-        print('in_step_available_trips() Execution time: ' + str(executionTime) + ' seconds')
-        print('Available rides for share found in step:', len(list_trips))
+        print('Get available trips in step took ' + str(executionTime) + ' s, found '+ str(len(list_trips)) +' trips')
         return list_trips
 
     def validateAction(self, action):
         return action < self.n_hubs
 
     def read_config(self):
-        with open('/Users/noah/Desktop/Repositories/ines-autonomous-dispatching/rl/Manhattan_Graph_Environment/env_config.pkl', 'rb') as f:
+        with open('env_config.pkl', 'rb') as f:
             loaded_dict = pickle.load(f)
         self.env_config = loaded_dict
         return loaded_dict

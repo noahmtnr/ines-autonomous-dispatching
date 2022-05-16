@@ -18,42 +18,6 @@ class LearnGraph:
     def adjacency_matrix(self, layer: str = None):
         return nx.to_numpy_array(self.G, weight=layer)
 
-    def add_travel_distance_layer(self):
-
-        #for each edge in learn_graph calculate travel time and add as edge attribute with
-        nx.set_edge_attributes(self.G, bb, "travel_distance") 
-
-    def add_travel_cost_layer(self, available_trips):
-        # self.manhattan_graph.setup_trips(self.START_TIME) #needed later for retrieving currently available trips
-        # nx.set_edge_attributes(self.G, 100, "cost") 
-        edges = {}
-        # wait
-        for k in range(70):
-            for l in range(70):
-                if(k==l):
-                    edges[(k,l,0)] = 2
-                    self.wait_till_departure_times[(k,l)] = 0
-                # book own ride
-                else:
-                    edges[(k,l,0)] = 50
-                    self.wait_till_departure_times[(k,l)] = 300 # 5 minutes for book own ride wait
-
-        for i in range(len(available_trips)):
-            for j in range(len(available_trips[i]['route'])):
-                # share ride
-                if(available_trips[i]['route'][j] in self.list_hubs):
-                    # print(f"Hub on route: {available_trips[i]['route'][j]}")
-                    edges[(available_trips[i]['route'][0],available_trips[i]['route'][j],0)] = 5
-                    pickup_nodeid = available_trips[i]['route'][0]
-                    dropoff_nodeid = available_trips[i]['route'][j]
-                    pickup_hub_index = self.manhattan_graph.get_hub_index_by_nodeid(pickup_nodeid)
-                    dropoff_hub_index = self.manhattan_graph.get_hub_index_by_nodeid(dropoff_nodeid)
-                    self.wait_till_departure_times[(pickup_hub_index,dropoff_hub_index)] = available_trips[i]['departure_time']
-                    #self.wait_till_departure_times[pickup_hub_index,dropoff_hub_index] = 120
-        
-        #print(f"cost_edges: {edges}")
-        nx.set_edge_attributes(self.G, edges, "cost")     
-
     def fill_distance_matrix(self):
         distances = np.zeros((70,70))
         for i in range(70):
@@ -76,8 +40,50 @@ class LearnGraph:
                 #     distance_edges[(i,j)] = dist_travelled
 
         
-        print(distances)
+        #print(distances)
         return distances
+
+    def add_travel_distance_layer(self):
+
+        #for each edge in learn_graph calculate travel time and add as edge attribute with
+        nx.set_edge_attributes(self.G, bb, "travel_distance") 
+
+    def add_travel_cost_layer(self, available_trips, distance_matrix):
+        # self.manhattan_graph.setup_trips(self.START_TIME) #needed later for retrieving currently available trips
+        # nx.set_edge_attributes(self.G, 100, "cost") 
+        edges = {}
+        #print(f"available trips: {available_trips}")
+        #print(f"distance matrix: {distance_matrix}")
+        # wait
+        for k in range(70):
+            for l in range(70):
+                if(k==l):
+                    edges[(k,l,0)] = 0
+                    self.wait_till_departure_times[(k,l)] = 0
+                # book own ride
+                else:
+                    edges[(k,l,0)] = distance_matrix[k,l] * 1
+                    self.wait_till_departure_times[(k,l)] = 300 # 5 minutes for book own ride wait
+
+        for i in range(len(available_trips)):
+            for j in range(len(available_trips[i]['route'])):
+                # share ride
+                if(available_trips[i]['route'][j] in self.list_hubs):
+                    # print(f"Hub on route: {available_trips[i]['route'][j]}")
+                    pickup_nodeid = available_trips[i]['route'][0]
+                    dropoff_nodeid = available_trips[i]['route'][j]
+                    
+                    pickup_hub_index = self.manhattan_graph.get_hub_index_by_nodeid(pickup_nodeid)
+                    dropoff_hub_index = self.manhattan_graph.get_hub_index_by_nodeid(dropoff_nodeid)
+
+                    edges[(pickup_hub_index,dropoff_hub_index,0)] = distance_matrix[pickup_hub_index,dropoff_hub_index] * 0.2 #5
+
+                    self.wait_till_departure_times[(pickup_hub_index,dropoff_hub_index)] = available_trips[i]['departure_time']
+                    #self.wait_till_departure_times[pickup_hub_index,dropoff_hub_index] = 120
+        
+        #print(f"cost_edges: {edges}")
+        nx.set_edge_attributes(self.G, edges, "cost")     
+
     
     def add_remaining_distance_layer(self, current_hub, distance_matrix):
         distance_edges = {}
