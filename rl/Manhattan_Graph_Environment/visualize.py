@@ -77,7 +77,6 @@ final_hub_coordinates=graph.get_coordinates_of_node(input_example["route"][len(i
 
 
 
-
 @app.route('/')
 def index():
   return render_template('index.html')
