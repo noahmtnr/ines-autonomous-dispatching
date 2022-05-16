@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 class ManhattanGraph:
 
     def __init__(self, filename, num_hubs):
-        filepath = ("../../data/graph/%s.graphml") % (filename)
+        filepath = ("data/graph/%s.graphml") % (filename)
         self.inner_graph = ox.load_graphml(filepath)
         self.inner_graph = ox.add_edge_speeds(self.inner_graph,fallback=30)
         self.inner_graph = ox.add_edge_travel_times(self.inner_graph)
@@ -28,7 +28,7 @@ class ManhattanGraph:
             self.hubs(list): List of hubs in graph
         """
         # the code below is for mapping the pre-defined hubs (customer/store/trips) to nodes in the graph
-        hubs_file = pd.read_csv("../../data/hubs/new_hubs.CSV")
+        hubs_file = pd.read_csv("data/hubs/new_hubs.CSV")
         hubs = []
         i=0
         for row in hubs_file.index:    
@@ -60,7 +60,7 @@ class ManhattanGraph:
         """
         
         #trips for simple graph, only the first 5000 rows
-        all_trips = pd.read_csv('../../data/trips/preprocessed_trips.csv', nrows=100)
+        all_trips = pd.read_csv('data/trips/preprocessed_trips.csv', nrows=100)
         print(all_trips.head())
         #self.trips = self.prefilter_trips(all_trips, start_time).reset_index(drop=True)
         self.trips =  all_trips
@@ -131,4 +131,23 @@ class ManhattanGraph:
 
     def get_index_by_nodeid(self, nodeid: int):
         return self.get_nodeids_list().index(nodeid)
+    
+    def get_coordinates_of_node(self, node_id): 
+        # manhattangraph = ManhattanGraph(filename='simple', num_hubs=70)
+        nodes = self.inner_graph.nodes()
+        return [nodes[node_id]['x'], nodes[node_id]['y']]
+        
+    def get_nodeid_by_hub_index(self, hub_index: int):
+        return self.hubs[hub_index]
+
+    def get_node_by_hub_index(self, hub_index: int):
+        return self.get_node_by_nodeid(self.get_nodeid_by_hub_index(hub_index))
+
+    # def get_coordinates_of_node_by_hub_index(self, node_index): 
+    #     # manhattangraph = ManhattanGraph(filename='simple', num_hubs=70)
+    #     nodes = self.inner_graph.nodes()
+    #     get_node_by_index(node_index):
+
+    #     return [nodes[node_id]['x'], nodes[node_id]['y']]       
+
 

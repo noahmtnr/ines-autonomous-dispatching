@@ -1,4 +1,3 @@
-from asyncio.windows_events import NULL
 import sys
 import matplotlib.pyplot as plot
 from numpy import double
@@ -9,10 +8,13 @@ import urllib
 from datetime import datetime, timedelta
 from folium import plugins, folium
 sys.path.insert(0,"")
+from rl.Manhattan_Graph_Environment.ManhattanGraph import ManhattanGraph
+
 from preprocessing.data_preprocessing import DataPreProcessing
 from flask import Flask, jsonify, request, render_template, redirect
 import pandas as pd
 import mysql.connector
+from LearnGraph import LearnGraph
 import json
 
 from datetime import datetime
@@ -95,10 +97,36 @@ def search():
     route = []
     times = []
     for trip in myList:
-        route, times = getRouteFromTrip(trip)
-        answear[trip] = {'route': route, 'timestamps': times}
+      route, times = getRouteFromTrip(trip)
+      # print(type(times[0]))
+      answear[trip] = {'route': route, 'timestamps': times}
+    print(route, times)
     lines = buildLines(route, times)
+    print(DataPreProcessing.get_coordinates_of_node(42444043))
+    return buildFolium(lines)
 
+@app.route('/order', methods=['GET'])
+def addOrder():  
+    data = request.args
+    pickup_longitude = double(data.get('pickup_long') or 0)
+    pickup_latitude = double(data.get('pickup_lat') or 0)
+    dropoff_longitude = double(data.get('dropoff_long') or 0)
+    dropoff_latitude = double(data.get('dropoff_lat') or 0)
+    print(pickup_longitude, pickup_latitude, dropoff_longitude, dropoff_latitude)
+    pickup_datetime = datetime.strptime(data.get('start_date') or "", "%Y-%m-%d %H:%M:%S")
+    dropoff_datetime = datetime.strptime(data.get('delivery_date') or "", "%Y-%m-%d %H:%M:%S")
+    manhattangraph = ManhattanGraph(filename='simple', num_hubs=70)
+    learngraph = LearnGraph(70, manhattangraph, 5)
+    # start_node = DataPreProcessing.get_node_index_by_coordinates(pickup_longitude, pickup_latitude)
+    # final_node = DataPreProcessing.get_node_index_by_coordinates(dropoff_longitude, dropoff_latitude)
+    start_node = learngraph.getNearestNodeId(pickup_longitude,pickup_latitude)
+    final_node = learngraph.getNearestNodeId(dropoff_longitude,dropoff_latitude)
+    
+    print(start_node, final_node)
+    order={"pickup_node":start_node,"delivery_node":final_node,"pickup_timestamp":pickup_datetime , "delivery_timestamp":dropoff_datetime}
+
+    result = proceed_order_random(order)
+    lines = buildLines(result["route"],result["timestamps"])
     return buildFolium(lines)
 
 def buildFolium(lines):
@@ -109,7 +137,7 @@ def buildFolium(lines):
     zoom_start=12,
 )
 
-  dir = r"templates\m_events.html"
+  dir = r"templates\ciao.html"
   dirname = os.path.dirname(__file__)
   save_location = os.path.join(dirname, dir)
   features = [
@@ -141,7 +169,7 @@ def buildFolium(lines):
     add_last_point=True,
   ).add_to(m_events)
   m_events.save(save_location)
-  return render_template("m_events.html")
+  return render_template("ciao.html")
   #m_events
 
 
@@ -152,6 +180,7 @@ def buildLines(routes, timestamps):
       element = {}
       element["coordinates"]= [DataPreProcessing.get_coordinates_of_node(routes[i]), DataPreProcessing.get_coordinates_of_node(routes[i+1])]
       element["dates"] = [timestamps[i], timestamps[i+1]]
+      print("Helo",[timestamps[i], timestamps[i+1]], type(timestamps[i]) )
       element["color"] =  "blue"
       list_elements.append(element)
     #print(list_elements)
@@ -181,8 +210,6 @@ def addTrip():
 
 
     
-    
-
   
 
 # driver function

@@ -6,13 +6,59 @@
 </head>
 <body>
   <h1>Welcome! Find a taxi trip</h1>
-  <form action="http://127.0.0.1:5000/search">
-    <label for="pickup_long">Pickup longitude:</label>
-    <input type="text" id="pickup_long" name="pickup_long" /><br /><br />
-    <label for="pickup_lat">Pickup latitude:</label>
-    <input type="text" id="pickup_lat" name="pickup_lat" /><br /><br />
+  <form action="http://127.0.0.1:5000/order">
+    <textarea id="fromAddress" rows="3" cols="25"></textarea>
+    <br />
+
+    <textarea id="toAddress" rows="3" cols="25"></textarea>
+    <br />
+    <input type="button" onclick="GetLocation()" value="Get Location" />
+    <input name="pickup_long" id="pickup_long" type="hidden" value="" />
+    <input name="pickup_lat" id="pickup_lat" type="hidden" value="" />
+
+    <input name="dropoff_long" id="dropoff_long" type="hidden" value="" />
+    <input name="dropoff_lat" id="dropoff_lat" type="hidden" value="" />
+    <script
+      type="text/javascript"
+      src="http://maps.googleapis.com/maps/api/js?key=AIzaSyA7DnzvbeVppf-GO2xlHFpZZ_DQTwz4Urw&sensor=false"
+    ></script>
+    <script type="text/javascript">
+      function GetLocation() {
+        var geocoder = new google.maps.Geocoder();
+        var from_address = document.getElementById("fromAddress").value;
+        var to_address = document.getElementById("toAddress").value;
+        geocoder.geocode({ address: from_address }, function (results, status) {
+          if (status == google.maps.GeocoderStatus.OK) {
+            var latitude = results[0].geometry.location.lat();
+            var longitude = results[0].geometry.location.lng();
+            alert("Latitude: " + latitude + "\nLongitude: " + longitude);
+            document.getElementById("pickup_long").value = longitude;
+            document.getElementById("pickup_lat").value = latitude;
+          } else {
+            alert("Request failed.");
+          }
+        });
+
+        geocoder.geocode({ address: to_address }, function (results, status) {
+          if (status == google.maps.GeocoderStatus.OK) {
+            var latitude = results[0].geometry.location.lat();
+            var longitude = results[0].geometry.location.lng();
+            alert("Latitude: " + latitude + "\nLongitude: " + longitude);
+            document.getElementById("dropoff_long").value = longitude;
+            document.getElementById("dropoff_lat").value = latitude;
+          } else {
+            alert("Request failed.");
+          }
+        });
+      }
+      //-->
+    </script>
     <label for="start_date">Pickup time:</label>
     <input type="text" id="start_date" name="start_date" /><br /><br />
+
+    <label for="delivery_date">Delivery time:</label>
+    <input type="text" id="delivery_date" name="delivery_date" /><br /><br />
+
     <input type="submit" value="Submit" />
   </form>
 
