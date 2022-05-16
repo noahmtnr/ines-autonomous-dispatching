@@ -273,7 +273,7 @@ class GraphEnv(gym.Env):
         print(self.old_position, "->", action, cost_of_action)
         # if delay is greater than 12 hours (=720 minutes), terminate training episode
         if((self.time-self.deadline).total_seconds()/60 >= 720):
-            done = False
+            done = True
         # if box is delivered to final hub in time
         if (self.position == self.final_hub and self.time <= self.deadline):
             print("DELIVERED IN TIME")
