@@ -27,22 +27,19 @@ class GraphEnv(gym.Env):
 
     REWARD_AWAY = -1
     REWARD_GOAL = 100
-    pickup_day = 1
+    pickup_day = np.random.randint(low=1,high=14)
     pickup_hour =  np.random.randint(24)
     pickup_minute = np.random.randint(60) 
     START_TIME = datetime(2016,1,pickup_day,pickup_hour,pickup_minute,0)
     
-    def __init__(self, env_config=None):
-        """_summary_
-
-        Args:
-            graph (nx.MultiDiGraph): graph
-            start_hub (int): nodeId
-            final_hub (int): nodeId
-
-        """  
+    def __init__(self, use_config: bool = False ):
         self.LEARNGRAPH_FIRST_INIT_DONE = False
-        self.env_config = self.read_config()
+
+        if(use_config):
+            self.env_config = self.read_config()
+        else:
+             self.env_config = None
+    
         self.n_hubs = 70
         self.distance_matrix = None
 
@@ -97,11 +94,12 @@ class GraphEnv(gym.Env):
         # two cases depending if we have env config 
         #super().reset()
 
+        resetExecutionStart = time.time()
+
         if (self.env_config == None or self.env_config == {}):
-            print("Reset without config")
+            print("Started Reset() without config")
             #self.final_hub = self.manhattan_graph.get_nodeids_list().index(random.sample(self.hubs,1)[0])
             self.final_hub = random.randint(0,self.n_hubs-1)
-            print(f"final hub: {self.final_hub}")
             #self.start_hub = self.manhattan_graph.get_nodeids_list().index(random.sample(self.hubs,1)[0])
             self.start_hub = random.randint(0,self.n_hubs-1)
 
@@ -110,7 +108,6 @@ class GraphEnv(gym.Env):
                 self.start_hub = random.randint(0,self.n_hubs-1)
 
             self.position = self.start_hub
-            print(f"current position: {self.position}")
 
         # time for pickup
             self.pickup_time = self.START_TIME
@@ -120,27 +117,28 @@ class GraphEnv(gym.Env):
             self.current_wait = 1 ## to avoid dividing by 0
             #self.manhattan_graph.setup_trips(self.START_TIME)
         else:
-            print("Reset with config")
+            print("Started Reset() with config")
             self.final_hub = self.env_config['delivery_hub_index']
-            print(f"final hub: {self.final_hub}")
+
             self.start_hub = self.env_config['pickup_hub_index']
-            #self.final_hub = self.manhattan_graph.get_node_index_by_hub_index(self.env_config['delivery_hub_index'])
-            #self.start_hub = self.manhattan_graph.get_node_index_by_hub_index(self.env_config['pickup_hub_index'])
+
             self.position = self.start_hub
-            print(f"current position: {self.position}")
 
             self.pickup_time = self.env_config['pickup_timestamp']
             self.time = datetime.strptime(self.pickup_time, '%Y-%m-%d %H:%M:%S')
             self.total_travel_time = 0
             self.deadline=datetime.strptime(self.env_config['delivery_timestamp'], '%Y-%m-%d %H:%M:%S')
             self.current_wait = 0
-            # self.manhattan_graph.setup_trips(self.pickup_time)
 
         start_timestamp = datetime.strptime(self.pickup_time, '%Y-%m-%d %H:%M:%S') - timedelta(hours=2)
         end_timestamp = start_timestamp + timedelta(hours=48)
 
         self.trips = self.DB.getAvailableTrips(start_timestamp, end_timestamp)
-        print("Reset() loaded trips within 48 hrs into memory:", len(self.trips))
+
+        print(f"Reset loaded {len(self.trips)} rides within a 48 hrs window")
+        print(f"Reset initialized pickup: {self.position}")
+        print(f"Reset initialized dropoff: {self.final_hub}")
+        print(f"Reset initialized time: {self.time}")
         
 
         learn_graph = LearnGraph(n_hubs=self.n_hubs, manhattan_graph=self.manhattan_graph, final_hub=self.final_hub)
@@ -170,6 +168,9 @@ class GraphEnv(gym.Env):
             'current_hub' : self.one_hot(self.position).astype(int), 
             'final_hub' : self.one_hot(self.final_hub).astype(int)
             }
+
+        resetExecutionTime = (time.time() - resetExecutionStart)
+        print(f"Reset() Execution Time: {str(resetExecutionTime)}")
         return self.state
 
     def step(self, action: int):
@@ -503,10 +504,6 @@ class GraphEnv(gym.Env):
                     route, times = self.DB.getRouteFromTrip(tripId)
                     isNotFinalNode = True
                     if isNotFinalNode:
-                        print(route)
-                        print(nodeId)
-                        print(position)
-                        print(tripId)
                         index_in_route = route.index(position)
                         position_timestamp = times[index_in_route]
                         route_to_target_node=route[index_in_route::]
@@ -523,8 +520,7 @@ class GraphEnv(gym.Env):
         self.available_actions = list_trips
 
         executionTime = (time.time() - startTime)
-        print('in_step_available_trips() Execution time: ' + str(executionTime) + ' seconds')
-        print('Available rides for share found in step:', len(list_trips))
+        print('Get available trips in step took ' + str(executionTime) + ' s, found '+ str(len(list_trips)) +' trips')
         return list_trips
 
     def validateAction(self, action):

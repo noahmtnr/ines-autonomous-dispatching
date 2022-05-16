@@ -52,7 +52,7 @@ class LearnGraph:
         # self.manhattan_graph.setup_trips(self.START_TIME) #needed later for retrieving currently available trips
         # nx.set_edge_attributes(self.G, 100, "cost") 
         edges = {}
-        print(f"available trips: {available_trips}")
+        #print(f"available trips: {available_trips}")
         #print(f"distance matrix: {distance_matrix}")
         # wait
         for k in range(70):
