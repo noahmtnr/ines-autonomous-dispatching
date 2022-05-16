@@ -6,7 +6,7 @@ from numpy import double
 import osmnx as ox
 import os
 import urllib
-import datetime
+import datetime, timedelta
 import folium
 from folium import plugins
 sys.path.insert(0,"")
@@ -24,12 +24,9 @@ import timestamps_mapping
 graph= ManhattanGraph('simple',70)
 app = Flask(__name__)
 
-input_example={'route': [1,2,3],'timestamps':[ datetime.datetime(2016, 5, 19, 23, 33, 46, 600000), datetime.datetime(2016, 5, 19, 23, 41, 6, 600000), datetime.datetime(2016, 5, 19, 23, 51, 6, 600000)]}
-input_example2={'route': [1,4,3],'timestamps':[ datetime.datetime(2016, 5, 19, 23, 33, 46, 600000), datetime.datetime(2016, 5, 19, 23, 41, 6, 600000), datetime.datetime(2016, 5, 19, 23, 51, 6, 600000)]}
-#input_example={'route': [3579432156, 42428782, 42428770, 595314103, 7004393049, 42428760, 42421745, 42428751, 42428746, 42428742, 42428737, 42428728, 42428725, 42428723, 42428720, 42428716, 42428714, 42428711, 42428709, 42428705, 42428701, 42428695, 42428689, 42422006, 42428682, 42428678, 42428674, 42428670, 42421809, 42428663, 42428661, 42428657, 42421775, 42428653, 42428065, 42428648, 42428645, 42428643, 42428640, 42428637, 42428634, 1061531448, 9177424867, 42428610, 42428604, 42428601, 42428598, 42428595, 42428590, 42428588, 42428579, 42428575, 42421972, 42428570, 1825841655, 1825841704, 1825841743, 42428332, 42428329, 42428328, 42428321, 42428315, 42428313, 42428312, 42428310, 42428308, 42428307, 42428305, 42439996, 42439994, 42439990, 42428297, 42439984, 42439981, 42437363, 42439972, 42439968, 42439964, 42433611, 42428268, 42428264, 42428258, 42430311, 42452973, 42434946, 42437644], 'timestamps': ['2016-05-19 23:04:00', '2016-05-19 23:04:07', '2016-05-19 23:04:14', '2016-05-19 23:04:21', '2016-05-19 23:04:28', '2016-05-19 23:04:35', '2016-05-19 23:04:42', '2016-05-19 23:04:49', '2016-05-19 23:04:56', '2016-05-19 23:05:03', '2016-05-19 23:05:10', '2016-05-19 23:05:17', '2016-05-19 23:05:24', '2016-05-19 23:05:31', '2016-05-19 23:05:38', '2016-05-19 23:05:45', '2016-05-19 23:05:52', '2016-05-19 23:06:00', '2016-05-19 23:06:07', '2016-05-19 23:06:14', '2016-05-19 23:06:21', '2016-05-19 23:06:28', '2016-05-19 23:06:35', '2016-05-19 23:06:42', '2016-05-19 23:06:49', '2016-05-19 23:06:56', '2016-05-19 23:07:03', '2016-05-19 23:07:10', '2016-05-19 23:07:17', '2016-05-19 23:07:24', '2016-05-19 23:07:31', '2016-05-19 23:07:38', '2016-05-19 23:07:45', '2016-05-19 23:07:52', '2016-05-19 23:08:00', '2016-05-19 23:08:07', '2016-05-19 23:08:14', '2016-05-19 23:08:21', '2016-05-19 23:08:28', '2016-05-19 23:08:35', '2016-05-19 23:08:42', '2016-05-19 23:08:49', '2016-05-19 23:08:56', '2016-05-19 23:09:03', '2016-05-19 23:09:10', '2016-05-19 23:09:17', '2016-05-19 23:09:24', '2016-05-19 23:09:31', '2016-05-19 23:09:38', '2016-05-19 23:09:45', '2016-05-19 23:09:52', '2016-05-19 23:10:00', '2016-05-19 23:10:07', '2016-05-19 23:10:14', '2016-05-19 23:10:21', '2016-05-19 23:10:28', '2016-05-19 23:10:35', '2016-05-19 23:10:42', '2016-05-19 23:10:49', '2016-05-19 23:10:56', '2016-05-19 23:11:03', '2016-05-19 23:11:10', '2016-05-19 23:11:17', '2016-05-19 23:11:24', '2016-05-19 23:11:31', '2016-05-19 23:11:38', '2016-05-19 23:11:45', '2016-05-19 23:11:52', '2016-05-19 23:12:00', '2016-05-19 23:12:07', '2016-05-19 23:12:14', '2016-05-19 23:12:21', '2016-05-19 23:12:28', '2016-05-19 23:12:35', '2016-05-19 23:12:42', '2016-05-19 23:12:49', '2016-05-19 23:12:56', '2016-05-19 23:13:03', '2016-05-19 23:13:10', '2016-05-19 23:13:17', '2016-05-19 23:13:24', '2016-05-19 23:13:31', '2016-05-19 23:13:38', '2016-05-19 23:13:45', '2016-05-19 23:13:52', '2016-05-19 23:14:00']}
-#input_example={'route': [3579432156, 42428782, 42428770], 'timestamps': ['2016-05-19 23:04:00', '2016-05-19 23:04:07', '2016-05-19 23:04:14']}
-#input_example={'route': [1,2,3,4], 'timestamps': ["2016-05-19 23:04:00","2016-05-19 23:04:10","2016-05-19 23:04:20","2016-05-19 23:04:30"]}
-#input_example2={'route': [1,2,3,4], 'timestamps': ["2016-05-19 23:04:00","2016-05-19 23:04:10","2016-05-19 23:04:20","2016-05-19 23:04:30"]}
+input_example={'route': [1,2,2,6,5],'timestamps':[ datetime.datetime(2016, 5, 19, 23, 33, 46, 600000), datetime.datetime(2016, 5, 19, 23, 35, 46, 600000), datetime.datetime(2016, 5, 19, 23, 41, 46,600000), datetime.datetime(2016, 5, 19, 23, 46, 46, 600000),datetime.datetime(2016, 5, 19, 23, 56, 46, 600000)]}
+input_example2={'route': [1,4,5],'timestamps':[ datetime.datetime(2016, 5, 19, 23, 33, 46, 600000), datetime.datetime(2016, 5, 19, 23, 41, 56, 600000), datetime.datetime(2016, 5, 19, 23, 46, 46, 600000)]}
+
 
 real_input={'pickup_hub': 27, 'delivery_hub': 14, 'reward': -3182.772359, 'hubs': 29, 'route': [48, 19, 46, 47, 43, 15, 38, 24, 66, 4, 9, 62, 64, 3, 25, 58, 32, 25, 4, 37, 50, 50, 53, 67, 35, 15, 49, 65, 24, 17], 'time': '6:08:51.500000', 'dist': 182.77235900000005, 'time_until_deadline': datetime.datetime(2016, 5, 20, 4, 55, 8, 500000), 'timestamps': [datetime.datetime(2016, 5, 19, 23, 13, 24, 400000), datetime.datetime(2016, 
 5, 19, 23, 22, 50, 100000), datetime.datetime(2016, 5, 19, 23, 33, 46, 600000), datetime.datetime(2016, 5, 19, 23, 41, 6, 600000), datetime.datetime(2016, 5, 19, 23, 51, 30, 600000), datetime.datetime(2016, 5, 20, 
@@ -44,7 +41,6 @@ def preprocess_input(inputs):
         all_timestamps=[]
         route_withids=[]
         for i in input["route"]:
-            print(graph.get_nodeid_by_hub_index(i))
             route_withids.append(graph.get_nodeid_by_hub_index(i))
         input.update({'route': route_withids})
         for i in range(len(input['route'])-1):
@@ -55,25 +51,25 @@ def preprocess_input(inputs):
             timestamps=timestamps_mapping.map_nodes_to_timestaps_to_list(route,input["timestamps"][i],input["timestamps"][i+1],duration)
             for j in timestamps:
                 #j=j.strftime("%Y-%m-%d %H:%M:%S")
-                print(j)
+                #print(timestamps)
                 date= datetime.datetime.strptime(j,"%Y-%m-%d %H:%M:%S")
                 date_str=date.strftime("%Y-%m-%d %H:%M:%S")
-                #j = pd.to_datetime(j, format=date_format_str)
+                j = pd.to_datetime(j, format=date_format_str)
                 all_timestamps.append(date_str)
         input.update({'timestamps': all_timestamps})
         print("ALL",all_timestamps, type(all_timestamps[0]))
-        input.update({'route': nodes})
+        input['route_nodes']=nodes
 
         
 
 
 preprocess_input(inputs)
-print(inputs)
 input_example=inputs[0]
 input_example2=inputs[1]
 
 start_hub_coordinates=graph.get_coordinates_of_node(input_example["route"][0])
 final_hub_coordinates=graph.get_coordinates_of_node(input_example["route"][len(input_example["route"])-1])
+
 
 
 
@@ -106,26 +102,24 @@ def search():
     # route = []
     # times = []
     # for trip in myList:
-    route, times = input_example["route"], input_example["timestamps"]
-    route2, times2 = input_example2["route"], input_example2["timestamps"]
+    route, times, hubs = input_example["route_nodes"], input_example["timestamps"], input_example["route"]
+    route2, times2, hubs2 = input_example2["route_nodes"], input_example2["timestamps"], input_example2["route"]
 
     #   
     #answear[trip] = {'route': route, 'timestamps': times}
-    print(times)
-    print(type(times[0]))
     lines = buildLines(route, times,"blue")
     lines2=buildLines(route2, times2, "red")
 
-    return buildFolium(lines,lines2)
+    return buildFolium(lines,lines2, route, route2, hubs, hubs2)
 
-def buildFolium(lines,lines2):
+def buildFolium(lines,lines2,route, route2, hubs, hubs2):
     m_events = folium.Map(
     location=[40.776676, -73.971321],control_scale=True,
     zoom_start=12,
 )
 
     dir = r"templates/ciao.html"
-    dirname = os.path.dirname(_file_)
+    dirname = os.path.dirname(__file__)
     save_location = os.path.join(dirname, dir)
     
 
@@ -167,10 +161,54 @@ def buildFolium(lines,lines2):
             },
         }
         for line in lines2]
+    
+    waited = 0
+    waited2=False
+    for i in range(len(hubs)-1):
+        # case 1: if next hub is the same as current hub (i.e. wait) and we did not wait before on the same hub
+        if (hubs[i]==hubs[i+1] and waited == 0):
+            waited2=True
+            waited = 1
+            folium.Marker(location=graph.get_coordinates_of_node(hubs[i]), icon=folium.Icon(color='orange', prefix='fa', icon='cube'), popup = f'WAIT {waited}').add_to(m_events)
+        # case 2: if next hub is the same as current hub (i.e. wait) and we did already wait at least once at the current hub
+        elif (hubs[i]==hubs[i+1] and waited > 0):
+            waited2=True
+            waited += 1
+            folium.Marker(location=graph.get_coordinates_of_node(hubs[i]), icon=folium.Icon(color='orange', prefix='fa', icon='cube'), popup = f'WAIT {waited}').add_to(m_events)
+        # case 3: did not wait at the current hub 
+        elif(waited2==False):
+            waited = 0
+            folium.Marker(location=graph.get_coordinates_of_node(hubs[i]), icon=folium.Icon(color='black', prefix='fa', icon='cube')).add_to(m_events)
+        # case 4: waited at the current hub and now moving to next hub
+        else:
+            folium.Marker(location=graph.get_coordinates_of_node(hubs[i]), icon=folium.Icon(color='orange', prefix='fa', icon='cube'), popup = f'WAIT {waited}').add_to(m_events)
+            waited = 0
+            waited2=False
+    waited = 0
+    waited2=False
+    for i in range(len(hubs2)-1):
+        # if next hub is the same as current hub (i.e. wait) and we did not wait before on the same hub
+        if (hubs2[i]==hubs2[i+1] and waited == 0):
+            waited2=True
+            waited = 1
+            folium.Marker(location=graph.get_coordinates_of_node(hubs2[i]), icon=folium.Icon(color='orange', prefix='fa', icon='cube'), popup = f'WAIT {waited}').add_to(m_events)
+        # if next hub is the same as current hub (i.e. wait) and we did already wait at least once at the current hub
+        elif (hubs2[i]==hubs2[i+1] and waited > 0):
+            waited2=True
+            waited += 1
+            folium.Marker(location=graph.get_coordinates_of_node(hubs2[i]), icon=folium.Icon(color='orange', prefix='fa', icon='cube'), popup = f'WAIT {waited}').add_to(m_events)
+        # case 3 
+        elif(waited2==False):
+            waited = 0
+            folium.Marker(location=graph.get_coordinates_of_node(hubs2[i]), icon=folium.Icon(color='black', prefix='fa', icon='cube')).add_to(m_events)
+        # case 4: waited at the current hub and now moving to next hub
+        else:
+            folium.Marker(location=graph.get_coordinates_of_node(hubs2[i]), icon=folium.Icon(color='orange', prefix='fa', icon='cube'), popup = f'WAIT {waited}').add_to(m_events)
+            waited = 0
+            waited2=False
     folium.Marker(location=start_hub_coordinates, icon=folium.Icon(color='red', prefix='fa', icon='flag-checkered')).add_to(m_events)
     folium.Marker(location=final_hub_coordinates, icon=folium.Icon(color='green', prefix='fa', icon='caret-right')).add_to(m_events)
-   # print("properties times", len(features["properties"]["times"]))
-   # print("geometry coordinates",len(features["geometry"]["coordinates"]))
+
 
     plugins.TimestampedGeoJson(
          {
@@ -229,9 +267,7 @@ def addTrip():
     # print("Timestamps: ", timestamps)
     insertIntoTripsRoutes(data.get('id'), timestamps)
     return "Success"
-
-
-    
+   
     
 
 # driver function
