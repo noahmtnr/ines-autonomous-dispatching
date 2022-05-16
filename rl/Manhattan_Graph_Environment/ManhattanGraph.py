@@ -46,7 +46,8 @@ class ManhattanGraph:
         #     for row in hubs_file.index:    
         #         hubs.append(hubs_file.loc[row])
          
-        self.hubs = random.sample(hubs,num_hubs)
+        #self.hubs = random.sample(hubs,num_hubs)
+        self.hubs = hubs
         # pd.DataFrame(self.hubs).to_csv("hub_nodeids.csv")
         #self.hubs = hubs
         return self.hubs
