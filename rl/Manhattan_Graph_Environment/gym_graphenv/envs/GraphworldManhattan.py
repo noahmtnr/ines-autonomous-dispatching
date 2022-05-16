@@ -306,6 +306,7 @@ class GraphEnv(gym.Env):
         if((self.time-self.deadline).total_seconds()/60 >= 720):
             done = True
             reward = -(cost_of_action / 1000) - 10000
+            print("Delay more than 12 hours")
         # if box is delivered to final hub in time
         if (self.position == self.final_hub and self.time <= self.deadline):
             print(f"DELIVERED IN TIME AFTER {self.count_actions} ACTIONS (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown}")

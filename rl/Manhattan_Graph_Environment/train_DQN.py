@@ -16,7 +16,7 @@ from ManhattanGraph import ManhattanGraph
 from gym_graphenv.envs.GraphworldManhattan import GraphEnv
 
 wandb.login(key="93aab2bcc48447dd2e8f74124d0258be2bf93859")
-wandb.init(project="Manhattan-env", entity="hitchhike")
+wandb.init(project="Manhattan-env-test10", entity="hitchhike")
 
 env=GraphEnv()
 
@@ -47,7 +47,7 @@ shutil.rmtree(checkpoint_root, ignore_errors=True, onerror=None)   # clean up ol
 results = []
 episode_data = []
 episode_json = []
-n_iter = 1
+n_iter = 10
 
 for n in range(n_iter):
     result = trainer.train()
