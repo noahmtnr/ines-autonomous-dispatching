@@ -81,7 +81,7 @@ class LearnGraph:
                     self.wait_till_departure_times[(pickup_hub_index,dropoff_hub_index)] = available_trips[i]['departure_time']
                     #self.wait_till_departure_times[pickup_hub_index,dropoff_hub_index] = 120
         
-        print(f"cost_edges: {edges}")
+        #print(f"cost_edges: {edges}")
         nx.set_edge_attributes(self.G, edges, "cost")     
 
     
