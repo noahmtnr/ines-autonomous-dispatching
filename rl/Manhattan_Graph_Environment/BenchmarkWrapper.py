@@ -43,8 +43,7 @@ class BenchmarkWrapper:
                 reward_list.append(self.proceed_order_random(order))
             return reward_list
    
-     def proceed_order_random(self, order):
-        print(order)
+     def proceed_order(self, order):
         manhattan_graph = ManhattanGraph(filename='simple', num_hubs=70)
         pick_up_hub_index = ManhattanGraph.get_hub_index_by_node_index(manhattan_graph,order.get('pickup_node'))
         delivery_hub_index = ManhattanGraph.get_hub_index_by_node_index(manhattan_graph,order.get('delivery_node'))
