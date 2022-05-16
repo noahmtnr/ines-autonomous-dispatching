@@ -26,14 +26,14 @@ class CostAgent:
         sum_distance = 0
         route = []
         route_timestamps = []
-        while(counter<30):
+        for i in range(30):
             # visualize current situation
             # env.render()
 
             # look in adjacency matrix for costs from the current position
             array = env.learn_graph.adjacency_matrix('cost')[env.position].astype(int)
             min = np.amin(array)
-            array = np.where(array==min,50,array)
+            array = np.where(array==min,sys.maxsize,array)
             
             # get minimal value in array
             #while(action==env.position):

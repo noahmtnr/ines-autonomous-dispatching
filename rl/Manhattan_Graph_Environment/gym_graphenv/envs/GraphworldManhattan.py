@@ -109,7 +109,7 @@ class GraphEnv(gym.Env):
 
         # time for pickup
             self.pickup_time = self.START_TIME
-            self.time = self.pickup_time
+            self.time = datetime.strptime(self.pickup_time, '%Y-%m-%d %H:%M:%S')
             self.total_travel_time = 0
             self.deadline=self.pickup_time+timedelta(hours=12)
             self.current_wait = 1 ## to avoid dividing by 0
@@ -125,13 +125,13 @@ class GraphEnv(gym.Env):
             print(f"current position: {self.position}")
 
             self.pickup_time = self.env_config['pickup_timestamp']
-            self.time = self.pickup_time
+            self.time = datetime.strptime(self.pickup_time, '%Y-%m-%d %H:%M:%S')
             self.total_travel_time = 0
-            self.deadline=self.env_config['delivery_timestamp']
+            self.deadline=datetime.strptime(self.env_config['delivery_timestamp'], '%Y-%m-%d %H:%M:%S')
             self.current_wait = 0
             # self.manhattan_graph.setup_trips(self.pickup_time)
 
-        start_timestamp = self.pickup_time - timedelta(hours=2)
+        start_timestamp = datetime.strptime(self.pickup_time, '%Y-%m-%d %H:%M:%S') - timedelta(hours=2)
         end_timestamp = start_timestamp + timedelta(hours=48)
 
         self.trips = self.DB.getAvailableTrips(start_timestamp, end_timestamp)
@@ -260,7 +260,7 @@ class GraphEnv(gym.Env):
         executionTime = (time.time() - startTime)
         # print('Step() Execution time: ' + str(executionTime) + ' seconds')
 
-        return self.state, reward,  done, {}
+        return self.state, reward,  done, {"timestamp": self.time,"step_travel_time":step_duration,"distance":self.distance_matrix[self.old_position][self.position], "count_hubs":self.count_hubs}
 
     
     def compute_reward(self, action):
@@ -522,7 +522,7 @@ class GraphEnv(gym.Env):
         return action < self.n_hubs
 
     def read_config(self):
-        with open('/Users/noah/Desktop/Repositories/ines-autonomous-dispatching/rl/Manhattan_Graph_Environment/env_config.pkl', 'rb') as f:
+        with open('env_config.pkl', 'rb') as f:
             loaded_dict = pickle.load(f)
         self.env_config = loaded_dict
         return loaded_dict
