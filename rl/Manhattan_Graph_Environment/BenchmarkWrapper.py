@@ -64,6 +64,9 @@ class BenchmarkWrapper:
             elif self.name == "cost":
                 print("cost")
                 reward_list=CostAgent.run_one_episode(env,reward_list,env_config)
+            elif self.name == "DQN":
+                print("DQN")
+                reward_list = DQNAgent.run_one_episode(env,reward_list,env_config)
         return reward_list
 
 
@@ -74,5 +77,8 @@ def main():
     benchmark2 = BenchmarkWrapper("cost")
     results = benchmark2.read_orders()
     print("Cost",results)
+    benchmark3 = BenchmarkWrapper("DQN")
+    results = benchmark3.read_orders()
+    print("DQN",results)
 
 main()
