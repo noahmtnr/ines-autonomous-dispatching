@@ -15,6 +15,7 @@ from pandas import Timestamp
 import time
 import pickle
 import logging
+import json
 
 import sys
 sys.path.insert(0,"")
@@ -29,10 +30,17 @@ class GraphEnv(gym.Env):
     REWARD_AWAY = -1
     REWARD_GOAL = 100
     
-    def __init__(self, use_config: bool = False ):
+    def __init__(self, use_config: bool = True ):
         DB_LOWER_BOUNDARY = '2016-01-01 00:00:00'
         DB_UPPER_BOUNDARY = '2016-01-14 23:59:59'
         self.LEARNGRAPH_FIRST_INIT_DONE = False
+        print("USE CONFIG", use_config)
+
+
+        # f = open('graphworld_config.json')
+        # data = json.load(f)
+        # use_config=data['use_config']
+        # print(use_config)
 
         if(use_config):
             self.env_config = self.read_config()

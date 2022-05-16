@@ -20,7 +20,7 @@ from ray.rllib.agents.dqn import DQNTrainer, DEFAULT_CONFIG
 
 # class for DQN Agent
 class DQNAgent:
-    def __init__(self):
+    def __init__(self, ):
         sys.path.insert(0,"")
         #Set trainer configuration
         self.trainer_config = DEFAULT_CONFIG.copy()
@@ -31,13 +31,19 @@ class DQNAgent:
         self.trainer_config["framework"] = "torch"
         #trainer_config["num_gpus"] = int(os.environ.get("RLLIB_NUM_GPUS", "0"))
 
-    def run_one_episode (self,env,reward_list,env_config):
-        with open('env_config.pkl', 'wb') as f:
-            pickle.dump(env_config, f)
-        
+    def run_one_episode (self,reward_list,env_config):   
+        config={"use_config":True}
+        # env=gym.make([GraphEnv],config=config)
         # Initialize trainer
-        trainer = DQNTrainer(self.trainer_config,GraphEnv)
-        state = env.reset()
+        test_trainer = DQNTrainer(self.trainer_config,GraphEnv)
+        checkpoint_path="\\tmp\\dqn\\graphworld\\checkpoint_000001\\checkpoint-1"
+        # shutil.rmtree(checkpoint_path, ignore_errors=True, onerror=None)
+
+
+        ray_results="{}/ray_results".format(os.getenv("HOME"))
+        shutil.rmtree(ray_results,ignore_errors=True,onerror=None)
+        test_trainer.restore("\\tmp\\dqn\\graphworld\\checkpoint_000001\\checkpoint-1")
+        state = env.reset(checkpoint_path)
         print("reset done")
 
         # get information
@@ -50,7 +56,7 @@ class DQNAgent:
         results = []
         for i in range(30):
             # get action and result
-            action = trainer.compute_action(state)
+            action = test_trainer.compute_action(state)
             state, reward, done, info = env.step(action)
             results.append([state,reward,done,info])
             print("TEST", i)

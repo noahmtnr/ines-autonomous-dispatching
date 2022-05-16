@@ -56,9 +56,13 @@ class BenchmarkWrapper:
                     'pickup_timestamp': order.get('pickup_timestamp'),
                     'delivery_timestamp': order.get('delivery_timestamp')
                 }
+       
         with open('env_config.pkl', 'wb') as f:
             pickle.dump(env_config, f)
-        env=GraphEnv(use_config=True)
+            
+        if self.name != "DQN":
+            env=GraphEnv(use_config=True)
+
         reward_list=[]
        
         for i in range(1): 
@@ -71,7 +75,7 @@ class BenchmarkWrapper:
             elif self.name == "DQN":
                 print("DQN")
                 dqn_Agent=DQNAgent()
-                reward_list = dqn_Agent.run_one_episode(env,reward_list,env_config)
+                reward_list = dqn_Agent.run_one_episode(reward_list,env_config)
         return reward_list
 
 
@@ -83,7 +87,7 @@ def main():
     # results = benchmark2.read_orders()
     # print("Cost",results)
     benchmark3 = BenchmarkWrapper("DQN")
-    DQNAgent()
+    # DQNAgent()
     results = benchmark3.read_orders()
     print("DQN",results)
 
