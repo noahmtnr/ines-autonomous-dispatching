@@ -40,19 +40,19 @@ class BenchmarkWrapper:
             orders=self.file_read()
             for index, row in orders.iterrows():
                 order={"pickup_node":row['pickup_node_id'],"delivery_node":row['delivery_node_id'],"pickup_timestamp":row['pickup_timestamp'] , "delivery_timestamp":row['delivery_timestamp']  }
-                reward_list.append(self.proceed_order_random(row))
+                reward_list.append(self.proceed_order_random(order))
             return reward_list
    
      def proceed_order_random(self, order):
         print(order)
         manhattan_graph = ManhattanGraph(filename='simple', num_hubs=70)
-        pick_up_hub_index = ManhattanGraph.get_hub_index_by_node_index(manhattan_graph,order['pickup_node_id'])
-        delivery_hub_index = ManhattanGraph.get_hub_index_by_node_index(manhattan_graph,order['delivery_node_id'])
+        pick_up_hub_index = ManhattanGraph.get_hub_index_by_node_index(manhattan_graph,order.get('pickup_node'))
+        delivery_hub_index = ManhattanGraph.get_hub_index_by_node_index(manhattan_graph,order.get('delivery_node'))
                 # print(pick_up_hub_index,delivery_hub_index)
         env_config = {'pickup_hub_index':pick_up_hub_index,
                     'delivery_hub_index':delivery_hub_index,
-                    'pickup_timestamp': order['pickup_timestamp'],
-                    'delivery_timestamp': order['delivery_timestamp'] 
+                    'pickup_timestamp': order.get('pickup_timestamp'),
+                    'delivery_timestamp': order.get('delivery_timestamp')
                 }
         reward_list=[]
         with open('env_config.pkl', 'wb') as f:
