@@ -19,7 +19,7 @@ warnings.filterwarnings('ignore')
 class RandomAgent:
 
     def run_one_episode (env,reward_list,env_config):
-        route=[]
+        route = [env_config["pickup_hub_index"]]
         route_timestamps=[]
         env.reset()
         print("reset done")
