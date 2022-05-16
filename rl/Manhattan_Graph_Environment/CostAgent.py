@@ -24,23 +24,23 @@ class CostAgent:
         sum_reward = 0
         sum_travel_time = timedelta(seconds=0)
         sum_distance = 0
-        route = []
+        route = [env_config["pickup_hub_index"]]
         route_timestamps = []
         for i in range(30):
             # visualize current situation
             # env.render()
 
             # look in adjacency matrix for costs from the current position
-            array = env.learn_graph.adjacency_matrix('cost')[env.position].astype(int)
+            array = env.learn_graph.adjacency_matrix('remaining_distance')[env.position].astype(int)
             min = np.amin(array)
-            array = np.where(array==min,sys.maxsize,array)
+            # array = np.where(array==min,sys.maxsize,array)
             
             # get minimal value in array
             #while(action==env.position):
             min_value = np.amin(array)
             print(min_value)
             # if multiple entries have the same value
-            all_indices = np.where(array==min_value)
+            all_indices = np.where(array==min)
             print(f"Alle: {all_indices[0]}")
             action = np.random.choice(all_indices[0])
             print(action)
@@ -50,6 +50,7 @@ class CostAgent:
 
             # select action and show it
             #action = env.action_space[dest_hub]
+            route.append(action)
             print(f"Our destination hub is: {action}")
             state, reward, done, info = env.step(action)
             route.append(action)

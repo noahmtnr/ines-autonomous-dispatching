@@ -68,11 +68,11 @@ class BenchmarkWrapper:
 
 
 def main():
-    benchmark = BenchmarkWrapper("random")
-    results = benchmark.read_orders()
-    print("Random",results)
+    # benchmark = BenchmarkWrapper("random")
+    # results = benchmark.read_orders()
+    # print("Random",results)
     benchmark2 = BenchmarkWrapper("cost")
     results = benchmark2.read_orders()
     print("Cost",results)
 
-# main()
+main()
