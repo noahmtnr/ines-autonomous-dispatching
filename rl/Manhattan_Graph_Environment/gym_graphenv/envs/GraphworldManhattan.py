@@ -154,6 +154,7 @@ class GraphEnv(gym.Env):
         self.learn_graph.add_remaining_distance_layer(current_hub=self.position, distance_matrix=self.distance_matrix)
 
         self.count_hubs = 0
+        self.count_actions = 0
         # old position is current position
         self.old_position = self.start_hub
         # current trip
@@ -260,6 +261,8 @@ class GraphEnv(gym.Env):
 
         self.time += timedelta(seconds=step_duration)
 
+        self.count_actions += 1
+
         reward, done = self.compute_reward(action)
 
         executionTime = (time.time() - startTime)
@@ -271,27 +274,29 @@ class GraphEnv(gym.Env):
     def compute_reward(self, action):
         cost_of_action = self.learn_graph.adjacency_matrix('cost')[self.old_position][action]
         print(self.old_position, "->", action, cost_of_action)
+        done = False
         # if delay is greater than 12 hours (=720 minutes), terminate training episode
         if((self.time-self.deadline).total_seconds()/60 >= 720):
             done = True
+            reward = -(cost_of_action / 1000) - 10000
         # if box is delivered to final hub in time
         if (self.position == self.final_hub and self.time <= self.deadline):
-            print("DELIVERED IN TIME")
+            print(f"DELIVERED IN TIME AFTER {self.count_actions} ACTIONS")
             reward = 1000
             reward -= (cost_of_action / 1000)
             done = True
         # if box is delivered to final hub with delay
         elif(self.position == self.final_hub and (self.time-self.deadline).total_seconds()/60 < 720): #self.time > self.deadline):
             overtime = self.time - self.deadline
-            print(f"DELIVERED WITH DELAY: {overtime}")
+            print(f"DELIVERED AFTER {self.count_actions} ACTIONS WITH DELAY: {overtime}")
             overtime = round(overtime.total_seconds()/60)
             reward = 1000 - overtime
             reward -= (cost_of_action / 1000)
             done = True
         # if box is not delivered to final hub
-        else:
-            reward = -(cost_of_action / 1000) - 100
-            done = False
+        elif(done==False):
+            reward = -(cost_of_action / 1000)
+            #done = False
 
         return reward, done
         
