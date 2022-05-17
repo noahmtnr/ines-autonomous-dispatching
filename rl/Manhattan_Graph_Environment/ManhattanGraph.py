@@ -145,3 +145,8 @@ class ManhattanGraph:
 
     def get_node_index_by_hub_index(self, hub_index: int):
         return self.get_index_by_nodeid(self.get_nodeid_by_hub_index(hub_index))
+    
+    def get_coordinates_of_node(self, node_id): 
+        # manhattangraph = ManhattanGraph(filename='simple', num_hubs=70)
+        nodes = self.inner_graph.nodes()
+        return [nodes[node_id]['x'], nodes[node_id]['y']]

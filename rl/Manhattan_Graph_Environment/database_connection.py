@@ -92,6 +92,7 @@ class DBConnection:
     result = self.mycursor.fetchall()
     executionTime = (time.time() - startTime)
     print('DB: getAvailableTrips() Execution time: ' + str(executionTime) + ' seconds')
+    print("loaded "+ str(len(result)) + " trips")
     return result
 
   def getRouteFromTrip(self,trip_id):
@@ -105,7 +106,7 @@ class DBConnection:
       nodes_list.append(result[0])
       time_list.append(result[1].strftime("%Y-%m-%d %H:%M:%S"))
     executionTime = (time.time() - startTime)
-    print('DB: getRouteFromTrip() Execution time: ' + str(executionTime) + ' seconds')
+    # print('DB: getRouteFromTrip() Execution time: ' + str(executionTime) + ' seconds')
     return nodes_list, time_list
 
 

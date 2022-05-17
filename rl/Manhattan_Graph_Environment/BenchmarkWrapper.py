@@ -1,5 +1,6 @@
 import sys
 from unittest import result
+from DQNAgent import DQNAgent
 sys.path.insert(0,"")
 from RandomAgent import RandomAgent
 from CostAgent import CostAgent
@@ -40,24 +41,30 @@ class BenchmarkWrapper:
             orders=self.file_read()
             for index, row in orders.iterrows():
                 order={"pickup_node":row['pickup_node_id'],"delivery_node":row['delivery_node_id'],"pickup_timestamp":row['pickup_timestamp'] , "delivery_timestamp":row['delivery_timestamp']  }
-                reward_list.append(self.proceed_order_random(row))
+                reward_list.append(self.proceed_order(order))
             return reward_list
    
-     def proceed_order_random(self, order):
+     def proceed_order(self, order):
         print(order)
+        
         manhattan_graph = ManhattanGraph(filename='simple', num_hubs=70)
-        pick_up_hub_index = ManhattanGraph.get_hub_index_by_node_index(manhattan_graph,order['pickup_node_id'])
-        delivery_hub_index = ManhattanGraph.get_hub_index_by_node_index(manhattan_graph,order['delivery_node_id'])
+        pick_up_hub_index = ManhattanGraph.get_hub_index_by_node_index(manhattan_graph,order.get('pickup_node'))
+        delivery_hub_index = ManhattanGraph.get_hub_index_by_node_index(manhattan_graph,order.get('delivery_node'))
                 # print(pick_up_hub_index,delivery_hub_index)
         env_config = {'pickup_hub_index':pick_up_hub_index,
                     'delivery_hub_index':delivery_hub_index,
-                    'pickup_timestamp': order['pickup_timestamp'],
-                    'delivery_timestamp': order['delivery_timestamp'] 
+                    'pickup_timestamp': order.get('pickup_timestamp'),
+                    'delivery_timestamp': order.get('delivery_timestamp')
                 }
-        reward_list=[]
+       
         with open('env_config.pkl', 'wb') as f:
             pickle.dump(env_config, f)
-        env=GraphEnv()
+            
+        if self.name != "DQN":
+            env=GraphEnv(use_config=True)
+
+        reward_list=[]
+       
         for i in range(1): 
             if self.name == "random":
                 print("random")
@@ -65,15 +72,23 @@ class BenchmarkWrapper:
             elif self.name == "cost":
                 print("cost")
                 reward_list=CostAgent.run_one_episode(env,reward_list,env_config)
+            elif self.name == "DQN":
+                print("DQN")
+                dqn_Agent=DQNAgent()
+                reward_list = dqn_Agent.run_one_episode(reward_list,env_config)
         return reward_list
 
 
 def main():
-    benchmark = BenchmarkWrapper("random")
-    results = benchmark.read_orders()
-    print("Random",results)
-    benchmark2 = BenchmarkWrapper("cost")
-    results = benchmark2.read_orders()
-    print("Cost",results)
+    # benchmark = BenchmarkWrapper("random")
+    # results = benchmark.read_orders()
+    # print("Random",results)
+    # benchmark2 = BenchmarkWrapper("cost")
+    # results = benchmark2.read_orders()
+    # print("Cost",results)
+    benchmark3 = BenchmarkWrapper("DQN")
+    # DQNAgent()
+    results = benchmark3.read_orders()
+    print("DQN",results)
 
 main()

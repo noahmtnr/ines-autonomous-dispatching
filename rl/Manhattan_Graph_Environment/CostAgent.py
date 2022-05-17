@@ -24,23 +24,23 @@ class CostAgent:
         sum_reward = 0
         sum_travel_time = timedelta(seconds=0)
         sum_distance = 0
-        route = []
+        route = [env_config["pickup_hub_index"]]
         route_timestamps = []
         for i in range(30):
             # visualize current situation
             # env.render()
 
             # look in adjacency matrix for costs from the current position
-            array = env.learn_graph.adjacency_matrix('cost')[env.position].astype(int)
+            array = env.learn_graph.adjacency_matrix('remaining_distance')[env.position].astype(int)
             min = np.amin(array)
-            array = np.where(array==min,sys.maxsize,array)
+            # array = np.where(array==min,sys.maxsize,array)
             
             # get minimal value in array
             #while(action==env.position):
             min_value = np.amin(array)
             print(min_value)
             # if multiple entries have the same value
-            all_indices = np.where(array==min_value)
+            all_indices = np.where(array==min)
             print(f"Alle: {all_indices[0]}")
             action = np.random.choice(all_indices[0])
             print(action)
@@ -70,7 +70,9 @@ class CostAgent:
                 print("DELIVERY DONE! Distance: ",sum_distance)
                 print("DELIVERY DONE! Hubs: ",number_hubs)
                 print("DELIVERY DONE! unitl deadline: ",time_until_deadline)
+                # if action!=env_config["delivery_hub_index"]:
+                #     raise Exception("DID NOT ARRIVE IN FINAL HUB")
                 break
 
-        reward_list={"pickup_hub":env_config['pickup_hub_index'],"delivery_hub":env_config['delivery_hub_index'],"reward":sum_reward, "hubs":number_hubs, "route":route, "time":str(sum_travel_time), "dist":sum_distance, "time_until_deadline":time_until_deadline, "route_timestamps":route_timestamps}
+        reward_list={"pickup_hub":env_config['pickup_hub_index'],"delivery_hub":env_config['delivery_hub_index'],"reward":sum_reward, "hubs":number_hubs, "route":route, "time":str(sum_travel_time), "dist":sum_distance, "time_until_deadline":time_until_deadline, "timestamps":route_timestamps}
         return reward_list
