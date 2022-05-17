@@ -48,8 +48,8 @@ class ManhattanGraph:
         #     for row in hubs_file.index:    
         #         hubs.append(hubs_file.loc[row])
          
-        self.hubs = random.sample(hubs,num_hubs)
-        #self.hubs = hubs
+        #self.hubs = random.sample(hubs,num_hubs)
+        self.hubs = hubs
         return self.hubs
 
     def setup_trips(self, start_time: datetime):
@@ -140,9 +140,6 @@ class ManhattanGraph:
     def get_nodeid_by_hub_index(self, hub_index: int):
         return self.hubs[hub_index]
 
-    def get_node_by_hub_index(self, hub_index: int):
-        return self.get_node_by_nodeid(self.get_nodeid_by_hub_index(hub_index))
-
     # def get_coordinates_of_node_by_hub_index(self, node_index): 
     #     # manhattangraph = ManhattanGraph(filename='simple', num_hubs=70)
     #     nodes = self.inner_graph.nodes()
@@ -150,4 +147,20 @@ class ManhattanGraph:
 
     #     return [nodes[node_id]['x'], nodes[node_id]['y']]       
 
+    def get_hub_index_by_nodeid(self, nodeid: int):
+        return self.hubs.index(nodeid)
 
+    def get_hub_index_by_node_index(self, node_index: int):
+        return self.get_hub_index_by_nodeid(self.get_nodeid_by_index(node_index))
+
+    def get_nodeid_by_hub_index(self, hub_index: int):
+        return self.hubs[hub_index]
+
+    def get_node_by_hub_index(self, hub_index: int):
+        return self.get_node_by_nodeid(self.get_nodeid_by_hub_index(hub_index))
+
+    def get_node_index_by_hub_index(self, hub_index: int):
+        return self.get_index_by_nodeid(self.get_nodeid_by_hub_index(hub_index))
+    
+    def get_coordinates_of_node(self, nodeid: int): 
+        return [ self.inner_graph.nodes[nodeid]['y'], self.inner_graph.nodes[nodeid]['x']]
