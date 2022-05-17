@@ -9,13 +9,14 @@ from datetime import datetime, timedelta
 from folium import plugins, folium
 sys.path.insert(0,"")
 from rl.Manhattan_Graph_Environment.ManhattanGraph import ManhattanGraph
-
+from rl.Manhattan_Graph_Environment.Hubs_Graph  import HubsGraph
 from preprocessing.data_preprocessing import DataPreProcessing
 from flask import Flask, jsonify, request, render_template, redirect
 import pandas as pd
 import mysql.connector
 from LearnGraph import LearnGraph
 import json
+import BenchmarkWrapper
 
 from datetime import datetime
 # creating a Flask app
@@ -115,17 +116,18 @@ def addOrder():
     print(pickup_longitude, pickup_latitude, dropoff_longitude, dropoff_latitude)
     pickup_datetime = datetime.strptime(data.get('start_date') or "", "%Y-%m-%d %H:%M:%S")
     dropoff_datetime = datetime.strptime(data.get('delivery_date') or "", "%Y-%m-%d %H:%M:%S")
-    manhattangraph = ManhattanGraph(filename='simple', num_hubs=70)
-    learngraph = LearnGraph(70, manhattangraph, 5)
+    hubsgraph = HubsGraph(filename='learn', num_hubs=70)
+    
     # start_node = DataPreProcessing.get_node_index_by_coordinates(pickup_longitude, pickup_latitude)
     # final_node = DataPreProcessing.get_node_index_by_coordinates(dropoff_longitude, dropoff_latitude)
-    start_node = learngraph.getNearestNodeId(pickup_longitude,pickup_latitude)
-    final_node = learngraph.getNearestNodeId(dropoff_longitude,dropoff_latitude)
+    start_node = hubsgraph.getNearestNode(pickup_longitude,pickup_latitude)
+    final_node = hubsgraph.getNearestNode( dropoff_longitude, dropoff_latitude)
     
     print(start_node, final_node)
     order={"pickup_node":start_node,"delivery_node":final_node,"pickup_timestamp":pickup_datetime , "delivery_timestamp":dropoff_datetime}
 
-    result = proceed_order_random(order)
+    result = BenchmarkWrapper.proceed_order_random(order)
+    print(result)
     lines = buildLines(result["route"],result["timestamps"])
     return buildFolium(lines)
 

@@ -2,6 +2,7 @@
 <graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
   <key id="d1" for="node" attr.name="y" attr.type="string" />
   <key id="d0" for="node" attr.name="x" attr.type="string" />
+  <key id="d2" for="graph" attr.name="crs" attr.type="string" />
   <graph edgedefault="directed">
     <node id="0">
       <data key="d0">-73.9760571</data>
@@ -5183,5 +5184,6 @@
     <edge source="69" target="67" id="0" />
     <edge source="69" target="68" id="0" />
     <edge source="69" target="69" id="0" />
+    <data key="d2">epsg:4326</data>
   </graph>
 </graphml>

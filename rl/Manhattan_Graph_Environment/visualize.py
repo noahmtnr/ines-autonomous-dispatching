@@ -66,7 +66,6 @@ def preprocess_input(inputs):
 
         
 
-
 preprocess_input(inputs)
 print(inputs)
 input_example=inputs[0]
