@@ -33,7 +33,7 @@ class BenchmarkWrapper:
             file_path='data/'+first_arg
             orders = pd.read_csv(file_path, nrows=2)
         else:
-            orders = pd.read_csv('data/random_orders.csv', nrows=2)
+            orders = pd.read_csv('/Users/noah/Desktop/Repositories/ines-autonomous-dispatching/data/random_orders.csv', nrows=2)
         return orders
 
      def read_orders(self):
@@ -48,11 +48,12 @@ class BenchmarkWrapper:
         print(order)
         
         manhattan_graph = ManhattanGraph(filename='simple', num_hubs=70)
-        pick_up_hub_index = ManhattanGraph.get_hub_index_by_node_index(manhattan_graph,order.get('pickup_node'))
-        delivery_hub_index = ManhattanGraph.get_hub_index_by_node_index(manhattan_graph,order.get('delivery_node'))
+        #TODO in order to work also with random_orders.csv
+        #pick_up_hub_index = ManhattanGraph.get_hub_index_by_node_index(manhattan_graph,order.get('pickup_node'))
+        #delivery_hub_index = ManhattanGraph.get_hub_index_by_node_index(manhattan_graph,order.get('delivery_node'))
                 # print(pick_up_hub_index,delivery_hub_index)
-        env_config = {'pickup_hub_index':pick_up_hub_index,
-                    'delivery_hub_index':delivery_hub_index,
+        env_config = {'pickup_hub_index':order.get('pickup_node'),
+                    'delivery_hub_index':order.get('delivery_node'),
                     'pickup_timestamp': order.get('pickup_timestamp'),
                     'delivery_timestamp': order.get('delivery_timestamp')
                 }
@@ -91,4 +92,4 @@ def main():
     results = benchmark3.read_orders()
     print("random",results)
 
-main()
+# main()

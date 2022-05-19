@@ -231,6 +231,7 @@ class DataPreProcessing:
         graph = ox.io.load_graphml("data/graph/simple.graphml")
         node_id = ox.distance.nearest_nodes(graph, longitude, latitude)
         return list(graph.nodes()).index(node_id)
-def main():
-    print(DataPreProcessing.get_coordinates_of_node(42434948))
-main()
+
+    def get_node_index_by_id(id):
+        x, y = DataPreProcessing.get_coordinates_of_node(id)
+        return DataPreProcessing.get_node_index_by_coordinates(x, y)
