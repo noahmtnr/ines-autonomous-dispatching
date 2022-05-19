@@ -20,7 +20,7 @@ class LearnGraph:
         print(self.manhattan_graph.get_node_by_index(5))
         print(self.G.nodes()[5])
          
-        ox.save_graphml(self.G, filepath="./data/graph/learn.graphml")
+        #ox.save_graphml(self.G, filepath="./data/graph/learn.graphml")
 
     def setup(self):
         dict_x = {}
