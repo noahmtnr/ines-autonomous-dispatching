@@ -16,14 +16,14 @@ import pandas as pd
 import mysql.connector
 from LearnGraph import LearnGraph
 import json
-import BenchmarkWrapper
+from BenchmarkWrapper import BenchmarkWrapper
 
 from datetime import datetime
 # creating a Flask app
 mydb = mysql.connector.connect(
 host="localhost",
-user="Denisa",
-password="Denisa_1700",
+user="root",
+password="rootroot",
 database="mannheimprojekt",
 auth_plugin='mysql_native_password')
 mycursor = mydb.cursor()
@@ -113,9 +113,8 @@ def addOrder():
     pickup_latitude = double(data.get('pickup_lat') or 0)
     dropoff_longitude = double(data.get('dropoff_long') or 0)
     dropoff_latitude = double(data.get('dropoff_lat') or 0)
-    print(pickup_longitude, pickup_latitude, dropoff_longitude, dropoff_latitude)
-    pickup_datetime = datetime.strptime(data.get('start_date') or "", "%Y-%m-%d %H:%M:%S")
-    dropoff_datetime = datetime.strptime(data.get('delivery_date') or "", "%Y-%m-%d %H:%M:%S")
+    pickup_datetime = data.get('start_date')
+    dropoff_datetime = data.get('delivery_date')
     hubsgraph = HubsGraph(filename='learn', num_hubs=70)
     
     # start_node = DataPreProcessing.get_node_index_by_coordinates(pickup_longitude, pickup_latitude)
@@ -123,13 +122,12 @@ def addOrder():
     start_node = hubsgraph.getNearestNode(pickup_longitude,pickup_latitude)
     final_node = hubsgraph.getNearestNode( dropoff_longitude, dropoff_latitude)
     
-    print(start_node, final_node)
     order={"pickup_node":start_node,"delivery_node":final_node,"pickup_timestamp":pickup_datetime , "delivery_timestamp":dropoff_datetime}
-
-    result = BenchmarkWrapper.proceed_order_random(order)
-    print(result)
-    lines = buildLines(result["route"],result["timestamps"])
-    return buildFolium(lines)
+    benchmark = BenchmarkWrapper("random")
+    result = benchmark.proceed_order(order)
+    
+    #lines = buildLines(result["route"],result["timestamps"])
+    return result
 
 def buildFolium(lines):
   graph = ox.io.load_graphml("data/graph/simple.graphml")
