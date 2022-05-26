@@ -33,6 +33,7 @@ trainer_config = DEFAULT_CONFIG.copy()
 # trainer_config["gamma"] = 0.95
 # trainer_config["n_step"] = 10
 trainer_config["framework"] = "torch"
+trainer_config["callbacks"] = CustomCallbacks
 #trainer_config["num_gpus"] = int(os.environ.get("RLLIB_NUM_GPUS", "0"))
 
 
