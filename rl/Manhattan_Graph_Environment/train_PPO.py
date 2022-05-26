@@ -2,6 +2,8 @@ import numpy as np
 import pandas as pd
 import json
 import os
+#import os
+os.environ['KMP_DUPLICATE_LIB_OK']='True'
 import shutil
 import sys
 import gym
@@ -16,7 +18,7 @@ from ManhattanGraph import ManhattanGraph
 from gym_graphenv.envs.GraphworldManhattan import GraphEnv
 
 wandb.login(key="93aab2bcc48447dd2e8f74124d0258be2bf93859")
-wandb.init(project="Manhattan-env-test10", entity="hitchhike")
+wandb.init(project="Manhattan-ppo", entity="hitchhike")
 
 env=GraphEnv()
 

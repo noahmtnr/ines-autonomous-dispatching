@@ -10,7 +10,7 @@ class DBConnection:
     self.mydb = mysql.connector.connect(
       host="localhost",
       user="root",
-      password="rootroot",
+      password="root",
       database="mannheimprojekt",
       auth_plugin='mysql_native_password'
     )
