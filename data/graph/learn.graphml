@@ -1,5 +1,4 @@
 <?xml version='1.0' encoding='utf-8'?>
-<<<<<<< HEAD
 <graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
   <key id="d1" for="node" attr.name="y" attr.type="string" />
   <key id="d0" for="node" attr.name="x" attr.type="string" />
@@ -5188,7 +5187,6 @@
     <data key="d2">epsg:4326</data>
   </graph>
 </graphml>
-=======
 <graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd"><graph edgedefault="directed"><node id="0"/>
 <node id="1"/>
 <node id="2"/>
@@ -10160,4 +10158,3 @@
 <edge source="69" target="68" id="0"/>
 <edge source="69" target="69" id="0"/>
 </graph></graphml>
->>>>>>> main
