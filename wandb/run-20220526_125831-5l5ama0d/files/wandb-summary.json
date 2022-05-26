@@ -1,0 +1,1 @@
+{"n_trained_episodes": 24, "mean_reward": -6366.368550416667, "own_mean": 39.041666666666664, "wait_mean": 0.4583333333333333, "share_mean": 0.4583333333333333, "share_of_own_mean": 0.9676717468440867, "share_of_wair_mean": 0.010657639514190602, "share_of_share_mean": 0.021670613641722642, "_timestamp": 1653563220, "_runtime": 509, "_step": 0, "_wandb": {"runtime": 508}}
