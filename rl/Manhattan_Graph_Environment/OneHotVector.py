@@ -4,6 +4,7 @@ import numpy as np
 class OneHotVector(gym.Space):
     """
     {0,...,1,...,0}
+
     Example usage:
     self.observation_space = OneHotVector(size=4)
     """

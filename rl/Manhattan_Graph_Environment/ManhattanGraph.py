@@ -12,23 +12,21 @@ class ManhattanGraph:
         self.inner_graph = ox.add_edge_speeds(self.inner_graph,fallback=30)
         self.inner_graph = ox.add_edge_travel_times(self.inner_graph)
         ox.utils_graph.remove_isolated_nodes(self.inner_graph)
-        fin_hub = random.sample(self.nodes(),1)
-        self.generate_hubs(fin_hub, num_hubs)
+        self.generate_hubs(num_hubs)
 
 
-    def generate_hubs(self, fin_hub, num_hubs: int = 70):#, opt: int = 0):
+    def generate_hubs(self, num_hubs: int = 70):#, opt: int = 0):
         # the code below is for loading the hubs specified in data/trips/manual_hubs.csv
         """Generates random bubs within the graph
 
         Args:
-            fin_hub (int): index_id of final hub
             num_hubs (int, optional): Number of hubs to create. Defaults to 5.
 
         Returns:
             self.hubs(list): List of hubs in graph
         """
         # the code below is for mapping the pre-defined hubs (customer/store/trips) to nodes in the graph
-        hubs_file = pd.read_csv("data/hubs/new_hubs.CSV")
+        hubs_file = pd.read_csv("data/hubs/new_hubs.csv")
         hubs = []
         i=0
         for row in hubs_file.index:    
@@ -50,6 +48,7 @@ class ManhattanGraph:
          
         #self.hubs = random.sample(hubs,num_hubs)
         self.hubs = hubs
+        # pd.DataFrame(self.hubs).to_csv("hub_nodeids.csv")
         return self.hubs
 
     def setup_trips(self, start_time: datetime):
@@ -60,10 +59,9 @@ class ManhattanGraph:
         """
         
         #trips for simple graph, only the first 5000 rows
-        all_trips = pd.read_csv('data/trips/preprocessed_trips.csv', nrows=100)
-        print(all_trips.head())
-        #self.trips = self.prefilter_trips(all_trips, start_time).reset_index(drop=True)
-        self.trips =  all_trips
+        all_trips = pd.read_csv('data/trips/preprocessed_trips.csv')
+        self.trips = self.prefilter_trips(all_trips, start_time).reset_index(drop=True)
+
         #compute trip length and add to csv
         #generate random passenger count between 1 and 4 and add to csv
         route_length_column=[]
@@ -162,5 +160,7 @@ class ManhattanGraph:
     def get_node_index_by_hub_index(self, hub_index: int):
         return self.get_index_by_nodeid(self.get_nodeid_by_hub_index(hub_index))
     
-    def get_coordinates_of_node(self, nodeid: int): 
-        return [ self.inner_graph.nodes[nodeid]['y'], self.inner_graph.nodes[nodeid]['x']]
+    def get_coordinates_of_node(self, node_id): 
+        # manhattangraph = ManhattanGraph(filename='simple', num_hubs=70)
+        nodes = self.inner_graph.nodes()
+        return [nodes[node_id]['x'], nodes[node_id]['y']]

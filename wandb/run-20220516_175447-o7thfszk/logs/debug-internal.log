@@ -1,0 +1,187 @@
+2022-05-16 17:54:50,540 INFO    MainThread:7291 [internal.py:wandb_internal():90] W&B internal server running at pid: 7291, started at: 2022-05-16 17:54:50.540530
+2022-05-16 17:54:50,543 INFO    WriterThread:7291 [datastore.py:open_for_write():75] open: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220516_175447-o7thfszk/run-o7thfszk.wandb
+2022-05-16 17:54:50,545 DEBUG   SenderThread:7291 [sender.py:send():232] send: header
+2022-05-16 17:54:50,545 DEBUG   SenderThread:7291 [sender.py:send():232] send: run
+2022-05-16 17:54:50,803 DEBUG   HandlerThread:7291 [handler.py:handle_request():141] handle_request: check_version
+2022-05-16 17:54:50,804 INFO    SenderThread:7291 [dir_watcher.py:__init__():197] watching files in: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220516_175447-o7thfszk/files
+2022-05-16 17:54:50,804 INFO    SenderThread:7291 [sender.py:_start_run_threads():811] run started: o7thfszk with start time 1652712887
+2022-05-16 17:54:50,804 DEBUG   SenderThread:7291 [sender.py:send():232] send: summary
+2022-05-16 17:54:50,804 INFO    SenderThread:7291 [sender.py:_save_file():948] saving file wandb-summary.json with policy end
+2022-05-16 17:54:50,805 DEBUG   SenderThread:7291 [sender.py:send_request():246] send_request: check_version
+2022-05-16 17:54:50,891 DEBUG   HandlerThread:7291 [handler.py:handle_request():141] handle_request: run_start
+2022-05-16 17:54:52,427 INFO    Thread-7  :7291 [dir_watcher.py:_on_file_created():244] file/dir created: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220516_175447-o7thfszk/files/wandb-summary.json
+2022-05-16 17:54:55,724 DEBUG   HandlerThread:7291 [meta.py:__init__():35] meta init
+2022-05-16 17:54:55,725 DEBUG   HandlerThread:7291 [meta.py:__init__():49] meta init done
+2022-05-16 17:54:55,725 DEBUG   HandlerThread:7291 [meta.py:probe():209] probe
+2022-05-16 17:54:55,728 DEBUG   HandlerThread:7291 [meta.py:_setup_git():199] setup git
+2022-05-16 17:54:55,794 DEBUG   HandlerThread:7291 [meta.py:_setup_git():206] setup git done
+2022-05-16 17:54:55,795 DEBUG   HandlerThread:7291 [meta.py:_save_pip():53] save pip
+2022-05-16 17:54:55,797 DEBUG   HandlerThread:7291 [meta.py:_save_pip():67] save pip done
+2022-05-16 17:54:55,798 DEBUG   HandlerThread:7291 [meta.py:_save_conda():74] save conda
+2022-05-16 17:54:56,449 INFO    Thread-7  :7291 [dir_watcher.py:_on_file_created():244] file/dir created: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220516_175447-o7thfszk/files/output.log
+2022-05-16 17:54:56,450 INFO    Thread-7  :7291 [dir_watcher.py:_on_file_created():244] file/dir created: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220516_175447-o7thfszk/files/requirements.txt
+2022-05-16 17:54:56,451 INFO    Thread-7  :7291 [dir_watcher.py:_on_file_created():244] file/dir created: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220516_175447-o7thfszk/files/conda-environment.yaml
+2022-05-16 17:55:00,463 INFO    Thread-7  :7291 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220516_175447-o7thfszk/files/output.log
+2022-05-16 17:55:02,471 INFO    Thread-7  :7291 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220516_175447-o7thfszk/files/output.log
+2022-05-16 17:55:04,483 INFO    Thread-7  :7291 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220516_175447-o7thfszk/files/output.log
+2022-05-16 17:55:06,499 INFO    Thread-7  :7291 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220516_175447-o7thfszk/files/output.log
+2022-05-16 17:55:18,552 INFO    Thread-7  :7291 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220516_175447-o7thfszk/files/output.log
+2022-05-16 17:55:27,576 DEBUG   HandlerThread:7291 [meta.py:_save_conda():84] save conda done
+2022-05-16 17:55:27,577 DEBUG   HandlerThread:7291 [meta.py:probe():247] probe done
+2022-05-16 17:55:27,581 DEBUG   HandlerThread:7291 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-16 17:55:27,582 DEBUG   HandlerThread:7291 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-16 17:55:27,583 DEBUG   SenderThread:7291 [sender.py:send_request():246] send_request: stop_status
+2022-05-16 17:55:27,589 INFO    Thread-7  :7291 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220516_175447-o7thfszk/files/conda-environment.yaml
+2022-05-16 17:55:27,589 INFO    Thread-7  :7291 [dir_watcher.py:_on_file_created():244] file/dir created: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220516_175447-o7thfszk/files/wandb-metadata.json
+2022-05-16 17:55:27,775 DEBUG   SenderThread:7291 [sender.py:send():232] send: telemetry
+2022-05-16 17:55:27,776 DEBUG   SenderThread:7291 [sender.py:send_request():246] send_request: stop_status
+2022-05-16 17:55:27,975 DEBUG   SenderThread:7291 [sender.py:send():232] send: stats
+2022-05-16 17:55:27,976 DEBUG   SenderThread:7291 [sender.py:send():232] send: files
+2022-05-16 17:55:27,977 INFO    SenderThread:7291 [sender.py:_save_file():948] saving file wandb-metadata.json with policy now
+2022-05-16 17:55:28,721 INFO    Thread-11 :7291 [upload_job.py:push():132] Uploaded file /var/folders/rx/9zbs_8p92hlb0sgdws1plkfm0000gn/T/tmp723_w_65wandb/2lnkdp75-wandb-metadata.json
+2022-05-16 17:55:38,962 DEBUG   HandlerThread:7291 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-16 17:55:38,963 DEBUG   SenderThread:7291 [sender.py:send_request():246] send_request: stop_status
+2022-05-16 17:55:39,639 INFO    Thread-7  :7291 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220516_175447-o7thfszk/files/output.log
+2022-05-16 17:55:41,684 INFO    Thread-7  :7291 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220516_175447-o7thfszk/files/output.log
+2022-05-16 17:55:52,735 INFO    Thread-7  :7291 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220516_175447-o7thfszk/files/config.yaml
+2022-05-16 17:55:54,250 DEBUG   HandlerThread:7291 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-16 17:55:54,250 DEBUG   SenderThread:7291 [sender.py:send_request():246] send_request: stop_status
+2022-05-16 17:55:55,640 DEBUG   SenderThread:7291 [sender.py:send():232] send: stats
+2022-05-16 17:56:07,795 INFO    Thread-7  :7291 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220516_175447-o7thfszk/files/output.log
+2022-05-16 17:56:09,441 DEBUG   HandlerThread:7291 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-16 17:56:09,442 DEBUG   SenderThread:7291 [sender.py:send_request():246] send_request: stop_status
+2022-05-16 17:56:09,801 INFO    Thread-7  :7291 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220516_175447-o7thfszk/files/output.log
+2022-05-16 17:56:15,852 INFO    Thread-7  :7291 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220516_175447-o7thfszk/files/output.log
+2022-05-16 17:56:24,661 DEBUG   HandlerThread:7291 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-16 17:56:24,661 DEBUG   SenderThread:7291 [sender.py:send_request():246] send_request: stop_status
+2022-05-16 17:56:26,592 DEBUG   SenderThread:7291 [sender.py:send():232] send: stats
+2022-05-16 17:56:39,851 DEBUG   HandlerThread:7291 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-16 17:56:39,852 DEBUG   SenderThread:7291 [sender.py:send_request():246] send_request: stop_status
+2022-05-16 17:56:55,085 DEBUG   HandlerThread:7291 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-16 17:56:55,086 DEBUG   SenderThread:7291 [sender.py:send_request():246] send_request: stop_status
+2022-05-16 17:56:57,460 DEBUG   SenderThread:7291 [sender.py:send():232] send: stats
+2022-05-16 17:57:10,275 DEBUG   HandlerThread:7291 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-16 17:57:10,277 DEBUG   SenderThread:7291 [sender.py:send_request():246] send_request: stop_status
+2022-05-16 17:57:24,616 DEBUG   SenderThread:7291 [sender.py:send():232] send: telemetry
+2022-05-16 17:57:26,064 INFO    Thread-7  :7291 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220516_175447-o7thfszk/files/output.log
+2022-05-16 17:57:26,766 DEBUG   HandlerThread:7291 [handler.py:handle_request():141] handle_request: poll_exit
+2022-05-16 17:57:26,766 DEBUG   SenderThread:7291 [sender.py:send():232] send: exit
+2022-05-16 17:57:26,766 INFO    SenderThread:7291 [sender.py:send_exit():368] handling exit code: 1
+2022-05-16 17:57:26,769 INFO    SenderThread:7291 [sender.py:send_exit():370] handling runtime: 155
+2022-05-16 17:57:26,773 INFO    SenderThread:7291 [sender.py:_save_file():948] saving file wandb-summary.json with policy end
+2022-05-16 17:57:26,773 INFO    SenderThread:7291 [sender.py:send_exit():376] send defer
+2022-05-16 17:57:26,774 DEBUG   SenderThread:7291 [sender.py:send_request():246] send_request: poll_exit
+2022-05-16 17:57:26,781 DEBUG   HandlerThread:7291 [handler.py:handle_request():141] handle_request: defer
+2022-05-16 17:57:26,782 INFO    HandlerThread:7291 [handler.py:handle_request_defer():164] handle defer: 0
+2022-05-16 17:57:26,783 DEBUG   SenderThread:7291 [sender.py:send_request():246] send_request: defer
+2022-05-16 17:57:26,783 INFO    SenderThread:7291 [sender.py:send_request_defer():385] handle sender defer: 0
+2022-05-16 17:57:26,783 INFO    SenderThread:7291 [sender.py:transition_state():389] send defer: 1
+2022-05-16 17:57:26,783 DEBUG   HandlerThread:7291 [handler.py:handle_request():141] handle_request: defer
+2022-05-16 17:57:26,784 INFO    HandlerThread:7291 [handler.py:handle_request_defer():164] handle defer: 1
+2022-05-16 17:57:26,851 DEBUG   SenderThread:7291 [sender.py:send_request():246] send_request: defer
+2022-05-16 17:57:26,852 INFO    SenderThread:7291 [sender.py:send_request_defer():385] handle sender defer: 1
+2022-05-16 17:57:26,853 INFO    SenderThread:7291 [sender.py:transition_state():389] send defer: 2
+2022-05-16 17:57:26,853 DEBUG   SenderThread:7291 [sender.py:send():232] send: stats
+2022-05-16 17:57:26,855 DEBUG   HandlerThread:7291 [handler.py:handle_request():141] handle_request: defer
+2022-05-16 17:57:26,855 INFO    HandlerThread:7291 [handler.py:handle_request_defer():164] handle defer: 2
+2022-05-16 17:57:26,855 DEBUG   SenderThread:7291 [sender.py:send_request():246] send_request: defer
+2022-05-16 17:57:26,855 INFO    SenderThread:7291 [sender.py:send_request_defer():385] handle sender defer: 2
+2022-05-16 17:57:26,856 INFO    SenderThread:7291 [sender.py:transition_state():389] send defer: 3
+2022-05-16 17:57:26,856 DEBUG   HandlerThread:7291 [handler.py:handle_request():141] handle_request: defer
+2022-05-16 17:57:26,857 INFO    HandlerThread:7291 [handler.py:handle_request_defer():164] handle defer: 3
+2022-05-16 17:57:26,857 DEBUG   SenderThread:7291 [sender.py:send_request():246] send_request: defer
+2022-05-16 17:57:26,857 INFO    SenderThread:7291 [sender.py:send_request_defer():385] handle sender defer: 3
+2022-05-16 17:57:26,857 INFO    SenderThread:7291 [sender.py:transition_state():389] send defer: 4
+2022-05-16 17:57:26,858 DEBUG   HandlerThread:7291 [handler.py:handle_request():141] handle_request: defer
+2022-05-16 17:57:26,858 INFO    HandlerThread:7291 [handler.py:handle_request_defer():164] handle defer: 4
+2022-05-16 17:57:26,858 DEBUG   SenderThread:7291 [sender.py:send():232] send: summary
+2022-05-16 17:57:26,859 INFO    SenderThread:7291 [sender.py:_save_file():948] saving file wandb-summary.json with policy end
+2022-05-16 17:57:26,859 DEBUG   SenderThread:7291 [sender.py:send_request():246] send_request: defer
+2022-05-16 17:57:26,860 INFO    SenderThread:7291 [sender.py:send_request_defer():385] handle sender defer: 4
+2022-05-16 17:57:26,860 INFO    SenderThread:7291 [sender.py:transition_state():389] send defer: 5
+2022-05-16 17:57:26,860 DEBUG   HandlerThread:7291 [handler.py:handle_request():141] handle_request: defer
+2022-05-16 17:57:26,861 INFO    HandlerThread:7291 [handler.py:handle_request_defer():164] handle defer: 5
+2022-05-16 17:57:26,862 DEBUG   SenderThread:7291 [sender.py:send_request():246] send_request: defer
+2022-05-16 17:57:26,862 INFO    SenderThread:7291 [sender.py:send_request_defer():385] handle sender defer: 5
+2022-05-16 17:57:26,887 DEBUG   HandlerThread:7291 [handler.py:handle_request():141] handle_request: poll_exit
+2022-05-16 17:57:27,070 INFO    Thread-7  :7291 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220516_175447-o7thfszk/files/wandb-summary.json
+2022-05-16 17:57:27,070 INFO    Thread-7  :7291 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220516_175447-o7thfszk/files/output.log
+2022-05-16 17:57:27,126 INFO    SenderThread:7291 [sender.py:transition_state():389] send defer: 6
+2022-05-16 17:57:27,126 DEBUG   SenderThread:7291 [sender.py:send_request():246] send_request: poll_exit
+2022-05-16 17:57:27,126 DEBUG   HandlerThread:7291 [handler.py:handle_request():141] handle_request: defer
+2022-05-16 17:57:27,127 INFO    HandlerThread:7291 [handler.py:handle_request_defer():164] handle defer: 6
+2022-05-16 17:57:27,127 DEBUG   SenderThread:7291 [sender.py:send_request():246] send_request: defer
+2022-05-16 17:57:27,127 INFO    SenderThread:7291 [sender.py:send_request_defer():385] handle sender defer: 6
+2022-05-16 17:57:27,127 INFO    SenderThread:7291 [dir_watcher.py:finish():312] shutting down directory watcher
+2022-05-16 17:57:27,228 DEBUG   HandlerThread:7291 [handler.py:handle_request():141] handle_request: poll_exit
+2022-05-16 17:57:28,073 INFO    Thread-7  :7291 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220516_175447-o7thfszk/files/config.yaml
+2022-05-16 17:57:28,074 INFO    SenderThread:7291 [dir_watcher.py:finish():342] scan: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220516_175447-o7thfszk/files
+2022-05-16 17:57:28,074 INFO    SenderThread:7291 [dir_watcher.py:finish():356] scan save: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220516_175447-o7thfszk/files/requirements.txt requirements.txt
+2022-05-16 17:57:28,075 INFO    SenderThread:7291 [dir_watcher.py:finish():356] scan save: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220516_175447-o7thfszk/files/output.log output.log
+2022-05-16 17:57:28,075 INFO    SenderThread:7291 [dir_watcher.py:finish():356] scan save: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220516_175447-o7thfszk/files/config.yaml config.yaml
+2022-05-16 17:57:28,075 INFO    SenderThread:7291 [dir_watcher.py:finish():356] scan save: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220516_175447-o7thfszk/files/wandb-summary.json wandb-summary.json
+2022-05-16 17:57:28,075 INFO    SenderThread:7291 [dir_watcher.py:finish():356] scan save: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220516_175447-o7thfszk/files/conda-environment.yaml conda-environment.yaml
+2022-05-16 17:57:28,075 INFO    SenderThread:7291 [dir_watcher.py:finish():356] scan save: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220516_175447-o7thfszk/files/wandb-metadata.json wandb-metadata.json
+2022-05-16 17:57:28,075 INFO    SenderThread:7291 [sender.py:transition_state():389] send defer: 7
+2022-05-16 17:57:28,076 DEBUG   SenderThread:7291 [sender.py:send_request():246] send_request: poll_exit
+2022-05-16 17:57:28,081 DEBUG   HandlerThread:7291 [handler.py:handle_request():141] handle_request: defer
+2022-05-16 17:57:28,081 INFO    HandlerThread:7291 [handler.py:handle_request_defer():164] handle defer: 7
+2022-05-16 17:57:28,082 DEBUG   SenderThread:7291 [sender.py:send_request():246] send_request: defer
+2022-05-16 17:57:28,082 INFO    SenderThread:7291 [sender.py:send_request_defer():385] handle sender defer: 7
+2022-05-16 17:57:28,082 INFO    SenderThread:7291 [file_pusher.py:finish():145] shutting down file pusher
+2022-05-16 17:57:28,186 DEBUG   HandlerThread:7291 [handler.py:handle_request():141] handle_request: poll_exit
+2022-05-16 17:57:28,187 DEBUG   SenderThread:7291 [sender.py:send_request():246] send_request: poll_exit
+2022-05-16 17:57:28,291 DEBUG   HandlerThread:7291 [handler.py:handle_request():141] handle_request: poll_exit
+2022-05-16 17:57:28,291 DEBUG   SenderThread:7291 [sender.py:send_request():246] send_request: poll_exit
+2022-05-16 17:57:28,394 DEBUG   HandlerThread:7291 [handler.py:handle_request():141] handle_request: poll_exit
+2022-05-16 17:57:28,394 DEBUG   SenderThread:7291 [sender.py:send_request():246] send_request: poll_exit
+2022-05-16 17:57:28,497 DEBUG   HandlerThread:7291 [handler.py:handle_request():141] handle_request: poll_exit
+2022-05-16 17:57:28,497 DEBUG   SenderThread:7291 [sender.py:send_request():246] send_request: poll_exit
+2022-05-16 17:57:28,603 DEBUG   HandlerThread:7291 [handler.py:handle_request():141] handle_request: poll_exit
+2022-05-16 17:57:28,603 DEBUG   SenderThread:7291 [sender.py:send_request():246] send_request: poll_exit
+2022-05-16 17:57:28,708 DEBUG   HandlerThread:7291 [handler.py:handle_request():141] handle_request: poll_exit
+2022-05-16 17:57:28,708 DEBUG   SenderThread:7291 [sender.py:send_request():246] send_request: poll_exit
+2022-05-16 17:57:28,811 DEBUG   HandlerThread:7291 [handler.py:handle_request():141] handle_request: poll_exit
+2022-05-16 17:57:28,811 DEBUG   SenderThread:7291 [sender.py:send_request():246] send_request: poll_exit
+2022-05-16 17:57:28,905 INFO    Thread-15 :7291 [upload_job.py:push():132] Uploaded file /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220516_175447-o7thfszk/files/wandb-summary.json
+2022-05-16 17:57:28,910 INFO    Thread-16 :7291 [upload_job.py:push():132] Uploaded file /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220516_175447-o7thfszk/files/conda-environment.yaml
+2022-05-16 17:57:28,912 INFO    Thread-13 :7291 [upload_job.py:push():132] Uploaded file /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220516_175447-o7thfszk/files/output.log
+2022-05-16 17:57:28,915 INFO    Thread-14 :7291 [upload_job.py:push():132] Uploaded file /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220516_175447-o7thfszk/files/config.yaml
+2022-05-16 17:57:28,917 DEBUG   HandlerThread:7291 [handler.py:handle_request():141] handle_request: poll_exit
+2022-05-16 17:57:28,917 DEBUG   SenderThread:7291 [sender.py:send_request():246] send_request: poll_exit
+2022-05-16 17:57:28,931 INFO    Thread-12 :7291 [upload_job.py:push():132] Uploaded file /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220516_175447-o7thfszk/files/requirements.txt
+2022-05-16 17:57:29,023 DEBUG   HandlerThread:7291 [handler.py:handle_request():141] handle_request: poll_exit
+2022-05-16 17:57:29,024 DEBUG   SenderThread:7291 [sender.py:send_request():246] send_request: poll_exit
+2022-05-16 17:57:29,131 DEBUG   HandlerThread:7291 [handler.py:handle_request():141] handle_request: poll_exit
+2022-05-16 17:57:29,131 DEBUG   SenderThread:7291 [sender.py:send_request():246] send_request: poll_exit
+2022-05-16 17:57:29,135 INFO    Thread-6  :7291 [sender.py:transition_state():389] send defer: 8
+2022-05-16 17:57:29,136 DEBUG   HandlerThread:7291 [handler.py:handle_request():141] handle_request: defer
+2022-05-16 17:57:29,136 INFO    HandlerThread:7291 [handler.py:handle_request_defer():164] handle defer: 8
+2022-05-16 17:57:29,136 DEBUG   SenderThread:7291 [sender.py:send_request():246] send_request: defer
+2022-05-16 17:57:29,136 INFO    SenderThread:7291 [sender.py:send_request_defer():385] handle sender defer: 8
+2022-05-16 17:57:29,236 DEBUG   HandlerThread:7291 [handler.py:handle_request():141] handle_request: poll_exit
+2022-05-16 17:57:29,746 INFO    SenderThread:7291 [sender.py:transition_state():389] send defer: 9
+2022-05-16 17:57:29,746 DEBUG   SenderThread:7291 [sender.py:send_request():246] send_request: poll_exit
+2022-05-16 17:57:29,747 DEBUG   HandlerThread:7291 [handler.py:handle_request():141] handle_request: defer
+2022-05-16 17:57:29,747 INFO    HandlerThread:7291 [handler.py:handle_request_defer():164] handle defer: 9
+2022-05-16 17:57:29,748 DEBUG   SenderThread:7291 [sender.py:send_request():246] send_request: defer
+2022-05-16 17:57:29,748 INFO    SenderThread:7291 [sender.py:send_request_defer():385] handle sender defer: 9
+2022-05-16 17:57:29,748 INFO    SenderThread:7291 [sender.py:transition_state():389] send defer: 10
+2022-05-16 17:57:29,749 DEBUG   HandlerThread:7291 [handler.py:handle_request():141] handle_request: defer
+2022-05-16 17:57:29,749 INFO    HandlerThread:7291 [handler.py:handle_request_defer():164] handle defer: 10
+2022-05-16 17:57:29,750 DEBUG   SenderThread:7291 [sender.py:send():232] send: final
+2022-05-16 17:57:29,750 DEBUG   SenderThread:7291 [sender.py:send():232] send: footer
+2022-05-16 17:57:29,750 DEBUG   SenderThread:7291 [sender.py:send_request():246] send_request: defer
+2022-05-16 17:57:29,750 INFO    SenderThread:7291 [sender.py:send_request_defer():385] handle sender defer: 10
+2022-05-16 17:57:29,852 DEBUG   HandlerThread:7291 [handler.py:handle_request():141] handle_request: poll_exit
+2022-05-16 17:57:29,852 DEBUG   SenderThread:7291 [sender.py:send_request():246] send_request: poll_exit
+2022-05-16 17:57:29,853 INFO    SenderThread:7291 [file_pusher.py:join():150] waiting for file pusher
+2022-05-16 17:57:30,327 DEBUG   HandlerThread:7291 [handler.py:handle_request():141] handle_request: sampled_history
+2022-05-16 17:57:30,329 DEBUG   HandlerThread:7291 [handler.py:handle_request():141] handle_request: get_summary
+2022-05-16 17:57:30,330 DEBUG   HandlerThread:7291 [handler.py:handle_request():141] handle_request: shutdown
+2022-05-16 17:57:30,330 INFO    HandlerThread:7291 [handler.py:finish():806] shutting down handler
+2022-05-16 17:57:30,753 INFO    WriterThread:7291 [datastore.py:close():279] close: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220516_175447-o7thfszk/run-o7thfszk.wandb
+2022-05-16 17:57:31,226 INFO    SenderThread:7291 [sender.py:finish():1110] shutting down sender
+2022-05-16 17:57:31,227 INFO    SenderThread:7291 [file_pusher.py:finish():145] shutting down file pusher
+2022-05-16 17:57:31,227 INFO    SenderThread:7291 [file_pusher.py:join():150] waiting for file pusher
+2022-05-16 17:57:31,236 INFO    MainThread:7291 [internal.py:handle_exit():80] Internal process exited

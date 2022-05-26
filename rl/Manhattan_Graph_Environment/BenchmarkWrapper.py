@@ -1,9 +1,9 @@
 import sys
 from unittest import result
-# from DQNAgent import DQNAgent
 sys.path.insert(0,"")
+from DQNAgent import DQNAgent
 from RandomAgent import RandomAgent
-# from CostAgent import CostAgent
+from CostAgent import CostAgent
 from ManhattanGraph import ManhattanGraph
 from gym_graphenv.envs.GraphworldManhattan import GraphEnv
 import numpy as np
@@ -33,7 +33,7 @@ class BenchmarkWrapper:
             file_path='data/'+first_arg
             orders = pd.read_csv(file_path, nrows=2)
         else:
-            orders = pd.read_csv('/Users/noah/Desktop/Repositories/ines-autonomous-dispatching/data/random_orders.csv', nrows=2)
+            orders = pd.read_csv('data/random_orders.csv', nrows=2)
         return orders
 
      def read_orders(self):
@@ -48,12 +48,11 @@ class BenchmarkWrapper:
         print(order)
         
         manhattan_graph = ManhattanGraph(filename='simple', num_hubs=70)
-        #TODO in order to work also with random_orders.csv
-        #pick_up_hub_index = ManhattanGraph.get_hub_index_by_node_index(manhattan_graph,order.get('pickup_node'))
-        #delivery_hub_index = ManhattanGraph.get_hub_index_by_node_index(manhattan_graph,order.get('delivery_node'))
+        pick_up_hub_index = ManhattanGraph.get_hub_index_by_node_index(manhattan_graph,order.get('pickup_node'))
+        delivery_hub_index = ManhattanGraph.get_hub_index_by_node_index(manhattan_graph,order.get('delivery_node'))
                 # print(pick_up_hub_index,delivery_hub_index)
-        env_config = {'pickup_hub_index':order.get('pickup_node'),
-                    'delivery_hub_index':order.get('delivery_node'),
+        env_config = {'pickup_hub_index':pick_up_hub_index,
+                    'delivery_hub_index':delivery_hub_index,
                     'pickup_timestamp': order.get('pickup_timestamp'),
                     'delivery_timestamp': order.get('delivery_timestamp')
                 }
@@ -70,13 +69,13 @@ class BenchmarkWrapper:
             if self.name == "random":
                 print("random")
                 reward_list=RandomAgent.run_one_episode(env,reward_list,env_config)
-            # elif self.name == "cost":
-            #     print("cost")
-            #     reward_list=CostAgent.run_one_episode(env,reward_list,env_config)
-            # elif self.name == "DQN":
-            #     print("DQN")
-            #     dqn_Agent=DQNAgent()
-            #     reward_list = dqn_Agent.run_one_episode(reward_list,env_config)
+            elif self.name == "cost":
+                print("cost")
+                reward_list=CostAgent.run_one_episode(env,reward_list,env_config)
+            elif self.name == "DQN":
+                print("DQN")
+                dqn_Agent=DQNAgent()
+                reward_list = dqn_Agent.run_one_episode(reward_list,env_config)
         return reward_list
 
 
@@ -87,9 +86,9 @@ def main():
     # benchmark2 = BenchmarkWrapper("cost")
     # results = benchmark2.read_orders()
     # print("Cost",results)
-    benchmark3 = BenchmarkWrapper("random")
+    benchmark3 = BenchmarkWrapper("DQN")
     # DQNAgent()
     results = benchmark3.read_orders()
-    print("random",results)
+    print("DQN",results)
 
-# main()
+main()

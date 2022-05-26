@@ -8,32 +8,12 @@ class LearnGraph:
     def __init__(self, n_hubs: int, manhattan_graph, final_hub):
         self.G=nx.complete_graph(n_hubs,nx.MultiDiGraph)
         self.manhattan_graph = manhattan_graph
-        
         self.final_hub = final_hub
         for node in self.G.nodes():
             self.G.add_edge(node, node)
         self.wait_till_departure_times = {}#np.zeros((70,70))
         self.list_hubs = self.manhattan_graph.hubs
-        self.coordinates = []
-
-        self.setup()
-        print(self.manhattan_graph.get_node_by_index(5))
-        print(self.G.nodes()[5])
-         
-        #ox.save_graphml(self.G, filepath="./data/graph/learn.graphml")
-
-    def setup(self):
-        dict_x = {}
-        dict_y = {}
-        pos={'0':(1,0),'1':(1,1),'2':(2,3),'3':(3,2),'4':(0.76,1.80),'5':(0,2)}    
-       
-        for i in range (len(self.list_hubs)):
-            node = self.manhattan_graph.get_node_by_hub_index(i)
-            dict_x[i]=node['x']
-            dict_y[i]= node['y']
-            #print(node)
-        nx.set_node_attributes(self.G, dict_x, 'x')
-        nx.set_node_attributes(self.G, dict_y, 'y')
+        ox.save_graphml(self.G, filepath="./data/graph/learn.graphml")
 
     def adjacency_matrix(self, layer: str = None):
         return nx.to_numpy_array(self.G, weight=layer)

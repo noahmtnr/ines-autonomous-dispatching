@@ -1,0 +1,22 @@
+{
+    "os": "macOS-10.16-x86_64-i386-64bit",
+    "python": "3.8.8",
+    "heartbeatAt": "2022-05-16T14:46:52.732619",
+    "startedAt": "2022-05-16T14:46:45.718184",
+    "docker": null,
+    "cpu_count": 4,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "/Users/noah/Desktop/Repositories/ines-autonomous-dispatching/rl/Manhattan_Graph_Environment/train_DQN.py",
+    "codePath": "rl/Manhattan_Graph_Environment/train_DQN.py",
+    "git": {
+        "remote": "git@github.com:knoms/ines-autonomous-dispatching.git",
+        "commit": "fa51dc43235e3060b5ea0fb4cd9f11c90e0ba581"
+    },
+    "email": "noah.mautner@outlook.de",
+    "root": "/Users/noah/Desktop/Repositories/ines-autonomous-dispatching",
+    "host": "Noahs-MacBook-Pro.local",
+    "username": "noah",
+    "executable": "/Users/noah/opt/anaconda3/bin/python"
+}
