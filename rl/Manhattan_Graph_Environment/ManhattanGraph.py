@@ -49,7 +49,6 @@ class ManhattanGraph:
         #self.hubs = random.sample(hubs,num_hubs)
         self.hubs = hubs
         # pd.DataFrame(self.hubs).to_csv("hub_nodeids.csv")
-        #self.hubs = hubs
         return self.hubs
 
     def setup_trips(self, start_time: datetime):
@@ -130,6 +129,21 @@ class ManhattanGraph:
 
     def get_index_by_nodeid(self, nodeid: int):
         return self.get_nodeids_list().index(nodeid)
+    
+    def get_coordinates_of_node(self, node_id): 
+        # manhattangraph = ManhattanGraph(filename='simple', num_hubs=70)
+        nodes = self.inner_graph.nodes()
+        return [nodes[node_id]['x'], nodes[node_id]['y']]
+        
+    def get_nodeid_by_hub_index(self, hub_index: int):
+        return self.hubs[hub_index]
+
+    # def get_coordinates_of_node_by_hub_index(self, node_index): 
+    #     # manhattangraph = ManhattanGraph(filename='simple', num_hubs=70)
+    #     nodes = self.inner_graph.nodes()
+    #     get_node_by_index(node_index):
+
+    #     return [nodes[node_id]['x'], nodes[node_id]['y']]       
 
     def get_hub_index_by_nodeid(self, nodeid: int):
         return self.hubs.index(nodeid)

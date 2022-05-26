@@ -2,7 +2,7 @@ import networkx as nx
 import osmnx as ox
 from ManhattanGraph import ManhattanGraph
 import numpy as np
-
+myManhattan = ManhattanGraph('simple',70)
 class LearnGraph:
         
     def __init__(self, n_hubs: int, manhattan_graph, final_hub):
@@ -97,4 +97,11 @@ class LearnGraph:
 
         nx.set_edge_attributes(self.G, distance_edges, "remaining_distance") 
 
-
+    def getNearestNodeId(self,pickup_longitude, pickup_latitude):
+        pickup_node_id = ox.distance.nearest_nodes(self.G, pickup_longitude, pickup_latitude)
+        return pickup_node_id
+    # def get_nearest_hub(self, long, lat):
+    #     for hub in hubs:
+    #     manhattangraph.get-node-by-hub-index
+    #     hub_id = ox.distance.nearest_nodes(self.G,long,lat)
+    #     return node_id

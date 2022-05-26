@@ -1,7 +1,7 @@
 import sys
 from unittest import result
-from DQNAgent import DQNAgent
 sys.path.insert(0,"")
+from DQNAgent import DQNAgent
 from RandomAgent import RandomAgent
 from CostAgent import CostAgent
 from ManhattanGraph import ManhattanGraph

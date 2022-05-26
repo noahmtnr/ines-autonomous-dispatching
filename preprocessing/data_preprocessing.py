@@ -5,7 +5,7 @@ from datetime import timedelta,datetime
 import time
 
 class DataPreProcessing:
-
+    
     def setup_graph():
         graph = ox.io.load_graphml("data/graph/simple.graphml")
         return graph
@@ -17,7 +17,7 @@ class DataPreProcessing:
         )
         return df
 
-    def map_trips_to_nodes(trips, graph):
+    def map_trips_to_nodes(graph, trips):
 
         start_time = time.time()
 
@@ -53,7 +53,7 @@ class DataPreProcessing:
         )
         return trips
 
-    def map_routes_to_trips(trips, graph):
+    def map_routes_to_trips(graph, trips):
 
         routes = []
         for index, row in trips.iterrows():
@@ -182,7 +182,7 @@ class DataPreProcessing:
         )
 
         return trips
-        
+    
     def map_oneRoute_to_oneTrip_with_timestamps(pickup_longitude, pickup_latitude, dropoff_longitude, dropoff_latitude, pickup_datetime, dropoff_datetime, trip_duration):
         """
         Adds for the trips data the route and the timestamp for each node
@@ -231,3 +231,7 @@ class DataPreProcessing:
         graph = ox.io.load_graphml("data/graph/simple.graphml")
         node_id = ox.distance.nearest_nodes(graph, longitude, latitude)
         return list(graph.nodes()).index(node_id)
+
+    def get_node_index_by_id(id):
+        x, y = DataPreProcessing.get_coordinates_of_node(id)
+        return DataPreProcessing.get_node_index_by_coordinates(x, y)

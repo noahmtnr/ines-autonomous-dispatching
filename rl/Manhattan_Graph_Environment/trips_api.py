@@ -7,20 +7,24 @@ from datetime import datetime
 import urllib
 from datetime import datetime, timedelta
 from folium import plugins, folium
+from rl.Manhattan_Graph_Environment.ManhattanGraph import ManhattanGraph
+from rl.Manhattan_Graph_Environment.Hubs_Graph  import HubsGraph
 from BenchmarkWrapper import BenchmarkWrapper
 sys.path.insert(0,"")
 from preprocessing.data_preprocessing import DataPreProcessing
 from flask import Flask, jsonify, request, render_template, redirect
 import pandas as pd
 import mysql.connector
+from LearnGraph import LearnGraph
 import json
+from BenchmarkWrapper import BenchmarkWrapper
 
 from datetime import datetime
 # creating a Flask app
 mydb = mysql.connector.connect(
 host="localhost",
 user="root",
-password="Cosmina_123",
+password="rootroot",
 database="mannheimprojekt",
 auth_plugin='mysql_native_password')
 mycursor = mydb.cursor()
@@ -69,6 +73,39 @@ app = Flask(__name__)
 def index():
   return render_template('index.html')
 
+@app.route('/search', methods=['GET'])
+def search():
+    answear = {}
+
+    args = request.args
+    start_node_long = args.get('pickup_long')
+    start_node_lat = args.get('pickup_lat')
+    start_date = args.get('start_date')
+  
+  
+    new_start_node_long = float(start_node_long or 0)
+    # print(new_start_node_long)
+    new_start_node_lat = float(start_node_lat or 0) 
+    # print(new_start_node_lat)
+    new_start_node = DataPreProcessing.getNearestNodeId(new_start_node_long, new_start_node_lat)
+    # print(new_start_node)
+
+    new_start_date = urllib.parse.unquote(start_date)
+  
+    start_date_format = datetime.strptime(new_start_date, "%Y-%m-%d %H:%M:%S")
+    end_date_format = start_date_format + timedelta(minutes=10)
+    # print(new_start_node, new_start_date, end_date_format)
+    myList = getTrips(new_start_node, new_start_date, end_date_format)
+    route = []
+    times = []
+    for trip in myList:
+      route, times = getRouteFromTrip(trip)
+      # print(type(times[0]))
+      answear[trip] = {'route': route, 'timestamps': times}
+    print(route, times)
+    lines = buildLines(route, times)
+    print(DataPreProcessing.get_coordinates_of_node(42444043))
+    return buildFolium(lines)
 # @app.route('/search', methods=['GET'])
 # def search():
 #     answear = {}
@@ -109,15 +146,22 @@ def addOrder():
     pickup_latitude = double(data.get('pickup_lat') or 0)
     dropoff_longitude = double(data.get('dropoff_long') or 0)
     dropoff_latitude = double(data.get('dropoff_lat') or 0)
+    pickup_datetime = data.get('start_date')
+    dropoff_datetime = data.get('delivery_date')
+    hubsgraph = HubsGraph(filename='learn', num_hubs=70)
+    
+    # start_node = DataPreProcessing.get_node_index_by_coordinates(pickup_longitude, pickup_latitude)
+    # final_node = DataPreProcessing.get_node_index_by_coordinates(dropoff_longitude, dropoff_latitude)
+    start_node = hubsgraph.getNearestNode(pickup_longitude,pickup_latitude)
+    final_node = hubsgraph.getNearestNode( dropoff_longitude, dropoff_latitude)
     print(pickup_longitude, pickup_latitude, dropoff_longitude, dropoff_latitude)
     pickup_datetime = datetime.strptime(data.get('start_date') or "", "%Y-%m-%d %H:%M:%S")
     dropoff_datetime = datetime.strptime(data.get('delivery_date') or "", "%Y-%m-%d %H:%M:%S")
-    start_node = DataPreProcessing.get_node_index_by_coordinates(pickup_longitude, pickup_latitude)
-    final_node = DataPreProcessing.get_node_index_by_coordinates(dropoff_longitude, dropoff_latitude)
     
     order={"pickup_node":start_node,"delivery_node":final_node,"pickup_timestamp":pickup_datetime , "delivery_timestamp":dropoff_datetime}
     benchmark = BenchmarkWrapper("random")
     result = benchmark.proceed_order(order)
+    
     lines = buildLines(result["route"],result["timestamps"])
     return buildFolium(lines)
 

@@ -192,7 +192,6 @@ class GraphEnv(gym.Env):
 
     def step(self, action: int):
         """ Executes an action based on the index passed as a parameter (only works with moves to direct neighbors as of now)
-
         Args:
             action (int): index of action to be taken from availableActions
         Returns:
@@ -439,7 +438,6 @@ class GraphEnv(gym.Env):
 
     def get_available_actions(self):
         """ Returns the available actions at the current position. Uses a simplified action space with moves to all direct neighbors allowed.
-
         Returns:
             list: list of nodeIds of direct neighbors
         """
@@ -510,7 +508,6 @@ class GraphEnv(gym.Env):
     
     def availableTrips(self, time_window=5):
         """ Returns a list of all available trips at the current node and within the next 5 minutes. Includes the time of departure from the current node as well as the target node of the trip.
-
         Returns:
             list: [departure_time,target_node]
         """
@@ -577,10 +574,8 @@ class GraphEnv(gym.Env):
 
     def render(self, visualize_actionspace: bool = False):
         """_summary_
-
         Args:
             visualize_actionspace (bool, optional): _description_. Defaults to False.
-
         Returns:
             _type_: _description_
         """
@@ -629,4 +624,3 @@ class GraphEnv(gym.Env):
         # if(not len(pos_to_final)< 2):
 
         return plot
-
