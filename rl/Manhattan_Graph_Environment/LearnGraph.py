@@ -76,7 +76,7 @@ class LearnGraph:
                     pickup_hub_index = self.manhattan_graph.get_hub_index_by_nodeid(pickup_nodeid)
                     dropoff_hub_index = self.manhattan_graph.get_hub_index_by_nodeid(dropoff_nodeid)
 
-                    edges[(pickup_hub_index,dropoff_hub_index,0)] = distance_matrix[pickup_hub_index,dropoff_hub_index] * 0.2 #5
+                    edges[(pickup_hub_index,dropoff_hub_index,0)] = distance_matrix[pickup_hub_index,dropoff_hub_index] * 0.1 #share ride is cheaper than book own ride by a factor of 10
 
                     self.wait_till_departure_times[(pickup_hub_index,dropoff_hub_index)] = available_trips[i]['departure_time']
                     #self.wait_till_departure_times[pickup_hub_index,dropoff_hub_index] = 120
