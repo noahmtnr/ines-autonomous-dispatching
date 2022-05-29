@@ -24,8 +24,9 @@ import timestamps_mapping
 graph= ManhattanGraph('simple',70)
 app = Flask(__name__)
 
-input_example={'route': [1,2,2,6,5],'timestamps':[ datetime.datetime(2016, 5, 19, 23, 33, 46, 600000), datetime.datetime(2016, 5, 19, 23, 35, 46, 600000), datetime.datetime(2016, 5, 19, 23, 41, 46,600000), datetime.datetime(2016, 5, 19, 23, 46, 46, 600000),datetime.datetime(2016, 5, 19, 23, 56, 46, 600000)]}
-input_example2={'route': [1,4,5],'timestamps':[ datetime.datetime(2016, 5, 19, 23, 33, 46, 600000), datetime.datetime(2016, 5, 19, 23, 41, 56, 600000), datetime.datetime(2016, 5, 19, 23, 46, 46, 600000)]}
+input_example={'route': [1,2,2,6,5,5,5,7,9,15],'timestamps':[ datetime.datetime(2016, 5, 19, 23, 33, 46, 600000),datetime.datetime(2016, 5, 19, 23, 33, 46, 600000),datetime.datetime(2016, 5, 19, 23, 33, 46, 600000),datetime.datetime(2016, 5, 19, 23, 33, 46, 600000), datetime.datetime(2016, 5, 19, 23, 35, 46, 600000), datetime.datetime(2016, 5, 19, 23, 41, 46,600000), datetime.datetime(2016, 5, 19, 23, 46, 46, 600000),datetime.datetime(2016, 5, 19, 23, 56, 46, 600000),datetime.datetime(2016, 5, 19, 23, 33, 46, 600000),datetime.datetime(2016, 5, 19, 23, 33, 46, 600000)]}
+input_example2={'route': [1,4,8,15],'timestamps':[datetime.datetime(2016, 5, 19, 23, 33, 46, 600000), datetime.datetime(2016, 5, 19, 23, 33, 46, 600000), datetime.datetime(2016, 5, 19, 23, 41, 56, 600000), datetime.datetime(2016, 5, 19, 23, 46, 46, 600000)]}
+#input_example2={'route': [1,4,5],'timestamps':[ datetime.datetime(2016, 5, 19, 23, 33, 46, 600000), datetime.datetime(2016, 5, 19, 23, 41, 56, 600000), datetime.datetime(2016, 5, 19, 23, 46, 46, 600000)]}
 
 
 real_input={'pickup_hub': 27, 'delivery_hub': 14, 'reward': -3182.772359, 'hubs': 29, 'route': [48, 19, 46, 47, 43, 15, 38, 24, 66, 4, 9, 62, 64, 3, 25, 58, 32, 25, 4, 37, 50, 50, 53, 67, 35, 15, 49, 65, 24, 17], 'time': '6:08:51.500000', 'dist': 182.77235900000005, 'time_until_deadline': datetime.datetime(2016, 5, 20, 4, 55, 8, 500000), 'timestamps': [datetime.datetime(2016, 5, 19, 23, 13, 24, 400000), datetime.datetime(2016, 
@@ -57,7 +58,6 @@ def preprocess_input(inputs):
                 j = pd.to_datetime(j, format=date_format_str)
                 all_timestamps.append(date_str)
         input.update({'timestamps': all_timestamps})
-        print("ALL",all_timestamps, type(all_timestamps[0]))
         input['route_nodes']=nodes
 
         
@@ -78,34 +78,11 @@ def index():
 
 @app.route('/search', methods=['GET'])
 def search():
-    # answear = {}
-
-    # args = request.args
-    # start_node_long = args.get('pickup_long')
-    # start_node_lat = args.get('pickup_lat')
-    # start_date = args.get('start_date')
-  
-    # new_start_node_long = float(start_node_long or 0)
-    # # print(new_start_node_long)
-    # new_start_node_lat = float(start_node_lat or 0) 
-    # # print(new_start_node_lat)
-    # new_start_node = DataPreProcessing.getNearestNodeId(new_start_node_long, new_start_node_lat)
-    # # print(new_start_node)
-
-    # new_start_date = urllib.parse.unquote(start_date)
-  
-    # start_date_format = datetime.strptime(new_start_date, "%Y-%m-%d %H:%M:%S")
-    # end_date_format = start_date_format + timedelta(minutes=10)
-    # print(new_start_node, new_start_date, end_date_format)
-    #myList = getTrips(new_start_node, new_start_date, end_date_format)
-    # route = []
-    # times = []
-    # for trip in myList:
+    
     route, times, hubs = input_example["route_nodes"], input_example["timestamps"], input_example["route"]
     route2, times2, hubs2 = input_example2["route_nodes"], input_example2["timestamps"], input_example2["route"]
 
-    #   
-    #answear[trip] = {'route': route, 'timestamps': times}
+
     lines = buildLines(route, times,"blue")
     lines2=buildLines(route2, times2, "red")
 
@@ -121,6 +98,14 @@ def buildFolium(lines,lines2,route, route2, hubs, hubs2):
     dirname = os.path.dirname(__file__)
     save_location = os.path.join(dirname, dir)
     
+    
+    edges=len(lines)
+    
+    mocked_times=['2020-01-19 11:00:00'] * edges
+    for i in range(len(mocked_times)-1):
+       new_date= datetime.datetime.strptime(mocked_times[i], '%Y-%m-%d %H:%M:%S') + datetime.timedelta(seconds=5)
+       mocked_times[i+1]=str(new_date)
+    
 
     features = [
         {
@@ -130,7 +115,8 @@ def buildFolium(lines,lines2,route, route2, hubs, hubs2):
                 "coordinates": line["coordinates"],
             },
             "properties": {
-                "times": line["dates"],
+                #"times": line["dates"],
+                "times": mocked_times,
                 "style": {
                     "color": line["color"],
                     "weight": line["weight"] if "weight" in line else 5,
@@ -141,6 +127,17 @@ def buildFolium(lines,lines2,route, route2, hubs, hubs2):
             },
         }
         for line in lines]
+    edges2=len(lines2)
+
+
+    mocked_times2=['2020-01-19 11:00:00'] * edges2
+    for i in range(len(mocked_times2)-1):
+       new_date= datetime.datetime.strptime(mocked_times2[i], '%Y-%m-%d %H:%M:%S') + datetime.timedelta(seconds=5)
+       mocked_times2[i+1]=str(new_date)
+    
+
+    
+
     features2 = [
         {
             "type": "Feature",
@@ -149,7 +146,8 @@ def buildFolium(lines,lines2,route, route2, hubs, hubs2):
                 "coordinates": line["coordinates"],
             },
             "properties": {
-                "times": line["dates"],
+                #"times": line["dates"],
+                "times": mocked_times2,
                 "style": {
                     "color": line["color"],
                     "weight": line["weight"] if "weight" in line else 5,
@@ -239,7 +237,7 @@ def buildLines(routes, timestamps,color):
     for i in range(len(routes)-1):
       element = {}
       element["coordinates"]= [DataPreProcessing.get_coordinates_of_node(routes[i]), DataPreProcessing.get_coordinates_of_node(routes[i+1])]
-      element["dates"] = [timestamps[i], timestamps[i+1]]
+      #element["dates"] = [timestamps[i], timestamps[i+1]]
       element["color"] =  color
       list_elements.append(element)
     #print(list_elements)
@@ -270,6 +268,6 @@ def addTrip():
     
 
 # driver function
-if __name__ == '_main_':
+if __name__ == '__main__':
   
     app.run(debug=True)
