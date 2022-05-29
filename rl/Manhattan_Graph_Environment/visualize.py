@@ -6,7 +6,7 @@ from numpy import double
 import osmnx as ox
 import os
 import urllib
-import datetime, timedelta
+import datetime
 import folium
 from folium import plugins
 sys.path.insert(0,"")
@@ -17,7 +17,7 @@ import pandas as pd
 import json
 from folium.plugins import MarkerCluster
 import osmnx as nx
-import timestamps_mapping
+import preprocessing.timestamps_mapping as timestamps_mapping
 
 
 
