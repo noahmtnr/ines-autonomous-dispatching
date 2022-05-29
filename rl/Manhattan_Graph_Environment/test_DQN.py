@@ -17,7 +17,7 @@ from gym_graphenv.envs.GraphworldManhattan import GraphEnv
 
 env=GraphEnv()
 
-file_name = "tmp/dqn/graphworld"
+file_name = "results/tmp/dqn/graphworld"
 
 trainer_config = DEFAULT_CONFIG.copy()
 trainer_config['num_workers'] = 1

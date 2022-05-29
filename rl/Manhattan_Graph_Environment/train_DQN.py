@@ -38,7 +38,7 @@ trainer_config["framework"] = "torch"
 trainer = DQNTrainer(trainer_config,GraphEnv )
 
 #Define the path where the results of the trainer should be saved
-checkpoint_root = "tmp/dqn/graphworld"
+checkpoint_root = "results/tmp/dqn/graphworld"
 shutil.rmtree(checkpoint_root, ignore_errors=True, onerror=None)   # clean up old runs
 
 

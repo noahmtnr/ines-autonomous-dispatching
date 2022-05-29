@@ -36,13 +36,13 @@ class DQNAgent:
         # env=gym.make([GraphEnv],config=config)
         # Initialize trainer
         test_trainer = DQNTrainer(self.trainer_config,GraphEnv)
-        checkpoint_path="\\tmp\\dqn\\graphworld\\checkpoint_000001\\checkpoint-1"
+        checkpoint_path="\\results\\tmp\\dqn\\graphworld\\checkpoint_000001\\checkpoint-1"
         # shutil.rmtree(checkpoint_path, ignore_errors=True, onerror=None)
 
 
         ray_results="{}/ray_results".format(os.getenv("HOME"))
         shutil.rmtree(ray_results,ignore_errors=True,onerror=None)
-        test_trainer.restore("\\tmp\\dqn\\graphworld\\checkpoint_000001\\checkpoint-1")
+        test_trainer.restore("\\results\\tmp\\dqn\\graphworld\\checkpoint_000001\\checkpoint-1")
         state = env.reset(checkpoint_path)
         print("reset done")
 

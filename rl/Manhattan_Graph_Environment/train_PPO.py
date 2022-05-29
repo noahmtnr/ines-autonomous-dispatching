@@ -38,7 +38,7 @@ trainer_config["framework"] = "torch"
 trainer = PPOTrainer(trainer_config,GraphEnv )
 
 #Define the path where the results of the trainer should be saved
-checkpoint_root = "tmp/ppo/graphworld"
+checkpoint_root = "results/tmp/ppo/graphworld"
 shutil.rmtree(checkpoint_root, ignore_errors=True, onerror=None)   # clean up old runs
 ray_results = "{}/ray_results/".format(os.getenv("HOME"))
 shutil.rmtree(ray_results, ignore_errors=True, onerror=None)   # clean up old runs
