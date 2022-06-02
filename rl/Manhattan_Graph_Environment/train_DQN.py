@@ -50,8 +50,7 @@ shutil.rmtree(ray_results, ignore_errors=True, onerror=None)   # clean up old ru
 results = []
 episode_data = []
 episode_json = []
-n_iter = 1
-
+n_iter = 120
 for n in range(n_iter):
     result = trainer.train()
     results.append(result)
@@ -81,6 +80,9 @@ for n in range(n_iter):
                'share_share_min': float(result["share_share_min"]),
                'share_share_max': float(result["share_share_max"]),
                'share_share_mean': float(result["share_share_mean"]),
+               'share_to_own_ratio_min': float(result["share_to_own_ratio_min"]),
+               'share_to_own_ratio_max': float(result["share_to_own_ratio_max"]),
+               'share_to_own_ratio_mean': float(result["share_to_own_ratio_mean"]),
                }
     episode_data.append(episode)
     episode_json.append(json.dumps(episode))
@@ -94,6 +96,8 @@ for n in range(n_iter):
                 "share_of_bookown_mean": result['share_bookown_mean'],
                 "share_of_wait_mean": result['share_wait_mean'],
                 "share_of_share_mean": result['share_share_mean'],
+                "share_to_own_ratio_max": result['share_to_own_ratio_max'],
+                "share_to_own_ratio_mean": result['share_to_own_ratio_mean'],
     })
 
     print(f'{n + 1:3d}: Min/Mean/Max reward: {result["episode_reward_min"]:8.4f}/{result["episode_reward_mean"]:8.4f}/{result["episode_reward_max"]:8.4f}, len mean: {result["episode_len_mean"]:8.4f}. Checkpoint saved to {file_name}')

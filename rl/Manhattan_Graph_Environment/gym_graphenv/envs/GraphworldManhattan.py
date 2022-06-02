@@ -697,6 +697,8 @@ class CustomCallbacks(DefaultCallbacks):
         episode.custom_metrics["share_wait"] = float(episode.env.count_wait / episode.env.count_actions)
         episode.custom_metrics["share_bookown"] = float(episode.env.count_bookown / episode.env.count_actions)
         episode.custom_metrics["share_share"] = float(episode.env.count_share / episode.env.count_actions)
+        episode.custom_metrics["share_to_own_ratio"] = episode.env.count_share if episode.env.count_bookown == 0 else float(episode.env.count_share / episode.env.count_bookown)
+        episode.custom_metrics["share_to_own_ratio"] = episode.env.count_share if episode.env.count_bookown == 0 else float(episode.env.count_share / episode.env.count_bookown)
 
     def on_train_result(self, *, trainer, result: dict, **kwargs):
         print(
@@ -724,3 +726,7 @@ class CustomCallbacks(DefaultCallbacks):
         result["share_share_min"] = result['custom_metrics']['share_share_min']
         result["share_share_max"] = result['custom_metrics']['share_share_max']
         result["share_share_mean"] = result['custom_metrics']['share_share_mean']
+        
+        result["share_to_own_ratio_min"] = result['custom_metrics']['share_to_own_ratio_min']
+        result["share_to_own_ratio_max"] = result['custom_metrics']['share_to_own_ratio_max']
+        result["share_to_own_ratio_mean"] = result['custom_metrics']['share_to_own_ratio_mean']
