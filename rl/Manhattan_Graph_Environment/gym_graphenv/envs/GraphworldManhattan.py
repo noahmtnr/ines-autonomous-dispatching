@@ -309,10 +309,10 @@ class GraphEnv(gym.Env):
         print(self.old_position, "->", action, cost_of_action)
         done = False
         # if delay is greater than 12 hours (=720 minutes), terminate training episode
-        if((self.time-self.deadline).total_seconds()/60 >= 720):
+        if((self.time-self.deadline).total_seconds()/60 >= 120):
             done = True
             reward = -(cost_of_action / 100) - 10000
-            print("BOX WAS NOT DELIVERED until 12 hours after deadline")
+            print("BOX WAS NOT DELIVERED until 2 hours after deadline")
         # if box is delivered to final hub in time
         if (self.position == self.final_hub and self.time <= self.deadline):
             print(f"DELIVERED IN TIME AFTER {self.count_actions} ACTIONS (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown}")
@@ -320,7 +320,7 @@ class GraphEnv(gym.Env):
             reward -= (cost_of_action / 100)
             done = True
         # if box is delivered to final hub with delay
-        elif(self.position == self.final_hub and (self.time-self.deadline).total_seconds()/60 < 720): #self.time > self.deadline):
+        elif(self.position == self.final_hub and (self.time-self.deadline).total_seconds()/60 < 120): #self.time > self.deadline):
             overtime = self.time - self.deadline
             print(f"DELIVERED AFTER {self.count_actions} ACTIONS (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown} WITH DELAY: {overtime}")
             overtime = round(overtime.total_seconds()/60)
@@ -573,7 +573,7 @@ class GraphEnv(gym.Env):
         return action < self.n_hubs
 
     def read_config(self):
-        with open('env_config.pkl', 'rb') as f:
+        with open('/Users/noah/Desktop/Repositories/ines-autonomous-dispatching/rl/Manhattan_Graph_Environment/env_config.pkl', 'rb') as f:
             loaded_dict = pickle.load(f)
         self.env_config = loaded_dict
         return loaded_dict
