@@ -308,7 +308,7 @@ class GraphEnv(gym.Env):
         cost_of_action = self.learn_graph.adjacency_matrix('cost')[self.old_position][action]
         print(self.old_position, "->", action, cost_of_action)
         done = False
-        # if delay is greater than 12 hours (=720 minutes), terminate training episode
+        # if delay is greater than 2 hours (=120 minutes), terminate training episode
         if((self.time-self.deadline).total_seconds()/60 >= 120):
             done = True
             reward = -(cost_of_action / 100) - 10000
