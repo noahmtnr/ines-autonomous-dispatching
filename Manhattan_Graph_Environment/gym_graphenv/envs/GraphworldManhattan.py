@@ -27,10 +27,12 @@ from ray.rllib.policy import Policy
 import sys
 sys.path.insert(0,"")
 
+# CHANGES
 from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
 from Manhattan_Graph_Environment.graphs.LearnGraph import LearnGraph
-from OneHotVector import OneHotVector
-from database_connection import DBConnection
+from Manhattan_Graph_Environment.OneHotVector import OneHotVector
+from Manhattan_Graph_Environment.database_connection import DBConnection
+# END OF CHANGES
 
 class GraphEnv(gym.Env):
 
@@ -573,7 +575,9 @@ class GraphEnv(gym.Env):
         return action < self.n_hubs
 
     def read_config(self):
-        with open('/Users/noah/Desktop/Repositories/ines-autonomous-dispatching/rl/Manhattan_Graph_Environment/env_config.pkl', 'rb') as f:
+        # CHANGES
+        with open('C:/Users/maren/OneDrive/Dokumente/Uni_Mannheim/MASTER/FSS 2022/Teamprojekt/ines-autonomous-dispatching/env_config.pkl','rb') as f:
+        # END OF CHANGES
             loaded_dict = pickle.load(f)
         self.env_config = loaded_dict
         return loaded_dict

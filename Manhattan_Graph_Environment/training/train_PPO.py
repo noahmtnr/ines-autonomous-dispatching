@@ -15,7 +15,7 @@ from ray.rllib.agents.ppo import PPOTrainer, DEFAULT_CONFIG
 sys.path.insert(0,"")
 
 from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
-from gym_graphenv.envs.GraphworldManhattan import GraphEnv, CustomCallbacks
+from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv, CustomCallbacks
 
 wandb.login(key="93aab2bcc48447dd2e8f74124d0258be2bf93859")
 wandb.init(project="Manhattan-ppo", entity="hitchhike")

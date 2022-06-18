@@ -7,13 +7,20 @@ import sys
 import gym
 import wandb
 
+# CHANGES HERE
+# uncomment if error appears
+# import os
+# os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
+# CHANGES END HERE
+
+
 import ray
 from ray.rllib.agents.dqn import DQNTrainer, DEFAULT_CONFIG
 
 sys.path.insert(0,"")
 
 from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
-from gym_graphenv.envs.GraphworldManhattan import GraphEnv, CustomCallbacks
+from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv, CustomCallbacks
 
 wandb.login(key="93aab2bcc48447dd2e8f74124d0258be2bf93859")
 wandb.init(project="Manhattan-DQN", entity="hitchhike")
