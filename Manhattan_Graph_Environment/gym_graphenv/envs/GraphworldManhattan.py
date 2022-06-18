@@ -17,6 +17,13 @@ import pickle
 import logging
 import json
 
+from typing import Dict
+
+from ray.rllib.agents.callbacks import DefaultCallbacks
+from ray.rllib.evaluation import Episode, RolloutWorker
+from ray.rllib.env import BaseEnv
+from ray.rllib.policy import Policy
+
 import sys
 sys.path.insert(0,"")
 
@@ -301,29 +308,29 @@ class GraphEnv(gym.Env):
         cost_of_action = self.learn_graph.adjacency_matrix('cost')[self.old_position][action]
         print(self.old_position, "->", action, cost_of_action)
         done = False
-        # if delay is greater than 12 hours (=720 minutes), terminate training episode
-        if((self.time-self.deadline).total_seconds()/60 >= 720):
+        # if delay is greater than 2 hours (=120 minutes), terminate training episode
+        if((self.time-self.deadline).total_seconds()/60 >= 120):
             done = True
-            reward = -(cost_of_action / 1000) - 10000
-            print("Delay more than 12 hours")
+            reward = -(cost_of_action / 100) - 10000
+            print("BOX WAS NOT DELIVERED until 2 hours after deadline")
         # if box is delivered to final hub in time
         if (self.position == self.final_hub and self.time <= self.deadline):
             print(f"DELIVERED IN TIME AFTER {self.count_actions} ACTIONS (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown}")
             reward = 1000
-            reward -= (cost_of_action / 1000)
+            reward -= (cost_of_action / 100)
             done = True
         # if box is delivered to final hub with delay
-        elif(self.position == self.final_hub and (self.time-self.deadline).total_seconds()/60 < 720): #self.time > self.deadline):
+        elif(self.position == self.final_hub and (self.time-self.deadline).total_seconds()/60 < 120): #self.time > self.deadline):
             overtime = self.time - self.deadline
             print(f"DELIVERED AFTER {self.count_actions} ACTIONS (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown} WITH DELAY: {overtime}")
             overtime = round(overtime.total_seconds()/60)
             reward = 1000 - overtime
-            reward -= (cost_of_action / 1000)
+            reward -= (cost_of_action / 100)
             done = True
         # if box is not delivered to final hub
         elif(done==False):
-            reward = -(cost_of_action / 1000)
-            print(f"BOX WAS NOT DELIVERED, ACTIONS: (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown}")
+            reward = -(cost_of_action / 100)
+            print(f"INTERMEDIATE STEP ACTIONS: (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown}")
             #done = False
 
         return reward, done
@@ -566,7 +573,7 @@ class GraphEnv(gym.Env):
         return action < self.n_hubs
 
     def read_config(self):
-        with open('env_config.pkl', 'rb') as f:
+        with open('/Users/noah/Desktop/Repositories/ines-autonomous-dispatching/rl/Manhattan_Graph_Environment/env_config.pkl', 'rb') as f:
             loaded_dict = pickle.load(f)
         self.env_config = loaded_dict
         return loaded_dict
@@ -624,3 +631,102 @@ class GraphEnv(gym.Env):
         # if(not len(pos_to_final)< 2):
 
         return plot
+
+class CustomCallbacks(DefaultCallbacks):
+
+    def on_episode_start(
+        self,
+        *,
+        worker: RolloutWorker,
+        base_env: BaseEnv,
+        policies: Dict[str, Policy],
+        episode: Episode,
+        env_index: int,
+        **kwargs
+    ):
+        # Make sure this episode has just been started (only initial obs
+        # logged so far).
+        assert episode.length == 0, (
+            "ERROR: `on_episode_start()` callback should be called right "
+            "after env reset!"
+        )
+        episode.env = base_env.get_sub_environments(as_dict = True)[0]
+        print(episode.env)
+        episode.user_data["pole_angles"] = 0
+
+    def on_episode_step(
+        self,
+        *,
+        worker: RolloutWorker,
+        base_env: BaseEnv,
+        policies: Dict[str, Policy],
+        episode: Episode,
+        env_index: int,
+        **kwargs
+    ):
+        # Make sure this episode is ongoing.
+        assert episode.length > 0, (
+            "ERROR: `on_episode_step()` callback should not be called right "
+            "after env reset!"
+        )
+
+    def on_episode_end(
+        self,
+        *,
+        worker: RolloutWorker,
+        base_env: BaseEnv,
+        policies: Dict[str, Policy],
+        episode: Episode,
+        env_index: int,
+        **kwargs
+    ):
+        # Check if there are multiple episodes in a batch, i.e.
+        # "batch_mode": "truncate_episodes".
+        if worker.policy_config["batch_mode"] == "truncate_episodes":
+            # Make sure this episode is really done.
+            assert episode.batch_builder.policy_collectors["default_policy"].batches[
+                -1
+            ]["dones"][-1], (
+                "ERROR: `on_episode_end()` should only be called "
+                "after episode is done!"
+            )
+
+        episode.custom_metrics["count_wait"] = episode.env.count_wait
+        episode.custom_metrics["count_bookown"] = episode.env.count_bookown
+        episode.custom_metrics["count_share"] = episode.env.count_share
+        episode.custom_metrics["share_wait"] = float(episode.env.count_wait / episode.env.count_actions)
+        episode.custom_metrics["share_bookown"] = float(episode.env.count_bookown / episode.env.count_actions)
+        episode.custom_metrics["share_share"] = float(episode.env.count_share / episode.env.count_actions)
+        episode.custom_metrics["share_to_own_ratio"] = episode.env.count_share if episode.env.count_bookown == 0 else float(episode.env.count_share / episode.env.count_bookown)
+        episode.custom_metrics["share_to_own_ratio"] = episode.env.count_share if episode.env.count_bookown == 0 else float(episode.env.count_share / episode.env.count_bookown)
+
+    def on_train_result(self, *, trainer, result: dict, **kwargs):
+        print(
+            "trainer.train() result: {} -> {} episodes".format(
+                trainer, result["episodes_this_iter"]
+            )
+        )
+        # you can mutate the result dict to add new fields to return
+        result["count_wait_min"] = result['custom_metrics']['count_wait_min']
+        result["count_wait_max"] = result['custom_metrics']['count_wait_max']
+        result["count_wait_mean"] = result['custom_metrics']['count_wait_mean']
+        result["count_bookown_min"] = result['custom_metrics']['count_bookown_min']
+        result["count_bookown_max"] = result['custom_metrics']['count_bookown_max']
+        result["count_bookown_mean"] = result['custom_metrics']['count_bookown_mean']
+        result["count_share_min"] = result['custom_metrics']['count_share_min']
+        result["count_share_max"] = result['custom_metrics']['count_share_max']
+        result["count_share_mean"] = result['custom_metrics']['count_share_mean']
+
+        result["share_wait_min"] = result['custom_metrics']['share_wait_min']
+        result["share_wait_max"] = result['custom_metrics']['share_wait_max']
+        result["share_wait_mean"] = result['custom_metrics']['share_wait_mean']
+        result["share_bookown_min"] = result['custom_metrics']['share_bookown_min']
+        result["share_bookown_max"] = result['custom_metrics']['share_bookown_max']
+        result["share_bookown_mean"] = result['custom_metrics']['share_bookown_mean']
+        result["share_share_min"] = result['custom_metrics']['share_share_min']
+        result["share_share_max"] = result['custom_metrics']['share_share_max']
+        result["share_share_mean"] = result['custom_metrics']['share_share_mean']
+        
+        result["share_to_own_ratio_min"] = result['custom_metrics']['share_to_own_ratio_min']
+        result["share_to_own_ratio_max"] = result['custom_metrics']['share_to_own_ratio_max']
+        result["share_to_own_ratio_mean"] = result['custom_metrics']['share_to_own_ratio_mean']
