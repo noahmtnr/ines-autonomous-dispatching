@@ -20,3 +20,6 @@ rl/Manhattan_Graph_Environment/trips_kaggle_providers.csv
 
 .tmp
 */.tmp/*
+
+.results/tmp/
+
