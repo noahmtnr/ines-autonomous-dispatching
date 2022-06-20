@@ -17,3 +17,6 @@ data/trips/preprocessed_trips.csv
 rl/Manhattan_Graph_Environment/trips_kaggle_providers.csv
 
 .idea/
+
+.tmp
+*/.tmp/*
