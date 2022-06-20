@@ -1,0 +1,427 @@
+2022-05-26 12:23:04,732 INFO    MainThread:86515 [internal.py:wandb_internal():90] W&B internal server running at pid: 86515, started at: 2022-05-26 12:23:04.731604
+2022-05-26 12:23:04,734 INFO    WriterThread:86515 [datastore.py:open_for_write():75] open: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/run-1hbsn9m5.wandb
+2022-05-26 12:23:04,736 DEBUG   SenderThread:86515 [sender.py:send():232] send: header
+2022-05-26 12:23:04,736 DEBUG   SenderThread:86515 [sender.py:send():232] send: run
+2022-05-26 12:23:04,968 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: check_version
+2022-05-26 12:23:04,970 INFO    SenderThread:86515 [dir_watcher.py:__init__():197] watching files in: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files
+2022-05-26 12:23:04,971 INFO    SenderThread:86515 [sender.py:_start_run_threads():811] run started: 1hbsn9m5 with start time 1653560582
+2022-05-26 12:23:04,971 DEBUG   SenderThread:86515 [sender.py:send():232] send: summary
+2022-05-26 12:23:04,971 INFO    SenderThread:86515 [sender.py:_save_file():948] saving file wandb-summary.json with policy end
+2022-05-26 12:23:04,971 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: check_version
+2022-05-26 12:23:05,060 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: run_start
+2022-05-26 12:23:06,287 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_created():244] file/dir created: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/wandb-summary.json
+2022-05-26 12:23:09,590 DEBUG   HandlerThread:86515 [meta.py:__init__():35] meta init
+2022-05-26 12:23:09,590 DEBUG   HandlerThread:86515 [meta.py:__init__():49] meta init done
+2022-05-26 12:23:09,590 DEBUG   HandlerThread:86515 [meta.py:probe():209] probe
+2022-05-26 12:23:09,592 DEBUG   HandlerThread:86515 [meta.py:_setup_git():199] setup git
+2022-05-26 12:23:09,620 DEBUG   HandlerThread:86515 [meta.py:_setup_git():206] setup git done
+2022-05-26 12:23:09,620 DEBUG   HandlerThread:86515 [meta.py:_save_pip():53] save pip
+2022-05-26 12:23:09,622 DEBUG   HandlerThread:86515 [meta.py:_save_pip():67] save pip done
+2022-05-26 12:23:09,622 DEBUG   HandlerThread:86515 [meta.py:_save_conda():74] save conda
+2022-05-26 12:23:10,293 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_created():244] file/dir created: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/requirements.txt
+2022-05-26 12:23:10,294 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_created():244] file/dir created: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/conda-environment.yaml
+2022-05-26 12:23:10,295 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_created():244] file/dir created: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:23:12,299 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:23:14,305 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:23:16,310 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:23:18,318 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:23:24,368 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/conda-environment.yaml
+2022-05-26 12:23:24,369 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:23:24,488 DEBUG   HandlerThread:86515 [meta.py:_save_conda():84] save conda done
+2022-05-26 12:23:24,488 DEBUG   HandlerThread:86515 [meta.py:probe():247] probe done
+2022-05-26 12:23:24,494 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-26 12:23:24,494 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: stop_status
+2022-05-26 12:23:24,750 DEBUG   SenderThread:86515 [sender.py:send():232] send: telemetry
+2022-05-26 12:23:24,751 DEBUG   SenderThread:86515 [sender.py:send():232] send: files
+2022-05-26 12:23:24,751 INFO    SenderThread:86515 [sender.py:_save_file():948] saving file wandb-metadata.json with policy now
+2022-05-26 12:23:25,353 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_created():244] file/dir created: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/wandb-metadata.json
+2022-05-26 12:23:25,517 INFO    Thread-11 :86515 [upload_job.py:push():132] Uploaded file /var/folders/rx/9zbs_8p92hlb0sgdws1plkfm0000gn/T/tmpyomk1e5fwandb/350cbbmc-wandb-metadata.json
+2022-05-26 12:23:31,001 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-26 12:23:31,002 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: stop_status
+2022-05-26 12:23:31,378 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:23:33,380 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:23:35,386 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/config.yaml
+2022-05-26 12:23:38,342 DEBUG   SenderThread:86515 [sender.py:send():232] send: stats
+2022-05-26 12:23:45,411 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:23:46,203 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-26 12:23:46,203 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: stop_status
+2022-05-26 12:23:47,418 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:23:49,421 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:23:51,424 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:23:53,426 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:23:57,435 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:24:01,379 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-26 12:24:01,385 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: stop_status
+2022-05-26 12:24:09,103 DEBUG   SenderThread:86515 [sender.py:send():232] send: stats
+2022-05-26 12:24:16,560 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-26 12:24:16,560 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: stop_status
+2022-05-26 12:24:31,847 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-26 12:24:31,848 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: stop_status
+2022-05-26 12:24:39,875 DEBUG   SenderThread:86515 [sender.py:send():232] send: stats
+2022-05-26 12:24:47,036 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-26 12:24:47,037 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: stop_status
+2022-05-26 12:24:49,585 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:24:51,595 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:24:53,601 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:24:55,606 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:24:57,611 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:24:59,617 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:25:01,625 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:25:02,201 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-26 12:25:02,202 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: stop_status
+2022-05-26 12:25:03,633 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:25:05,639 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:25:07,649 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:25:09,655 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:25:10,706 DEBUG   SenderThread:86515 [sender.py:send():232] send: stats
+2022-05-26 12:25:11,663 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:25:13,666 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:25:15,668 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:25:17,375 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-26 12:25:17,375 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: stop_status
+2022-05-26 12:25:17,671 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:25:19,681 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:25:21,690 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:25:23,695 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:25:25,702 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:25:27,708 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:25:29,711 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:25:31,720 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:25:32,542 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-26 12:25:32,542 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: stop_status
+2022-05-26 12:25:33,723 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:25:35,725 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:25:38,733 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:25:40,740 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:25:41,513 DEBUG   SenderThread:86515 [sender.py:send():232] send: stats
+2022-05-26 12:25:42,749 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:25:44,756 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:25:46,762 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:25:47,718 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-26 12:25:47,718 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: stop_status
+2022-05-26 12:25:48,769 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:25:50,778 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:25:52,788 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:25:54,796 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:25:56,799 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:25:58,813 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:26:00,814 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:26:02,840 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:26:02,903 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-26 12:26:02,903 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: stop_status
+2022-05-26 12:26:04,847 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:26:06,850 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:26:08,855 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:26:10,858 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:26:12,316 DEBUG   SenderThread:86515 [sender.py:send():232] send: stats
+2022-05-26 12:26:12,868 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:26:14,874 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:26:16,880 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:26:18,078 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-26 12:26:18,078 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: stop_status
+2022-05-26 12:26:18,889 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:26:20,890 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:26:22,897 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:26:24,905 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:26:26,913 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:26:28,916 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:26:30,922 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:26:32,927 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:26:33,260 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-26 12:26:33,261 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: stop_status
+2022-05-26 12:26:34,934 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:26:36,942 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:26:38,958 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:26:40,963 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:26:42,967 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:26:43,071 DEBUG   SenderThread:86515 [sender.py:send():232] send: stats
+2022-05-26 12:26:44,969 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:26:46,978 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:26:48,440 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-26 12:26:48,440 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: stop_status
+2022-05-26 12:26:48,985 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:26:50,989 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:26:52,997 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:26:55,002 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:26:57,006 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:26:59,014 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:27:01,022 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:27:03,029 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:27:03,614 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-26 12:27:03,614 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: stop_status
+2022-05-26 12:27:05,038 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:27:07,047 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:27:09,055 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:27:11,061 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:27:13,068 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:27:13,911 DEBUG   SenderThread:86515 [sender.py:send():232] send: stats
+2022-05-26 12:27:15,075 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:27:17,082 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:27:18,784 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-26 12:27:18,784 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: stop_status
+2022-05-26 12:27:19,087 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:27:21,098 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:27:23,104 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:27:25,110 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:27:27,117 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:27:29,125 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:27:31,131 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:27:33,138 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:27:34,495 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-26 12:27:34,495 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: stop_status
+2022-05-26 12:27:35,145 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:27:37,154 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:27:39,162 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:27:41,171 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:27:43,177 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:27:44,817 DEBUG   SenderThread:86515 [sender.py:send():232] send: stats
+2022-05-26 12:27:45,191 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:27:47,205 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:27:49,217 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:27:49,694 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-26 12:27:49,696 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: stop_status
+2022-05-26 12:27:51,221 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:27:53,232 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:27:55,248 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:27:57,267 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:27:59,272 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:28:01,292 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:28:03,308 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:28:04,888 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-26 12:28:04,889 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: stop_status
+2022-05-26 12:28:05,326 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:28:07,341 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:28:09,354 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:28:11,366 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:28:13,375 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:28:15,383 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:28:16,429 DEBUG   SenderThread:86515 [sender.py:send():232] send: stats
+2022-05-26 12:28:17,393 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:28:19,407 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:28:20,051 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-26 12:28:20,052 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: stop_status
+2022-05-26 12:28:21,422 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:28:23,438 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:28:25,452 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:28:27,467 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:28:29,475 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:28:31,479 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:28:33,493 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:28:35,223 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-26 12:28:35,225 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: stop_status
+2022-05-26 12:28:35,503 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:28:37,519 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:28:39,524 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:28:41,535 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:28:43,543 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:28:45,555 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:28:47,570 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:28:48,083 DEBUG   SenderThread:86515 [sender.py:send():232] send: stats
+2022-05-26 12:28:49,575 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:28:50,407 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-26 12:28:50,407 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: stop_status
+2022-05-26 12:28:51,585 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:28:53,593 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:28:55,603 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:28:57,612 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:28:59,624 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:29:01,636 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:29:03,645 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:29:05,574 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-26 12:29:05,574 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: stop_status
+2022-05-26 12:29:05,660 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:29:07,672 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:29:09,685 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:29:11,688 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:29:13,701 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:29:15,718 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:29:17,724 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:29:19,696 DEBUG   SenderThread:86515 [sender.py:send():232] send: stats
+2022-05-26 12:29:19,734 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:29:20,740 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-26 12:29:20,740 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: stop_status
+2022-05-26 12:29:21,741 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:29:23,760 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:29:25,780 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:29:27,795 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:29:29,808 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:29:31,819 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:29:33,834 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:29:35,841 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:29:35,941 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-26 12:29:35,943 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: stop_status
+2022-05-26 12:29:37,852 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:29:39,863 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:29:42,875 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:29:44,886 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:29:46,890 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:29:48,902 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:29:50,919 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:29:51,142 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-26 12:29:51,142 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: stop_status
+2022-05-26 12:29:51,331 DEBUG   SenderThread:86515 [sender.py:send():232] send: stats
+2022-05-26 12:29:52,924 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:29:54,935 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:29:56,940 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:29:58,953 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:30:00,959 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:30:02,971 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:30:04,979 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:30:06,337 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-26 12:30:06,337 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: stop_status
+2022-05-26 12:30:06,990 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:30:09,003 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:30:11,006 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:30:13,010 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:30:15,027 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:30:17,032 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:30:19,043 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:30:21,061 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:30:21,515 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-26 12:30:21,515 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: stop_status
+2022-05-26 12:30:22,784 DEBUG   SenderThread:86515 [sender.py:send():232] send: stats
+2022-05-26 12:30:23,074 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:30:25,080 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:30:27,104 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:30:29,111 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:30:31,125 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:30:33,129 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:30:35,135 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:30:36,690 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-26 12:30:36,690 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: stop_status
+2022-05-26 12:30:37,145 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:30:39,151 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:30:41,158 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:30:43,165 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:30:45,175 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:30:47,176 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:30:49,190 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:30:51,199 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:30:51,862 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: stop_status
+2022-05-26 12:30:51,862 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: stop_status
+2022-05-26 12:30:53,206 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:30:53,758 DEBUG   SenderThread:86515 [sender.py:send():232] send: stats
+2022-05-26 12:30:55,215 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:30:57,216 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:30:58,644 DEBUG   SenderThread:86515 [sender.py:send():232] send: telemetry
+2022-05-26 12:30:59,223 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:31:00,226 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:31:01,123 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: poll_exit
+2022-05-26 12:31:01,123 DEBUG   SenderThread:86515 [sender.py:send():232] send: exit
+2022-05-26 12:31:01,124 INFO    SenderThread:86515 [sender.py:send_exit():368] handling exit code: 1
+2022-05-26 12:31:01,127 INFO    SenderThread:86515 [sender.py:send_exit():370] handling runtime: 476
+2022-05-26 12:31:01,127 INFO    SenderThread:86515 [sender.py:_save_file():948] saving file wandb-summary.json with policy end
+2022-05-26 12:31:01,128 INFO    SenderThread:86515 [sender.py:send_exit():376] send defer
+2022-05-26 12:31:01,128 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: poll_exit
+2022-05-26 12:31:01,130 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: defer
+2022-05-26 12:31:01,131 INFO    HandlerThread:86515 [handler.py:handle_request_defer():164] handle defer: 0
+2022-05-26 12:31:01,133 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: defer
+2022-05-26 12:31:01,133 INFO    SenderThread:86515 [sender.py:send_request_defer():385] handle sender defer: 0
+2022-05-26 12:31:01,133 INFO    SenderThread:86515 [sender.py:transition_state():389] send defer: 1
+2022-05-26 12:31:01,136 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: defer
+2022-05-26 12:31:01,136 INFO    HandlerThread:86515 [handler.py:handle_request_defer():164] handle defer: 1
+2022-05-26 12:31:01,175 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: defer
+2022-05-26 12:31:01,175 INFO    SenderThread:86515 [sender.py:send_request_defer():385] handle sender defer: 1
+2022-05-26 12:31:01,175 INFO    SenderThread:86515 [sender.py:transition_state():389] send defer: 2
+2022-05-26 12:31:01,176 DEBUG   SenderThread:86515 [sender.py:send():232] send: stats
+2022-05-26 12:31:01,176 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: defer
+2022-05-26 12:31:01,176 INFO    HandlerThread:86515 [handler.py:handle_request_defer():164] handle defer: 2
+2022-05-26 12:31:01,176 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: defer
+2022-05-26 12:31:01,177 INFO    SenderThread:86515 [sender.py:send_request_defer():385] handle sender defer: 2
+2022-05-26 12:31:01,177 INFO    SenderThread:86515 [sender.py:transition_state():389] send defer: 3
+2022-05-26 12:31:01,177 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: defer
+2022-05-26 12:31:01,177 INFO    HandlerThread:86515 [handler.py:handle_request_defer():164] handle defer: 3
+2022-05-26 12:31:01,177 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: defer
+2022-05-26 12:31:01,177 INFO    SenderThread:86515 [sender.py:send_request_defer():385] handle sender defer: 3
+2022-05-26 12:31:01,177 INFO    SenderThread:86515 [sender.py:transition_state():389] send defer: 4
+2022-05-26 12:31:01,178 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: defer
+2022-05-26 12:31:01,178 INFO    HandlerThread:86515 [handler.py:handle_request_defer():164] handle defer: 4
+2022-05-26 12:31:01,178 DEBUG   SenderThread:86515 [sender.py:send():232] send: summary
+2022-05-26 12:31:01,179 INFO    SenderThread:86515 [sender.py:_save_file():948] saving file wandb-summary.json with policy end
+2022-05-26 12:31:01,179 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: defer
+2022-05-26 12:31:01,179 INFO    SenderThread:86515 [sender.py:send_request_defer():385] handle sender defer: 4
+2022-05-26 12:31:01,179 INFO    SenderThread:86515 [sender.py:transition_state():389] send defer: 5
+2022-05-26 12:31:01,179 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: defer
+2022-05-26 12:31:01,179 INFO    HandlerThread:86515 [handler.py:handle_request_defer():164] handle defer: 5
+2022-05-26 12:31:01,180 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: defer
+2022-05-26 12:31:01,180 INFO    SenderThread:86515 [sender.py:send_request_defer():385] handle sender defer: 5
+2022-05-26 12:31:01,228 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:31:01,228 INFO    Thread-7  :86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/wandb-summary.json
+2022-05-26 12:31:01,234 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: poll_exit
+2022-05-26 12:31:01,376 INFO    SenderThread:86515 [sender.py:transition_state():389] send defer: 6
+2022-05-26 12:31:01,376 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: poll_exit
+2022-05-26 12:31:01,378 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: defer
+2022-05-26 12:31:01,379 INFO    HandlerThread:86515 [handler.py:handle_request_defer():164] handle defer: 6
+2022-05-26 12:31:01,379 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: defer
+2022-05-26 12:31:01,379 INFO    SenderThread:86515 [sender.py:send_request_defer():385] handle sender defer: 6
+2022-05-26 12:31:01,379 INFO    SenderThread:86515 [dir_watcher.py:finish():312] shutting down directory watcher
+2022-05-26 12:31:01,484 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: poll_exit
+2022-05-26 12:31:02,232 INFO    SenderThread:86515 [dir_watcher.py:_on_file_modified():257] file/dir modified: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/config.yaml
+2022-05-26 12:31:02,232 INFO    SenderThread:86515 [dir_watcher.py:finish():342] scan: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files
+2022-05-26 12:31:02,234 INFO    SenderThread:86515 [dir_watcher.py:finish():356] scan save: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/requirements.txt requirements.txt
+2022-05-26 12:31:02,235 INFO    SenderThread:86515 [dir_watcher.py:finish():356] scan save: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log output.log
+2022-05-26 12:31:02,238 INFO    SenderThread:86515 [dir_watcher.py:finish():356] scan save: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/config.yaml config.yaml
+2022-05-26 12:31:02,239 INFO    SenderThread:86515 [dir_watcher.py:finish():356] scan save: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/wandb-summary.json wandb-summary.json
+2022-05-26 12:31:02,239 INFO    SenderThread:86515 [dir_watcher.py:finish():356] scan save: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/conda-environment.yaml conda-environment.yaml
+2022-05-26 12:31:02,239 INFO    SenderThread:86515 [dir_watcher.py:finish():356] scan save: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/wandb-metadata.json wandb-metadata.json
+2022-05-26 12:31:02,240 INFO    SenderThread:86515 [sender.py:transition_state():389] send defer: 7
+2022-05-26 12:31:02,244 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: poll_exit
+2022-05-26 12:31:02,250 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: defer
+2022-05-26 12:31:02,250 INFO    HandlerThread:86515 [handler.py:handle_request_defer():164] handle defer: 7
+2022-05-26 12:31:02,267 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: defer
+2022-05-26 12:31:02,267 INFO    SenderThread:86515 [sender.py:send_request_defer():385] handle sender defer: 7
+2022-05-26 12:31:02,267 INFO    SenderThread:86515 [file_pusher.py:finish():145] shutting down file pusher
+2022-05-26 12:31:02,350 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: poll_exit
+2022-05-26 12:31:02,350 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: poll_exit
+2022-05-26 12:31:02,456 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: poll_exit
+2022-05-26 12:31:02,457 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: poll_exit
+2022-05-26 12:31:02,562 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: poll_exit
+2022-05-26 12:31:02,562 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: poll_exit
+2022-05-26 12:31:02,664 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: poll_exit
+2022-05-26 12:31:02,664 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: poll_exit
+2022-05-26 12:31:02,772 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: poll_exit
+2022-05-26 12:31:02,773 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: poll_exit
+2022-05-26 12:31:02,796 INFO    Thread-12 :86515 [upload_job.py:push():132] Uploaded file /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/requirements.txt
+2022-05-26 12:31:02,823 INFO    Thread-14 :86515 [upload_job.py:push():132] Uploaded file /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/config.yaml
+2022-05-26 12:31:02,850 INFO    Thread-15 :86515 [upload_job.py:push():132] Uploaded file /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/wandb-summary.json
+2022-05-26 12:31:02,880 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: poll_exit
+2022-05-26 12:31:02,881 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: poll_exit
+2022-05-26 12:31:02,966 INFO    Thread-16 :86515 [upload_job.py:push():132] Uploaded file /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/conda-environment.yaml
+2022-05-26 12:31:02,985 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: poll_exit
+2022-05-26 12:31:02,986 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: poll_exit
+2022-05-26 12:31:03,080 INFO    Thread-13 :86515 [upload_job.py:push():132] Uploaded file /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/files/output.log
+2022-05-26 12:31:03,088 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: poll_exit
+2022-05-26 12:31:03,088 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: poll_exit
+2022-05-26 12:31:03,194 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: poll_exit
+2022-05-26 12:31:03,194 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: poll_exit
+2022-05-26 12:31:03,283 INFO    Thread-6  :86515 [sender.py:transition_state():389] send defer: 8
+2022-05-26 12:31:03,283 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: defer
+2022-05-26 12:31:03,283 INFO    HandlerThread:86515 [handler.py:handle_request_defer():164] handle defer: 8
+2022-05-26 12:31:03,284 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: defer
+2022-05-26 12:31:03,284 INFO    SenderThread:86515 [sender.py:send_request_defer():385] handle sender defer: 8
+2022-05-26 12:31:03,300 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: poll_exit
+2022-05-26 12:31:03,763 INFO    SenderThread:86515 [sender.py:transition_state():389] send defer: 9
+2022-05-26 12:31:03,763 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: poll_exit
+2022-05-26 12:31:03,764 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: defer
+2022-05-26 12:31:03,764 INFO    HandlerThread:86515 [handler.py:handle_request_defer():164] handle defer: 9
+2022-05-26 12:31:03,764 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: defer
+2022-05-26 12:31:03,764 INFO    SenderThread:86515 [sender.py:send_request_defer():385] handle sender defer: 9
+2022-05-26 12:31:03,765 INFO    SenderThread:86515 [sender.py:transition_state():389] send defer: 10
+2022-05-26 12:31:03,765 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: defer
+2022-05-26 12:31:03,765 INFO    HandlerThread:86515 [handler.py:handle_request_defer():164] handle defer: 10
+2022-05-26 12:31:03,766 DEBUG   SenderThread:86515 [sender.py:send():232] send: final
+2022-05-26 12:31:03,766 DEBUG   SenderThread:86515 [sender.py:send():232] send: footer
+2022-05-26 12:31:03,766 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: defer
+2022-05-26 12:31:03,766 INFO    SenderThread:86515 [sender.py:send_request_defer():385] handle sender defer: 10
+2022-05-26 12:31:03,866 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: poll_exit
+2022-05-26 12:31:03,866 DEBUG   SenderThread:86515 [sender.py:send_request():246] send_request: poll_exit
+2022-05-26 12:31:03,867 INFO    SenderThread:86515 [file_pusher.py:join():150] waiting for file pusher
+2022-05-26 12:31:04,310 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: sampled_history
+2022-05-26 12:31:04,311 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: get_summary
+2022-05-26 12:31:04,311 DEBUG   HandlerThread:86515 [handler.py:handle_request():141] handle_request: shutdown
+2022-05-26 12:31:04,312 INFO    HandlerThread:86515 [handler.py:finish():806] shutting down handler
+2022-05-26 12:31:04,771 INFO    WriterThread:86515 [datastore.py:close():279] close: /Users/noah/Desktop/Repositories/ines-autonomous-dispatching/wandb/run-20220526_122302-1hbsn9m5/run-1hbsn9m5.wandb
+2022-05-26 12:31:05,205 INFO    SenderThread:86515 [sender.py:finish():1110] shutting down sender
+2022-05-26 12:31:05,205 INFO    SenderThread:86515 [file_pusher.py:finish():145] shutting down file pusher
+2022-05-26 12:31:05,206 INFO    SenderThread:86515 [file_pusher.py:join():150] waiting for file pusher
+2022-05-26 12:31:05,215 INFO    MainThread:86515 [internal.py:handle_exit():80] Internal process exited

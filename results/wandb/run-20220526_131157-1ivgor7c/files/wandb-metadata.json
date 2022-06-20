@@ -1,0 +1,22 @@
+{
+    "os": "macOS-10.16-x86_64-i386-64bit",
+    "python": "3.8.8",
+    "heartbeatAt": "2022-05-26T11:12:05.156567",
+    "startedAt": "2022-05-26T11:11:57.666480",
+    "docker": null,
+    "cpu_count": 4,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "/Users/noah/Desktop/Repositories/ines-autonomous-dispatching/rl/Manhattan_Graph_Environment/train_PPO.py",
+    "codePath": "rl/Manhattan_Graph_Environment/train_PPO.py",
+    "git": {
+        "remote": "git@github.com:knoms/ines-autonomous-dispatching.git",
+        "commit": "f379e8fa72a42c073bb0fcdb1a7f9e61a74a04f6"
+    },
+    "email": "noah.mautner@outlook.de",
+    "root": "/Users/noah/Desktop/Repositories/ines-autonomous-dispatching",
+    "host": "mobile-218-228.wlan.uni-mannheim.de",
+    "username": "noah",
+    "executable": "/Users/noah/opt/anaconda3/bin/python"
+}
