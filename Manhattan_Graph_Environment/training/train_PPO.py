@@ -56,7 +56,7 @@ n_iter = 1
 for n in range(n_iter):
     result = trainer.train()
     results.append(result)
-    print("TEST", n)
+    print("Episode", n)
 
     episode = {'n': n,
                'n_trained_episodes': int(result['episodes_this_iter']),
@@ -82,6 +82,15 @@ for n in range(n_iter):
                'share_share_min': float(result["share_share_min"]),
                'share_share_max': float(result["share_share_max"]),
                'share_share_mean': float(result["share_share_mean"]),
+               'share_to_own_ratio_min': float(result["share_to_own_ratio_min"]),
+               'share_to_own_ratio_max': float(result["share_to_own_ratio_max"]),
+               'share_to_own_ratio_mean': float(result["share_to_own_ratio_mean"]),
+               'count_steps_min': float(result["count_steps_min"]),
+               'count_steps_max': float(result["count_steps_max"]),
+               'count_steps_mean': float(result["count_steps_mean"]),
+               'count_delivered_on_time': int(result["count_delivered_on_time"]),
+               'count_delivered_with_delay': int(result["count_delivered_with_delay"]),
+               'count_not_delivered': int(result["count_not_delivered"]),
                }
     episode_data.append(episode)
     episode_json.append(json.dumps(episode))
@@ -95,6 +104,12 @@ for n in range(n_iter):
                 "share_of_bookown_mean": result['share_bookown_mean'],
                 "share_of_wait_mean": result['share_wait_mean'],
                 "share_of_share_mean": result['share_share_mean'],
+                "share_to_own_ratio_max": result['share_to_own_ratio_max'],
+                "share_to_own_ratio_mean": result['share_to_own_ratio_mean'],
+                'count_steps_mean': result["count_steps_mean"],
+                'count_delivered_on_time': result["count_delivered_on_time"],
+                'count_delivered_with_delay': result["count_delivered_with_delay"],
+                'count_not_delivered': result["count_not_delivered"],
     })
 
     print(f'{n + 1:3d}: Min/Mean/Max reward: {result["episode_reward_min"]:8.4f}/{result["episode_reward_mean"]:8.4f}/{result["episode_reward_max"]:8.4f}, len mean: {result["episode_len_mean"]:8.4f}. Checkpoint saved to {file_name}')

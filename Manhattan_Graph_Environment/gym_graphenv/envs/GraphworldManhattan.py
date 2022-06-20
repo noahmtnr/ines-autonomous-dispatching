@@ -75,6 +75,7 @@ class GraphEnv(gym.Env):
 
 
         self.state = None
+        self.state_of_delivery = DeliveryState.IN_DELIVERY
 
       
         self.action_space = gym.spaces.Discrete(self.n_hubs) 
@@ -177,6 +178,7 @@ class GraphEnv(gym.Env):
         self.count_wait = 0
         self.count_bookown = 0
         self.count_share = 0
+        self.count_steps = 0
         self.action_choice = None
         # old position is current position
         self.old_position = self.start_hub
@@ -186,6 +188,7 @@ class GraphEnv(gym.Env):
         self.own_ride = False
         self.has_waited=False
         reward=0
+
         #self.available_actions = self.get_available_actions()
 
         self.state = {
@@ -220,6 +223,7 @@ class GraphEnv(gym.Env):
 
         if self.validateAction(action):
             startTimeWait = time.time()
+            self.count_steps +=1
             if(action == self.position):
             # action = wait
                 step_duration = 300
@@ -298,8 +302,9 @@ class GraphEnv(gym.Env):
 
         self.count_actions += 1
 
-        reward, done = self.compute_reward(action)
-
+        reward, done, state_of_delivery = self.compute_reward(action)
+        
+        self.state_of_delivery = state_of_delivery
         executionTime = (time.time() - startTime)
         # print('Step() Execution time: ' + str(executionTime) + ' seconds')
 
@@ -314,6 +319,7 @@ class GraphEnv(gym.Env):
         if((self.time-self.deadline).total_seconds()/60 >= 120):
             done = True
             reward = -(cost_of_action / 100) - 10000
+            state_of_delivery = DeliveryState.NOT_DELIVERED
             print("BOX WAS NOT DELIVERED until 2 hours after deadline")
         # if box is delivered to final hub in time
         if (self.position == self.final_hub and self.time <= self.deadline):
@@ -321,6 +327,7 @@ class GraphEnv(gym.Env):
             reward = 1000
             reward -= (cost_of_action / 100)
             done = True
+            state_of_delivery = DeliveryState.DELIVERED_ON_TIME
         # if box is delivered to final hub with delay
         elif(self.position == self.final_hub and (self.time-self.deadline).total_seconds()/60 < 120): #self.time > self.deadline):
             overtime = self.time - self.deadline
@@ -329,13 +336,15 @@ class GraphEnv(gym.Env):
             reward = 1000 - overtime
             reward -= (cost_of_action / 100)
             done = True
+            state_of_delivery = DeliveryState.DELIVERED_WITH_DELAY
         # if box is not delivered to final hub
         elif(done==False):
             reward = -(cost_of_action / 100)
             print(f"INTERMEDIATE STEP ACTIONS: (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown}")
+            state_of_delivery = DeliveryState.IN_DELIVERY
             #done = False
 
-        return reward, done
+        return reward, done, state_of_delivery
         
     
     # def compute_reward(self, done):
@@ -636,7 +645,33 @@ class GraphEnv(gym.Env):
 
         return plot
 
+class DeliveryState:
+    DELIVERED_ON_TIME, DELIVERED_WITH_DELAY, NOT_DELIVERED, IN_DELIVERY = range(4)
+
 class CustomCallbacks(DefaultCallbacks):
+    count_delivered_on_time = 0
+    count_delivered_with_delay = 0
+    count_not_delivered = 0
+
+    def on_trainer_init(
+        self,
+        *,
+        trainer,
+        **kwargs,
+    ) -> None:
+        """Callback run when a new trainer instance has finished setup.
+
+        This method gets called at the end of Trainer.setup() after all
+        the initialization is done, and before actually training starts.
+
+        Args:
+            trainer: Reference to the trainer instance.
+            kwargs: Forward compatibility placeholder.
+        """
+        self.count_delivered_on_time = 0
+        self.count_delivered_with_delay = 0
+        self.count_not_delivered = 0
+        
 
     def on_episode_start(
         self,
@@ -655,8 +690,9 @@ class CustomCallbacks(DefaultCallbacks):
             "after env reset!"
         )
         episode.env = base_env.get_sub_environments(as_dict = True)[0]
-        print(episode.env)
-        episode.user_data["pole_angles"] = 0
+        episode.custom_metrics["count_not_delivered"] = 0
+        episode.custom_metrics["count_delivered_with_delay"] = 0
+        episode.custom_metrics["count_delivered_on_time"] = 0
 
     def on_episode_step(
         self,
@@ -698,11 +734,22 @@ class CustomCallbacks(DefaultCallbacks):
         episode.custom_metrics["count_wait"] = episode.env.count_wait
         episode.custom_metrics["count_bookown"] = episode.env.count_bookown
         episode.custom_metrics["count_share"] = episode.env.count_share
+        episode.custom_metrics["count_steps"] = episode.env.count_steps
         episode.custom_metrics["share_wait"] = float(episode.env.count_wait / episode.env.count_actions)
         episode.custom_metrics["share_bookown"] = float(episode.env.count_bookown / episode.env.count_actions)
         episode.custom_metrics["share_share"] = float(episode.env.count_share / episode.env.count_actions)
         episode.custom_metrics["share_to_own_ratio"] = episode.env.count_share if episode.env.count_bookown == 0 else float(episode.env.count_share / episode.env.count_bookown)
         episode.custom_metrics["share_to_own_ratio"] = episode.env.count_share if episode.env.count_bookown == 0 else float(episode.env.count_share / episode.env.count_bookown)
+
+        if (episode.env.state_of_delivery == DeliveryState.DELIVERED_ON_TIME):
+            self.count_delivered_on_time +=1
+            episode.custom_metrics["count_delivered_on_time"] = self.count_delivered_on_time
+        elif (episode.env.state_of_delivery == DeliveryState.DELIVERED_WITH_DELAY):
+            self.count_delivered_with_delay +=1
+            episode.custom_metrics["count_delivered_with_delay"] = self.count_delivered_with_delay
+        elif (episode.env.state_of_delivery == DeliveryState.NOT_DELIVERED):
+            self.count_not_delivered +=1
+            episode.custom_metrics["count_not_delivered"] = self.count_not_delivered
 
     def on_train_result(self, *, trainer, result: dict, **kwargs):
         print(
@@ -720,6 +767,9 @@ class CustomCallbacks(DefaultCallbacks):
         result["count_share_min"] = result['custom_metrics']['count_share_min']
         result["count_share_max"] = result['custom_metrics']['count_share_max']
         result["count_share_mean"] = result['custom_metrics']['count_share_mean']
+        result["count_steps_min"] = result['custom_metrics']['count_steps_min']
+        result["count_steps_max"] = result['custom_metrics']['count_steps_max']
+        result["count_steps_mean"] = result['custom_metrics']['count_steps_mean']
 
         result["share_wait_min"] = result['custom_metrics']['share_wait_min']
         result["share_wait_max"] = result['custom_metrics']['share_wait_max']
@@ -734,3 +784,7 @@ class CustomCallbacks(DefaultCallbacks):
         result["share_to_own_ratio_min"] = result['custom_metrics']['share_to_own_ratio_min']
         result["share_to_own_ratio_max"] = result['custom_metrics']['share_to_own_ratio_max']
         result["share_to_own_ratio_mean"] = result['custom_metrics']['share_to_own_ratio_mean']
+
+        result["count_delivered_on_time"] = result['custom_metrics']["count_delivered_on_time_max"]
+        result["count_delivered_with_delay"] = result['custom_metrics']["count_delivered_with_delay_max"]
+        result["count_not_delivered"] = result['custom_metrics']["count_not_delivered_max"]
