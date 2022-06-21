@@ -596,3 +596,7 @@ class CustomCallbacks(DefaultCallbacks):
         result["count_delivered_on_time"] = result['custom_metrics']["count_delivered_on_time_max"]
         result["count_delivered_with_delay"] = result['custom_metrics']["count_delivered_with_delay_max"]
         result["count_not_delivered"] = result['custom_metrics']["count_not_delivered_max"]
+
+        self.count_delivered_on_time = 0
+        self.count_delivered_with_delay = 0
+        self.count_not_delivered = 0
