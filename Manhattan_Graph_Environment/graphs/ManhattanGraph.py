@@ -2,12 +2,13 @@ import osmnx as ox
 import pandas as pd
 import random
 from datetime import datetime, timedelta
+import os
 #graph to be used: full.graphml (all nodes)
 #if we use small_manhattan.graphml, we do not have all nodes which are in the trips and then we get Key Error
 class ManhattanGraph:
 
     def __init__(self, filename, num_hubs):
-        filepath = ("data/graph/%s.graphml") % (filename)
+        filepath = os.path.join('data', 'graph', ("%s.graphml") % (filename))
         self.inner_graph = ox.load_graphml(filepath)
         self.inner_graph = ox.add_edge_speeds(self.inner_graph,fallback=30)
         self.inner_graph = ox.add_edge_travel_times(self.inner_graph)
@@ -26,7 +27,9 @@ class ManhattanGraph:
             self.hubs(list): List of hubs in graph
         """
         # the code below is for mapping the pre-defined hubs (customer/store/trips) to nodes in the graph
-        hubs_file = pd.read_csv("data/hubs/new_hubs.csv")
+        filepath = os.path.join('data', 'hubs', 'new_hubs.csv')
+        hubs_file = pd.read_csv(filepath)
+        print("Read hubs successfully")
         hubs = []
         i=0
         for row in hubs_file.index:    
@@ -59,7 +62,8 @@ class ManhattanGraph:
         """
         
         #trips for simple graph, only the first 5000 rows
-        all_trips = pd.read_csv('data/trips/preprocessed_trips.csv')
+        filepath = os.path.join('data', 'trips', 'preprocessed_trips.csv')
+        all_trips = pd.read_csv(filepath)
         self.trips = self.prefilter_trips(all_trips, start_time).reset_index(drop=True)
 
         #compute trip length and add to csv
@@ -85,11 +89,12 @@ class ManhattanGraph:
         # add mobility providers randomly
         provider_column=[]
         totalprice_column=[]
-        x = pd.read_csv("Provider.csv")
+        filepath = os.path.join('data', 'others', 'Provider.csv')
+        providers = pd.read_csv(filepath)
         for i in self.trips.index:
-            provider_id = x['id'].sample(n=1).iloc[0]
+            provider_id = providers['id'].sample(n=1).iloc[0]
             provider_column.append(provider_id)
-            selected_row = x[x['id']==provider_id]
+            selected_row = providers[providers['id']==provider_id]
             basic_price = selected_row['basic_cost']
             km_price = selected_row['cost_per_km']
             leng = self.trips.iloc[0]['route_length']

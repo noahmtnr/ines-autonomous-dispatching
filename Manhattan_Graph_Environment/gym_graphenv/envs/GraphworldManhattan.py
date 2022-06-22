@@ -16,6 +16,7 @@ import time
 import pickle
 import logging
 import json
+import os
 
 from typing import Dict
 
@@ -401,7 +402,8 @@ class GraphEnv(gym.Env):
         return action < self.n_hubs
 
     def read_config(self):
-        with open('C:/Users/maren/OneDrive/Dokumente/Uni_Mannheim/MASTER/FSS 2022/Teamprojekt/ines-autonomous-dispatching/env_config.pkl','rb') as f:
+        filepath = os.path.join('env_config.pkl')
+        with open(filepath,'rb') as f:
             loaded_dict = pickle.load(f)
         self.env_config = loaded_dict
         return loaded_dict
