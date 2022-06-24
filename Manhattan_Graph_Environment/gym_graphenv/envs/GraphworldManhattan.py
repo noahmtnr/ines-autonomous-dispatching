@@ -193,7 +193,7 @@ class GraphEnv(gym.Env):
             }
 
         resetExecutionTime = (time.time() - resetExecutionStart)
-        print(f"Reset() Execution Time: {str(resetExecutionTime)}")
+        # print(f"Reset() Execution Time: {str(resetExecutionTime)}")
         return self.state
 
     def step(self, action: int):
@@ -226,7 +226,7 @@ class GraphEnv(gym.Env):
                 self.action_choice = "Wait"
                 print("action == wait ")
                 executionTimeWait = (time.time() - startTimeWait)
-                print(f"Time Wait: {str(executionTimeWait)}")
+                # print(f"Time Wait: {str(executionTimeWait)}")
                 pass
 
             # action = share ride or book own ride
@@ -263,7 +263,7 @@ class GraphEnv(gym.Env):
                 self.position = action
                 
                 executionTimeRide = (time.time() - startTimeRide)
-                print(f"Time Ride: {str(executionTimeRide)}")
+                # print(f"Time Ride: {str(executionTimeRide)}")
                 pass 
         else:
             print("invalid action")
@@ -277,8 +277,8 @@ class GraphEnv(gym.Env):
         self.learn_graph.add_remaining_distance_layer(current_hub=self.position, distance_matrix=self.distance_matrix)
         startTimeLearn = time.time()
         self.state = {'cost' : self.learn_graph.adjacency_matrix('cost')[self.position].astype(int),'remaining_distance': self.learn_graph.adjacency_matrix('remaining_distance')[self.position].astype(int),'current_hub' : self.one_hot(self.position).astype(int), 'final_hub' : self.one_hot(self.final_hub).astype(int)}
-        print("New State: ")        
-        print(self.state)
+        # print("New State: ")        
+        # print(self.state)
 
         self.time += timedelta(seconds=step_duration)
 
@@ -321,7 +321,7 @@ class GraphEnv(gym.Env):
         # if box is not delivered to final hub
         elif(done==False):
             reward = -(cost_of_action / 100)
-            print(f"INTERMEDIATE STEP ACTIONS: (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown}")
+            # print(f"INTERMEDIATE STEP ACTIONS: (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown}")
             state_of_delivery = DeliveryState.IN_DELIVERY
             #done = False
 
@@ -340,7 +340,7 @@ class GraphEnv(gym.Env):
         available_rides = list(self.availableTrips(10))
         
         executionTime = (time.time() - startTime)
-        print('get_available_actions() Execution time: ' + str(executionTime) + ' seconds')
+        # print('get_available_actions() Execution time: ' + str(executionTime) + ' seconds')
 
         available_actions = [wait,ownRide,*available_rides]
         self.available_actions = available_actions
@@ -391,11 +391,11 @@ class GraphEnv(gym.Env):
             shared_rides_mask[self.manhattan_graph.get_hub_index_by_nodeid(list_trips[i]['target_hub'])] = 1
 
         self.shared_rides_mask = shared_rides_mask
-        print(shared_rides_mask)
-        print(list_trips)
+        # print(shared_rides_mask)
+        # print(list_trips)
 
         executionTime = (time.time() - startTime)
-        print('found '+ str(len(list_trips)) +' trips, ' + 'current time: ' + str(self.time))
+        # print('found '+ str(len(list_trips)) +' trips, ' + 'current time: ' + str(self.time))
         return list_trips
 
     def validateAction(self, action):
@@ -462,13 +462,16 @@ class CustomCallbacks(DefaultCallbacks):
     count_delivered_on_time = 0
     count_delivered_with_delay = 0
     count_not_delivered = 0
+    last_count_delivered_on_time = 0
+    last_count_delivered_with_delay = 0
+    last_count_not_delivered = 0
 
-    def on_trainer_init(
+    def on_algorithm_init(
         self,
         *,
-        trainer,
+        algorithm,
         **kwargs,
-    ) -> None:
+    ):
         """Callback run when a new trainer instance has finished setup.
 
         This method gets called at the end of Trainer.setup() after all
@@ -595,10 +598,10 @@ class CustomCallbacks(DefaultCallbacks):
         result["share_to_own_ratio_max"] = result['custom_metrics']['share_to_own_ratio_max']
         result["share_to_own_ratio_mean"] = result['custom_metrics']['share_to_own_ratio_mean']
 
-        result["count_delivered_on_time"] = result['custom_metrics']["count_delivered_on_time_max"]
-        result["count_delivered_with_delay"] = result['custom_metrics']["count_delivered_with_delay_max"]
-        result["count_not_delivered"] = result['custom_metrics']["count_not_delivered_max"]
-
-        self.count_delivered_on_time = 0
-        self.count_delivered_with_delay = 0
-        self.count_not_delivered = 0
+        result["count_delivered_on_time"] = result['custom_metrics']["count_delivered_on_time_max"] - self.last_count_delivered_on_time
+        result["count_delivered_with_delay"] = result['custom_metrics']["count_delivered_with_delay_max"] - self.last_count_delivered_with_delay
+        result["count_not_delivered"] = result['custom_metrics']["count_not_delivered_max"] - self.last_count_not_delivered
+        
+        self.last_count_not_delivered = result["count_delivered_on_time"]
+        self.last_count_delivered_with_delay = result["count_delivered_with_delay"]
+        self.last_count_delivered_on_time = result["count_delivered_on_time"]
