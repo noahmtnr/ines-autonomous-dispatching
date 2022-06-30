@@ -46,7 +46,7 @@ class GraphEnv(gym.Env):
         self.LEARNGRAPH_FIRST_INIT_DONE = False
         print("USE CONFIG", use_config)
 
-
+        self.done = False
         # f = open('graphworld_config.json')
         # data = json.load(f)
         # use_config=data['use_config']
@@ -112,6 +112,7 @@ class GraphEnv(gym.Env):
         # two cases depending if we have env config 
         #super().reset()
 
+        #self.done = False
         resetExecutionStart = time.time()
 
         pickup_day = np.random.randint(low=1,high=14)
@@ -208,7 +209,7 @@ class GraphEnv(gym.Env):
 
         startTime = time.time()
 
-        done =  False
+        self.done =  False
 
         # set old position to current position before changing current position
         self.old_position = self.position
@@ -284,21 +285,21 @@ class GraphEnv(gym.Env):
 
         self.count_actions += 1
 
-        reward, done, state_of_delivery = self.compute_reward(action)
+        reward, self.done, state_of_delivery = self.compute_reward(action)
         
         self.state_of_delivery = state_of_delivery
         executionTime = (time.time() - startTime)
 
-        return self.state, reward,  done, {"timestamp": self.time,"step_travel_time":step_duration,"distance":self.distance_matrix[self.old_position][self.position], "count_hubs":self.count_hubs, "action": self.action_choice, "hub_index": action}
+        return self.state, reward,  self.done, {"timestamp": self.time,"step_travel_time":step_duration,"distance":self.distance_matrix[self.old_position][self.position], "count_hubs":self.count_hubs, "action": self.action_choice, "hub_index": action}
 
     
     def compute_reward(self, action):
         cost_of_action = self.learn_graph.adjacency_matrix('cost')[self.old_position][action]
         print(self.old_position, "->", action, cost_of_action)
-        done = False
+        self.done = False
         # if delay is greater than 2 hours (=120 minutes), terminate training episode
         if((self.time-self.deadline).total_seconds()/60 >= 120):
-            done = True
+            self.done = True
             reward = -(cost_of_action / 100) - 10000
             state_of_delivery = DeliveryState.NOT_DELIVERED
             print("BOX WAS NOT DELIVERED until 2 hours after deadline")
@@ -307,7 +308,7 @@ class GraphEnv(gym.Env):
             print(f"DELIVERED IN TIME AFTER {self.count_actions} ACTIONS (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown}")
             reward = 1000
             reward -= (cost_of_action / 100)
-            done = True
+            self.done = True
             state_of_delivery = DeliveryState.DELIVERED_ON_TIME
         # if box is delivered to final hub with delay
         elif(self.position == self.final_hub and (self.time-self.deadline).total_seconds()/60 < 120): #self.time > self.deadline):
@@ -316,16 +317,16 @@ class GraphEnv(gym.Env):
             overtime = round(overtime.total_seconds()/60)
             reward = 1000 - overtime
             reward -= (cost_of_action / 100)
-            done = True
+            self.done = True
             state_of_delivery = DeliveryState.DELIVERED_WITH_DELAY
         # if box is not delivered to final hub
-        elif(done==False):
+        elif(self.done==False):
             reward = -(cost_of_action / 100)
             # print(f"INTERMEDIATE STEP ACTIONS: (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown}")
             state_of_delivery = DeliveryState.IN_DELIVERY
             #done = False
 
-        return reward, done, state_of_delivery
+        return reward, self.done, state_of_delivery
     
     def get_available_actions(self):
         """ Returns the available actions at the current position. Uses a simplified action space with moves to all direct neighbors allowed.
