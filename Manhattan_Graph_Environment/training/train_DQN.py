@@ -40,6 +40,12 @@ trainer_config["n_step"] = 1
 trainer_config["framework"] = "torch"
 trainer_config["callbacks"] = CustomCallbacks
 #trainer_config["num_gpus"] = int(os.environ.get("RLLIB_NUM_GPUS", "0"))
+trainer_config["explore"] = True
+trainer_config["exploration_config"] = {
+    "type": "EpsilonGreedy",
+    "initial_epsilon": 1.0,
+    "final_epsilon": 0.02,
+}
 
 
 # Initialize trainer
