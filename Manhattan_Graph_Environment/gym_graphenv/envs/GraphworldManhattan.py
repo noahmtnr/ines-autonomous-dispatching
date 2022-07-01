@@ -17,6 +17,7 @@ import pickle
 import logging
 import json
 import os
+from config.definitions import ROOT_DIR
 
 from typing import Dict
 
@@ -403,7 +404,7 @@ class GraphEnv(gym.Env):
         return action < self.n_hubs
 
     def read_config(self):
-        filepath = os.path.join('env_config.pkl')
+        filepath = os.path.join(ROOT_DIR,'env_config.pkl')
         with open(filepath,'rb') as f:
             loaded_dict = pickle.load(f)
         self.env_config = loaded_dict
@@ -603,6 +604,6 @@ class CustomCallbacks(DefaultCallbacks):
         result["count_delivered_with_delay"] = result['custom_metrics']["count_delivered_with_delay_max"] - self.last_count_delivered_with_delay
         result["count_not_delivered"] = result['custom_metrics']["count_not_delivered_max"] - self.last_count_not_delivered
         
-        self.last_count_not_delivered = result["count_delivered_on_time"]
+        self.last_count_not_delivered = result["count_not_delivered"]
         self.last_count_delivered_with_delay = result["count_delivered_with_delay"]
         self.last_count_delivered_on_time = result["count_delivered_on_time"]
