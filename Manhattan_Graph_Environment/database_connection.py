@@ -8,9 +8,9 @@ import time
 class DBConnection:
   def __init__(self):
     self.mydb = mysql.connector.connect(
-      host="localhost",
-      user="root",
-      password="root",
+      host="mannheimprojekt.mysql.database.azure.com",
+      user="mannheim",
+      password="Projekt2022",
       database="mannheimprojekt",
       auth_plugin='mysql_native_password'
     )
@@ -138,6 +138,15 @@ class DBConnection:
     
     self.mydb.commit()
 
+  def getAllHubs(self):
+    sql = "SELECT * FROM HUBS"
+
+    self.mycursor.execute(sql)
+    result = self.mycursor.fetchall()
+    print(result)
+    return result
+
+
   def close_connection(self):
     self.cursor.close()
     self.mydb.close()
@@ -145,6 +154,7 @@ class DBConnection:
   
 
 DB = DBConnection()
+DB.getAllHubs()
   
 # print(DB.getAvailableTrips(42430063, '2016-01-03 19:50:10', '2016-01-03 19:55:10'))
 # print(DB.getRouteFromTrip('id0000569'))
