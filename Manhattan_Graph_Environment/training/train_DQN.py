@@ -63,7 +63,7 @@ shutil.rmtree(ray_results, ignore_errors=True, onerror=None)   # clean up old ru
 results = []
 episode_data = []
 episode_json = []
-n_iter = 120
+n_iter = 300
 for n in range(n_iter):
     result = trainer.train()
     results.append(result)
@@ -102,6 +102,7 @@ for n in range(n_iter):
                'count_delivered_on_time': int(result["count_delivered_on_time"]),
                'count_delivered_with_delay': int(result["count_delivered_with_delay"]),
                'count_not_delivered': int(result["count_not_delivered"]),
+               'share_delivered_on_time': float(result["count_delivered_on_time"]/result['episodes_this_iter'])
                }
     episode_data.append(episode)
     episode_json.append(json.dumps(episode))
@@ -121,6 +122,7 @@ for n in range(n_iter):
                 'count_delivered_on_time': result["count_delivered_on_time"],
                 'count_delivered_with_delay': result["count_delivered_with_delay"],
                 'count_not_delivered': result["count_not_delivered"],
+                'share_delivered_on_time': result["count_delivered_on_time"]/result['episodes_this_iter']
     })
 
     print(f'{n + 1:3d}: Min/Mean/Max reward: {result["episode_reward_min"]:8.4f}/{result["episode_reward_mean"]:8.4f}/{result["episode_reward_max"]:8.4f}, len mean: {result["episode_len_mean"]:8.4f}. Checkpoint saved to {file_name}')
