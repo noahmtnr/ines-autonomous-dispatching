@@ -9,13 +9,19 @@ import wandb
 
 # CHANGES HERE
 # uncomment if error appears
-# import os
-# os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
+import os
+os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 # CHANGES END HERE
 
 
 import ray
 from ray.rllib.agents.dqn import DQNTrainer, DEFAULT_CONFIG
+from ray.rllib.models import ModelCatalog
+from ray.rllib.models.tf.tf_modelv2 import TFModelV2
+import tensorflow as tf
+from tensorflow import keras
+from keras.layers import Dense,LSTM,GRU,Dropout, Flatten
+from ray.rllib.models.tf.misc import normc_initializer
 
 sys.path.insert(0,"")
 
@@ -25,34 +31,80 @@ from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import Gr
 wandb.login(key="93aab2bcc48447dd2e8f74124d0258be2bf93859")
 wandb.init(project="Comparison-Total_Env", entity="hitchhike")
 
+# class CustomModel(TFModelV2):
+#     def __init__(self, obs_space, action_space, num_outputs, model_config, name):
+#         super(CustomModel, self).__init__(obs_space, action_space, num_outputs, model_config, name)
+#         self.inputs = tf.keras.layers.Input(shape=obs_space.shape, name="final_hub")
+#         layer_1 = tf.keras.layers.Dense(
+#             70,
+#             name="my_layer1",
+#             activation=tf.nn.relu,
+#             kernel_initializer=normc_initializer(1.0),
+#         )(self.inputs)
+#         layer_out = tf.keras.layers.Dense(
+#             num_outputs,
+#             name="my_out",
+#             activation=None,
+#             kernel_initializer=normc_initializer(0.01),
+#         )(layer_1)
+#         value_out = tf.keras.layers.Dense(
+#             1,
+#             name="value_out",
+#             activation=None,
+#             kernel_initializer=normc_initializer(0.01),
+#         )(layer_1)
+#         self.base_model = tf.keras.Model(self.inputs, [layer_out, value_out])
+
+#     def forward(self, input_dict, state, seq_lens):
+#         model_out, self._value_out = self.base_model(input_dict["obs"])
+#         return model_out, state
+
+#     def value_function(self):
+#         return tf.reshape(self._value_out, [-1])
+
+# ModelCatalog.register_custom_model("my_tf_model", CustomModel)
+
 env=GraphEnv()
 
 
 # Initialize Ray
 ray.init()
 
-#Set trainer configuration 
-trainer_config = DEFAULT_CONFIG.copy()
-trainer_config['num_workers'] = 1
-trainer_config["train_batch_size"] = 400
-trainer_config["gamma"] = 0.95
-trainer_config["n_step"] = 1
-#trainer_config["framework"] = "torch"
-trainer_config["callbacks"] = CustomCallbacks
-#trainer_config["num_gpus"] = int(os.environ.get("RLLIB_NUM_GPUS", "0"))
-trainer_config["explore"] = True
-trainer_config["exploration_config"] = {
-    "type": "EpsilonGreedy",
-    "initial_epsilon": 1.0,
-    "final_epsilon": 0.02,
-}
+
+rainbow_config = DEFAULT_CONFIG.copy()
+rainbow_config['num_workers'] = 3
+rainbow_config["train_batch_size"] = 400
+rainbow_config["gamma"] = 0.99
+# rainbow_config["framework"] = "torch"
+rainbow_config["callbacks"] = CustomCallbacks
+#rainbow_config["hiddens"] = [70] # to try with 1024  //was also 516
+# rainbow_config["model"] = {
+#     "custom_model": "my_tf_model",
+# }
+
+#num_gpus and other gpu parameters in order to train with gpu
+#rainbow_config["num_gpus"] = int(os.environ.get("RLLIB_NUM_GPUS", "0"))
+
+#rainbow parameters
+
+# N-step Q learning
+rainbow_config["n_step"]= 3 #[between 1 and 10]  //was 5 and 7
+# Whether to use noisy network
+rainbow_config["noisy"] = True
+# rainbow_config["sigma0"] = 0.2
+# Number of atoms for representing the distribution of return. When
+# this is greater than 1, distributional Q-learning is used.
+# the discrete supports are bounded by v_min and v_max
+rainbow_config["num_atoms"] = 70 #[more than 1] //was 51,20
+rainbow_config["v_min"] =-15000
+rainbow_config["v_max"]=10000 # (set v_min and v_max according to your expected range of returns).
 
 
 # Initialize trainer
-trainer = DQNTrainer(trainer_config,GraphEnv )
+trainer = DQNTrainer(rainbow_config,GraphEnv )
 
 #Define the path where the results of the trainer should be saved
-checkpoint_root = "tmp/dqn/graphworld"
+checkpoint_root = "tmp/rainbow/graphworld"
 shutil.rmtree(checkpoint_root, ignore_errors=True, onerror=None)   # clean up old runs
 ray_results = "{}/ray_results/".format(os.getenv("HOME"))
 shutil.rmtree(ray_results, ignore_errors=True, onerror=None)   # clean up old runs
@@ -68,7 +120,7 @@ for n in range(n_iter):
     result = trainer.train()
     results.append(result)
     print("Episode", n)
-
+    print("Result",result)
     episode = {'n': n,
                'n_trained_episodes': int(result['episodes_this_iter']),
                'episode_reward_min': float(result['episode_reward_min']),
@@ -99,14 +151,9 @@ for n in range(n_iter):
                'count_steps_min': float(result["count_steps_min"]),
                'count_steps_max': float(result["count_steps_max"]),
                'count_steps_mean': float(result["count_steps_mean"]),
-                
                'count_delivered_on_time': int(result["count_delivered_on_time"]),
                'count_delivered_with_delay': int(result["count_delivered_with_delay"]),
                'count_not_delivered': int(result["count_not_delivered"]),
-               # für den Vergleich später
-               # 'count_not_delivered_first': int(result["count_not_delivered_first"]),
-               'share_delivered_on_time': float(result["count_delivered_on_time"]/result['episodes_this_iter'])
-               
                }
     episode_data.append(episode)
     episode_json.append(json.dumps(episode))
@@ -126,9 +173,6 @@ for n in range(n_iter):
                 'count_delivered_on_time': result["count_delivered_on_time"],
                 'count_delivered_with_delay': result["count_delivered_with_delay"],
                 'count_not_delivered': result["count_not_delivered"],
-                # für den Vergleich
-                # 'count_not_delivered_first': result["count_not_delivered_first"],
-                'share_delivered_on_time': result["count_delivered_on_time"]/result['episodes_this_iter']
     })
 
     print(f'{n + 1:3d}: Min/Mean/Max reward: {result["episode_reward_min"]:8.4f}/{result["episode_reward_mean"]:8.4f}/{result["episode_reward_max"]:8.4f}, len mean: {result["episode_len_mean"]:8.4f}. Checkpoint saved to {file_name}')
