@@ -78,31 +78,18 @@ class GraphEnv(gym.Env):
 
       
         self.action_space = gym.spaces.Discrete(self.n_hubs) 
-        
-        # self.observation_space = spaces.Dict(dict(
-        #     #layer_one = spaces.Box(low=0, high=100, shape=(1,self.n_hubs), dtype=np.int32),
-        #     cost = gym.spaces.Discrete(self.n_hubs),
-        #     current_hub = OneHotVector(self.n_hubs),
-        #     final_hub = OneHotVector(self.n_hubs)
-        # ))
-
-        # self.observation_space = spaces.Dict(
-        #     {'cost': gym.spaces.Discrete(self.n_hubs), 
-        #     'current_hub': OneHotVector(self.n_hubs),
-        #     'final_hub': OneHotVector(self.n_hubs)}
-        # )
 
         self.observation_space = spaces.Dict(
-            {#'cost': gym.spaces.Discrete(self.n_hubs), 
-            #'current_hub': OneHotVector(self.n_hubs),
-            #'final_hub': OneHotVector(self.n_hubs)
-            'cost': gym.spaces.Box(low=np.zeros(70), high=np.zeros(70)+500000, shape=(70,), dtype=np.int64),
-            'remaining_distance': gym.spaces.Box(low=np.zeros(70), high=np.zeros(70)+500000, shape=(70,), dtype=np.int64),
-            'current_hub': gym.spaces.Box(low=0, high=1, shape=(70,), dtype=np.int64),
-            'final_hub': gym.spaces.Box(low=0, high=1, shape=(70,), dtype=np.int64)
-            #'current_hub': gym.spaces.Discrete(self.n_hubs),
-            #'final_hub': gym.spaces.Discrete(self.n_hubs)
+            {
+            'cost': gym.spaces.Box(low=np.zeros(70)-10, high=np.zeros(70)+10, shape=(70,), dtype=np.float64),
+            'remaining_distance': gym.spaces.Box(low=np.zeros(70)-10, high=np.zeros(70)+10, shape=(70,), dtype=np.float64),
+            'current_hub': gym.spaces.Box(low=0, high=1, shape=(70,), dtype=np.float64),
+            'final_hub': gym.spaces.Box(low=0, high=1, shape=(70,), dtype=np.float64)
         })
+        self.mean1=6779.17
+        self.mean2=13653.00
+        self.stdev1=4433.51
+        self.stdev2=6809.79
 
     def one_hot(self, pos):
         one_hot_vector = np.zeros(len(self.hubs))
@@ -188,10 +175,10 @@ class GraphEnv(gym.Env):
         reward=0
 
         self.state = {
-            'cost' : self.learn_graph.adjacency_matrix('cost')[self.position].astype(int),
-            'remaining_distance': self.learn_graph.adjacency_matrix('remaining_distance')[self.position].astype(int),
-            'current_hub' : self.one_hot(self.position).astype(int), 
-            'final_hub' : self.one_hot(self.final_hub).astype(int)
+            'cost' : ((self.learn_graph.adjacency_matrix('cost')[self.position]-self.mean1)/self.stdev1).astype(np.float64),
+            'remaining_distance': ((self.learn_graph.adjacency_matrix('remaining_distance')[self.position]-self.mean2)/self.stdev2).astype(np.float64),
+            'current_hub' : self.one_hot(self.position).astype(np.float64), 
+            'final_hub' : self.one_hot(self.final_hub).astype(np.float64)
             }
 
         resetExecutionTime = (time.time() - resetExecutionStart)
@@ -278,7 +265,7 @@ class GraphEnv(gym.Env):
         self.learn_graph.add_travel_cost_layer(self.availableTrips(), self.distance_matrix)
         self.learn_graph.add_remaining_distance_layer(current_hub=self.position, distance_matrix=self.distance_matrix)
         startTimeLearn = time.time()
-        self.state = {'cost' : self.learn_graph.adjacency_matrix('cost')[self.position].astype(int),'remaining_distance': self.learn_graph.adjacency_matrix('remaining_distance')[self.position].astype(int),'current_hub' : self.one_hot(self.position).astype(int), 'final_hub' : self.one_hot(self.final_hub).astype(int)}
+        self.state = {'cost' : ((self.learn_graph.adjacency_matrix('cost')[self.position]-self.mean1)/self.stdev1).astype(np.float64),'remaining_distance': ((self.learn_graph.adjacency_matrix('remaining_distance')[self.position]-self.mean2)/self.stdev2).astype(np.float64),'current_hub' : self.one_hot(self.position).astype(np.float64), 'final_hub' : self.one_hot(self.final_hub).astype(np.float64)}
         # print("New State: ")        
         # print(self.state)
 
