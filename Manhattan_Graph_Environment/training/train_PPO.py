@@ -18,7 +18,7 @@ from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
 from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv, CustomCallbacks
 
 wandb.login(key="93aab2bcc48447dd2e8f74124d0258be2bf93859")
-wandb.init(project="Manhattan-ppo", entity="hitchhike")
+wandb.init(project="Comparison-Total_Env", entity="hitchhike")
 
 env=GraphEnv()
 
@@ -32,7 +32,7 @@ trainer_config = DEFAULT_CONFIG.copy()
 # trainer_config["train_batch_size"] = 400
 # trainer_config["gamma"] = 0.95
 # trainer_config["n_step"] = 10
-trainer_config["framework"] = "torch"
+#trainer_config["framework"] = "torch"
 trainer_config["callbacks"] = CustomCallbacks
 trainer_config["explore"] = True
 trainer_config["exploration_config"] = {
@@ -57,7 +57,7 @@ shutil.rmtree(ray_results, ignore_errors=True, onerror=None)   # clean up old ru
 results = []
 episode_data = []
 episode_json = []
-n_iter = 1
+n_iter = 100
 
 for n in range(n_iter):
     result = trainer.train()
