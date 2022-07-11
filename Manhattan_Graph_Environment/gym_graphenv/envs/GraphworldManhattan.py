@@ -84,7 +84,8 @@ class GraphEnv(gym.Env):
             'cost': gym.spaces.Box(low=np.zeros(70)-10, high=np.zeros(70)+10, shape=(70,), dtype=np.float64),
             'remaining_distance': gym.spaces.Box(low=np.zeros(70)-10, high=np.zeros(70)+10, shape=(70,), dtype=np.float64),
             'current_hub': gym.spaces.Box(low=0, high=1, shape=(70,), dtype=np.float64),
-            'final_hub': gym.spaces.Box(low=0, high=1, shape=(70,), dtype=np.float64)
+            'final_hub': gym.spaces.Box(low=0, high=1, shape=(70,), dtype=np.float64),
+            'distinction': gym.spaces.Box(low=np.zeros(70)-1, high=np.zeros(70)+1, shape=(70,), dtype=np.float64)
         })
         self.mean1=6779.17
         self.mean2=13653.00
@@ -178,7 +179,8 @@ class GraphEnv(gym.Env):
             'cost' : ((self.learn_graph.adjacency_matrix('cost')[self.position]-self.mean1)/self.stdev1).astype(np.float64),
             'remaining_distance': ((self.learn_graph.adjacency_matrix('remaining_distance')[self.position]-self.mean2)/self.stdev2).astype(np.float64),
             'current_hub' : self.one_hot(self.position).astype(np.float64), 
-            'final_hub' : self.one_hot(self.final_hub).astype(np.float64)
+            'final_hub' : self.one_hot(self.final_hub).astype(np.float64),
+            'distinction' : self.learn_graph.adjacency_matrix('distinction')[self.position].astype(np.float64)
             }
 
         resetExecutionTime = (time.time() - resetExecutionStart)
@@ -224,10 +226,12 @@ class GraphEnv(gym.Env):
                     self.count_share += 1
                     self.action_choice = "Share"
                     print("action == share ")
+                    print(f"Rides Mask for Action {action}: {self.shared_rides_mask}")
                 else:
                     self.count_bookown += 1
                     self.action_choice = "Book"
                     print("action == book own ")
+                    print(f"Rides Mask for Action {action}: {self.shared_rides_mask}")
                 startTimeRide = time.time()
                 self.has_waited=False
                 self.count_hubs += 1
@@ -265,7 +269,15 @@ class GraphEnv(gym.Env):
         self.learn_graph.add_travel_cost_layer(self.availableTrips(), self.distance_matrix)
         self.learn_graph.add_remaining_distance_layer(current_hub=self.position, distance_matrix=self.distance_matrix)
         startTimeLearn = time.time()
-        self.state = {'cost' : ((self.learn_graph.adjacency_matrix('cost')[self.position]-self.mean1)/self.stdev1).astype(np.float64),'remaining_distance': ((self.learn_graph.adjacency_matrix('remaining_distance')[self.position]-self.mean2)/self.stdev2).astype(np.float64),'current_hub' : self.one_hot(self.position).astype(np.float64), 'final_hub' : self.one_hot(self.final_hub).astype(np.float64)}
+
+        old_state = self.state
+
+        self.state = {'cost' : ((self.learn_graph.adjacency_matrix('cost')[self.position]-self.mean1)/self.stdev1).astype(np.float64),
+        'remaining_distance': ((self.learn_graph.adjacency_matrix('remaining_distance')[self.position]-self.mean2)/self.stdev2).astype(np.float64),
+        'current_hub' : self.one_hot(self.position).astype(np.float64), 
+        'final_hub' : self.one_hot(self.final_hub).astype(np.float64),
+        'distinction' : self.learn_graph.adjacency_matrix('distinction')[self.position].astype(np.float64)
+        }
         # print("New State: ")        
         # print(self.state)
 
@@ -273,7 +285,7 @@ class GraphEnv(gym.Env):
 
         self.count_actions += 1
 
-        reward, self.done, state_of_delivery = self.compute_reward(action)
+        reward, self.done, state_of_delivery = self.compute_reward(action, old_state)
         
         self.state_of_delivery = state_of_delivery
         executionTime = (time.time() - startTime)
@@ -281,21 +293,21 @@ class GraphEnv(gym.Env):
         return self.state, reward,  self.done, {"timestamp": self.time,"step_travel_time":step_duration,"distance":self.distance_matrix[self.old_position][self.position], "count_hubs":self.count_hubs, "action": self.action_choice, "hub_index": action}
 
     
-    def compute_reward(self, action):
+    def compute_reward(self, action, old_state):
+        old_distinction = old_state['distinction']
         cost_of_action = self.learn_graph.adjacency_matrix('cost')[self.old_position][action]
         print(self.old_position, "->", action, cost_of_action)
         self.done = False
         # if delay is greater than 2 hours (=120 minutes), terminate training episode
         if((self.time-self.deadline).total_seconds()/60 >= 120):
             self.done = True
-            reward = -(cost_of_action / 100) - 10000
+            reward = -10000
             state_of_delivery = DeliveryState.NOT_DELIVERED
             print("BOX WAS NOT DELIVERED until 2 hours after deadline")
         # if box is delivered to final hub in time
         if (self.position == self.final_hub and self.time <= self.deadline):
             print(f"DELIVERED IN TIME AFTER {self.count_actions} ACTIONS (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown}")
             reward = 10000
-            reward -= (cost_of_action / 100)
             self.done = True
             state_of_delivery = DeliveryState.DELIVERED_ON_TIME
         # if box is delivered to final hub with delay
@@ -304,15 +316,18 @@ class GraphEnv(gym.Env):
             print(f"DELIVERED AFTER {self.count_actions} ACTIONS (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown} WITH DELAY: {overtime}")
             overtime = round(overtime.total_seconds()/60)
             reward = 10000 - overtime
-            reward -= (cost_of_action / 100)
             self.done = True
             state_of_delivery = DeliveryState.DELIVERED_WITH_DELAY
         # if box is not delivered to final hub
         elif(self.done==False):
-            reward = -(cost_of_action / 100)
+            reward = old_distinction[action]*1000
             # print(f"INTERMEDIATE STEP ACTIONS: (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown}")
             state_of_delivery = DeliveryState.IN_DELIVERY
             #done = False
+
+        print(f"Reward: {reward}")
+        print(f"Action: {action}")
+        print(old_distinction)
 
         return reward, self.done, state_of_delivery
     

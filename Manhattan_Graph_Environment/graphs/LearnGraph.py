@@ -52,6 +52,7 @@ class LearnGraph:
         # self.manhattan_graph.setup_trips(self.START_TIME) #needed later for retrieving currently available trips
         # nx.set_edge_attributes(self.G, 100, "cost") 
         edges = {}
+        edges_distinction = {}
         #print(f"available trips: {available_trips}")
         #print(f"distance matrix: {distance_matrix}")
         # wait
@@ -59,10 +60,12 @@ class LearnGraph:
             for l in range(70):
                 if(k==l):
                     edges[(k,l,0)] = 0
+                    edges_distinction[(k,l,0)] = 0
                     self.wait_till_departure_times[(k,l)] = 0
                 # book own ride
                 else:
                     edges[(k,l,0)] = distance_matrix[k,l] * 1
+                    edges_distinction[(k,l,0)] = -1
                     self.wait_till_departure_times[(k,l)] = 300 # 5 minutes for book own ride wait
 
         for i in range(len(available_trips)):
@@ -77,12 +80,13 @@ class LearnGraph:
                     dropoff_hub_index = self.manhattan_graph.get_hub_index_by_nodeid(dropoff_nodeid)
 
                     edges[(pickup_hub_index,dropoff_hub_index,0)] = distance_matrix[pickup_hub_index,dropoff_hub_index] * 0.1 #share ride is cheaper than book own ride by a factor of 10
-
+                    edges_distinction[(pickup_hub_index,dropoff_hub_index,0)]=1
                     self.wait_till_departure_times[(pickup_hub_index,dropoff_hub_index)] = available_trips[i]['departure_time']
                     #self.wait_till_departure_times[pickup_hub_index,dropoff_hub_index] = 120
         
         #print(f"cost_edges: {edges}")
-        nx.set_edge_attributes(self.G, edges, "cost")     
+        nx.set_edge_attributes(self.G, edges, "cost")
+        nx.set_edge_attributes(self.G, edges_distinction, "distinction")   
 
     
     def add_remaining_distance_layer(self, current_hub, distance_matrix):
