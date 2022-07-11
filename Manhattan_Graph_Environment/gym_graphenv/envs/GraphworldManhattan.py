@@ -17,7 +17,10 @@ import pickle
 import logging
 import json
 import os
-from config.definitions import ROOT_DIR
+
+import sys
+sys.path.insert(0,"")
+#from config.definitions import ROOT_DIR
 
 from typing import Dict
 
@@ -26,8 +29,7 @@ from ray.rllib.evaluation import Episode, RolloutWorker
 from ray.rllib.env import BaseEnv
 from ray.rllib.policy import Policy
 
-import sys
-sys.path.insert(0,"")
+
 
 # CHANGES
 from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
@@ -404,20 +406,33 @@ class GraphEnv(gym.Env):
         return action < self.n_hubs
 
     def read_config(self):
-        filepath = os.path.join(ROOT_DIR,'env_config.pkl')
+        #filepath = os.path.join(ROOT_DIR,'env_config.pkl')
+        filepath = "env_config.pkl"
         with open(filepath,'rb') as f:
             loaded_dict = pickle.load(f)
         self.env_config = loaded_dict
         return loaded_dict
         
 
-    def render(self, visualize_actionspace: bool = False):
+    def render(self, visualize_actionspace: bool = True):
         """_summary_
         Args:
             visualize_actionspace (bool, optional): _description_. Defaults to False.
         Returns:
             _type_: _description_
+
+
         """
+
+        plot2 = folium.Map(
+            location=[40.776676, -73.971321], control_scale=True,
+            zoom_start=12,
+        )
+
+        dir = r"templates/plot2.html"
+        dirname = os.path.dirname(__file__)
+        save_location = os.path.join(dirname, dir)
+
         current_pos_x = self.manhattan_graph.get_node_by_index(self.position)['x']
         current_pos_y = self.manhattan_graph.get_node_by_index(self.position)['y']
         final_hub_x = self.manhattan_graph.get_node_by_index(self.final_hub)['x']
@@ -435,13 +450,15 @@ class GraphEnv(gym.Env):
             hub_pos_x = hub_node['x']
             hub_pos_y = hub_node['y']
             popup = "HUB %d" % (hub)
-            folium.Marker(location=[hub_pos_y, hub_pos_x],popup=popup, icon=folium.Icon(color='orange', prefix='fa', icon='cube')).add_to(plot)
+            folium.Marker(location=[hub_pos_y, hub_pos_x],popup=popup, icon=folium.Icon(color='orange', prefix='fa', icon='cube')).add_to(plot2)
 
         # Place markers for start, final and current position
-        folium.Marker(location=[final_hub_y, final_hub_x], icon=folium.Icon(color='red', prefix='fa', icon='flag-checkered')).add_to(plot)
-        folium.Marker(location=[start_hub_y, start_hub_x], popup = f"Pickup time: {self.pickup_time.strftime('%m/%d/%Y, %H:%M:%S')}", icon=folium.Icon(color='lightblue', prefix='fa', icon='caret-right')).add_to(plot)
-        folium.Marker(location=[current_pos_y, current_pos_x], popup = f"Current time: {self.time.strftime('%m/%d/%Y, %H:%M:%S')}", icon=folium.Icon(color='lightgreen', prefix='fa',icon='cube')).add_to(plot)
-        
+        folium.Marker(location=[final_hub_y, final_hub_x], icon=folium.Icon(color='red', prefix='fa', icon='flag-checkered')).add_to(plot2)
+        #folium.Marker(location=[start_hub_y, start_hub_x], popup = f"Pickup time: {self.pickup_time.strftime('%m/%d/%Y, %H:%M:%S')}", icon=folium.Icon(color='lightblue', prefix='fa', icon='caret-right')).add_to(plot)
+        folium.Marker(location=[start_hub_y, start_hub_x], popup = f"Pickup time: {self.pickup_time}", icon=folium.Icon(color='lightblue', prefix='fa', icon='caret-right')).add_to(plot2)
+
+        #folium.Marker(location=[current_pos_y, current_pos_x], popup = f"Current time: {self.time.strftime('%m/%d/%Y, %H:%M:%S')}", icon=folium.Icon(color='lightgreen', prefix='fa',icon='cube')).add_to(plot)
+        folium.Marker(location=[current_pos_y, current_pos_x], popup = f"Current time: {self.time}", icon=folium.Icon(color='lightgreen', prefix='fa',icon='cube')).add_to(plot2)
 
         if(visualize_actionspace):
             for i, trip in enumerate(self.availableTrips()):
@@ -449,12 +466,14 @@ class GraphEnv(gym.Env):
                 target_node_x = target_hub['x']
                 target_node_y = target_hub['y']
                 popup = "%s: go to node %d" % (i, trip['target_hub'])
-                folium.Marker(location=[target_node_y, target_node_x], popup = popup, tooltip=str(i)).add_to(plot)
-                ox.plot_route_folium(G=self.manhattan_graph.inner_graph,route=trip['route'],route_map=plot)
+                folium.Marker(location=[target_node_y, target_node_x], popup = popup, tooltip=str(i)).add_to(plot2)
+                ox.plot_route_folium(G=self.manhattan_graph.inner_graph,route=trip['route'],route_map=plot2)
         # Plot
         # pos_to_final = nx.shortest_path(self.manhattan_graph.inner_graph, self.manhattan_graph.get_nodeid_by_index(self.start_hub), self.manhattan_graph.get_nodeid_by_index(self.final_hub), weight="travel_time")
         # if(not len(pos_to_final)< 2):
 
+        plot2.save(save_location)
+        print("HIER IST RENDER FERTIG")
         return plot
 
 class DeliveryState:
