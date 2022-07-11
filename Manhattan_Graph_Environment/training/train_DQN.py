@@ -99,10 +99,14 @@ for n in range(n_iter):
                'count_steps_min': float(result["count_steps_min"]),
                'count_steps_max': float(result["count_steps_max"]),
                'count_steps_mean': float(result["count_steps_mean"]),
+                
                'count_delivered_on_time': int(result["count_delivered_on_time"]),
                'count_delivered_with_delay': int(result["count_delivered_with_delay"]),
                'count_not_delivered': int(result["count_not_delivered"]),
+               # für den Vergleich später
+               # 'count_not_delivered_first': int(result["count_not_delivered_first"]),
                'share_delivered_on_time': float(result["count_delivered_on_time"]/result['episodes_this_iter'])
+               
                }
     episode_data.append(episode)
     episode_json.append(json.dumps(episode))
@@ -122,6 +126,8 @@ for n in range(n_iter):
                 'count_delivered_on_time': result["count_delivered_on_time"],
                 'count_delivered_with_delay': result["count_delivered_with_delay"],
                 'count_not_delivered': result["count_not_delivered"],
+                # für den Vergleich
+                # 'count_not_delivered_first': result["count_not_delivered_first"],
                 'share_delivered_on_time': result["count_delivered_on_time"]/result['episodes_this_iter']
     })
 

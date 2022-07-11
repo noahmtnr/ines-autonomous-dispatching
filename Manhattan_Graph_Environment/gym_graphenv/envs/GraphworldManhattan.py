@@ -461,12 +461,12 @@ class DeliveryState:
     DELIVERED_ON_TIME, DELIVERED_WITH_DELAY, NOT_DELIVERED, IN_DELIVERY = range(4)
 
 class CustomCallbacks(DefaultCallbacks):
-    count_delivered_on_time = 0
-    count_delivered_with_delay = 0
-    count_not_delivered = 0
     last_count_delivered_on_time = 0
     last_count_delivered_with_delay = 0
     last_count_not_delivered = 0
+    count_not_delivered = 0
+    count_delivered_with_delay = 0
+    count_delivered_on_time = 0
 
     def on_algorithm_init(
         self,
@@ -566,6 +566,9 @@ class CustomCallbacks(DefaultCallbacks):
             self.count_not_delivered +=1
             episode.custom_metrics["count_not_delivered"] = self.count_not_delivered
 
+        # zum Vergleich ohne Abzug später
+        # episode.custom_metrics["count_not_delivered_first"] = self.count_not_delivered
+
     def on_train_result(self, *, trainer, result: dict, **kwargs):
         print(
             "trainer.train() result: {} -> {} episodes".format(
@@ -600,10 +603,19 @@ class CustomCallbacks(DefaultCallbacks):
         result["share_to_own_ratio_max"] = result['custom_metrics']['share_to_own_ratio_max']
         result["share_to_own_ratio_mean"] = result['custom_metrics']['share_to_own_ratio_mean']
 
-        result["count_delivered_on_time"] = result['custom_metrics']["count_delivered_on_time_max"] - self.last_count_delivered_on_time
-        result["count_delivered_with_delay"] = result['custom_metrics']["count_delivered_with_delay_max"] - self.last_count_delivered_with_delay
-        result["count_not_delivered"] = result['custom_metrics']["count_not_delivered_max"] - self.last_count_not_delivered
+        result["count_delivered_on_time"] = result['custom_metrics']["count_delivered_on_time_max"] - CustomCallbacks.last_count_delivered_on_time
+        result["count_delivered_with_delay"] = result['custom_metrics']["count_delivered_with_delay_max"] - CustomCallbacks.last_count_delivered_with_delay
+
+        """
+        print("COUNTER AUSGABE")
+        print("Erg:", result['custom_metrics']["count_not_delivered_max"])
+        print("Abzug", self.last_count_not_delivered)
+        """
+
+        result["count_not_delivered"] = result['custom_metrics']["count_not_delivered_max"] - CustomCallbacks.last_count_not_delivered
+        # zum Vergleich ohne Abzug
+        # result["count_not_delivered_first"] = result['custom_metrics']["count_not_delivered_max"]
         
-        self.last_count_not_delivered = result["count_not_delivered"]
-        self.last_count_delivered_with_delay = result["count_delivered_with_delay"]
-        self.last_count_delivered_on_time = result["count_delivered_on_time"]
+        CustomCallbacks.last_count_not_delivered = CustomCallbacks.last_count_not_delivered + result["count_not_delivered"]
+        CustomCallbacks.last_count_delivered_with_delay = CustomCallbacks.last_count_delivered_with_delay + result["count_delivered_with_delay"]
+        CustomCallbacks.last_count_delivered_on_time = CustomCallbacks.last_count_delivered_on_time + result["count_delivered_on_time"]
