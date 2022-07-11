@@ -307,7 +307,7 @@ class GraphEnv(gym.Env):
         # if box is delivered to final hub in time
         if (self.position == self.final_hub and self.time <= self.deadline):
             print(f"DELIVERED IN TIME AFTER {self.count_actions} ACTIONS (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown}")
-            reward = 1000
+            reward = 10000
             reward -= (cost_of_action / 100)
             self.done = True
             state_of_delivery = DeliveryState.DELIVERED_ON_TIME
@@ -316,7 +316,7 @@ class GraphEnv(gym.Env):
             overtime = self.time - self.deadline
             print(f"DELIVERED AFTER {self.count_actions} ACTIONS (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown} WITH DELAY: {overtime}")
             overtime = round(overtime.total_seconds()/60)
-            reward = 1000 - overtime
+            reward = 10000 - overtime
             reward -= (cost_of_action / 100)
             self.done = True
             state_of_delivery = DeliveryState.DELIVERED_WITH_DELAY

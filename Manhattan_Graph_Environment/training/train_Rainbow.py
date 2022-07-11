@@ -96,7 +96,7 @@ rainbow_config["noisy"] = True
 # this is greater than 1, distributional Q-learning is used.
 # the discrete supports are bounded by v_min and v_max
 rainbow_config["num_atoms"] = 70 #[more than 1] //was 51,20
-rainbow_config["v_min"] =-10000
+rainbow_config["v_min"] =-15000
 rainbow_config["v_max"]=10000 # (set v_min and v_max according to your expected range of returns).
 
 
