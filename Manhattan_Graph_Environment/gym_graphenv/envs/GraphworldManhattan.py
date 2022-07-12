@@ -327,7 +327,8 @@ class GraphEnv(gym.Env):
 
         print(f"Reward: {reward}")
         print(f"Action: {action}")
-        print(old_distinction)
+        print(f"Old Distinction: {old_distinction}")
+        print(f"Rides Mask for Action {action}: {self.shared_rides_mask}")
 
         return reward, self.done, state_of_delivery
     
@@ -396,7 +397,7 @@ class GraphEnv(gym.Env):
 
         self.shared_rides_mask = shared_rides_mask
         # print(shared_rides_mask)
-        # print(list_trips)
+        print(list_trips)
 
         executionTime = (time.time() - startTime)
         # print('found '+ str(len(list_trips)) +' trips, ' + 'current time: ' + str(self.time))

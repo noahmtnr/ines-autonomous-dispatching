@@ -83,6 +83,14 @@ class LearnGraph:
                     edges_distinction[(pickup_hub_index,dropoff_hub_index,0)]=1
                     self.wait_till_departure_times[(pickup_hub_index,dropoff_hub_index)] = available_trips[i]['departure_time']
                     #self.wait_till_departure_times[pickup_hub_index,dropoff_hub_index] = 120
+
+
+        for k in range(70):
+            for l in range(70):
+                if(k==l):
+                    edges[(k,l,0)] = 0
+                    edges_distinction[(k,l,0)] = 0
+                    self.wait_till_departure_times[(k,l)] = 0
         
         #print(f"cost_edges: {edges}")
         nx.set_edge_attributes(self.G, edges, "cost")
