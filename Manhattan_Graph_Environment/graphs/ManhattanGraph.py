@@ -17,7 +17,6 @@ class ManhattanGraph:
         ox.utils_graph.remove_isolated_nodes(self.inner_graph)
         self.generate_hubs(num_hubs)
 
-
     def generate_hubs(self, num_hubs: int = 70):#, opt: int = 0):
         # the code below is for loading the hubs specified in data/trips/manual_hubs.csv
         """Generates random bubs within the graph
