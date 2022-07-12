@@ -299,7 +299,7 @@ class GraphEnv(gym.Env):
         print(self.old_position, "->", action, cost_of_action)
         self.done = False
         # if delay is greater than 2 hours (=120 minutes), terminate training episode
-        if((self.time-self.deadline).total_seconds()/60 >= 120):
+        if((self.time-self.deadline).total_seconds()/60 >= 120 or self.count_actions>200):
             self.done = True
             reward = -10000
             state_of_delivery = DeliveryState.NOT_DELIVERED
