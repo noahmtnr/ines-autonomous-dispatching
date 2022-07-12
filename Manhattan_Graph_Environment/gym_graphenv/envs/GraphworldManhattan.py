@@ -17,7 +17,8 @@ import pickle
 import logging
 import json
 import os
-from config.definitions import ROOT_DIR
+# from config.definitions import ROOT_DIR
+ROOT_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
 
 from typing import Dict
 
@@ -40,7 +41,7 @@ class GraphEnv(gym.Env):
 
     REWARD_AWAY = -1
     REWARD_GOAL = 100
-    
+
     def __init__(self, use_config: bool = True ):
         DB_LOWER_BOUNDARY = '2016-01-01 00:00:00'
         DB_UPPER_BOUNDARY = '2016-01-14 23:59:59'
@@ -53,11 +54,11 @@ class GraphEnv(gym.Env):
         # use_config=data['use_config']
         # print(use_config)
 
-        if(use_config):
-            self.env_config = self.read_config()
-        else:
-             self.env_config = None
-    
+        # if(use_config):
+        #     self.env_config = self.read_config()
+        # else:
+        self.env_config = None
+
         self.n_hubs = 70
         self.distance_matrix = None
 
@@ -76,8 +77,8 @@ class GraphEnv(gym.Env):
         self.state = None
         self.state_of_delivery = DeliveryState.IN_DELIVERY
 
-      
-        self.action_space = gym.spaces.Discrete(self.n_hubs) 
+
+        self.action_space = gym.spaces.Discrete(self.n_hubs)
 
         self.observation_space = spaces.Dict(
             {
@@ -97,7 +98,7 @@ class GraphEnv(gym.Env):
         return one_hot_vector
 
     def reset(self):
-        # two cases depending if we have env config 
+        # two cases depending if we have env config
         #super().reset()
 
         #self.done = False
@@ -105,7 +106,7 @@ class GraphEnv(gym.Env):
 
         pickup_day = np.random.randint(low=1,high=14)
         pickup_hour =  np.random.randint(24)
-        pickup_minute = np.random.randint(60) 
+        pickup_minute = np.random.randint(60)
         self.START_TIME = datetime(2016,1,pickup_day,pickup_hour,pickup_minute,0).strftime('%Y-%m-%d %H:%M:%S')
 
         if (self.env_config == None or self.env_config == {}):
@@ -146,14 +147,14 @@ class GraphEnv(gym.Env):
         print(f"Reset initialized pickup: {self.position}")
         print(f"Reset initialized dropoff: {self.final_hub}")
         print(f"Reset initialized time: {self.time}")
-        
+
 
         learn_graph = LearnGraph(n_hubs=self.n_hubs, manhattan_graph=self.manhattan_graph, final_hub=self.final_hub)
         self.learn_graph = learn_graph
 
         if(self.LEARNGRAPH_FIRST_INIT_DONE == False):
             self.distance_matrix = self.learn_graph.fill_distance_matrix()
-        
+
 
         self.LEARNGRAPH_FIRST_INIT_DONE = True
         self.learn_graph.add_travel_cost_layer(self.availableTrips(), self.distance_matrix)
@@ -191,7 +192,7 @@ class GraphEnv(gym.Env):
             action (int): index of action to be taken from availableActions
         Returns:
             int: new position
-            int: new reward 
+            int: new reward
             boolean: isDone
         """
 
@@ -247,20 +248,20 @@ class GraphEnv(gym.Env):
                     self.current_wait = ( departure_time - self.time).seconds
                     step_duration += self.current_wait
                     self.time = departure_time
-                
+
                 self.old_position = self.position
                 self.position = action
-                
+
                 executionTimeRide = (time.time() - startTimeRide)
                 # print(f"Time Ride: {str(executionTimeRide)}")
-                pass 
+                pass
         else:
             print("invalid action")
             #print("avail actions: ",self.available_actions)
             print("action: ",action)
             print("action space: ",self.action_space)
 
-        
+
         # refresh travel cost layer after each step
         self.learn_graph.add_travel_cost_layer(self.availableTrips(), self.distance_matrix)
         self.learn_graph.add_remaining_distance_layer(current_hub=self.position, distance_matrix=self.distance_matrix)
@@ -275,13 +276,13 @@ class GraphEnv(gym.Env):
         self.count_actions += 1
 
         reward, self.done, state_of_delivery = self.compute_reward(action)
-        
+
         self.state_of_delivery = state_of_delivery
         executionTime = (time.time() - startTime)
 
         return self.state, reward,  self.done, {"timestamp": self.time,"step_travel_time":step_duration,"distance":self.distance_matrix[self.old_position][self.position], "count_hubs":self.count_hubs, "action": self.action_choice, "hub_index": action}
 
-    
+
     def compute_reward(self, action):
         # cost_of_action = self.learn_graph.adjacency_matrix('cost')[self.old_position][action]
         print(self.old_position, "->", action)
@@ -296,12 +297,10 @@ class GraphEnv(gym.Env):
         if (self.position == self.final_hub and self.time <= self.deadline):
             print(f"DELIVERED IN TIME AFTER {self.count_actions} ACTIONS (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown}")
             reward = 10000
-            reward -= (cost_of_action / 100)
             self.done = True
             state_of_delivery = DeliveryState.DELIVERED_ON_TIME
         # if box is delivered to final hub with delay
         elif(self.position == self.final_hub and (self.time-self.deadline).total_seconds()/60 < 120): #self.time > self.deadline):
-            overtime = self.time - self.deadline
             print(f"DELIVERED AFTER {self.count_actions} ACTIONS (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown} WITH DELAY: {overtime}")
             reward = 8000
             self.done = True
@@ -314,7 +313,7 @@ class GraphEnv(gym.Env):
             #done = False
 
         return reward, self.done, state_of_delivery
-    
+
     def get_available_actions(self):
         """ Returns the available actions at the current position. Uses a simplified action space with moves to all direct neighbors allowed.
         Returns:
@@ -326,14 +325,14 @@ class GraphEnv(gym.Env):
         wait = [{'type': 'wait'}]
         ownRide = [{'type': 'ownRide'}]
         available_rides = list(self.availableTrips(10))
-        
+
         executionTime = (time.time() - startTime)
         # print('get_available_actions() Execution time: ' + str(executionTime) + ' seconds')
 
         available_actions = [wait,ownRide,*available_rides]
         self.available_actions = available_actions
         return available_actions
-    
+
     def availableTrips(self, time_window=5):
         """ Returns a list of all available trips at the current node and within the next 5 minutes. Includes the time of departure from the current node as well as the target node of the trip.
         Returns:
@@ -347,7 +346,7 @@ class GraphEnv(gym.Env):
 
         start_timestamp=self.time
         end_timestamp = self.time + timedelta(minutes=time_window)
-        
+
         trips = self.trips
 
         for tripId, nodeId, timestamp in trips:
@@ -373,7 +372,7 @@ class GraphEnv(gym.Env):
                                     list_trips.append(trip)
         self.available_actions = list_trips
 
-        # create index vector 
+        # create index vector
         shared_rides_mask = np.zeros(self.n_hubs)
         for i in range(len(list_trips)):
             shared_rides_mask[self.manhattan_graph.get_hub_index_by_nodeid(list_trips[i]['target_hub'])] = 1
@@ -395,7 +394,7 @@ class GraphEnv(gym.Env):
             loaded_dict = pickle.load(f)
         self.env_config = loaded_dict
         return loaded_dict
-        
+
 
     def render(self, visualize_actionspace: bool = False):
         """_summary_
@@ -410,7 +409,7 @@ class GraphEnv(gym.Env):
         final_hub_y = self.manhattan_graph.get_node_by_index(self.final_hub)['y']
         start_hub_x = self.manhattan_graph.get_node_by_index(self.start_hub)['x']
         start_hub_y = self.manhattan_graph.get_node_by_index(self.start_hub)['y']
-        
+
         # Create plot
         plot = ox.plot_graph_folium(self.manhattan_graph.inner_graph,fit_bounds=True, weight=2, color="#333333")
 
@@ -427,7 +426,7 @@ class GraphEnv(gym.Env):
         folium.Marker(location=[final_hub_y, final_hub_x], icon=folium.Icon(color='red', prefix='fa', icon='flag-checkered')).add_to(plot)
         folium.Marker(location=[start_hub_y, start_hub_x], popup = f"Pickup time: {self.pickup_time.strftime('%m/%d/%Y, %H:%M:%S')}", icon=folium.Icon(color='lightblue', prefix='fa', icon='caret-right')).add_to(plot)
         folium.Marker(location=[current_pos_y, current_pos_x], popup = f"Current time: {self.time.strftime('%m/%d/%Y, %H:%M:%S')}", icon=folium.Icon(color='lightgreen', prefix='fa',icon='cube')).add_to(plot)
-        
+
 
         if(visualize_actionspace):
             for i, trip in enumerate(self.availableTrips()):
