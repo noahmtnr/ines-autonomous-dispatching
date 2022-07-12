@@ -17,10 +17,13 @@ import pickle
 import logging
 import json
 import os
+import matplotlib.pyplot as plt
+import networkx as nx 
 
 import sys
 sys.path.insert(0,"")
-#from config.definitions import ROOT_DIR
+# from config.definitions import ROOT_DIR
+ROOT_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
 
 from typing import Dict
 
@@ -32,10 +35,10 @@ from ray.rllib.policy import Policy
 
 
 # CHANGES
-from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
-from Manhattan_Graph_Environment.graphs.LearnGraph import LearnGraph
-from Manhattan_Graph_Environment.OneHotVector import OneHotVector
-from Manhattan_Graph_Environment.database_connection import DBConnection
+from graphs.ManhattanGraph import ManhattanGraph
+from graphs.LearnGraph import LearnGraph
+from OneHotVector import OneHotVector
+from database_connection import DBConnection
 # END OF CHANGES
 
 class GraphEnv(gym.Env):
@@ -407,74 +410,161 @@ class GraphEnv(gym.Env):
 
     def read_config(self):
         #filepath = os.path.join(ROOT_DIR,'env_config.pkl')
-        filepath = "env_config.pkl"
+        #filepath = "/Users/noah/Desktop/Repositories/ines-autonomous-dispatching/Manhattan_Graph_Environment/env_config.pkl"
+        filepath = "/Users/noah/Desktop/Repositories/ines-autonomous-dispatching/env_config.pkl"
         with open(filepath,'rb') as f:
             loaded_dict = pickle.load(f)
         self.env_config = loaded_dict
         return loaded_dict
         
 
-    def render(self, visualize_actionspace: bool = True):
+    def render(self, visualize_actionspace: bool = False):
         """_summary_
         Args:
             visualize_actionspace (bool, optional): _description_. Defaults to False.
         Returns:
             _type_: _description_
 
-
         """
 
-        plot2 = folium.Map(
-            location=[40.776676, -73.971321], control_scale=True,
-            zoom_start=12,
-        )
+        #plot2 = folium.Map(
+         #   location=[40.776676, -73.971321], control_scale=True,
+          #  zoom_start=12,
+        #)
 
-        dir = r"templates/plot2.html"
-        dirname = os.path.dirname(__file__)
-        save_location = os.path.join(dirname, dir)
+        #save_location = "/Users/noah/Desktop/Repositories/ines-autonomous-dispatching/Manhattan_Graph_Environment/templates/plot2.html"
+        #dirname = os.path.dirname(__file__)
+        #save_location = os.path.join(dirname, dir)
 
+        #fig, ax = ox.plot.plot_graph(self.manhattan_graph.inner_graph, figsize=(8, 8), bgcolor='#111111', node_color='w', node_size=15, node_alpha=None, node_edgecolor='none', node_zorder=1, edge_color='#999999', edge_linewidth=0.5, edge_alpha=None, show=True, close = False, dpi=300)
+        
+        
+        # nx.draw(self.manhattan_graph.inner_graph)
         current_pos_x = self.manhattan_graph.get_node_by_index(self.position)['x']
         current_pos_y = self.manhattan_graph.get_node_by_index(self.position)['y']
         final_hub_x = self.manhattan_graph.get_node_by_index(self.final_hub)['x']
         final_hub_y = self.manhattan_graph.get_node_by_index(self.final_hub)['y']
         start_hub_x = self.manhattan_graph.get_node_by_index(self.start_hub)['x']
         start_hub_y = self.manhattan_graph.get_node_by_index(self.start_hub)['y']
+
+        # ax.plot(current_pos_x, current_pos_y, c='lime')
+        # ax.plot(final_hub_x, final_hub_y, c='red')
+        # ax.plot(start_hub_x, start_hub_y, c='red')
+        # pos = nx.spring_layout(self.manhattan_graph.inner_graph)
+        # nx.draw_networkx_nodes(self.manhattan_graph.inner_graph, pos =pos, nodelist=[self.manhattan_graph.get_node_by_index(self.position), 
+        #                         self.manhattan_graph.get_node_by_index(self.final_hub),
+        #                         self.manhattan_graph.get_node_by_index(self.start_hub)], 
+        #                         node_size=300, node_color='#1f78b4', node_shape='o')
+
+        shared_rides = list()
+        shared_ids = list()
+       
+        for i, trip in enumerate(self.availableTrips()):
+            target_hub=self.manhattan_graph.get_node_by_nodeid(trip['target_hub'])
+            target_node_x = target_hub['x']
+            target_node_y = target_hub['y']
+            shared_rides.append((target_node_x, target_node_y))
+            shared_ids.append(target_hub)
+            #ax.plot(target_node_x, target_node_y, c='green')
+            # nx.draw_networkx_nodes(self.manhattan_graph.inner_graph, pos =pos, nodelist=[target_hub], 
+            #                     node_size=300, node_color='#1f78b4', node_shape='o')
+        print('Shared: ', shared_ids)
+
+        all_hubs = self.hubs
+        book_own_ids = list(set(all_hubs) - set(shared_ids))
+        print('Book owns: ', book_own_ids)
+
+        book_own_rides = list()
+        for i in range(len(book_own_ids)):
+            hub = self.manhattan_graph.get_node_by_nodeid(book_own_ids[i])
+            node_x = hub['x']
+            node_y = hub['y']
+            book_own_rides.append((node_x, node_y))
+            # nx.draw_networkx_nodes(self.manhattan_graph.inner_graph, pos =pos, nodelist=[hub], 
+            #                     node_size=300, node_color='#1f78b4', node_shape='o')
+        position = self.manhattan_graph.get_nodeid_by_index(self.position)
+        final = self.manhattan_graph.get_nodeid_by_index(self.final_hub)
+        start = self.manhattan_graph.get_nodeid_by_index(self.start_hub)
+
+        node_sizes = list()
+        colors = []
+        for n in self.manhattan_graph.nodes():
+            if n == position:
+                colors.append('#59326A')
+                node_sizes.append(20)
+            else:
+                if n == final:
+                    colors.append('b')
+                    node_sizes.append(20)
+                else:
+                    if n == start:
+                        colors.append('g')
+                        node_sizes.append(20)
+                    else:
+                        if n in shared_ids:
+                            colors.append('r')
+                            node_sizes.append(20)
+                        else:
+                            if n in book_own_ids:
+                                colors.append('c')
+                                node_sizes.append(20)
+                            else:
+                                colors.append('w')
+                                node_sizes.append(0)
+                
+            
+        graph = self.manhattan_graph.inner_graph
+
+        fig, ax = ox.plot_graph(graph, figsize=(15,15), node_color=colors, node_size = node_sizes, edge_linewidth=1)
+            #ax.plot(node_x, node_y, c='blue')
+        
+        
+
+        # Retrieve nodes and edges
+        #nodes, edges = ox.graph_to_gdfs(graph)
+        #nodes.head()
+
+        # Plot the nodes
+        #fig, ax = plt.subplots(figsize=(12,8))
+        #nodes.plot(ax=ax, facecolor='black')
         
         # Create plot
-        plot = ox.plot_graph_folium(self.manhattan_graph.inner_graph,fit_bounds=True, weight=2, color="#333333")
-
+        #plot = ox.plot_graph_folium(self.manhattan_graph.inner_graph,fit_bounds=True, weight=2, color="#333333")
 
         #Place markers for the random hubs
-        for hub in self.hubs:
-            hub_node = self.manhattan_graph.get_node_by_nodeid(hub)
-            hub_pos_x = hub_node['x']
-            hub_pos_y = hub_node['y']
-            popup = "HUB %d" % (hub)
-            folium.Marker(location=[hub_pos_y, hub_pos_x],popup=popup, icon=folium.Icon(color='orange', prefix='fa', icon='cube')).add_to(plot2)
+        # for hub in self.hubs:
+        #     hub_node = self.manhattan_graph.get_node_by_nodeid(hub)
+        #     hub_pos_x = hub_node['x']
+        #     hub_pos_y = hub_node['y']
+        #     popup = "HUB %d" % (hub)
+        #     folium.Marker(location=[hub_pos_y, hub_pos_x],popup=popup, icon=folium.Icon(color='orange', prefix='fa', icon='cube')).add_to(plot)
 
-        # Place markers for start, final and current position
-        folium.Marker(location=[final_hub_y, final_hub_x], icon=folium.Icon(color='red', prefix='fa', icon='flag-checkered')).add_to(plot2)
-        #folium.Marker(location=[start_hub_y, start_hub_x], popup = f"Pickup time: {self.pickup_time.strftime('%m/%d/%Y, %H:%M:%S')}", icon=folium.Icon(color='lightblue', prefix='fa', icon='caret-right')).add_to(plot)
-        folium.Marker(location=[start_hub_y, start_hub_x], popup = f"Pickup time: {self.pickup_time}", icon=folium.Icon(color='lightblue', prefix='fa', icon='caret-right')).add_to(plot2)
+        # # Place markers for start, final and current position
+        # folium.Marker(location=[final_hub_y, final_hub_x], icon=folium.Icon(color='red', prefix='fa', icon='flag-checkered')).add_to(plot)
+        # #folium.Marker(location=[start_hub_y, start_hub_x], popup = f"Pickup time: {self.pickup_time.strftime('%m/%d/%Y, %H:%M:%S')}", icon=folium.Icon(color='lightblue', prefix='fa', icon='caret-right')).add_to(plot)
+        # folium.Marker(location=[start_hub_y, start_hub_x], popup = f"Pickup time: {self.pickup_time}", icon=folium.Icon(color='lightblue', prefix='fa', icon='caret-right')).add_to(plot)
 
-        #folium.Marker(location=[current_pos_y, current_pos_x], popup = f"Current time: {self.time.strftime('%m/%d/%Y, %H:%M:%S')}", icon=folium.Icon(color='lightgreen', prefix='fa',icon='cube')).add_to(plot)
-        folium.Marker(location=[current_pos_y, current_pos_x], popup = f"Current time: {self.time}", icon=folium.Icon(color='lightgreen', prefix='fa',icon='cube')).add_to(plot2)
+        # #folium.Marker(location=[current_pos_y, current_pos_x], popup = f"Current time: {self.time.strftime('%m/%d/%Y, %H:%M:%S')}", icon=folium.Icon(color='lightgreen', prefix='fa',icon='cube')).add_to(plot)
+        # folium.Marker(location=[current_pos_y, current_pos_x], popup = f"Current time: {self.time}", icon=folium.Icon(color='lightgreen', prefix='fa',icon='cube')).add_to(plot)
 
-        if(visualize_actionspace):
-            for i, trip in enumerate(self.availableTrips()):
-                target_hub=self.manhattan_graph.get_node_by_nodeid(trip['target_hub'])
-                target_node_x = target_hub['x']
-                target_node_y = target_hub['y']
-                popup = "%s: go to node %d" % (i, trip['target_hub'])
-                folium.Marker(location=[target_node_y, target_node_x], popup = popup, tooltip=str(i)).add_to(plot2)
-                ox.plot_route_folium(G=self.manhattan_graph.inner_graph,route=trip['route'],route_map=plot2)
+        # if(visualize_actionspace):
+        #     for i, trip in enumerate(self.availableTrips()):
+        #         target_hub=self.manhattan_graph.get_node_by_nodeid(trip['target_hub'])
+        #         target_node_x = target_hub['x']
+        #         target_node_y = target_hub['y']
+        #         popup = "%s: go to node %d" % (i, trip['target_hub'])
+        #         folium.Marker(location=[target_node_y, target_node_x], popup = popup, tooltip=str(i)).add_to(plot)
+        #         ox.plot_route_folium(G=self.manhattan_graph.inner_graph,route=trip['route'],route_map=plot)
         # Plot
         # pos_to_final = nx.shortest_path(self.manhattan_graph.inner_graph, self.manhattan_graph.get_nodeid_by_index(self.start_hub), self.manhattan_graph.get_nodeid_by_index(self.final_hub), weight="travel_time")
         # if(not len(pos_to_final)< 2):
 
-        plot2.save(save_location)
+        #plot2.save(save_location)
         print("HIER IST RENDER FERTIG")
-        return plot
+        # plt.savefig('this.png')
+        plt.show()
+        # return plt
+
 
 class DeliveryState:
     DELIVERED_ON_TIME, DELIVERED_WITH_DELAY, NOT_DELIVERED, IN_DELIVERY = range(4)
