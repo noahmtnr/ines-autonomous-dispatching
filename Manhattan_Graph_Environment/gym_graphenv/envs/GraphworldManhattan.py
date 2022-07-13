@@ -83,7 +83,7 @@ class GraphEnv(gym.Env):
         self.observation_space = spaces.Dict(
             {
             # 'cost': gym.spaces.Box(low=np.zeros(70)-10, high=np.zeros(70)+10, shape=(70,), dtype=np.float64),
-            'remaining_distance': gym.spaces.Box(low=np.zeros(70)-20000, high=np.zeros(70)+20000, shape=(70,), dtype=np.float64),
+            'remaining_distance': gym.spaces.Box(low=np.zeros(70)-200000, high=np.zeros(70)+200000, shape=(70,), dtype=np.float64),
             'current_hub': gym.spaces.Box(low=0, high=1, shape=(70,), dtype=np.float64),
             'final_hub': gym.spaces.Box(low=0, high=1, shape=(70,), dtype=np.float64)
         })
@@ -177,7 +177,7 @@ class GraphEnv(gym.Env):
 
         self.state = {
             # 'cost' : ((self.learn_graph.adjacency_matrix('cost')[self.position]-self.mean1)/self.stdev1).astype(np.float64),
-            'remaining_distance': (self.learn_graph.adjacency_matrix('remaining_distance')[self.position]).astype(np.float64),
+            'remaining_distance': self.learn_graph.adjacency_matrix('remaining_distance')[self.position].astype(np.float64),
             'current_hub' : self.one_hot(self.position).astype(np.float64),
             'final_hub' : self.one_hot(self.final_hub).astype(np.float64)
             }
@@ -216,7 +216,6 @@ class GraphEnv(gym.Env):
                 self.action_choice = "Wait"
                 print("action == wait ")
                 executionTimeWait = (time.time() - startTimeWait)
-                # print(f"Time Wait: {str(executionTimeWait)}")
                 pass
 
             # action = share ride or book own ride
@@ -266,10 +265,11 @@ class GraphEnv(gym.Env):
         self.learn_graph.add_travel_cost_layer(self.availableTrips(), self.distance_matrix)
         self.learn_graph.add_remaining_distance_layer(current_hub=self.position, distance_matrix=self.distance_matrix)
         startTimeLearn = time.time()
-        self.state = {'remaining_distance': (self.learn_graph.adjacency_matrix('remaining_distance')[self.position]).astype(np.float64),'current_hub' : self.one_hot(self.position).astype(np.float64), 'final_hub' : self.one_hot(self.final_hub).astype(np.float64)}
-        # self.state = {'cost' : ((self.learn_graph.adjacency_matrix('cost')[self.position]-self.mean1)/self.stdev1).astype(np.float64),'remaining_distance': ((self.learn_graph.adjacency_matrix('remaining_distance')[self.position]-self.mean2)/self.stdev2).astype(np.float64),'current_hub' : self.one_hot(self.position).astype(np.float64), 'final_hub' : self.one_hot(self.final_hub).astype(np.float64)}
-        # print("New State: ")
-        # print(self.state)
+        self.old_state = self.state
+        self.state = {
+            'remaining_distance': (self.learn_graph.adjacency_matrix('remaining_distance')[self.position]).astype(np.float64),
+            'current_hub' : self.one_hot(self.position).astype(np.float64),
+            'final_hub' : self.one_hot(self.final_hub).astype(np.float64)}
 
         self.time += timedelta(seconds=step_duration)
 
@@ -285,10 +285,10 @@ class GraphEnv(gym.Env):
 
     def compute_reward(self, action):
         # cost_of_action = self.learn_graph.adjacency_matrix('cost')[self.old_position][action]
-        print(self.old_position, "->", action)
+        distance_gained = self.old_state['remaining_distance'][self.position]
         self.done = False
         # if delay is greater than 2 hours (=120 minutes), terminate training episode
-        if((self.time-self.deadline).total_seconds()/60 >= 120 or self.count_actions > 200):
+        if((self.time-self.deadline).total_seconds()/60 >= 120):
             self.done = True
             reward = - 10000
             state_of_delivery = DeliveryState.NOT_DELIVERED
@@ -301,16 +301,20 @@ class GraphEnv(gym.Env):
             state_of_delivery = DeliveryState.DELIVERED_ON_TIME
         # if box is delivered to final hub with delay
         elif(self.position == self.final_hub and (self.time-self.deadline).total_seconds()/60 < 120): #self.time > self.deadline):
+            overtime = self.time - self.deadline
+            overtime = round(overtime.total_seconds() / 60)
             print(f"DELIVERED AFTER {self.count_actions} ACTIONS (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown} WITH DELAY: {overtime}")
-            reward = 8000
+            reward = 10000 - overtime
             self.done = True
             state_of_delivery = DeliveryState.DELIVERED_WITH_DELAY
         # if box is not delivered to final hub
         elif(self.done==False):
-            reward = -100
+            reward = distance_gained / 100
             # print(f"INTERMEDIATE STEP ACTIONS: (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown}")
             state_of_delivery = DeliveryState.IN_DELIVERY
             #done = False
+
+        print(self.old_position, "->", action, reward)
 
         return reward, self.done, state_of_delivery
 
