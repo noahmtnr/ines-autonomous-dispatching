@@ -29,7 +29,7 @@ from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
 from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv, CustomCallbacks
 
 wandb.login(key="93aab2bcc48447dd2e8f74124d0258be2bf93859")
-wandb.init(project="HP-reduce_bookowns", entity="hitchhike")
+wandb.init(project="Comparison_Hypothese_Normalisiert", entity="hitchhike")
 
 # class CustomModel(TFModelV2):
 #     def __init__(self, obs_space, action_space, num_outputs, model_config, name):
@@ -96,7 +96,7 @@ rainbow_config["noisy"] = True
 # this is greater than 1, distributional Q-learning is used.
 # the discrete supports are bounded by v_min and v_max
 rainbow_config["num_atoms"] = 70 #[more than 1] //was 51,20
-rainbow_config["v_min"] =-210000
+rainbow_config["v_min"] =-20010000
 rainbow_config["v_max"]=210000 # (set v_min and v_max according to your expected range of returns).
 
 
