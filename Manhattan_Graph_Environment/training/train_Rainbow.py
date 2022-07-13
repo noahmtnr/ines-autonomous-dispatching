@@ -115,7 +115,7 @@ shutil.rmtree(ray_results, ignore_errors=True, onerror=None)   # clean up old ru
 results = []
 episode_data = []
 episode_json = []
-n_iter = 100
+n_iter = 30
 for n in range(n_iter):
     result = trainer.train()
     results.append(result)

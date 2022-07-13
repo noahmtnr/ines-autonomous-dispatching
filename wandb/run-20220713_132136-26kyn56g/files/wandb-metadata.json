@@ -1,0 +1,22 @@
+{
+    "os": "macOS-12.4-arm64-arm-64bit",
+    "python": "3.8.12",
+    "heartbeatAt": "2022-07-13T11:21:40.522949",
+    "startedAt": "2022-07-13T11:21:36.904178",
+    "docker": null,
+    "cpu_count": 8,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "/Users/agnieszkalenart/iCloud Drive (Archive)/Documents/mannheim/team_projekt/ines-autonomous-dispatching-1/Manhattan_Graph_Environment/training/train_PPO.py",
+    "codePath": "Manhattan_Graph_Environment/training/train_PPO.py",
+    "git": {
+        "remote": "https://github.com/knoms/ines-autonomous-dispatching.git",
+        "commit": "6ac0dae9a8fed021acb26bf6b56dc92fce01c58b"
+    },
+    "email": "agnieszkalenart99@gmail.com",
+    "root": "/Users/agnieszkalenart/iCloud Drive (Archive)/Documents/mannheim/team_projekt/ines-autonomous-dispatching-1",
+    "host": "Agnieszkas-MacBook-Air.local",
+    "username": "agnieszkalenart",
+    "executable": "/Users/agnieszkalenart/miniconda3/bin/python"
+}
