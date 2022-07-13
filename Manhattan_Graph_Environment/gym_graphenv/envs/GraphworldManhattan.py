@@ -76,7 +76,7 @@ class GraphEnv(gym.Env):
 
         self.state = None
         self.state_of_delivery = DeliveryState.IN_DELIVERY
-        self.book_available = 0
+        self.allow_bookown = 0
 
 
         self.action_space = gym.spaces.Discrete(self.n_hubs)
@@ -88,7 +88,7 @@ class GraphEnv(gym.Env):
             'current_hub': gym.spaces.Box(low=0, high=1, shape=(70,), dtype=np.float64),
             'final_hub': gym.spaces.Box(low=0, high=1, shape=(70,), dtype=np.float64),
             'distinction': gym.spaces.Box(low=np.zeros(70)-1, high=np.zeros(70)+1, shape=(70,), dtype=np.float64),
-            'book_available': gym.spaces.Discrete(2)
+            'allow_bookown': gym.spaces.Discrete(2)
         
         })
         self.mean1=6779.17
@@ -180,9 +180,9 @@ class GraphEnv(gym.Env):
         reward=0
 
         if((self.deadline - self.time).total_seconds()/60 <= 120):
-            self.book_available = 1
+            self.allow_bookown = 1
         else:
-            self.book_available = 0
+            self.allow_bookown = 0
 
       
 
@@ -192,7 +192,7 @@ class GraphEnv(gym.Env):
             'current_hub' : self.one_hot(self.position).astype(np.float64),
             'final_hub' : self.one_hot(self.final_hub).astype(np.float64),
             'distinction' : self.learn_graph.adjacency_matrix('distinction')[self.position].astype(np.float64),
-            'book_available': self.book_available,
+            'allow_bookown': self.allow_bookown,
             }
 
         resetExecutionTime = (time.time() - resetExecutionStart)
@@ -276,9 +276,9 @@ class GraphEnv(gym.Env):
             print("action space: ",self.action_space)
 
         if((self.deadline - self.time).total_seconds()/60 <= 120):
-            self.book_available = 1
+            self.allow_bookown = 1
         else:
-            self.book_available = 0
+            self.allow_bookown = 0
         # refresh travel cost layer after each step
         self.learn_graph.add_travel_cost_layer(self.availableTrips(), self.distance_matrix)
         self.learn_graph.add_remaining_distance_layer(current_hub=self.position, distance_matrix=self.distance_matrix)
@@ -289,7 +289,7 @@ class GraphEnv(gym.Env):
             'current_hub' : self.one_hot(self.position).astype(np.float64),
             'final_hub' : self.one_hot(self.final_hub).astype(np.float64),
             'distinction' : self.learn_graph.adjacency_matrix('distinction')[self.position].astype(np.float64),
-            'book_available': self.book_available,
+            'allow_bookown': self.allow_bookown,
             }
 
         # print("New State: ")        
@@ -337,14 +337,14 @@ class GraphEnv(gym.Env):
         # if box is not delivered to final hub
         elif(self.done==False):
             # reward = distance_gained / 100 + old_distinction[action]*1000
-            # print("book available",self.book_available)
+            # print("book available",self.allow_bookown)
             # print("Distinction action available",old_distinction[action])
-            if(self.book_available == 0 and old_distinction[action] == -1 ):
-                 reward = distance_gained / 100 + old_distinction[action]*100000
-            elif(self.book_available == 1 and old_distinction[action] == -1):
-                reward = distance_gained / 100 + 1000
+            if(self.allow_bookown == 0 and old_distinction[action] == -1 ):
+                 reward = old_distinction[action]*100000
+            elif(self.allow_bookown == 1 and old_distinction[action] == -1):
+                reward = (distance_gained/100) * 1000
             else:
-                reward =  distance_gained / 100 + old_distinction[action]*1000
+                reward = (distance_gained/100) * 1000 + old_distinction[action]*1000
             # print(f"INTERMEDIATE STEP ACTIONS: (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown}")
             state_of_delivery = DeliveryState.IN_DELIVERY
             #done = False
