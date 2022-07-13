@@ -1,3 +1,13 @@
+
+
+
+
+#THIS IS ONLY EXAMPLE HOW TO NORMALISE - DO NOT USE IT - THE ENV IS NOT UP TO DATE
+
+
+
+
+
 from xml.dom.pulldom import parseString
 import numpy as np
 import osmnx as ox

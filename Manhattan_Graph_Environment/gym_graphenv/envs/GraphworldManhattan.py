@@ -93,6 +93,8 @@ class GraphEnv(gym.Env):
         
         })
         self.rem_distance_values=[]
+        self.rd_mean=120.2
+        self.rd_stdev=5571.48
 
     def one_hot(self, pos):
         one_hot_vector = np.zeros(len(self.hubs))
@@ -186,7 +188,7 @@ class GraphEnv(gym.Env):
 
         self.state = {
             # 'cost' : ((self.learn_graph.adjacency_matrix('cost')[self.position]-self.mean1)/self.stdev1).astype(np.float64),
-            'remaining_distance': self.learn_graph.adjacency_matrix('remaining_distance')[self.position].astype(np.float64),
+            'remaining_distance': ((self.learn_graph.adjacency_matrix('remaining_distance')[self.position]-self.rd_mean)/self.rd_stdev).astype(np.float64),
             'current_hub' : self.one_hot(self.position).astype(np.float64),
             'final_hub' : self.one_hot(self.final_hub).astype(np.float64),
             'distinction' : self.learn_graph.adjacency_matrix('distinction')[self.position].astype(np.float64),
@@ -285,7 +287,7 @@ class GraphEnv(gym.Env):
         startTimeLearn = time.time()
         self.old_state = self.state
         self.state = {
-            'remaining_distance': (self.learn_graph.adjacency_matrix('remaining_distance')[self.position]).astype(np.float64),
+            'remaining_distance': (((self.learn_graph.adjacency_matrix('remaining_distance')[self.position])-self.rd_mean)/self.rd_stdev).astype(np.float64),
             'current_hub' : self.one_hot(self.position).astype(np.float64),
             'final_hub' : self.one_hot(self.final_hub).astype(np.float64),
             'distinction' : self.learn_graph.adjacency_matrix('distinction')[self.position].astype(np.float64),
