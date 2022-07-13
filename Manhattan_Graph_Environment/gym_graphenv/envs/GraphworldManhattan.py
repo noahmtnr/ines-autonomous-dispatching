@@ -179,6 +179,7 @@ class GraphEnv(gym.Env):
 
         # new metrics for shares and bookowns
         self.count_shared_available = 0
+        self.boolean_shared_available = 0
         self.count_shared_available_useful = 0
         self.count_shared_taken_useful = 0
 
@@ -237,7 +238,8 @@ class GraphEnv(gym.Env):
                     # compute the number of shared available actions and the number of useful shared available actions
                     for hub in self.shared_rides_mask:
                         if hub == 1:
-                            self.count_shared_available = 1
+                            self.boolean_shared_available = 1
+                            self.count_shared_available += 1
                             break
                             # check whether remaining distance decreases
                             # compute dist from current position to final
@@ -510,6 +512,7 @@ class CustomCallbacks(DefaultCallbacks):
 
         # metrics for shares and bookowns
         self.count_shared_available = 0
+        self.boolean_shared_available = 0
         self.count_shared_taken = 0
         self.count_bookowns = 0
 
@@ -597,10 +600,11 @@ class CustomCallbacks(DefaultCallbacks):
         
         # metrics for shares and bookowns
         # note: count_shared_taken = count_share
-        if episode.env.count_shared_available == 0:
+        if episode.env.boolean_shared_available == 0:
             episode.custom_metrics["shared_taken_to_shared_available"] = 0
         else:
-            episode.custom_metrics["shared_taken_to_shared_available"] =  float(episode.env.count_share / episode.env.count_shared_available)
+            episode.custom_metrics["shared_taken_to_shared_available"] =  float(episode.env.count_share / episode.env.boolean_shared_available)
+        episode.custom_metrics["count_shared_available"] = episode.env.count_shared_available
         episode.custom_metrics["shared_available_useful_to_shared_available"] = 0
         episode.custom_metrics["shared_taken_useful_to_shared_available_useful"] = 0
 
@@ -677,5 +681,6 @@ class CustomCallbacks(DefaultCallbacks):
         result["count_booked_own"] = result['custom_metrics']["count_booked_own_mean"] # - CustomCallbacks.last_count_bookowns
         # CustomCallbacks.last_count_bookowns = CustomCallbacks.last_count_bookowns + result["count_booked_own"]
         result["shared_taken_to_shared_available"] = result['custom_metrics']["shared_taken_to_shared_available_mean"]
+        result["count_shared_available"] = result['custom_metrics']["count_shared_available_mean"]
         result["shared_available_useful_to_shared_available"] = 0 #TODO
         result["shared_taken_useful_to_shared_available_useful"] = 0 # TODO
