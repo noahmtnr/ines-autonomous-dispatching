@@ -88,12 +88,14 @@ class LearnGraph:
     def add_remaining_distance_layer(self, current_hub, distance_matrix):
         distance_edges = {}
         #final_hub_nodeid = self.manhattan_graph.get_nodeid_by_hub_index(self.final_hub)
-        dist_current_to_intermediate = distance_matrix[current_hub,:] # get row in distance matrix
+        # dist_current_to_intermediate = distance_matrix[current_hub,:] # get row in distance matrix
+        dist_current_to_final = distance_matrix[current_hub,self.final_hub] # get row in distance matrix
         dist_intermediate_to_final = distance_matrix[:,self.final_hub] # get column of final hub in distance matrix
-        total_distance_array = dist_current_to_intermediate + dist_intermediate_to_final
+        # total_distance_array = dist_current_to_intermediate - dist_intermediate_to_final
+        distance_gained_array = dist_current_to_final - dist_intermediate_to_final
 
-        for i in range(len(total_distance_array)):
-            distance_edges[(current_hub,i,0)] = total_distance_array[i]
+        for i in range(len(distance_gained_array)):
+            distance_edges[(current_hub,i,0)] = distance_gained_array[i]
 
         nx.set_edge_attributes(self.G, distance_edges, "remaining_distance") 
 
