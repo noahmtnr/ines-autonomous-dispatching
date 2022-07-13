@@ -159,8 +159,8 @@ for n in range(n_iter):
                'count_booked_own': int(result["count_booked_own"]),
                # 'bookowns_to_all': float(result["bookowns_to_all"]),
                'shared_taken_to_shared_available': float(result["shared_taken_to_shared_available"]),
-               # 'shared_available_useful_to_shared_available': float(result["shared_available_useful_to_shared_available"]),
-               # 'shared_taken_useful_to_shared_available_useful': float(result["shared_taken_useful_to_shared_available_useful"]),
+               'shared_available_useful_to_shared_available': float(result["shared_available_useful_to_shared_available"]),
+               'shared_taken_useful_to_shared_available_useful': float(result["shared_taken_useful_to_shared_available_useful"]),
                }
     episode_data.append(episode)
     episode_json.append(json.dumps(episode))
@@ -185,8 +185,8 @@ for n in range(n_iter):
                'count_booked_own': result["count_booked_own"],
                 #'bookowns_to_all': result["bookowns_to_all"],
                 'shared_taken_to_shared_available': result["shared_taken_to_shared_available"],
-                #'shared_available_useful_to_shared_available': result["shared_available_useful_to_shared_available"],
-                #'shared_taken_useful_to_shared_available_useful': result["shared_taken_useful_to_shared_available_useful"],
+                'shared_available_useful_to_shared_available': result["shared_available_useful_to_shared_available"],
+                'shared_taken_useful_to_shared_available_useful': result["shared_taken_useful_to_shared_available_useful"],
     })
 
     print(f'{n + 1:3d}: Min/Mean/Max reward: {result["episode_reward_min"]:8.4f}/{result["episode_reward_mean"]:8.4f}/{result["episode_reward_max"]:8.4f}, len mean: {result["episode_len_mean"]:8.4f}. Checkpoint saved to {file_name}')

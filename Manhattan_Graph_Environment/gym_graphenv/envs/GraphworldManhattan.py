@@ -208,6 +208,19 @@ class GraphEnv(gym.Env):
 
         self.done =  False
 
+        # determine whether shared ride was useful (= whether remaining distance was reduced)
+        # compute the number of shared available actions and the number of useful shared available actions
+        counter = 0
+        for hub in self.shared_rides_mask:
+            if hub == 1:
+                self.boolean_shared_available = 1
+                self.count_shared_available += 1
+                # check whether remaining distance decreases with new position
+                if self.state["remaining_distance"][counter] > 0:
+                    self.count_shared_available_useful += 1
+                    self.boolean_useful_shares_available = 1
+            counter += 1
+
         # set old position to current position before changing current position
         self.old_position = self.position
         step_duration = 0
@@ -233,18 +246,10 @@ class GraphEnv(gym.Env):
                     self.count_share += 1
                     self.action_choice = "Share"
                     print("action == share ")
-
-                    # determine whether shared ride was useful (= whether remaining distance was reduced)
-                    # compute the number of shared available actions and the number of useful shared available actions
-                    for hub in self.shared_rides_mask:
-                        if hub == 1:
-                            self.boolean_shared_available = 1
-                            self.count_shared_available += 1
-                            break
-                            # check whether remaining distance decreases
-                            # compute dist from current position to final
-                            # if (self.state["remaining_distance"][self.final_hub] - 
-                            #    self.count_shared_available_useful += 1
+                    
+                    # check whether current action is useful
+                    if self.state["remaining_distance"][action] > 0:
+                        self.count_shared_taken_useful += 1
 
                 else:
                     self.count_bookown += 1
@@ -517,6 +522,7 @@ class CustomCallbacks(DefaultCallbacks):
 
         self.count_shared_available_useful = 0
         self.count_shared_taken_useful = 0
+        self.boolean_useful_shares_available = 0
         
         
         
@@ -598,14 +604,26 @@ class CustomCallbacks(DefaultCallbacks):
         episode.custom_metrics["share_to_own_ratio"] = episode.env.count_share if episode.env.count_bookown == 0 else float(episode.env.count_share / episode.env.count_bookown)
         
         # metrics for shares and bookowns
-        # note: count_shared_taken = count_share
+        # ratio of shared taken when a shared is available
         if episode.env.boolean_shared_available == 0:
             episode.custom_metrics["shared_taken_to_shared_available"] = 0
         else:
             episode.custom_metrics["shared_taken_to_shared_available"] =  float(episode.env.count_share / episode.env.boolean_shared_available)
+        # counting the shared availables
         episode.custom_metrics["count_shared_available"] = episode.env.count_shared_available
-        episode.custom_metrics["shared_available_useful_to_shared_available"] = 0
-        episode.custom_metrics["shared_taken_useful_to_shared_available_useful"] = 0
+        # ratio: useful available shares (reducing remaining distance) of available shares
+        if episode.env.count_shared_available_useful == 0:
+            episode.custom_metrics["shared_available_useful_to_shared_available"] = 0
+        else:
+            episode.custom_metrics["shared_available_useful_to_shared_available"] = float(episode.env.count_shared_available_useful/episode.env.boolean_shared_available)
+        
+        # counting the useful available shared rides
+        episode.custom_metrics["count_shared_available_useful"] = episode.env.count_shared_available_useful
+        # ratio: useful shares taken of useful shares available
+        if episode.env.count_shared_availab:
+            episode.custom_metrics["shared_taken_useful_to_shared_available_useful"] = 0
+        else:
+            episode.custom_metrics["shared_taken_useful_to_shared_available_useful"] = float(episode.env.count_shared_taken_useful/episode.env.boolean_useful_shares_available)
 
         if episode.env.count_bookown > 0:
             episode.custom_metrics["count_booked_own"] = 1
@@ -681,5 +699,5 @@ class CustomCallbacks(DefaultCallbacks):
         # CustomCallbacks.last_count_bookowns = CustomCallbacks.last_count_bookowns + result["count_booked_own"]
         result["shared_taken_to_shared_available"] = result['custom_metrics']["shared_taken_to_shared_available_mean"]
         result["count_shared_available"] = result['custom_metrics']["count_shared_available_mean"]
-        result["shared_available_useful_to_shared_available"] = 0 #TODO
-        result["shared_taken_useful_to_shared_available_useful"] = 0 # TODO
+        result["shared_available_useful_to_shared_available"] = result['custom_metrics']["shared_available_useful_to_shared_available_mean"]
+        result["shared_taken_useful_to_shared_available_useful"] = result['custom_metrics']["shared_taken_useful_to_shared_available_useful_mean"]
