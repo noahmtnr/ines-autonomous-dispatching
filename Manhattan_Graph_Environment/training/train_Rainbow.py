@@ -29,7 +29,7 @@ from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
 from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv, CustomCallbacks
 
 wandb.login(key="93aab2bcc48447dd2e8f74124d0258be2bf93859")
-wandb.init(project="Comparison-Total_Env", entity="hitchhike")
+wandb.init(project="New_Metrics_Total_Env", entity="hitchhike")
 
 # class CustomModel(TFModelV2):
 #     def __init__(self, obs_space, action_space, num_outputs, model_config, name):
@@ -154,6 +154,13 @@ for n in range(n_iter):
                'count_delivered_on_time': int(result["count_delivered_on_time"]),
                'count_delivered_with_delay': int(result["count_delivered_with_delay"]),
                'count_not_delivered': int(result["count_not_delivered"]),
+
+               # new metrics
+               'count_booked_own': int(result["count_booked_own"]),
+               # 'bookowns_to_all': float(result["bookowns_to_all"]),
+               'shared_taken_to_shared_available': float(result["shared_taken_to_shared_available"]),
+               # 'shared_available_useful_to_shared_available': float(result["shared_available_useful_to_shared_available"]),
+               # 'shared_taken_useful_to_shared_available_useful': float(result["shared_taken_useful_to_shared_available_useful"]),
                }
     episode_data.append(episode)
     episode_json.append(json.dumps(episode))
@@ -173,6 +180,13 @@ for n in range(n_iter):
                 'count_delivered_on_time': result["count_delivered_on_time"],
                 'count_delivered_with_delay': result["count_delivered_with_delay"],
                 'count_not_delivered': result["count_not_delivered"],
+
+                # new metrics
+               'count_booked_own': result["count_booked_own"],
+                #'bookowns_to_all': result["bookowns_to_all"],
+                'shared_taken_to_shared_available': result["shared_taken_to_shared_available"],
+                #'shared_available_useful_to_shared_available': result["shared_available_useful_to_shared_available"],
+                #'shared_taken_useful_to_shared_available_useful': result["shared_taken_useful_to_shared_available_useful"],
     })
 
     print(f'{n + 1:3d}: Min/Mean/Max reward: {result["episode_reward_min"]:8.4f}/{result["episode_reward_mean"]:8.4f}/{result["episode_reward_max"]:8.4f}, len mean: {result["episode_len_mean"]:8.4f}. Checkpoint saved to {file_name}')
