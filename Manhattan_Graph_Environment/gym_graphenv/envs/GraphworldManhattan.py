@@ -326,7 +326,7 @@ class GraphEnv(gym.Env):
         if (self.position == self.final_hub and self.time <= self.deadline):
             print(f"DELIVERED IN TIME AFTER {self.count_actions} ACTIONS (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown}")
             reward = 10000
-            reward -= (cost_of_action / 100)
+            # reward -= (cost_of_action / 100)
             self.done = True
             state_of_delivery = DeliveryState.DELIVERED_ON_TIME
         # if box is delivered to final hub with delay
@@ -612,7 +612,7 @@ class CustomCallbacks(DefaultCallbacks):
         # counting the shared availables
         episode.custom_metrics["count_shared_available"] = episode.env.count_shared_available
         # ratio: useful available shares (reducing remaining distance) of available shares
-        if episode.env.count_shared_available_useful == 0:
+        if episode.env.boolean_shared_available == 0:
             episode.custom_metrics["shared_available_useful_to_shared_available"] = 0
         else:
             episode.custom_metrics["shared_available_useful_to_shared_available"] = float(episode.env.count_shared_available_useful/episode.env.boolean_shared_available)
@@ -620,7 +620,7 @@ class CustomCallbacks(DefaultCallbacks):
         # counting the useful available shared rides
         episode.custom_metrics["count_shared_available_useful"] = episode.env.count_shared_available_useful
         # ratio: useful shares taken of useful shares available
-        if episode.env.count_shared_availab:
+        if episode.env.boolean_useful_shares_available == 0:
             episode.custom_metrics["shared_taken_useful_to_shared_available_useful"] = 0
         else:
             episode.custom_metrics["shared_taken_useful_to_shared_available_useful"] = float(episode.env.count_shared_taken_useful/episode.env.boolean_useful_shares_available)
