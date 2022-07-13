@@ -1,0 +1,229 @@
+2022-07-13 11:51:22,786 INFO    MainThread:18644 [internal.py:wandb_internal():90] W&B internal server running at pid: 18644, started at: 2022-07-13 11:51:22.785343
+2022-07-13 11:51:22,794 INFO    WriterThread:18644 [datastore.py:open_for_write():75] open: C:\Users\cosmi\Documents\Mannheim\ines-autonomous-dispatching\wandb\run-20220713_115120-3j2h43hf\run-3j2h43hf.wandb
+2022-07-13 11:51:22,797 DEBUG   SenderThread:18644 [sender.py:send():235] send: header
+2022-07-13 11:51:22,798 DEBUG   SenderThread:18644 [sender.py:send():235] send: run
+2022-07-13 11:51:23,622 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: check_version
+2022-07-13 11:51:23,623 INFO    SenderThread:18644 [dir_watcher.py:__init__():205] watching files in: C:\Users\cosmi\Documents\Mannheim\ines-autonomous-dispatching\wandb\run-20220713_115120-3j2h43hf\files
+2022-07-13 11:51:23,623 INFO    SenderThread:18644 [sender.py:_start_run_threads():812] run started: 3j2h43hf with start time 1657702280
+2022-07-13 11:51:23,623 DEBUG   SenderThread:18644 [sender.py:send():235] send: summary
+2022-07-13 11:51:23,624 INFO    SenderThread:18644 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2022-07-13 11:51:23,624 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: check_version
+2022-07-13 11:51:24,629 INFO    Thread-11 :18644 [dir_watcher.py:_on_file_created():256] file/dir created: C:\Users\cosmi\Documents\Mannheim\ines-autonomous-dispatching\wandb\run-20220713_115120-3j2h43hf\files\wandb-summary.json
+2022-07-13 11:51:25,193 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: run_start
+2022-07-13 11:51:25,203 DEBUG   HandlerThread:18644 [meta.py:__init__():35] meta init
+2022-07-13 11:51:25,203 DEBUG   HandlerThread:18644 [meta.py:__init__():49] meta init done
+2022-07-13 11:51:25,203 DEBUG   HandlerThread:18644 [meta.py:probe():209] probe
+2022-07-13 11:51:25,237 DEBUG   HandlerThread:18644 [meta.py:_setup_git():199] setup git
+2022-07-13 11:51:25,317 DEBUG   HandlerThread:18644 [meta.py:_setup_git():206] setup git done
+2022-07-13 11:51:25,317 DEBUG   HandlerThread:18644 [meta.py:_save_pip():53] save pip
+2022-07-13 11:51:25,318 DEBUG   HandlerThread:18644 [meta.py:_save_pip():67] save pip done
+2022-07-13 11:51:25,319 DEBUG   HandlerThread:18644 [meta.py:_save_conda():74] save conda
+2022-07-13 11:51:25,322 ERROR   HandlerThread:18644 [meta.py:_save_conda():83] Error saving conda packages
+Traceback (most recent call last):
+  File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\wandb\sdk\internal\meta.py", line 79, in _save_conda
+    subprocess.call(
+  File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\subprocess.py", line 349, in call
+    with Popen(*popenargs, **kwargs) as p:
+  File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\subprocess.py", line 951, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\subprocess.py", line 1420, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+FileNotFoundError: [WinError 2] The system cannot find the file specified
+2022-07-13 11:51:25,324 DEBUG   HandlerThread:18644 [meta.py:_save_conda():84] save conda done
+2022-07-13 11:51:25,324 DEBUG   HandlerThread:18644 [meta.py:probe():247] probe done
+2022-07-13 11:51:25,538 DEBUG   SenderThread:18644 [sender.py:send():235] send: files
+2022-07-13 11:51:25,538 INFO    SenderThread:18644 [sender.py:_save_file():949] saving file wandb-metadata.json with policy now
+2022-07-13 11:51:25,538 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: stop_status
+2022-07-13 11:51:25,539 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: stop_status
+2022-07-13 11:51:25,636 INFO    Thread-11 :18644 [dir_watcher.py:_on_file_created():256] file/dir created: C:\Users\cosmi\Documents\Mannheim\ines-autonomous-dispatching\wandb\run-20220713_115120-3j2h43hf\files\wandb-metadata.json
+2022-07-13 11:51:25,636 INFO    Thread-11 :18644 [dir_watcher.py:_on_file_created():256] file/dir created: C:\Users\cosmi\Documents\Mannheim\ines-autonomous-dispatching\wandb\run-20220713_115120-3j2h43hf\files\conda-environment.yaml
+2022-07-13 11:51:25,636 INFO    Thread-11 :18644 [dir_watcher.py:_on_file_created():256] file/dir created: C:\Users\cosmi\Documents\Mannheim\ines-autonomous-dispatching\wandb\run-20220713_115120-3j2h43hf\files\output.log
+2022-07-13 11:51:25,636 INFO    Thread-11 :18644 [dir_watcher.py:_on_file_created():256] file/dir created: C:\Users\cosmi\Documents\Mannheim\ines-autonomous-dispatching\wandb\run-20220713_115120-3j2h43hf\files\requirements.txt
+2022-07-13 11:51:25,944 DEBUG   SenderThread:18644 [sender.py:send():235] send: telemetry
+2022-07-13 11:51:26,352 INFO    Thread-17 :18644 [upload_job.py:push():132] Uploaded file C:\Users\cosmi\AppData\Local\Temp\tmpspth3sr4wandb\2lftg1nw-wandb-metadata.json
+2022-07-13 11:51:27,654 INFO    Thread-11 :18644 [dir_watcher.py:_on_file_modified():269] file/dir modified: C:\Users\cosmi\Documents\Mannheim\ines-autonomous-dispatching\wandb\run-20220713_115120-3j2h43hf\files\output.log
+2022-07-13 11:51:29,669 INFO    Thread-11 :18644 [dir_watcher.py:_on_file_modified():269] file/dir modified: C:\Users\cosmi\Documents\Mannheim\ines-autonomous-dispatching\wandb\run-20220713_115120-3j2h43hf\files\output.log
+2022-07-13 11:51:41,015 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: stop_status
+2022-07-13 11:51:41,015 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: stop_status
+2022-07-13 11:51:53,882 INFO    Thread-11 :18644 [dir_watcher.py:_on_file_modified():269] file/dir modified: C:\Users\cosmi\Documents\Mannheim\ines-autonomous-dispatching\wandb\run-20220713_115120-3j2h43hf\files\config.yaml
+2022-07-13 11:51:56,031 DEBUG   SenderThread:18644 [sender.py:send():235] send: stats
+2022-07-13 11:51:56,787 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: stop_status
+2022-07-13 11:51:56,788 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: stop_status
+2022-07-13 11:52:12,027 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: stop_status
+2022-07-13 11:52:12,028 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: stop_status
+2022-07-13 11:52:20,116 INFO    Thread-11 :18644 [dir_watcher.py:_on_file_modified():269] file/dir modified: C:\Users\cosmi\Documents\Mannheim\ines-autonomous-dispatching\wandb\run-20220713_115120-3j2h43hf\files\output.log
+2022-07-13 11:52:26,179 INFO    Thread-11 :18644 [dir_watcher.py:_on_file_modified():269] file/dir modified: C:\Users\cosmi\Documents\Mannheim\ines-autonomous-dispatching\wandb\run-20220713_115120-3j2h43hf\files\output.log
+2022-07-13 11:52:27,230 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: stop_status
+2022-07-13 11:52:27,230 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: stop_status
+2022-07-13 11:52:29,040 DEBUG   SenderThread:18644 [sender.py:send():235] send: stats
+2022-07-13 11:52:32,231 INFO    Thread-11 :18644 [dir_watcher.py:_on_file_modified():269] file/dir modified: C:\Users\cosmi\Documents\Mannheim\ines-autonomous-dispatching\wandb\run-20220713_115120-3j2h43hf\files\output.log
+2022-07-13 11:52:34,239 INFO    Thread-11 :18644 [dir_watcher.py:_on_file_modified():269] file/dir modified: C:\Users\cosmi\Documents\Mannheim\ines-autonomous-dispatching\wandb\run-20220713_115120-3j2h43hf\files\output.log
+2022-07-13 11:52:36,259 INFO    Thread-11 :18644 [dir_watcher.py:_on_file_modified():269] file/dir modified: C:\Users\cosmi\Documents\Mannheim\ines-autonomous-dispatching\wandb\run-20220713_115120-3j2h43hf\files\output.log
+2022-07-13 11:52:38,267 INFO    Thread-11 :18644 [dir_watcher.py:_on_file_modified():269] file/dir modified: C:\Users\cosmi\Documents\Mannheim\ines-autonomous-dispatching\wandb\run-20220713_115120-3j2h43hf\files\output.log
+2022-07-13 11:52:40,289 INFO    Thread-11 :18644 [dir_watcher.py:_on_file_modified():269] file/dir modified: C:\Users\cosmi\Documents\Mannheim\ines-autonomous-dispatching\wandb\run-20220713_115120-3j2h43hf\files\output.log
+2022-07-13 11:52:42,624 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: stop_status
+2022-07-13 11:52:42,624 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: stop_status
+2022-07-13 11:52:57,799 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: stop_status
+2022-07-13 11:52:57,800 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: stop_status
+2022-07-13 11:53:01,924 DEBUG   SenderThread:18644 [sender.py:send():235] send: stats
+2022-07-13 11:53:13,008 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: stop_status
+2022-07-13 11:53:13,008 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: stop_status
+2022-07-13 11:53:28,215 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: stop_status
+2022-07-13 11:53:28,215 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: stop_status
+2022-07-13 11:53:34,773 DEBUG   SenderThread:18644 [sender.py:send():235] send: stats
+2022-07-13 11:53:43,538 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: stop_status
+2022-07-13 11:53:43,538 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: stop_status
+2022-07-13 11:53:50,726 INFO    Thread-11 :18644 [dir_watcher.py:_on_file_modified():269] file/dir modified: C:\Users\cosmi\Documents\Mannheim\ines-autonomous-dispatching\wandb\run-20220713_115120-3j2h43hf\files\output.log
+2022-07-13 11:53:58,719 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: stop_status
+2022-07-13 11:53:58,719 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: stop_status
+2022-07-13 11:54:07,706 DEBUG   SenderThread:18644 [sender.py:send():235] send: stats
+2022-07-13 11:54:13,886 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: stop_status
+2022-07-13 11:54:13,886 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: stop_status
+2022-07-13 11:54:29,083 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: stop_status
+2022-07-13 11:54:29,083 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: stop_status
+2022-07-13 11:54:29,432 DEBUG   SenderThread:18644 [sender.py:send():235] send: telemetry
+2022-07-13 11:54:30,006 INFO    Thread-11 :18644 [dir_watcher.py:_on_file_modified():269] file/dir modified: C:\Users\cosmi\Documents\Mannheim\ines-autonomous-dispatching\wandb\run-20220713_115120-3j2h43hf\files\output.log
+2022-07-13 11:54:30,267 DEBUG   SenderThread:18644 [sender.py:send():235] send: exit
+2022-07-13 11:54:30,267 INFO    SenderThread:18644 [sender.py:send_exit():371] handling exit code: 1
+2022-07-13 11:54:30,268 INFO    SenderThread:18644 [sender.py:send_exit():373] handling runtime: 185
+2022-07-13 11:54:30,268 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: poll_exit
+2022-07-13 11:54:30,268 INFO    SenderThread:18644 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2022-07-13 11:54:30,269 INFO    SenderThread:18644 [sender.py:send_exit():379] send defer
+2022-07-13 11:54:30,269 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: poll_exit
+2022-07-13 11:54:30,269 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: defer
+2022-07-13 11:54:30,269 INFO    HandlerThread:18644 [handler.py:handle_request_defer():164] handle defer: 0
+2022-07-13 11:54:30,270 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: defer
+2022-07-13 11:54:30,270 INFO    SenderThread:18644 [sender.py:send_request_defer():388] handle sender defer: 0
+2022-07-13 11:54:30,270 INFO    SenderThread:18644 [sender.py:transition_state():392] send defer: 1
+2022-07-13 11:54:30,270 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: defer
+2022-07-13 11:54:30,270 INFO    HandlerThread:18644 [handler.py:handle_request_defer():164] handle defer: 1
+2022-07-13 11:54:30,337 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: defer
+2022-07-13 11:54:30,337 INFO    SenderThread:18644 [sender.py:send_request_defer():388] handle sender defer: 1
+2022-07-13 11:54:30,338 INFO    SenderThread:18644 [sender.py:transition_state():392] send defer: 2
+2022-07-13 11:54:30,338 DEBUG   SenderThread:18644 [sender.py:send():235] send: stats
+2022-07-13 11:54:30,338 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: defer
+2022-07-13 11:54:30,338 INFO    HandlerThread:18644 [handler.py:handle_request_defer():164] handle defer: 2
+2022-07-13 11:54:30,338 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: defer
+2022-07-13 11:54:30,338 INFO    SenderThread:18644 [sender.py:send_request_defer():388] handle sender defer: 2
+2022-07-13 11:54:30,338 INFO    SenderThread:18644 [sender.py:transition_state():392] send defer: 3
+2022-07-13 11:54:30,339 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: defer
+2022-07-13 11:54:30,339 INFO    HandlerThread:18644 [handler.py:handle_request_defer():164] handle defer: 3
+2022-07-13 11:54:30,339 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: defer
+2022-07-13 11:54:30,339 INFO    SenderThread:18644 [sender.py:send_request_defer():388] handle sender defer: 3
+2022-07-13 11:54:30,339 INFO    SenderThread:18644 [sender.py:transition_state():392] send defer: 4
+2022-07-13 11:54:30,339 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: defer
+2022-07-13 11:54:30,339 INFO    HandlerThread:18644 [handler.py:handle_request_defer():164] handle defer: 4
+2022-07-13 11:54:30,339 DEBUG   SenderThread:18644 [sender.py:send():235] send: summary
+2022-07-13 11:54:30,340 INFO    SenderThread:18644 [sender.py:_save_file():949] saving file wandb-summary.json with policy end
+2022-07-13 11:54:30,340 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: defer
+2022-07-13 11:54:30,340 INFO    SenderThread:18644 [sender.py:send_request_defer():388] handle sender defer: 4
+2022-07-13 11:54:30,340 INFO    SenderThread:18644 [sender.py:transition_state():392] send defer: 5
+2022-07-13 11:54:30,340 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: defer
+2022-07-13 11:54:30,340 INFO    HandlerThread:18644 [handler.py:handle_request_defer():164] handle defer: 5
+2022-07-13 11:54:30,341 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: defer
+2022-07-13 11:54:30,341 INFO    SenderThread:18644 [sender.py:send_request_defer():388] handle sender defer: 5
+2022-07-13 11:54:30,374 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: poll_exit
+2022-07-13 11:54:30,578 INFO    SenderThread:18644 [sender.py:transition_state():392] send defer: 6
+2022-07-13 11:54:30,579 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: poll_exit
+2022-07-13 11:54:30,579 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: defer
+2022-07-13 11:54:30,579 INFO    HandlerThread:18644 [handler.py:handle_request_defer():164] handle defer: 6
+2022-07-13 11:54:30,579 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: defer
+2022-07-13 11:54:30,579 INFO    SenderThread:18644 [sender.py:send_request_defer():388] handle sender defer: 6
+2022-07-13 11:54:30,579 INFO    SenderThread:18644 [dir_watcher.py:finish():336] shutting down directory watcher
+2022-07-13 11:54:30,684 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: poll_exit
+2022-07-13 11:54:31,021 INFO    SenderThread:18644 [dir_watcher.py:_on_file_modified():269] file/dir modified: C:\Users\cosmi\Documents\Mannheim\ines-autonomous-dispatching\wandb\run-20220713_115120-3j2h43hf\files\output.log
+2022-07-13 11:54:31,021 INFO    SenderThread:18644 [dir_watcher.py:_on_file_modified():269] file/dir modified: C:\Users\cosmi\Documents\Mannheim\ines-autonomous-dispatching\wandb\run-20220713_115120-3j2h43hf\files\wandb-summary.json
+2022-07-13 11:54:31,022 INFO    SenderThread:18644 [dir_watcher.py:_on_file_modified():269] file/dir modified: C:\Users\cosmi\Documents\Mannheim\ines-autonomous-dispatching\wandb\run-20220713_115120-3j2h43hf\files\config.yaml
+2022-07-13 11:54:31,022 INFO    SenderThread:18644 [dir_watcher.py:finish():366] scan: C:\Users\cosmi\Documents\Mannheim\ines-autonomous-dispatching\wandb\run-20220713_115120-3j2h43hf\files
+2022-07-13 11:54:31,023 INFO    SenderThread:18644 [dir_watcher.py:finish():380] scan save: C:\Users\cosmi\Documents\Mannheim\ines-autonomous-dispatching\wandb\run-20220713_115120-3j2h43hf\files\conda-environment.yaml conda-environment.yaml
+2022-07-13 11:54:31,023 INFO    SenderThread:18644 [dir_watcher.py:finish():380] scan save: C:\Users\cosmi\Documents\Mannheim\ines-autonomous-dispatching\wandb\run-20220713_115120-3j2h43hf\files\config.yaml config.yaml
+2022-07-13 11:54:31,024 INFO    SenderThread:18644 [dir_watcher.py:finish():380] scan save: C:\Users\cosmi\Documents\Mannheim\ines-autonomous-dispatching\wandb\run-20220713_115120-3j2h43hf\files\output.log output.log
+2022-07-13 11:54:31,025 INFO    SenderThread:18644 [dir_watcher.py:finish():380] scan save: C:\Users\cosmi\Documents\Mannheim\ines-autonomous-dispatching\wandb\run-20220713_115120-3j2h43hf\files\requirements.txt requirements.txt
+2022-07-13 11:54:31,032 INFO    SenderThread:18644 [dir_watcher.py:finish():380] scan save: C:\Users\cosmi\Documents\Mannheim\ines-autonomous-dispatching\wandb\run-20220713_115120-3j2h43hf\files\wandb-metadata.json wandb-metadata.json
+2022-07-13 11:54:31,032 INFO    SenderThread:18644 [dir_watcher.py:finish():380] scan save: C:\Users\cosmi\Documents\Mannheim\ines-autonomous-dispatching\wandb\run-20220713_115120-3j2h43hf\files\wandb-summary.json wandb-summary.json
+2022-07-13 11:54:31,034 INFO    SenderThread:18644 [sender.py:transition_state():392] send defer: 7
+2022-07-13 11:54:31,034 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: poll_exit
+2022-07-13 11:54:31,041 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: defer
+2022-07-13 11:54:31,042 INFO    HandlerThread:18644 [handler.py:handle_request_defer():164] handle defer: 7
+2022-07-13 11:54:31,042 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: defer
+2022-07-13 11:54:31,042 INFO    SenderThread:18644 [sender.py:send_request_defer():388] handle sender defer: 7
+2022-07-13 11:54:31,042 INFO    SenderThread:18644 [file_pusher.py:finish():145] shutting down file pusher
+2022-07-13 11:54:31,142 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: poll_exit
+2022-07-13 11:54:31,142 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: poll_exit
+2022-07-13 11:54:31,251 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: poll_exit
+2022-07-13 11:54:31,252 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: poll_exit
+2022-07-13 11:54:31,358 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: poll_exit
+2022-07-13 11:54:31,359 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: poll_exit
+2022-07-13 11:54:31,466 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: poll_exit
+2022-07-13 11:54:31,466 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: poll_exit
+2022-07-13 11:54:31,575 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: poll_exit
+2022-07-13 11:54:31,575 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: poll_exit
+2022-07-13 11:54:31,680 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: poll_exit
+2022-07-13 11:54:31,682 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: poll_exit
+2022-07-13 11:54:31,755 INFO    Thread-20 :18644 [upload_job.py:push():132] Uploaded file C:\Users\cosmi\Documents\Mannheim\ines-autonomous-dispatching\wandb\run-20220713_115120-3j2h43hf\files\requirements.txt
+2022-07-13 11:54:31,787 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: poll_exit
+2022-07-13 11:54:31,788 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: poll_exit
+2022-07-13 11:54:31,895 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: poll_exit
+2022-07-13 11:54:31,895 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: poll_exit
+2022-07-13 11:54:32,004 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: poll_exit
+2022-07-13 11:54:32,004 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: poll_exit
+2022-07-13 11:54:32,018 INFO    Thread-21 :18644 [upload_job.py:push():132] Uploaded file C:\Users\cosmi\Documents\Mannheim\ines-autonomous-dispatching\wandb\run-20220713_115120-3j2h43hf\files\wandb-summary.json
+2022-07-13 11:54:32,040 INFO    Thread-19 :18644 [upload_job.py:push():132] Uploaded file C:\Users\cosmi\Documents\Mannheim\ines-autonomous-dispatching\wandb\run-20220713_115120-3j2h43hf\files\output.log
+2022-07-13 11:54:32,110 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: poll_exit
+2022-07-13 11:54:32,110 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: poll_exit
+2022-07-13 11:54:32,216 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: poll_exit
+2022-07-13 11:54:32,216 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: poll_exit
+2022-07-13 11:54:32,326 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: poll_exit
+2022-07-13 11:54:32,326 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: poll_exit
+2022-07-13 11:54:32,433 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: poll_exit
+2022-07-13 11:54:32,434 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: poll_exit
+2022-07-13 11:54:32,540 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: poll_exit
+2022-07-13 11:54:32,540 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: poll_exit
+2022-07-13 11:54:32,648 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: poll_exit
+2022-07-13 11:54:32,649 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: poll_exit
+2022-07-13 11:54:32,758 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: poll_exit
+2022-07-13 11:54:32,758 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: poll_exit
+2022-07-13 11:54:32,867 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: poll_exit
+2022-07-13 11:54:32,868 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: poll_exit
+2022-07-13 11:54:32,975 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: poll_exit
+2022-07-13 11:54:32,976 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: poll_exit
+2022-07-13 11:54:33,084 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: poll_exit
+2022-07-13 11:54:33,085 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: poll_exit
+2022-07-13 11:54:33,190 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: poll_exit
+2022-07-13 11:54:33,192 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: poll_exit
+2022-07-13 11:54:33,227 INFO    Thread-18 :18644 [upload_job.py:push():132] Uploaded file C:\Users\cosmi\Documents\Mannheim\ines-autonomous-dispatching\wandb\run-20220713_115120-3j2h43hf\files\config.yaml
+2022-07-13 11:54:33,299 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: poll_exit
+2022-07-13 11:54:33,299 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: poll_exit
+2022-07-13 11:54:33,407 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: poll_exit
+2022-07-13 11:54:33,407 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: poll_exit
+2022-07-13 11:54:33,438 INFO    Thread-10 :18644 [sender.py:transition_state():392] send defer: 8
+2022-07-13 11:54:33,438 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: defer
+2022-07-13 11:54:33,438 INFO    HandlerThread:18644 [handler.py:handle_request_defer():164] handle defer: 8
+2022-07-13 11:54:33,439 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: defer
+2022-07-13 11:54:33,439 INFO    SenderThread:18644 [sender.py:send_request_defer():388] handle sender defer: 8
+2022-07-13 11:54:33,516 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: poll_exit
+2022-07-13 11:54:34,007 INFO    SenderThread:18644 [sender.py:transition_state():392] send defer: 9
+2022-07-13 11:54:34,007 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: poll_exit
+2022-07-13 11:54:34,008 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: defer
+2022-07-13 11:54:34,009 INFO    HandlerThread:18644 [handler.py:handle_request_defer():164] handle defer: 9
+2022-07-13 11:54:34,009 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: defer
+2022-07-13 11:54:34,009 INFO    SenderThread:18644 [sender.py:send_request_defer():388] handle sender defer: 9
+2022-07-13 11:54:34,009 INFO    SenderThread:18644 [sender.py:transition_state():392] send defer: 10
+2022-07-13 11:54:34,011 DEBUG   SenderThread:18644 [sender.py:send():235] send: final
+2022-07-13 11:54:34,011 DEBUG   SenderThread:18644 [sender.py:send():235] send: footer
+2022-07-13 11:54:34,011 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: defer
+2022-07-13 11:54:34,012 INFO    HandlerThread:18644 [handler.py:handle_request_defer():164] handle defer: 10
+2022-07-13 11:54:34,012 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: defer
+2022-07-13 11:54:34,012 INFO    SenderThread:18644 [sender.py:send_request_defer():388] handle sender defer: 10
+2022-07-13 11:54:34,118 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: poll_exit
+2022-07-13 11:54:34,118 DEBUG   SenderThread:18644 [sender.py:send_request():249] send_request: poll_exit
+2022-07-13 11:54:34,118 INFO    SenderThread:18644 [file_pusher.py:join():150] waiting for file pusher
+2022-07-13 11:54:34,582 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: sampled_history
+2022-07-13 11:54:34,583 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: get_summary
+2022-07-13 11:54:34,584 DEBUG   HandlerThread:18644 [handler.py:handle_request():141] handle_request: shutdown
+2022-07-13 11:54:34,584 INFO    HandlerThread:18644 [handler.py:finish():806] shutting down handler
+2022-07-13 11:54:35,017 INFO    WriterThread:18644 [datastore.py:close():279] close: C:\Users\cosmi\Documents\Mannheim\ines-autonomous-dispatching\wandb\run-20220713_115120-3j2h43hf\run-3j2h43hf.wandb
+2022-07-13 11:54:35,479 INFO    SenderThread:18644 [sender.py:finish():1111] shutting down sender
+2022-07-13 11:54:35,480 INFO    SenderThread:18644 [file_pusher.py:finish():145] shutting down file pusher
+2022-07-13 11:54:35,480 INFO    SenderThread:18644 [file_pusher.py:join():150] waiting for file pusher
+2022-07-13 11:54:35,485 INFO    MainThread:18644 [internal.py:handle_exit():80] Internal process exited

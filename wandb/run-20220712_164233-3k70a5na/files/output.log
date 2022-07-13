@@ -1,0 +1,1067 @@
+USE CONFIG True
+Using local db
+Read hubs successfully
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+DB: getAvailableTrips() Execution time: 54.79468393325806 seconds
+loaded 154837 trips
+Initialized with 154837 taxi rides within two weeks
+2022-07-12 16:43:37,924	INFO trainer.py:2332 -- Your framework setting is 'tf', meaning you are using static-graph mode. Set framework='tf2' to enable eager execution with tf2.x. You may also then want to set eager_tracing=True in order to reach similar execution speed as with static-graph mode.
+2022-07-12 16:43:37,928	INFO simple_q.py:187 -- In multi-agent mode, policies will be optimized sequentially by the multi-GPU optimizer. Consider setting `simple_optimizer=True` if this doesn't work for you.
+2022-07-12 16:43:37,929	INFO trainer.py:903 -- Current log_level is WARN. For more information, set 'log_level': 'INFO' / 'DEBUG' or use the -v and -vv flags.
+[36m(RolloutWorker pid=17312)[39m Windows fatal exception: code 0xc0000139
+[36m(RolloutWorker pid=17312)
+[36m(RolloutWorker pid=12756)[39m Windows fatal exception: code 0xc0000139
+[36m(RolloutWorker pid=12756)
+[36m(RolloutWorker pid=17912)[39m Windows fatal exception: code 0xc0000139
+[36m(RolloutWorker pid=17912)
+[36m(RolloutWorker pid=17312)[39m Read hubs successfully
+[36m(RolloutWorker pid=12756)[39m Read hubs successfully
+[36m(RolloutWorker pid=17912)[39m Read hubs successfully
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m Using local db
+[36m(RolloutWorker pid=17312)[39m [(42423774,), (42424025,), (42427769,), (42427863,), (42427968,), (42428174,), (42428863,), (42428980,), (42429342,), (42430253,), (42430333,), (42430361,), (42430375,), (42432856,), (42432889,), (42432985,), (42433058,), (42433066,), (42433422,), (42435684,), (42436486,), (42437644,), (42438809,), (42440743,), (42440798,), (42442415,), (42442475,), (42442937,), (42443534,), (42443674,), (42444457,), (42445018,), (42445357,), (42445392,), (42445867,), (42445916,), (42446959,), (42446977,), (42447105,), (42447132,), (42449029,), (42450025,), (42450468,), (42450820,), (42453934,), (42457401,), (205024444,), (248708582,), (370888100,), (370913758,), (370924957,), (371188750,), (371239958,), (561035358,), (561042199,), (595295501,), (595314119,), (595352904,), (596775930,), (1061531596,), (1692433919,), (1825841704,), (1919595922,), (3099327970,), (3099327976,), (3579432156,), (4145735059,), (5779545445,), (7490266268,), (9177424868,)]
+[36m(RolloutWorker pid=17312)[39m USE CONFIG {, worker=2/3, vector_idx=0, remote=False}
+[36m(RolloutWorker pid=17312)[39m Using local db
+[36m(RolloutWorker pid=12756)[39m Using local db
+[36m(RolloutWorker pid=12756)[39m [(42423774,), (42424025,), (42427769,), (42427863,), (42427968,), (42428174,), (42428863,), (42428980,), (42429342,), (42430253,), (42430333,), (42430361,), (42430375,), (42432856,), (42432889,), (42432985,), (42433058,), (42433066,), (42433422,), (42435684,), (42436486,), (42437644,), (42438809,), (42440743,), (42440798,), (42442415,), (42442475,), (42442937,), (42443534,), (42443674,), (42444457,), (42445018,), (42445357,), (42445392,), (42445867,), (42445916,), (42446959,), (42446977,), (42447105,), (42447132,), (42449029,), (42450025,), (42450468,), (42450820,), (42453934,), (42457401,), (205024444,), (248708582,), (370888100,), (370913758,), (370924957,), (371188750,), (371239958,), (561035358,), (561042199,), (595295501,), (595314119,), (595352904,), (596775930,), (1061531596,), (1692433919,), (1825841704,), (1919595922,), (3099327970,), (3099327976,), (3579432156,), (4145735059,), (5779545445,), (7490266268,), (9177424868,)]
+[36m(RolloutWorker pid=17912)[39m Using local db
+[36m(RolloutWorker pid=17912)[39m [(42423774,), (42424025,), (42427769,), (42427863,), (42427968,), (42428174,), (42428863,), (42428980,), (42429342,), (42430253,), (42430333,), (42430361,), (42430375,), (42432856,), (42432889,), (42432985,), (42433058,), (42433066,), (42433422,), (42435684,), (42436486,), (42437644,), (42438809,), (42440743,), (42440798,), (42442415,), (42442475,), (42442937,), (42443534,), (42443674,), (42444457,), (42445018,), (42445357,), (42445392,), (42445867,), (42445916,), (42446959,), (42446977,), (42447105,), (42447132,), (42449029,), (42450025,), (42450468,), (42450820,), (42453934,), (42457401,), (205024444,), (248708582,), (370888100,), (370913758,), (370924957,), (371188750,), (371239958,), (561035358,), (561042199,), (595295501,), (595314119,), (595352904,), (596775930,), (1061531596,), (1692433919,), (1825841704,), (1919595922,), (3099327970,), (3099327976,), (3579432156,), (4145735059,), (5779545445,), (7490266268,), (9177424868,)]
+[36m(RolloutWorker pid=17912)[39m USE CONFIG {, worker=3/3, vector_idx=0, remote=False}
+[36m(RolloutWorker pid=17912)[39m Using local db
+[36m(RolloutWorker pid=12756)[39m USE CONFIG {, worker=1/3, vector_idx=0, remote=False}
+[36m(RolloutWorker pid=12756)[39m Using local db
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m Read hubs successfully
+[36m(RolloutWorker pid=12756)[39m Read hubs successfully
+[36m(RolloutWorker pid=17912)[39m Read hubs successfully
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=12756)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17912)[39m UserWarning: The `get_nearest_node` function has been deprecated and will be removed in a future release. Use the more efficient `distance.nearest_nodes` instead.
+[36m(RolloutWorker pid=17312)[39m DB: getAvailableTrips() Execution time: 84.03606486320496 seconds
+[36m(RolloutWorker pid=17312)[39m loaded 154837 trips
+[36m(RolloutWorker pid=17312)[39m Initialized with 154837 taxi rides within two weeks
+[36m(RolloutWorker pid=17312)[39m Started Reset() without config
+[36m(RolloutWorker pid=17312)[39m Reset initialized pickup: 10
+[36m(RolloutWorker pid=17312)[39m Reset initialized dropoff: 15
+[36m(RolloutWorker pid=17312)[39m Reset initialized time: 2016-01-07 16:27:00
+[36m(RolloutWorker pid=12756)[39m DB: getAvailableTrips() Execution time: 84.12102794647217 seconds
+[36m(RolloutWorker pid=12756)[39m loaded 154837 trips
+[36m(RolloutWorker pid=12756)[39m Initialized with 154837 taxi rides within two weeks
+[36m(RolloutWorker pid=12756)[39m Started Reset() without config
+[36m(RolloutWorker pid=12756)[39m Reset initialized pickup: 35
+[36m(RolloutWorker pid=12756)[39m Reset initialized dropoff: 61
+[36m(RolloutWorker pid=12756)[39m Reset initialized time: 2016-01-12 23:40:00
+[36m(RolloutWorker pid=17912)[39m DB: getAvailableTrips() Execution time: 84.19141054153442 seconds
+[36m(RolloutWorker pid=17912)[39m loaded 154837 trips
+[36m(RolloutWorker pid=17912)[39m Initialized with 154837 taxi rides within two weeks
+[36m(RolloutWorker pid=17912)[39m Started Reset() without config
+[36m(RolloutWorker pid=17912)[39m Reset initialized pickup: 34
+[36m(RolloutWorker pid=17912)[39m Reset initialized dropoff: 5
+[36m(RolloutWorker pid=17912)[39m Reset initialized time: 2016-01-04 23:54:00
+[36m(RolloutWorker pid=17312)[39m 2022-07-12 16:45:14,807	WARNING env.py:135 -- Your env doesn't have a .spec.max_episode_steps attribute. This is fine if you have set 'horizon' in your config dictionary, or `soft_horizon`. However, if you haven't, 'horizon' will default to infinity, and your environment will not be reset.
+[36m(RolloutWorker pid=12756)[39m 2022-07-12 16:45:14,842	WARNING env.py:135 -- Your env doesn't have a .spec.max_episode_steps attribute. This is fine if you have set 'horizon' in your config dictionary, or `soft_horizon`. However, if you haven't, 'horizon' will default to infinity, and your environment will not be reset.
+[36m(RolloutWorker pid=17912)[39m 2022-07-12 16:45:14,959	WARNING env.py:135 -- Your env doesn't have a .spec.max_episode_steps attribute. This is fine if you have set 'horizon' in your config dictionary, or `soft_horizon`. However, if you haven't, 'horizon' will default to infinity, and your environment will not be reset.
+[36m(RolloutWorker pid=17312)[39m []
+[36m(RolloutWorker pid=17312)[39m Masked State Return {'action_mask': array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+[36m(RolloutWorker pid=17312)[39m        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+[36m(RolloutWorker pid=17312)[39m        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+[36m(RolloutWorker pid=17312)[39m        0, 0, 0, 0]), 'avail_actions': array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+[36m(RolloutWorker pid=17312)[39m        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+[36m(RolloutWorker pid=17312)[39m        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+[36m(RolloutWorker pid=17312)[39m        1, 1, 1, 1], dtype=int16), 'state': {'cost': array([-6.54368209e-01, -2.75979529e-01, -8.39927732e-01, -8.48661219e-01,
+[36m(RolloutWorker pid=17312)[39m        -9.98736441e-01, -1.16339063e+00, -1.13230555e+00, -1.21864257e+00,
+[36m(RolloutWorker pid=17312)[39m        -1.35139134e+00, -8.66794932e-01, -1.52907516e+00, -1.26569896e+00,
+[36m(RolloutWorker pid=17312)[39m        -1.22176109e+00, -1.10255306e+00, -7.71124459e-01, -8.53036082e-01,
+[36m(RolloutWorker pid=17312)[39m        -7.43363385e-01, -7.35045821e-01, -6.73559099e-01, -7.60538039e-01,
+[36m(RolloutWorker pid=17312)[39m        -8.65560696e-01, -5.48030793e-01, -7.93487102e-01, -5.36427120e-01,
+[36m(RolloutWorker pid=17312)[39m        -2.75903742e-01, -1.79428038e-01,  1.81770426e-01, -1.08383425e-01,
+[36m(RolloutWorker pid=17312)[39m        -9.22519629e-04,  5.49844931e-01,  8.17990712e-01,  1.19028106e+00,
+[36m(RolloutWorker pid=17312)[39m         9.24679543e-01,  1.31563276e+00,  1.39200205e+00,  1.17132949e+00,
+[36m(RolloutWorker pid=17312)[39m         1.62964942e+00,  1.50494439e+00,  1.69502336e+00,  1.91930976e+00,
+[36m(RolloutWorker pid=17312)[39m         1.93994104e+00,  2.13656899e+00,  2.43599157e+00,  9.36491177e-01,
+[36m(RolloutWorker pid=17312)[39m         5.89380649e-01,  4.19958227e-01,  3.83952444e-01,  1.52590160e-01,
+[36m(RolloutWorker pid=17312)[39m        -5.09415790e-02, -3.48437468e-01, -3.90626163e-01, -6.04812891e-01,
+[36m(RolloutWorker pid=17312)[39m         1.23116673e-01, -7.18675271e-01, -1.15834858e-01, -4.29569799e-01,
+[36m(RolloutWorker pid=17312)[39m        -5.76701530e-01, -6.65130337e-01, -8.32659902e-01, -1.66322395e-01,
+[36m(RolloutWorker pid=17312)[39m        -8.34366225e-01, -5.27264853e-01, -3.08573568e-01, -3.56763828e-01,
+[36m(RolloutWorker pid=17312)[39m         1.63274020e-01,  3.46294020e-01,  4.53820336e-01, -1.02840391e+00,
+[36m(RolloutWorker pid=17312)[39m        -9.23965662e-01, -9.23501469e-01]), 'remaining_distance': array([-5.67273440e-01, -2.05674477e-03, -8.59124143e-01, -8.46100834e-01,
+[36m(RolloutWorker pid=17312)[39m        -1.14113504e+00, -1.23353319e+00, -1.26431990e+00, -1.39069325e+00,
+[36m(RolloutWorker pid=17312)[39m        -1.52038506e+00, -7.52174149e-01, -1.56477278e+00, -1.56504283e+00,
+[36m(RolloutWorker pid=17312)[39m        -1.30080149e+00, -1.56482946e+00, -1.45701703e+00, -1.56477278e+00,
+[36m(RolloutWorker pid=17312)[39m        -1.46902122e+00, -1.20537359e+00, -1.10189169e+00, -1.21554071e+00,
+[36m(RolloutWorker pid=17312)[39m        -1.32979387e+00, -1.16693231e+00, -1.23686619e+00, -1.10981631e+00,
+[36m(RolloutWorker pid=17312)[39m        -8.12448989e-01, -6.87205039e-01, -1.78895384e-01, -5.94142551e-01,
+[36m(RolloutWorker pid=17312)[39m        -4.99136537e-01,  3.61169140e-01,  8.58946017e-01,  1.02974424e+00,
+[36m(RolloutWorker pid=17312)[39m         6.15167575e-01,  1.30809996e+00,  1.38170722e+00,  1.45814585e+00,
+[36m(RolloutWorker pid=17312)[39m         1.80565950e+00,  1.80565950e+00,  2.18420906e+00,  2.24737606e+00,
+[36m(RolloutWorker pid=17312)[39m         2.26079306e+00,  2.51682210e+00,  2.84658337e+00,  1.06233026e+00,
+[36m(RolloutWorker pid=17312)[39m         3.93241348e-01,  1.84356639e-01,  1.34163168e-01, -1.72072560e-01,
+[36m(RolloutWorker pid=17312)[39m        -3.61892364e-01, -6.93669408e-01, -7.65644021e-01, -1.03051416e+00,
+[36m(RolloutWorker pid=17312)[39m        -7.36243408e-01, -1.38783839e+00,  4.95065193e-02, -3.99323768e-01,
+[36m(RolloutWorker pid=17312)[39m        -5.17562803e-01, -8.11934142e-01, -1.35049333e+00, -8.11934142e-01,
+[36m(RolloutWorker pid=17312)[39m        -1.15728826e+00, -8.77882725e-01, -8.19410878e-01, -8.77882725e-01,
+[36m(RolloutWorker pid=17312)[39m        -4.11624000e-01,  1.34211187e-02,  1.34211187e-02, -1.56477278e+00,
+[36m(RolloutWorker pid=17312)[39m        -1.51982323e+00, -1.56477278e+00]), 'current_hub': array([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0.,
+[36m(RolloutWorker pid=17312)[39m        0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+[36m(RolloutWorker pid=17312)[39m        0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+[36m(RolloutWorker pid=17312)[39m        0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+[36m(RolloutWorker pid=17312)[39m        0., 0.]), 'final_hub': array([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 1., 0.,
+[36m(RolloutWorker pid=17312)[39m        0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+[36m(RolloutWorker pid=17312)[39m        0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+[36m(RolloutWorker pid=17312)[39m        0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+[36m(RolloutWorker pid=17312)[39m        0., 0.]), 'distinction': array([-1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,  0., -1., -1.,
+[36m(RolloutWorker pid=17312)[39m        -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+[36m(RolloutWorker pid=17312)[39m        -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+[36m(RolloutWorker pid=17312)[39m        -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+[36m(RolloutWorker pid=17312)[39m        -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+[36m(RolloutWorker pid=17312)[39m        -1., -1., -1., -1., -1.])}}
+[36m(RolloutWorker pid=17312)[39m action == book own
+[36m(RolloutWorker pid=17312)[39m Rides Mask for Action 58: [0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+[36m(RolloutWorker pid=17312)[39m  0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+[36m(RolloutWorker pid=17312)[39m  0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+[36m(RolloutWorker pid=17312)[39m []
+[36m(RolloutWorker pid=17312)[39m 10 -> 58 3087.564
+[36m(RolloutWorker pid=17312)[39m Reward: -1000.0
+[36m(RolloutWorker pid=17312)[39m Action: 58
+[36m(RolloutWorker pid=17312)[39m Old Distinction: [-1. -1. -1. -1. -1. -1. -1. -1. -1. -1.  0. -1. -1. -1. -1. -1. -1. -1.
+[36m(RolloutWorker pid=17312)[39m  -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1.
+[36m(RolloutWorker pid=17312)[39m  -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1.
+[36m(RolloutWorker pid=17312)[39m  -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1.]
+[36m(RolloutWorker pid=17312)[39m Rides Mask for Action 58: [0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+[36m(RolloutWorker pid=17312)[39m  0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+[36m(RolloutWorker pid=17312)[39m  0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+[36m(RolloutWorker pid=17312)[39m Masked State Step {'action_mask': array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+[36m(RolloutWorker pid=17312)[39m        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+[36m(RolloutWorker pid=17312)[39m        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0,
+[36m(RolloutWorker pid=17312)[39m        0, 0, 0, 0]), 'avail_actions': array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+[36m(RolloutWorker pid=17312)[39m        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+[36m(RolloutWorker pid=17312)[39m        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+[36m(RolloutWorker pid=17312)[39m        1, 1, 1, 1], dtype=int16), 'state': {'cost': array([ 0.03199497,  0.07519776, -0.37850574, -0.75706427, -1.04601659,
+[36m(RolloutWorker pid=17312)[39m        -0.72615941, -0.89802752, -1.00498003, -0.96965948, -0.3110249 ,
+[36m(RolloutWorker pid=17312)[39m        -0.80321303, -1.06106245, -0.73360317, -1.25791529, -1.30392127,
+[36m(RolloutWorker pid=17312)[39m        -1.22032205, -1.14673137, -0.75111075, -0.68917224, -0.77660296,
+[36m(RolloutWorker pid=17312)[39m        -0.88177178, -0.98301752, -0.81022734, -0.80151866, -0.67494716,
+[36m(RolloutWorker pid=17312)[39m        -0.51040282, -0.51464483, -0.50742685, -0.39996594, -0.14657032,
+[36m(RolloutWorker pid=17312)[39m         0.12157546,  0.49386581,  0.37375601,  0.76747069,  0.69558679,
+[36m(RolloutWorker pid=17312)[39m         1.06258788,  1.34818146,  1.48914382,  1.65209777,  1.52511509,
+[36m(RolloutWorker pid=17312)[39m         1.5256774 ,  1.72230535,  1.92277541,  0.74518677,  0.52001462,
+[36m(RolloutWorker pid=17312)[39m         0.33236375,  0.3623021 , -0.00869492,  0.01334563, -0.26650442,
+[36m(RolloutWorker pid=17312)[39m        -0.30233314, -0.62130163, -0.57329858, -1.3524837 , -0.32979107,
+[36m(RolloutWorker pid=17312)[39m        -0.64352601, -0.79065774, -0.87908655, -1.52907516, -0.38027861,
+[36m(RolloutWorker pid=17312)[39m        -1.40093493, -1.22368011, -1.00498882, -1.05317908, -0.53314124,
+[36m(RolloutWorker pid=17312)[39m        -0.35012124, -0.24259492, -1.04495422, -1.22202769, -1.14985666]), 'remaining_distance': array([-0.12041708,  0.22657703, -0.55871561, -0.78646669, -1.17191676,
+[36m(RolloutWorker pid=17312)[39m        -0.94887405, -1.11179332, -1.25158837, -1.27185875, -0.39034038,
+[36m(RolloutWorker pid=17312)[39m        -1.09220064, -1.43181434, -0.98298655, -1.66597795, -1.8038941 ,
+[36m(RolloutWorker pid=17312)[39m        -1.8038941 , -1.73163372, -1.21583265, -1.11205661, -1.22599977,
+[36m(RolloutWorker pid=17312)[39m        -1.34034809, -1.45013018, -1.24776491, -1.28240401, -1.07224599,
+[36m(RolloutWorker pid=17312)[39m        -0.90268599, -0.63229615, -0.85393955, -0.75893354, -0.09223163,
+[36m(RolloutWorker pid=17312)[39m         0.40554525,  0.57634347,  0.25648911,  0.95121935,  0.92830645,
+[36m(RolloutWorker pid=17312)[39m         1.38734968,  1.62240994,  1.79537254,  2.15626238,  1.99073584,
+[36m(RolloutWorker pid=17312)[39m         1.99108695,  2.24711599,  2.51245428,  0.93778163,  0.34808063,
+[36m(RolloutWorker pid=17312)[39m         0.1273283 ,  0.12006773, -0.27707712, -0.32003821, -0.64032694,
+[36m(RolloutWorker pid=17312)[39m        -0.7081609 , -1.04124914, -1.18964417, -1.80047902, -0.08978955,
+[36m(RolloutWorker pid=17312)[39m        -0.53861984, -0.65685888, -0.95123021, -1.8038941 , -0.95123021,
+[36m(RolloutWorker pid=17312)[39m        -1.5261525 , -1.33128349, -1.27281164, -1.33128349, -0.86502477,
+[36m(RolloutWorker pid=17312)[39m        -0.43997965, -0.43997965, -1.57554785, -1.71387635, -1.7121412 ]), 'current_hub': array([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+[36m(RolloutWorker pid=17312)[39m        0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+[36m(RolloutWorker pid=17312)[39m        0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+[36m(RolloutWorker pid=17312)[39m        0., 0., 0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+[36m(RolloutWorker pid=17312)[39m        0., 0.]), 'final_hub': array([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 1., 0.,
+[36m(RolloutWorker pid=17312)[39m        0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+[36m(RolloutWorker pid=17312)[39m        0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+[36m(RolloutWorker pid=17312)[39m        0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+[36m(RolloutWorker pid=17312)[39m        0., 0.]), 'distinction': array([-1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+[36m(RolloutWorker pid=17312)[39m        -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+[36m(RolloutWorker pid=17312)[39m        -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+[36m(RolloutWorker pid=17312)[39m        -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+[36m(RolloutWorker pid=17312)[39m        -1., -1., -1., -1., -1., -1.,  0., -1., -1., -1., -1., -1., -1.,
+[36m(RolloutWorker pid=17312)[39m        -1., -1., -1., -1., -1.])}}
+[36m(RolloutWorker pid=12756)[39m []
+[36m(RolloutWorker pid=12756)[39m Masked State Return {'action_mask': array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+[36m(RolloutWorker pid=12756)[39m        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+[36m(RolloutWorker pid=12756)[39m        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+[36m(RolloutWorker pid=12756)[39m        0, 0, 0, 0]), 'avail_actions': array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+[36m(RolloutWorker pid=12756)[39m        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+[36m(RolloutWorker pid=12756)[39m        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+[36m(RolloutWorker pid=12756)[39m        1, 1, 1, 1], dtype=int16), 'state': {'cost': array([ 1.86320477,  2.09963821,  2.20697055,  1.82841203,  1.53945971,
+[36m(RolloutWorker pid=12756)[39m         1.46924153,  1.68744877,  1.58049627,  1.26435127,  1.68033116,
+[36m(RolloutWorker pid=12756)[39m         1.21108016,  1.21983214,  0.96578174,  1.0083638 ,  1.00610758,
+[36m(RolloutWorker pid=12756)[39m         1.0897068 ,  1.05278504,  0.51541194,  0.41789869,  0.50537926,
+[36m(RolloutWorker pid=12756)[39m         0.64595749,  0.80973089,  0.57440673,  0.53087644,  0.5986399 ,
+[36m(RolloutWorker pid=12756)[39m        -0.0071449 ,  0.17608396,  0.26543799, -0.11747216, -0.26581693,
+[36m(RolloutWorker pid=12756)[39m         0.35651978, -0.7706438 , -0.90448178, -0.98957553, -1.16007813,
+[36m(RolloutWorker pid=12756)[39m        -1.52907516, -1.19707613, -1.23821397, -1.037171  , -0.90990795,
+[36m(RolloutWorker pid=12756)[39m        -0.81777215, -0.6211442 , -0.11215561, -1.23818058, -0.90217773,
+[36m(RolloutWorker pid=12756)[39m        -0.71451897, -0.41306504, -0.36914882, -0.21136188,  0.00926895,
+[36m(RolloutWorker pid=12756)[39m         0.13899709,  0.26175761,  0.92099736,  1.08528886,  2.25568522,
+[36m(RolloutWorker pid=12756)[39m         1.94195028,  1.79481855,  1.70638975,  1.05872954,  2.20519769,
+[36m(RolloutWorker pid=12756)[39m         1.18454137,  1.107633  ,  0.56902048,  1.27813403,  0.33480155,
+[36m(RolloutWorker pid=12756)[39m        -0.11356375, -0.02751364,  0.77616358,  0.94503204,  0.88106602]), 'remaining_distance': array([ 1.40699302,  1.53722714,  1.44040022,  0.88944549,  0.50399542,
+[36m(RolloutWorker pid=12756)[39m         0.63749249,  0.61005347,  0.47025841,  0.35060934,  1.33063545,
+[36m(RolloutWorker pid=12756)[39m         0.431297  ,  0.26552405,  0.33529683,  0.02245635, -0.19504684,
+[36m(RolloutWorker pid=12756)[39m        -0.08619238, -0.132664  , -0.27115271, -0.27119177, -0.27109059,
+[36m(RolloutWorker pid=12756)[39m        -0.22507669, -0.20720654, -0.22565556, -0.29446282, -0.16799241,
+[36m(RolloutWorker pid=12756)[39m        -0.45536691, -0.17092671, -0.25201365, -0.45519803, -0.15819621,
+[36m(RolloutWorker pid=12756)[39m         0.57017647, -0.23524396, -0.25166885, -0.18103378, -0.26815232,
+[36m(RolloutWorker pid=12756)[39m        -0.28828026, -0.02300776,  0.03139862,  0.41708628,  0.41708628,
+[36m(RolloutWorker pid=12756)[39m         0.47705627,  0.73308531,  1.19928441, -0.2134499 , -0.45778387,
+[36m(RolloutWorker pid=12756)[39m        -0.43419107, -0.26468158, -0.39169739, -0.34628087, -0.3407318 ,
+[36m(RolloutWorker pid=12756)[39m        -0.30078005, -0.34628087, -0.16367025, -0.17529806,  1.58612263,
+[36m(RolloutWorker pid=12756)[39m         1.13729234,  1.0190533 ,  0.72468197, -0.12129155,  0.72468197,
+[36m(RolloutWorker pid=12756)[39m         0.14975968, -0.28828026, -0.23638291,  0.19818746, -0.28828026,
+[36m(RolloutWorker pid=12756)[39m        -0.27429818, -0.28828026, -0.17615139, -0.13442984, -0.17615139]), 'current_hub': array([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+[36m(RolloutWorker pid=12756)[39m        0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+[36m(RolloutWorker pid=12756)[39m        0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+[36m(RolloutWorker pid=12756)[39m        0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+[36m(RolloutWorker pid=12756)[39m        0., 0.]), 'final_hub': array([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+[36m(RolloutWorker pid=12756)[39m        0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+[36m(RolloutWorker pid=12756)[39m        0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+[36m(RolloutWorker pid=12756)[39m        0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0.,
+[36m(RolloutWorker pid=12756)[39m        0., 0.]), 'distinction': array([-1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+[36m(RolloutWorker pid=12756)[39m        -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+[36m(RolloutWorker pid=12756)[39m        -1., -1., -1., -1., -1., -1., -1., -1., -1.,  0., -1., -1., -1.,
+[36m(RolloutWorker pid=12756)[39m        -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+[36m(RolloutWorker pid=12756)[39m        -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+[36m(RolloutWorker pid=12756)[39m        -1., -1., -1., -1., -1.])}}
+[36m(RolloutWorker pid=12756)[39m action == book own
+[36m(RolloutWorker pid=12756)[39m Rides Mask for Action 23: [0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+[36m(RolloutWorker pid=12756)[39m  0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+[36m(RolloutWorker pid=12756)[39m  0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+[36m(RolloutWorker pid=12756)[39m []
+[36m(RolloutWorker pid=12756)[39m 35 -> 23 9132.815999999995
+[36m(RolloutWorker pid=12756)[39m Reward: -1000.0
+[36m(RolloutWorker pid=12756)[39m Action: 23
+[36m(RolloutWorker pid=12756)[39m Old Distinction: [-1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1.
+[36m(RolloutWorker pid=12756)[39m  -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1.  0.
+[36m(RolloutWorker pid=12756)[39m  -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1.
+[36m(RolloutWorker pid=12756)[39m  -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1.]
+[36m(RolloutWorker pid=12756)[39m Rides Mask for Action 23: [0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+[36m(RolloutWorker pid=12756)[39m  0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+[36m(RolloutWorker pid=12756)[39m  0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+[36m(RolloutWorker pid=12756)[39m Masked State Step {'action_mask': array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+[36m(RolloutWorker pid=12756)[39m        0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+[36m(RolloutWorker pid=12756)[39m        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+[36m(RolloutWorker pid=12756)[39m        0, 0, 0, 0]), 'avail_actions': array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+[36m(RolloutWorker pid=12756)[39m        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+[36m(RolloutWorker pid=12756)[39m        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+[36m(RolloutWorker pid=12756)[39m        1, 1, 1, 1], dtype=int16), 'state': {'cost': array([ 0.07769871,  0.7668926 , -0.10786081, -0.06536943, -0.35432175,
+[36m(RolloutWorker pid=12756)[39m        -0.43132371, -0.4036294 , -0.51058191, -0.69803316, -0.01314196,
+[36m(RolloutWorker pid=12756)[39m        -0.54590065, -0.7898701 , -0.48241687, -0.9721169 , -1.06334033,
+[36m(RolloutWorker pid=12756)[39m        -1.14687933, -1.18427927, -0.93447043, -0.87254613, -1.03159776,
+[36m(RolloutWorker pid=12756)[39m        -1.20937271, -1.38424476, -1.28101211, -1.52907516, -1.19251225,
+[36m(RolloutWorker pid=12756)[39m        -1.09718756, -0.83210436, -1.02499194, -0.94745247, -0.33207662,
+[36m(RolloutWorker pid=12756)[39m        -0.06393084, -0.25519532, -0.28100534, -0.05074151,  0.5100805 ,
+[36m(RolloutWorker pid=12756)[39m         0.51091528,  1.16267517,  0.84453018,  1.03460915,  1.3396088 ,
+[36m(RolloutWorker pid=12756)[39m         1.34017111,  1.53679906,  1.73726912,  0.27607697, -0.25189883,
+[36m(RolloutWorker pid=12756)[39m        -0.43963586, -0.44078845, -0.72976581, -0.76344161, -0.98757531,
+[36m(RolloutWorker pid=12756)[39m        -1.029764  , -1.20161678, -0.79271886, -1.0095324 ,  0.36190377,
+[36m(RolloutWorker pid=12756)[39m         0.04816883, -0.0989629 , -0.18739171, -0.83738031,  0.31141624,
+[36m(RolloutWorker pid=12756)[39m        -0.70924008, -0.96181491, -1.2244091 , -0.79131388, -0.75372425,
+[36m(RolloutWorker pid=12756)[39m        -0.53562753, -0.65111232, -1.04524745, -1.12747124, -1.08255784]), 'remaining_distance': array([ 0.24454029,  0.66954385, -0.06666946, -0.34349987, -0.72894994,
+[36m(RolloutWorker pid=12756)[39m        -0.59986945, -0.75134182, -0.89113688, -0.92699995,  0.22810072,
+[36m(RolloutWorker pid=12756)[39m        -0.71258438, -1.04289148, -0.60755207, -1.26693452, -1.54235975,
+[36m(RolloutWorker pid=12756)[39m        -1.54232054, -1.58910348, -1.21509782, -1.11133515, -1.27173863,
+[36m(RolloutWorker pid=12756)[39m        -1.43298839, -1.63559317, -1.43362497, -1.63559317, -1.33412102,
+[36m(RolloutWorker pid=12756)[39m        -1.16503857, -0.82730716, -1.09214733, -0.99555625, -0.20133455,
+[36m(RolloutWorker pid=12756)[39m         0.29644233,  0.10033848,  0.15424514,  0.43019359,  0.81920353,
+[36m(RolloutWorker pid=12756)[39m         1.03985439,  1.51330702,  1.38736804,  1.7659176 ,  1.88163291,
+[36m(RolloutWorker pid=12756)[39m         1.88198403,  2.13801307,  2.40335135,  0.77240664, -0.03442015,
+[36m(RolloutWorker pid=12756)[39m        -0.25522858, -0.28273089, -0.62647688, -0.70571207, -0.9897267 ,
+[36m(RolloutWorker pid=12756)[39m        -1.06170132, -1.29900995, -1.27938424, -1.53913028,  0.35317726,
+[36m(RolloutWorker pid=12756)[39m        -0.09565302, -0.21389206, -0.5082634 , -1.35575282, -0.5082634 ,
+[36m(RolloutWorker pid=12756)[39m        -1.08318568, -1.63559317, -1.40399425, -1.14912545, -0.99696437,
+[36m(RolloutWorker pid=12756)[39m        -0.54908257, -0.69427383, -1.36198003, -1.48373195, -1.45456762]), 'current_hub': array([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+[36m(RolloutWorker pid=12756)[39m        0., 0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+[36m(RolloutWorker pid=12756)[39m        0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+[36m(RolloutWorker pid=12756)[39m        0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+[36m(RolloutWorker pid=12756)[39m        0., 0.]), 'final_hub': array([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+[36m(RolloutWorker pid=12756)[39m        0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+[36m(RolloutWorker pid=12756)[39m        0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+[36m(RolloutWorker pid=12756)[39m        0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0.,
+[36m(RolloutWorker pid=12756)[39m        0., 0.]), 'distinction': array([-1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+[36m(RolloutWorker pid=12756)[39m        -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,  0., -1., -1.,
+[36m(RolloutWorker pid=12756)[39m        -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+[36m(RolloutWorker pid=12756)[39m        -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+[36m(RolloutWorker pid=12756)[39m        -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+[36m(RolloutWorker pid=12756)[39m        -1., -1., -1., -1., -1.])}}
+[36m(RolloutWorker pid=17912)[39m []
+[36m(RolloutWorker pid=17912)[39m Masked State Return {'action_mask': array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+[36m(RolloutWorker pid=17912)[39m        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+[36m(RolloutWorker pid=17912)[39m        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+[36m(RolloutWorker pid=17912)[39m        0, 0, 0, 0]), 'avail_actions': array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+[36m(RolloutWorker pid=17912)[39m        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+[36m(RolloutWorker pid=17912)[39m        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+[36m(RolloutWorker pid=17912)[39m        1, 1, 1, 1], dtype=int16), 'state': {'cost': array([ 2.27939037,  2.32259316,  1.86888966,  1.49033114,  1.20137882,
+[36m(RolloutWorker pid=17912)[39m         1.521236  ,  1.34936788,  1.24241538,  1.27773592,  1.93637051,
+[36m(RolloutWorker pid=17912)[39m         1.44418237,  1.18633295,  1.24065605,  0.98454385,  0.66802669,
+[36m(RolloutWorker pid=17912)[39m         0.75162591,  0.71470415,  0.33030127,  0.69277299,  0.32032182,
+[36m(RolloutWorker pid=17912)[39m         0.77090996,  0.47165   ,  0.12782378,  0.47016833,  0.26055902,
+[36m(RolloutWorker pid=17912)[39m        -0.2727983 , -0.16199693, -0.07264289, -0.38316255, -0.60389781,
+[36m(RolloutWorker pid=17912)[39m         0.01843889, -1.11564111, -1.06606662, -1.34757878, -1.52907516,
+[36m(RolloutWorker pid=17912)[39m        -1.15007003, -1.04403464, -0.90307228, -0.74963674, -0.47458988,
+[36m(RolloutWorker pid=17912)[39m        -0.47402758, -0.27739962, -0.07692957, -1.00609134, -0.71648265,
+[36m(RolloutWorker pid=17912)[39m        -0.54845235, -0.42824715, -0.31977417,  0.06351243, -0.05990897,
+[36m(RolloutWorker pid=17912)[39m         0.4138714 ,  0.10153219,  0.58291647,  0.74720797,  1.91760434,
+[36m(RolloutWorker pid=17912)[39m         1.60386939,  1.45673766,  1.36830886,  0.72064865,  1.8671168 ,
+[36m(RolloutWorker pid=17912)[39m         0.84646048,  0.76955212,  0.23093959,  0.94005314, -0.00327934,
+[36m(RolloutWorker pid=17912)[39m        -0.45164463, -0.36559453,  0.92699374,  0.87862348,  0.8220913 ]), 'remaining_distance': array([ 8.36766038e-01,  1.06763542e+00,  4.98450466e-01,  2.10093116e-01,
+[36m(RolloutWorker pid=17912)[39m         6.72083867e-02, -1.90042571e-02,  6.99885018e-02,  4.83897448e-02,
+[36m(RolloutWorker pid=17912)[39m         4.28530102e-02,  5.63290792e-01,  1.68908733e-01,  4.10297528e-02,
+[36m(RolloutWorker pid=17912)[39m         1.63658498e-01,  5.56027425e-02, -3.30866297e-02, -1.83462339e-02,
+[36m(RolloutWorker pid=17912)[39m        -1.80349174e-02, -1.34718251e-01,  1.64719764e-01, -8.71449780e-02,
+[36m(RolloutWorker pid=17912)[39m         1.85675623e-01, -1.35745743e-03, -1.87001068e-01,  1.13891911e-02,
+[36m(RolloutWorker pid=17912)[39m         3.85270324e-02, -2.46281457e-01,  9.83492883e-02, -6.91614573e-02,
+[36m(RolloutWorker pid=17912)[39m        -2.33403233e-01,  1.11079784e-01,  8.39452465e-01,  2.95291044e-02,
+[36m(RolloutWorker pid=17912)[39m         1.32514806e-01,  7.52717778e-02, -1.90042571e-02,  1.93895847e-01,
+[36m(RolloutWorker pid=17912)[39m         5.66013196e-01,  5.66068704e-01,  7.71650227e-01,  1.18988324e+00,
+[36m(RolloutWorker pid=17912)[39m         1.19023435e+00,  1.44626339e+00,  1.71160168e+00,  1.34667883e-01,
+[36m(RolloutWorker pid=17912)[39m         1.58769801e-01,  1.91176967e-01,  8.98469703e-02,  7.26509922e-02,
+[36m(RolloutWorker pid=17912)[39m         1.91752315e-01, -8.11205632e-02,  1.82826196e-01, -1.45946057e-01,
+[36m(RolloutWorker pid=17912)[39m        -1.90042571e-02,  5.34959228e-02,  6.67686375e-01,  5.06580232e-01,
+[36m(RolloutWorker pid=17912)[39m         4.09306308e-01,  2.21724458e-01, -1.74883513e-02,  8.29875224e-01,
+[36m(RolloutWorker pid=17912)[39m        -1.90042571e-02,  5.25935308e-01,  3.28930848e-02,  5.25935308e-01,
+[36m(RolloutWorker pid=17912)[39m        -1.90042571e-02, -5.02218130e-03, -1.90042571e-02,  1.58333957e-01,
+[36m(RolloutWorker pid=17912)[39m         2.16858376e-02,  6.57463740e-02]), 'current_hub': array([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+[36m(RolloutWorker pid=17912)[39m        0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+[36m(RolloutWorker pid=17912)[39m        1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+[36m(RolloutWorker pid=17912)[39m        0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+[36m(RolloutWorker pid=17912)[39m        0., 0.]), 'final_hub': array([0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+[36m(RolloutWorker pid=17912)[39m        0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+[36m(RolloutWorker pid=17912)[39m        0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+[36m(RolloutWorker pid=17912)[39m        0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+[36m(RolloutWorker pid=17912)[39m        0., 0.]), 'distinction': array([-1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+[36m(RolloutWorker pid=17912)[39m        -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+[36m(RolloutWorker pid=17912)[39m        -1., -1., -1., -1., -1., -1., -1., -1.,  0., -1., -1., -1., -1.,
+[36m(RolloutWorker pid=17912)[39m        -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+[36m(RolloutWorker pid=17912)[39m        -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+[36m(RolloutWorker pid=17912)[39m        -1., -1., -1., -1., -1.])}}
+[36m(RolloutWorker pid=17912)[39m action == book own
+[36m(RolloutWorker pid=17912)[39m Rides Mask for Action 48: [0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+[36m(RolloutWorker pid=17912)[39m  0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+[36m(RolloutWorker pid=17912)[39m  0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+[36m(RolloutWorker pid=17912)[39m []
+[36m(RolloutWorker pid=17912)[39m 34 -> 48 7060.752999999999
+[36m(RolloutWorker pid=17912)[39m Reward: -1000.0
+[36m(RolloutWorker pid=17912)[39m Action: 48
+[36m(RolloutWorker pid=17912)[39m Old Distinction: [-1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1.
+[36m(RolloutWorker pid=17912)[39m  -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1.  0. -1.
+[36m(RolloutWorker pid=17912)[39m  -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1.
+[36m(RolloutWorker pid=17912)[39m  -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1. -1.]
+[36m(RolloutWorker pid=17912)[39m Rides Mask for Action 48: [0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+[36m(RolloutWorker pid=17912)[39m  0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+[36m(RolloutWorker pid=17912)[39m  0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+[36m(RolloutWorker pid=17912)[39m Masked State Step {'action_mask': array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+[36m(RolloutWorker pid=17912)[39m        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+[36m(RolloutWorker pid=17912)[39m        0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+[36m(RolloutWorker pid=17912)[39m        0, 0, 0, 0]), 'avail_actions': array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+[36m(RolloutWorker pid=17912)[39m        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+[36m(RolloutWorker pid=17912)[39m        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+[36m(RolloutWorker pid=17912)[39m        1, 1, 1, 1], dtype=int16), 'state': {'cost': array([ 0.64632988,  0.88276332,  0.65591687,  0.71888301,  0.42993069,
+[36m(RolloutWorker pid=17912)[39m         0.25236664,  0.37872859,  0.30463786,  0.04747638,  0.46345627,
+[36m(RolloutWorker pid=17912)[39m        -0.00579473, -0.25281729, -0.25109315, -0.45406055, -0.40069358,
+[36m(RolloutWorker pid=17912)[39m        -0.48356742, -0.52058121, -0.84834905, -0.79897621, -0.8583285 ,
+[36m(RolloutWorker pid=17912)[39m        -0.78649309, -0.70345979, -0.85373914, -0.78683684, -0.78446378,
+[36m(RolloutWorker pid=17912)[39m        -0.94904466, -0.69977467, -0.87728075, -0.81489384, -0.33303861,
+[36m(RolloutWorker pid=17912)[39m        -0.02386439, -0.02429858, -0.53712228, -0.14616906,  0.03543423,
+[36m(RolloutWorker pid=17912)[39m        -0.29047233,  0.1678476 ,  0.04314257,  0.23322153,  0.45750793,
+[36m(RolloutWorker pid=17912)[39m         0.47813922,  0.67476717,  0.97418975, -0.52531065, -0.87242117,
+[36m(RolloutWorker pid=17912)[39m        -1.0418436 , -1.1954765 , -1.32554342, -1.52907516, -1.30844433,
+[36m(RolloutWorker pid=17912)[39m        -1.17871619, -1.05595566, -0.18853166, -0.34688565,  1.14615621,
+[36m(RolloutWorker pid=17912)[39m         0.83242126,  0.68528953,  0.59686073, -0.05079948,  1.09566867,
+[36m(RolloutWorker pid=17912)[39m         0.07501235, -0.29916815, -0.583479  , -0.12866713, -0.60513002,
+[36m(RolloutWorker pid=17912)[39m        -0.49394791, -0.51878263, -0.65893525, -0.49006679, -0.55403281]), 'remaining_distance': array([-0.22643709,  0.130235  , -0.2912548 , -0.29215776, -0.43504249,
+[36m(RolloutWorker pid=17912)[39m        -0.84510095, -0.56194567, -0.56214979, -0.75810678, -0.39564921,
+[36m(RolloutWorker pid=17912)[39m        -0.77509806, -0.89592822, -0.80754399, -0.88099985, -0.72887637,
+[36m(RolloutWorker pid=17912)[39m        -0.82251817, -0.82226677, -0.90207789, -0.80648273, -0.85450462,
+[36m(RolloutWorker pid=17912)[39m        -0.82827077, -0.76641203, -0.82604706, -0.80698333, -0.64183448,
+[36m(RolloutWorker pid=17912)[39m        -0.68655127, -0.25177061, -0.59302049, -0.51448165,  0.28742252,
+[36m(RolloutWorker pid=17912)[39m         0.81191094,  0.74004705,  0.47688372,  0.85744891,  0.99956871,
+[36m(RolloutWorker pid=17912)[39m         0.75353645,  1.35500845,  1.18210136,  1.41153956,  1.79672501,
+[36m(RolloutWorker pid=17912)[39m         1.81014202,  2.06617106,  2.39593233,  0.44767988,  0.05724611,
+[36m(RolloutWorker pid=17912)[39m        -0.13004513, -0.40965727, -0.58215452, -0.84510095, -0.89397882,
+[36m(RolloutWorker pid=17912)[39m        -0.85402707, -0.89952789, -0.52125513, -0.65881312,  0.1654355 ,
+[36m(RolloutWorker pid=17912)[39m         0.00432936, -0.09294457, -0.28052642, -0.51973923,  0.32762435,
+[36m(RolloutWorker pid=17912)[39m        -0.52125513, -0.16985443, -0.49733369, -0.16985443, -0.41083881,
+[36m(RolloutWorker pid=17912)[39m        -0.03256371, -0.11873729, -0.87418423, -0.8693992 , -0.83017846]), 'current_hub': array([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+[36m(RolloutWorker pid=17912)[39m        0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+[36m(RolloutWorker pid=17912)[39m        0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 1., 0., 0.,
+[36m(RolloutWorker pid=17912)[39m        0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+[36m(RolloutWorker pid=17912)[39m        0., 0.]), 'final_hub': array([0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+[36m(RolloutWorker pid=17912)[39m        0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+[36m(RolloutWorker pid=17912)[39m        0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+[36m(RolloutWorker pid=17912)[39m        0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+[36m(RolloutWorker pid=17912)[39m        0., 0.]), 'distinction': array([-1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+[36m(RolloutWorker pid=17912)[39m        -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+[36m(RolloutWorker pid=17912)[39m        -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+[36m(RolloutWorker pid=17912)[39m        -1., -1., -1., -1., -1., -1., -1., -1., -1.,  0., -1., -1., -1.,
+[36m(RolloutWorker pid=17912)[39m        -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
+[36m(RolloutWorker pid=17912)[39m        -1., -1., -1., -1., -1.])}}
+[36m(RolloutWorker pid=17312)[39m 2022-07-12 16:46:04,644	ERROR worker.py:451 -- Exception raised in creation task: The actor died because of an error raised in its creation task, [36mray::RolloutWorker.__init__()[39m (pid=17312, ip=127.0.0.1, repr=<ray.rllib.evaluation.rollout_worker.RolloutWorker object at 0x000001C37B499520>)
+[36m(RolloutWorker pid=17312)[39m   File "python\ray\_raylet.pyx", line 665, in ray._raylet.execute_task
+[36m(RolloutWorker pid=17312)[39m   File "python\ray\_raylet.pyx", line 669, in ray._raylet.execute_task
+[36m(RolloutWorker pid=17312)[39m   File "python\ray\_raylet.pyx", line 616, in ray._raylet.execute_task.function_executor
+[36m(RolloutWorker pid=17312)[39m   File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\_private\function_manager.py", line 675, in actor_method_executor
+[36m(RolloutWorker pid=17312)[39m     return method(__ray_actor, *args, **kwargs)
+[36m(RolloutWorker pid=17312)[39m   File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\util\tracing\tracing_helper.py", line 462, in _resume_span
+[36m(RolloutWorker pid=17312)[39m     return method(self, *_args, **_kwargs)
+[36m(RolloutWorker pid=17312)[39m   File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\rllib\evaluation\rollout_worker.py", line 630, in __init__
+[36m(RolloutWorker pid=17312)[39m     self._build_policy_map(
+[36m(RolloutWorker pid=17312)[39m   File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\util\tracing\tracing_helper.py", line 462, in _resume_span
+[36m(RolloutWorker pid=17312)[39m     return method(self, *_args, **_kwargs)
+[36m(RolloutWorker pid=17312)[39m   File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\rllib\evaluation\rollout_worker.py", line 1788, in _build_policy_map
+[36m(RolloutWorker pid=17312)[39m     self.policy_map.create_policy(
+[36m(RolloutWorker pid=17312)[39m   File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\rllib\policy\policy_map.py", line 140, in create_policy
+[36m(RolloutWorker pid=17312)[39m     self[policy_id] = class_(
+[36m(RolloutWorker pid=17312)[39m   File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\rllib\policy\tf_policy_template.py", line 256, in __init__
+[36m(RolloutWorker pid=17312)[39m     DynamicTFPolicy.__init__(
+[36m(RolloutWorker pid=17312)[39m   File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\rllib\policy\dynamic_tf_policy.py", line 336, in __init__
+[36m(RolloutWorker pid=17312)[39m     ) = action_distribution_fn(
+[36m(RolloutWorker pid=17312)[39m   File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\rllib\agents\dqn\dqn_tf_policy.py", line 228, in get_distribution_inputs_and_class
+[36m(RolloutWorker pid=17312)[39m     q_vals = compute_q_values(
+[36m(RolloutWorker pid=17312)[39m   File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\rllib\agents\dqn\dqn_tf_policy.py", line 390, in compute_q_values
+[36m(RolloutWorker pid=17312)[39m     model_out, state = model(input_batch, state_batches or [], seq_lens)
+[36m(RolloutWorker pid=17312)[39m   File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\rllib\models\modelv2.py", line 259, in __call__
+[36m(RolloutWorker pid=17312)[39m     res = self.forward(restored, state or [], seq_lens)
+[36m(RolloutWorker pid=17312)[39m   File "c:\Users\cosmi\Documents\Mannheim\ines-autonomous-dispatching\Manhattan_Graph_Environment\training\train_Rainbow.py", line 67, in forward
+[36m(RolloutWorker pid=17312)[39m     action_embedding, _ = self.action_embed_model({
+[36m(RolloutWorker pid=17312)[39m   File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\rllib\models\modelv2.py", line 259, in __call__
+[36m(RolloutWorker pid=17312)[39m     res = self.forward(restored, state or [], seq_lens)
+[36m(RolloutWorker pid=17312)[39m   File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\rllib\models\tf\fcnet.py", line 146, in forward
+[36m(RolloutWorker pid=17312)[39m     model_out, self._value_out = self.base_model(input_dict["obs_flat"])
+[36m(RolloutWorker pid=17312)[39m   File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\keras\utils\traceback_utils.py", line 70, in error_handler
+[36m(RolloutWorker pid=17312)[39m     raise e.with_traceback(filtered_tb) from None
+[36m(RolloutWorker pid=17312)[39m   File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\keras\engine\input_spec.py", line 197, in assert_input_compatibility
+[36m(RolloutWorker pid=17312)[39m     raise ValueError(
+[36m(RolloutWorker pid=17312)[39m ValueError: Missing data for input "observations". You passed a data dictionary with keys ['cost', 'current_hub', 'distinction', 'final_hub', 'remaining_distance']. Expected the following keys: ['observations']
+Traceback (most recent call last):
+  File "c:\Users\cosmi\Documents\Mannheim\ines-autonomous-dispatching\Manhattan_Graph_Environment\training\train_Rainbow.py", line 156, in <module>
+    trainer = DQNTrainer(rainbow_config,GraphEnv )
+  File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\rllib\agents\trainer.py", line 870, in __init__
+    super().__init__(
+  File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\tune\trainable.py", line 156, in __init__
+    self.setup(copy.deepcopy(self.config))
+  File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\rllib\agents\trainer.py", line 950, in setup
+    self.workers = WorkerSet(
+  File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\rllib\evaluation\worker_set.py", line 142, in __init__
+    remote_spaces = ray.get(
+  File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\_private\client_mode_hook.py", line 105, in wrapper
+    return func(*args, **kwargs)
+  File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\worker.py", line 1833, in get
+    raise value
+  File "python\ray\_raylet.pyx", line 799, in ray._raylet.task_execution_handler
+  File "python\ray\_raylet.pyx", line 618, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 762, in ray._raylet.execute_task
+ray.exceptions.RayActorError: The actor died because of an error raised in its creation task, [36mray::RolloutWorker.__init__()[39m (pid=12756, ip=127.0.0.1, repr=<ray.rllib.evaluation.rollout_worker.RolloutWorker object at 0x00000201B2B99520>)
+  File "python\ray\_raylet.pyx", line 665, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 669, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 616, in ray._raylet.execute_task.function_executor
+  File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\_private\function_manager.py", line 675, in actor_method_executor
+    return method(__ray_actor, *args, **kwargs)
+  File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\util\tracing\tracing_helper.py", line 462, in _resume_span
+    return method(self, *_args, **_kwargs)
+  File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\rllib\evaluation\rollout_worker.py", line 630, in __init__
+    self._build_policy_map(
+  File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\util\tracing\tracing_helper.py", line 462, in _resume_span
+    return method(self, *_args, **_kwargs)
+  File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\rllib\evaluation\rollout_worker.py", line 1788, in _build_policy_map
+    self.policy_map.create_policy(
+  File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\rllib\policy\policy_map.py", line 140, in create_policy
+    self[policy_id] = class_(
+  File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\rllib\policy\tf_policy_template.py", line 256, in __init__
+    DynamicTFPolicy.__init__(
+  File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\rllib\policy\dynamic_tf_policy.py", line 336, in __init__
+    ) = action_distribution_fn(
+  File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\rllib\agents\dqn\dqn_tf_policy.py", line 228, in get_distribution_inputs_and_class
+    q_vals = compute_q_values(
+  File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\rllib\agents\dqn\dqn_tf_policy.py", line 390, in compute_q_values
+    model_out, state = model(input_batch, state_batches or [], seq_lens)
+  File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\rllib\models\modelv2.py", line 259, in __call__
+    res = self.forward(restored, state or [], seq_lens)
+  File "c:\Users\cosmi\Documents\Mannheim\ines-autonomous-dispatching\Manhattan_Graph_Environment\training\train_Rainbow.py", line 67, in forward
+    action_embedding, _ = self.action_embed_model({
+  File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\rllib\models\modelv2.py", line 259, in __call__
+    res = self.forward(restored, state or [], seq_lens)
+  File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\rllib\models\tf\fcnet.py", line 146, in forward
+    model_out, self._value_out = self.base_model(input_dict["obs_flat"])
+  File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\keras\utils\traceback_utils.py", line 70, in error_handler
+    raise e.with_traceback(filtered_tb) from None
+  File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\keras\engine\input_spec.py", line 197, in assert_input_compatibility
+    raise ValueError(
+ValueError: Missing data for input "observations". You passed a data dictionary with keys ['cost', 'current_hub', 'distinction', 'final_hub', 'remaining_distance']. Expected the following keys: ['observations']
+Traceback (most recent call last):
+  File "c:\Users\cosmi\Documents\Mannheim\ines-autonomous-dispatching\Manhattan_Graph_Environment\training\train_Rainbow.py", line 156, in <module>
+    trainer = DQNTrainer(rainbow_config,GraphEnv )
+  File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\rllib\agents\trainer.py", line 870, in __init__
+    super().__init__(
+  File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\tune\trainable.py", line 156, in __init__
+    self.setup(copy.deepcopy(self.config))
+  File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\rllib\agents\trainer.py", line 950, in setup
+    self.workers = WorkerSet(
+  File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\rllib\evaluation\worker_set.py", line 142, in __init__
+    remote_spaces = ray.get(
+  File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\_private\client_mode_hook.py", line 105, in wrapper
+    return func(*args, **kwargs)
+  File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\worker.py", line 1833, in get
+    raise value
+  File "python\ray\_raylet.pyx", line 799, in ray._raylet.task_execution_handler
+  File "python\ray\_raylet.pyx", line 618, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 762, in ray._raylet.execute_task
+ray.exceptions.RayActorError: The actor died because of an error raised in its creation task, [36mray::RolloutWorker.__init__()[39m (pid=12756, ip=127.0.0.1, repr=<ray.rllib.evaluation.rollout_worker.RolloutWorker object at 0x00000201B2B99520>)
+  File "python\ray\_raylet.pyx", line 665, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 669, in ray._raylet.execute_task
+  File "python\ray\_raylet.pyx", line 616, in ray._raylet.execute_task.function_executor
+  File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\_private\function_manager.py", line 675, in actor_method_executor
+    return method(__ray_actor, *args, **kwargs)
+  File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\util\tracing\tracing_helper.py", line 462, in _resume_span
+    return method(self, *_args, **_kwargs)
+  File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\rllib\evaluation\rollout_worker.py", line 630, in __init__
+    self._build_policy_map(
+  File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\util\tracing\tracing_helper.py", line 462, in _resume_span
+    return method(self, *_args, **_kwargs)
+  File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\rllib\evaluation\rollout_worker.py", line 1788, in _build_policy_map
+    self.policy_map.create_policy(
+  File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\rllib\policy\policy_map.py", line 140, in create_policy
+    self[policy_id] = class_(
+  File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\rllib\policy\tf_policy_template.py", line 256, in __init__
+    DynamicTFPolicy.__init__(
+  File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\rllib\policy\dynamic_tf_policy.py", line 336, in __init__
+    ) = action_distribution_fn(
+  File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\rllib\agents\dqn\dqn_tf_policy.py", line 228, in get_distribution_inputs_and_class
+    q_vals = compute_q_values(
+  File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\rllib\agents\dqn\dqn_tf_policy.py", line 390, in compute_q_values
+    model_out, state = model(input_batch, state_batches or [], seq_lens)
+  File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\rllib\models\modelv2.py", line 259, in __call__
+    res = self.forward(restored, state or [], seq_lens)
+  File "c:\Users\cosmi\Documents\Mannheim\ines-autonomous-dispatching\Manhattan_Graph_Environment\training\train_Rainbow.py", line 67, in forward
+    action_embedding, _ = self.action_embed_model({
+  File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\rllib\models\modelv2.py", line 259, in __call__
+    res = self.forward(restored, state or [], seq_lens)
+  File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\rllib\models\tf\fcnet.py", line 146, in forward
+    model_out, self._value_out = self.base_model(input_dict["obs_flat"])
+  File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\keras\utils\traceback_utils.py", line 70, in error_handler
+    raise e.with_traceback(filtered_tb) from None
+  File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\keras\engine\input_spec.py", line 197, in assert_input_compatibility
+    raise ValueError(
+ValueError: Missing data for input "observations". You passed a data dictionary with keys ['cost', 'current_hub', 'distinction', 'final_hub', 'remaining_distance']. Expected the following keys: ['observations']
+[36m(RolloutWorker pid=12756)[39m 2022-07-12 16:46:05,449	ERROR worker.py:451 -- Exception raised in creation task: The actor died because of an error raised in its creation task, [36mray::RolloutWorker.__init__()[39m (pid=12756, ip=127.0.0.1, repr=<ray.rllib.evaluation.rollout_worker.RolloutWorker object at 0x00000201B2B99520>)
+[36m(RolloutWorker pid=12756)[39m   File "python\ray\_raylet.pyx", line 665, in ray._raylet.execute_task
+[36m(RolloutWorker pid=12756)[39m   File "python\ray\_raylet.pyx", line 669, in ray._raylet.execute_task
+[36m(RolloutWorker pid=12756)[39m   File "python\ray\_raylet.pyx", line 616, in ray._raylet.execute_task.function_executor
+[36m(RolloutWorker pid=12756)[39m   File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\_private\function_manager.py", line 675, in actor_method_executor
+[36m(RolloutWorker pid=12756)[39m     return method(__ray_actor, *args, **kwargs)
+[36m(RolloutWorker pid=12756)[39m   File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\util\tracing\tracing_helper.py", line 462, in _resume_span
+[36m(RolloutWorker pid=12756)[39m     return method(self, *_args, **_kwargs)
+[36m(RolloutWorker pid=12756)[39m   File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\rllib\evaluation\rollout_worker.py", line 630, in __init__
+[36m(RolloutWorker pid=12756)[39m     self._build_policy_map(
+[36m(RolloutWorker pid=12756)[39m   File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\util\tracing\tracing_helper.py", line 462, in _resume_span
+[36m(RolloutWorker pid=12756)[39m     return method(self, *_args, **_kwargs)
+[36m(RolloutWorker pid=12756)[39m   File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\rllib\evaluation\rollout_worker.py", line 1788, in _build_policy_map
+[36m(RolloutWorker pid=12756)[39m     self.policy_map.create_policy(
+[36m(RolloutWorker pid=12756)[39m   File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\rllib\policy\policy_map.py", line 140, in create_policy
+[36m(RolloutWorker pid=12756)[39m     self[policy_id] = class_(
+[36m(RolloutWorker pid=12756)[39m   File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\rllib\policy\tf_policy_template.py", line 256, in __init__
+[36m(RolloutWorker pid=12756)[39m     DynamicTFPolicy.__init__(
+[36m(RolloutWorker pid=12756)[39m   File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\rllib\policy\dynamic_tf_policy.py", line 336, in __init__
+[36m(RolloutWorker pid=12756)[39m     ) = action_distribution_fn(
+[36m(RolloutWorker pid=12756)[39m   File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\rllib\agents\dqn\dqn_tf_policy.py", line 228, in get_distribution_inputs_and_class
+[36m(RolloutWorker pid=12756)[39m     q_vals = compute_q_values(
+[36m(RolloutWorker pid=12756)[39m   File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\rllib\agents\dqn\dqn_tf_policy.py", line 390, in compute_q_values
+[36m(RolloutWorker pid=12756)[39m     model_out, state = model(input_batch, state_batches or [], seq_lens)
+[36m(RolloutWorker pid=12756)[39m   File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\rllib\models\modelv2.py", line 259, in __call__
+[36m(RolloutWorker pid=12756)[39m     res = self.forward(restored, state or [], seq_lens)
+[36m(RolloutWorker pid=12756)[39m   File "c:\Users\cosmi\Documents\Mannheim\ines-autonomous-dispatching\Manhattan_Graph_Environment\training\train_Rainbow.py", line 67, in forward
+[36m(RolloutWorker pid=12756)[39m     action_embedding, _ = self.action_embed_model({
+[36m(RolloutWorker pid=12756)[39m   File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\rllib\models\modelv2.py", line 259, in __call__
+[36m(RolloutWorker pid=12756)[39m     res = self.forward(restored, state or [], seq_lens)
+[36m(RolloutWorker pid=12756)[39m   File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\ray\rllib\models\tf\fcnet.py", line 146, in forward
+[36m(RolloutWorker pid=12756)[39m     model_out, self._value_out = self.base_model(input_dict["obs_flat"])
+[36m(RolloutWorker pid=12756)[39m   File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\keras\utils\traceback_utils.py", line 70, in error_handler
+[36m(RolloutWorker pid=12756)[39m     raise e.with_traceback(filtered_tb) from None
+[36m(RolloutWorker pid=12756)[39m   File "C:\Users\cosmi\anaconda3\envs\teamproject\lib\site-packages\keras\engine\input_spec.py", line 197, in assert_input_compatibility
+[36m(RolloutWorker pid=12756)[39m     raise ValueError(
+[36m(RolloutWorker pid=12756)[39m ValueError: Missing data for input "observations". You passed a data dictionary with keys ['cost', 'current_hub', 'distinction', 'final_hub', 'remaining_distance']. Expected the following keys: ['observations']

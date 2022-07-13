@@ -49,8 +49,23 @@ class ActionMaskModel(TFModelV2):
     ):
 
         orig_space = getattr(obs_space, "original_space", obs_space)
+
+        self.cost = orig_space['cost']
+        
+        self.remaining_distance = orig_space['remaining_distance']
+        self.current_hub = orig_space['current_hub']
+        self.final_hub = orig_space['final_hub']
+        self.distinction = orig_space['observations']
+        print("cost",self.cost)
+        print("current", self.current_hub)
+        print("final",self.final_hub)
+        print("distinction ",self.distinction)
         print("Original Space:", orig_space )
         print("Original Space Shape", orig_space.shape)
+        concatenated = np.concatenate([self.cost, self.remaining_distance, self.current_hub, self.final_hub, self.distinction])
+        # print("Original Space Action Mask", orig_space['action_mask'])
+        print(concatenated)
+        
         # assert (
         #     isinstance(orig_space, Dict)
         #     and "action_mask" in orig_space.spaces
@@ -60,7 +75,7 @@ class ActionMaskModel(TFModelV2):
         super().__init__(obs_space, action_space, num_outputs, model_config, name)
 
         self.internal_model = FullyConnectedNetwork(
-            orig_space["observations"],
+            orig_space,
             action_space,
             num_outputs,
             model_config,
@@ -72,20 +87,21 @@ class ActionMaskModel(TFModelV2):
 
     def forward(self, input_dict, state, seq_lens):
         # Extract the available actions tensor from the observation.
-        action_mask = input_dict["obs"]["action_mask"]
-
+        # action_mask = input_dict["obs"]["action_mask"]
+        print("Imput dict", input_dict["obs"])
         # Compute the unmasked logits.
-        logits, _ = self.internal_model({"obs": input_dict["obs"]["observations"]})
+        logits, _ = self.internal_model({"obs": input_dict["obs"]})
 
         
        
 
         # Convert action_mask into a [0.0 || -inf]-type mask.
-        inf_mask = tf.maximum(tf.math.log(action_mask), tf.float32.min)
-        masked_logits = logits + inf_mask
+
+        # inf_mask = tf.maximum(tf.math.log(action_mask), tf.float32.min)
+        # masked_logits = logits + inf_mask
 
         # Return masked logits.
-        return masked_logits, state
+        return logits, state
 
     def value_function(self):
         return self.internal_model.value_function()

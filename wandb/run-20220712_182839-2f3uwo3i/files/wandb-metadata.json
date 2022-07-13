@@ -1,0 +1,24 @@
+{
+    "os": "Windows-10-10.0.19044-SP0",
+    "python": "3.9.12",
+    "heartbeatAt": "2022-07-12T15:28:40.987959",
+    "startedAt": "2022-07-12T15:28:39.079395",
+    "docker": null,
+    "gpu": "NVIDIA GeForce RTX 3050 Laptop GPU",
+    "gpu_count": 1,
+    "cpu_count": 8,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "c:\\Users\\cosmi\\Documents\\Mannheim\\ines-autonomous-dispatching\\Manhattan_Graph_Environment\\training\\train_Rainbow_mask.py",
+    "codePath": "Manhattan_Graph_Environment\\training\\train_Rainbow_mask.py",
+    "git": {
+        "remote": "https://github.com/noahmtnr/ines-autonomous-dispatching.git",
+        "commit": "5b5b6645258541567fe2312ca10661733be95ba7"
+    },
+    "email": "cosmina.ionut@stud.ubbcluj.ro",
+    "root": "C:/Users/cosmi/Documents/Mannheim/ines-autonomous-dispatching",
+    "host": "LAPTOP-FDVI9MUH",
+    "username": "cosmi",
+    "executable": "C:\\Users\\cosmi\\anaconda3\\envs\\teamproject\\python.exe"
+}

@@ -51,7 +51,7 @@ class GraphEnv(gym.Env):
         print("USE CONFIG", use_config)
 
         self.done = False
-        self.mask = True
+        self.mask = False
         # f = open('graphworld_config.json')
         # data = json.load(f)
         # use_config=data['use_config']
@@ -84,10 +84,10 @@ class GraphEnv(gym.Env):
         self.action_space = gym.spaces.Discrete(self.n_hubs) 
         obs_space = spaces.Dict(
                 {
-                # 'cost': gym.spaces.Box(low=np.zeros(70)-10, high=np.zeros(70)+10, shape=(70,), dtype=np.float64),
-                # 'remaining_distance': gym.spaces.Box(low=np.zeros(70)-10, high=np.zeros(70)+10, shape=(70,), dtype=np.float64),
-                # 'current_hub': gym.spaces.Box(low=0, high=1, shape=(70,), dtype=np.float64),
-                # 'final_hub': gym.spaces.Box(low=0, high=1, shape=(70,), dtype=np.float64),
+                'cost': gym.spaces.Box(low=np.zeros(70)-10, high=np.zeros(70)+10, shape=(70,), dtype=np.float64),
+                'remaining_distance': gym.spaces.Box(low=np.zeros(70)-10, high=np.zeros(70)+10, shape=(70,), dtype=np.float64),
+                'current_hub': gym.spaces.Box(low=0, high=1, shape=(70,), dtype=np.float64),
+                'final_hub': gym.spaces.Box(low=0, high=1, shape=(70,), dtype=np.float64),
                 'observations': gym.spaces.Box(low=np.zeros(70)-1, high=np.zeros(70)+1, shape=(70,), dtype=np.float64)
             })
 
@@ -100,10 +100,10 @@ class GraphEnv(gym.Env):
         else:
             self.observation_space = spaces.Dict(
                 {
-                # 'cost': gym.spaces.Box(low=np.zeros(70)-10, high=np.zeros(70)+10, shape=(70,), dtype=np.float64),
-                # 'remaining_distance': gym.spaces.Box(low=np.zeros(70)-10, high=np.zeros(70)+10, shape=(70,), dtype=np.float64),
-                # 'current_hub': gym.spaces.Box(low=0, high=1, shape=(70,), dtype=np.float64),
-                # 'final_hub': gym.spaces.Box(low=0, high=1, shape=(70,), dtype=np.float64),
+                'cost': gym.spaces.Box(low=np.zeros(70)-10, high=np.zeros(70)+10, shape=(70,), dtype=np.float64),
+                'remaining_distance': gym.spaces.Box(low=np.zeros(70)-10, high=np.zeros(70)+10, shape=(70,), dtype=np.float64),
+                'current_hub': gym.spaces.Box(low=0, high=1, shape=(70,), dtype=np.float64),
+                'final_hub': gym.spaces.Box(low=0, high=1, shape=(70,), dtype=np.float64),
                 'observations': gym.spaces.Box(low=np.zeros(70)-1, high=np.zeros(70)+1, shape=(70,), dtype=np.float64)
             })
         self.mean1=6779.17
@@ -158,7 +158,7 @@ class GraphEnv(gym.Env):
             self.pickup_time = self.env_config['pickup_timestamp']
             self.time = datetime.strptime(self.pickup_time, '%Y-%m-%d %H:%M:%S')
             self.total_travel_time = 0
-            self.deadline=datetime.strptime(self.env_config['delivery_timestamp'], '%Y-%m-%d %H:%M:%S')
+            self.deadline = datetime.strptime(self.env_config['delivery_timestamp'], '%Y-%m-%d %H:%M:%S')
             self.current_wait = 0
 
 
@@ -195,10 +195,10 @@ class GraphEnv(gym.Env):
         reward=0
 
         self.state = {
-            # 'cost' : ((self.learn_graph.adjacency_matrix('cost')[self.position]-self.mean1)/self.stdev1).astype(np.float64),
-            # 'remaining_distance': ((self.learn_graph.adjacency_matrix('remaining_distance')[self.position]-self.mean2)/self.stdev2).astype(np.float64),
-            # 'current_hub' : self.one_hot(self.position).astype(np.float64), 
-            # 'final_hub' : self.one_hot(self.final_hub).astype(np.float64),
+            'cost' : ((self.learn_graph.adjacency_matrix('cost')[self.position]-self.mean1)/self.stdev1).astype(np.float64),
+            'remaining_distance': ((self.learn_graph.adjacency_matrix('remaining_distance')[self.position]-self.mean2)/self.stdev2).astype(np.float64),
+            'current_hub' : self.one_hot(self.position).astype(np.float64), 
+            'final_hub' : self.one_hot(self.final_hub).astype(np.float64),
             'observations' : self.learn_graph.adjacency_matrix('distinction')[self.position].astype(np.float64)
             }
         resetExecutionTime = (time.time() - resetExecutionStart)
@@ -217,9 +217,10 @@ class GraphEnv(gym.Env):
                 "avail_actions": np.ones(self.n_hubs, dtype=np.int16),
                 "observations": self.state
                 }
+            self.state = mask_state     
         else:
             pass
-        self.state = mask_state       
+          
 
     def step(self, action: int):
         """ Executes an action based on the index passed as a parameter (only works with moves to direct neighbors as of now)
@@ -307,10 +308,10 @@ class GraphEnv(gym.Env):
         old_state = self.state
 
         self.state = {
-        # 'cost' : ((self.learn_graph.adjacency_matrix('cost')[self.position]-self.mean1)/self.stdev1).astype(np.float64),
-        # 'remaining_distance': ((self.learn_graph.adjacency_matrix('remaining_distance')[self.position]-self.mean2)/self.stdev2).astype(np.float64),
-        # 'current_hub' : self.one_hot(self.position).astype(np.float64), 
-        # 'final_hub' : self.one_hot(self.final_hub).astype(np.float64),
+        'cost' : ((self.learn_graph.adjacency_matrix('cost')[self.position]-self.mean1)/self.stdev1).astype(np.float64),
+        'remaining_distance': ((self.learn_graph.adjacency_matrix('remaining_distance')[self.position]-self.mean2)/self.stdev2).astype(np.float64),
+        'current_hub' : self.one_hot(self.position).astype(np.float64), 
+        'final_hub' : self.one_hot(self.final_hub).astype(np.float64),
         'observations' : self.learn_graph.adjacency_matrix('distinction')[self.position].astype(np.float64)
         }
         # print("New State: ")        
@@ -330,7 +331,7 @@ class GraphEnv(gym.Env):
 
     
     def compute_reward(self, action, old_state):
-        old_distinction = old_state['observations']['observations']
+        old_distinction = old_state['observations']
         cost_of_action = self.learn_graph.adjacency_matrix('cost')[self.old_position][action]
         print(self.old_position, "->", action, cost_of_action)
         self.done = False
