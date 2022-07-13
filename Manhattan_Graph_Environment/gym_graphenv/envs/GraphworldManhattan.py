@@ -470,16 +470,26 @@ class GraphEnv(gym.Env):
                                 node_sizes.append(0)
                 
         graph = self.manhattan_graph.inner_graph
-        fig, ax = ox.plot_graph(graph, figsize=(15,15), node_color=colors, node_size = node_sizes, edge_linewidth=1)
-          
+        fig, ax = ox.plot_graph(graph, figsize=(15,15), node_color=colors, node_size = node_sizes, edge_linewidth=1, show=False)
+        
+
+        for hub in self.hubs:
+            print(type(hub))
+            print(type(int(hub)))
+            print('Hub:', hub)
+            index = self.manhattan_graph.get_hub_index_by_nodeid(hub)
+            hub_x = self.manhattan_graph.get_node_by_index(index)['x']
+            hub_y = self.manhattan_graph.get_node_by_index(index)['y']
+            fig.text(hub_x, hub_y, str(index), style = 'normal', fontsize = 10, color = "green")
+
+        current_pos_y = self.manhattan_graph.get_node_by_index(self.position)['y']
         print("Legend HUBS:")
         print(Fore.RED + 'RED - SHARED')
         print(Fore.CYAN + 'TURQUISE - BOOK OWN')
         print(Fore.MAGENTA + 'LILA - CURRENT')
         print(Fore.GREEN + 'GREEN - START')
         print(Fore.BLUE + 'BLUE - FINAL')
-
-        plt.show()
+        fig.show()
 
 
 class DeliveryState:

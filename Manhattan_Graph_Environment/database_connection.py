@@ -162,11 +162,3 @@ class DBConnection:
     self.cursor.close()
     self.mydb.close()
 
-
-
-
-DB = DBConnection()
-DB.getAllHubs()
-  
-# print(DB.getAvailableTrips(42430063, '2016-01-03 19:50:10', '2016-01-03 19:55:10'))
-# print(DB.getRouteFromTrip('id0000569'))
