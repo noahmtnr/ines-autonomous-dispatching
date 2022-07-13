@@ -17,6 +17,7 @@ import pickle
 import logging
 import json
 import os
+import statistics
 # from config.definitions import ROOT_DIR
 ROOT_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
 
@@ -91,10 +92,7 @@ class GraphEnv(gym.Env):
             'allow_bookown': gym.spaces.Discrete(2)
         
         })
-        self.mean1=6779.17
-        self.mean2=13653.00
-        self.stdev1=4433.51
-        self.stdev2=6809.79
+        self.rem_distance_values=[]
 
     def one_hot(self, pos):
         one_hot_vector = np.zeros(len(self.hubs))
@@ -194,6 +192,8 @@ class GraphEnv(gym.Env):
             'distinction' : self.learn_graph.adjacency_matrix('distinction')[self.position].astype(np.float64),
             'allow_bookown': self.allow_bookown,
             }
+        self.rem_distance_values.extend(self.learn_graph.adjacency_matrix('remaining_distance')[self.position].astype(np.float64))
+
 
         resetExecutionTime = (time.time() - resetExecutionStart)
         # print(f"Reset() Execution Time: {str(resetExecutionTime)}")
@@ -301,6 +301,11 @@ class GraphEnv(gym.Env):
 
         reward, self.done, state_of_delivery = self.compute_reward(action)
 
+        if (self.done):
+             self.mean_rd=sum(self.rem_distance_values)/len(self.rem_distance_values)
+             print("mean rd: ",self.mean_rd)
+             self.sd_rd=statistics.stdev(self.rem_distance_values)
+             print("stdev rd: ",self.sd_rd)
         self.state_of_delivery = state_of_delivery
         executionTime = (time.time() - startTime)
 
