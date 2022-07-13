@@ -18,6 +18,9 @@ import logging
 import json
 import os
 from config.definitions import ROOT_DIR
+from gym import spaces, logger
+from gym.utils import seeding
+from or_gym.utils import assign_env_config
 
 from typing import Dict
 
@@ -48,6 +51,7 @@ class GraphEnv(gym.Env):
         print("USE CONFIG", use_config)
 
         self.done = False
+        self.mask = True
         # f = open('graphworld_config.json')
         # data = json.load(f)
         # use_config=data['use_config']
@@ -78,15 +82,30 @@ class GraphEnv(gym.Env):
 
       
         self.action_space = gym.spaces.Discrete(self.n_hubs) 
+        obs_space = spaces.Dict(
+                {
+                # 'cost': gym.spaces.Box(low=np.zeros(70)-10, high=np.zeros(70)+10, shape=(70,), dtype=np.float64),
+                # 'remaining_distance': gym.spaces.Box(low=np.zeros(70)-10, high=np.zeros(70)+10, shape=(70,), dtype=np.float64),
+                # 'current_hub': gym.spaces.Box(low=0, high=1, shape=(70,), dtype=np.float64),
+                # 'final_hub': gym.spaces.Box(low=0, high=1, shape=(70,), dtype=np.float64),
+                'observations': gym.spaces.Box(low=np.zeros(70)-1, high=np.zeros(70)+1, shape=(70,), dtype=np.float64)
+            })
 
-        self.observation_space = spaces.Dict(
-            {
-            'cost': gym.spaces.Box(low=np.zeros(70)-10, high=np.zeros(70)+10, shape=(70,), dtype=np.float64),
-            'remaining_distance': gym.spaces.Box(low=np.zeros(70)-10, high=np.zeros(70)+10, shape=(70,), dtype=np.float64),
-            'current_hub': gym.spaces.Box(low=0, high=1, shape=(70,), dtype=np.float64),
-            'final_hub': gym.spaces.Box(low=0, high=1, shape=(70,), dtype=np.float64),
-            'distinction': gym.spaces.Box(low=np.zeros(70)-1, high=np.zeros(70)+1, shape=(70,), dtype=np.float64)
-        })
+        if self.mask:
+            self.observation_space = spaces.Dict({
+                "action_mask": spaces.Box(0, 1, shape=(self.n_hubs,), dtype=np.int32),
+                "avail_actions": spaces.Box(0, 1, shape=(self.n_hubs,), dtype=np.int16),
+                "observations": obs_space
+                })
+        else:
+            self.observation_space = spaces.Dict(
+                {
+                # 'cost': gym.spaces.Box(low=np.zeros(70)-10, high=np.zeros(70)+10, shape=(70,), dtype=np.float64),
+                # 'remaining_distance': gym.spaces.Box(low=np.zeros(70)-10, high=np.zeros(70)+10, shape=(70,), dtype=np.float64),
+                # 'current_hub': gym.spaces.Box(low=0, high=1, shape=(70,), dtype=np.float64),
+                # 'final_hub': gym.spaces.Box(low=0, high=1, shape=(70,), dtype=np.float64),
+                'observations': gym.spaces.Box(low=np.zeros(70)-1, high=np.zeros(70)+1, shape=(70,), dtype=np.float64)
+            })
         self.mean1=6779.17
         self.mean2=13653.00
         self.stdev1=4433.51
@@ -143,7 +162,7 @@ class GraphEnv(gym.Env):
             self.current_wait = 0
 
 
-
+        
         print(f"Reset initialized pickup: {self.position}")
         print(f"Reset initialized dropoff: {self.final_hub}")
         print(f"Reset initialized time: {self.time}")
@@ -176,16 +195,31 @@ class GraphEnv(gym.Env):
         reward=0
 
         self.state = {
-            'cost' : ((self.learn_graph.adjacency_matrix('cost')[self.position]-self.mean1)/self.stdev1).astype(np.float64),
-            'remaining_distance': ((self.learn_graph.adjacency_matrix('remaining_distance')[self.position]-self.mean2)/self.stdev2).astype(np.float64),
-            'current_hub' : self.one_hot(self.position).astype(np.float64), 
-            'final_hub' : self.one_hot(self.final_hub).astype(np.float64),
-            'distinction' : self.learn_graph.adjacency_matrix('distinction')[self.position].astype(np.float64)
+            # 'cost' : ((self.learn_graph.adjacency_matrix('cost')[self.position]-self.mean1)/self.stdev1).astype(np.float64),
+            # 'remaining_distance': ((self.learn_graph.adjacency_matrix('remaining_distance')[self.position]-self.mean2)/self.stdev2).astype(np.float64),
+            # 'current_hub' : self.one_hot(self.position).astype(np.float64), 
+            # 'final_hub' : self.one_hot(self.final_hub).astype(np.float64),
+            'observations' : self.learn_graph.adjacency_matrix('distinction')[self.position].astype(np.float64)
             }
-
         resetExecutionTime = (time.time() - resetExecutionStart)
         # print(f"Reset() Execution Time: {str(resetExecutionTime)}")
+        self.update_action_mask()
+        print("Masked State Return",self.state)
         return self.state
+
+
+    def update_action_mask(self):
+        if self.mask:
+            mask = np.where(self.state['observations'] < 0,
+            0, 1)
+            mask_state = {
+                "action_mask": mask,
+                "avail_actions": np.ones(self.n_hubs, dtype=np.int16),
+                "observations": self.state
+                }
+        else:
+            pass
+        self.state = mask_state       
 
     def step(self, action: int):
         """ Executes an action based on the index passed as a parameter (only works with moves to direct neighbors as of now)
@@ -272,11 +306,12 @@ class GraphEnv(gym.Env):
 
         old_state = self.state
 
-        self.state = {'cost' : ((self.learn_graph.adjacency_matrix('cost')[self.position]-self.mean1)/self.stdev1).astype(np.float64),
-        'remaining_distance': ((self.learn_graph.adjacency_matrix('remaining_distance')[self.position]-self.mean2)/self.stdev2).astype(np.float64),
-        'current_hub' : self.one_hot(self.position).astype(np.float64), 
-        'final_hub' : self.one_hot(self.final_hub).astype(np.float64),
-        'distinction' : self.learn_graph.adjacency_matrix('distinction')[self.position].astype(np.float64)
+        self.state = {
+        # 'cost' : ((self.learn_graph.adjacency_matrix('cost')[self.position]-self.mean1)/self.stdev1).astype(np.float64),
+        # 'remaining_distance': ((self.learn_graph.adjacency_matrix('remaining_distance')[self.position]-self.mean2)/self.stdev2).astype(np.float64),
+        # 'current_hub' : self.one_hot(self.position).astype(np.float64), 
+        # 'final_hub' : self.one_hot(self.final_hub).astype(np.float64),
+        'observations' : self.learn_graph.adjacency_matrix('distinction')[self.position].astype(np.float64)
         }
         # print("New State: ")        
         # print(self.state)
@@ -289,12 +324,13 @@ class GraphEnv(gym.Env):
         
         self.state_of_delivery = state_of_delivery
         executionTime = (time.time() - startTime)
-
+        self.update_action_mask()
+        print("Masked State Step",self.state)
         return self.state, reward,  self.done, {"timestamp": self.time,"step_travel_time":step_duration,"distance":self.distance_matrix[self.old_position][self.position], "count_hubs":self.count_hubs, "action": self.action_choice, "hub_index": action}
 
     
     def compute_reward(self, action, old_state):
-        old_distinction = old_state['distinction']
+        old_distinction = old_state['observations']['observations']
         cost_of_action = self.learn_graph.adjacency_matrix('cost')[self.old_position][action]
         print(self.old_position, "->", action, cost_of_action)
         self.done = False

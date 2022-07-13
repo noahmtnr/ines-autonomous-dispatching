@@ -12,7 +12,7 @@ import wandb
 import os
 os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 # CHANGES END HERE
-
+from gym.spaces import Dict
 
 import ray
 from ray.rllib.agents.dqn import DQNTrainer, DEFAULT_CONFIG
@@ -36,146 +36,61 @@ wandb.init(project="HP-reduce_bookowns", entity="hitchhike")
 
 tf_api, tf_original, tf_version = try_import_tf(error = True)
 
-class CustomMaskModel(TFModelV2):
-    def __init__(self, obs_space, action_space, num_outputs,
-        model_config, name, true_obs_shape=(70,),action_embed_size=70):
-        
-        # true_obs_shape is going to match the size of the state. 
-        # If we stick with our reduced KP, that will be a vector with 11 entries. 
-        # The other value we need to provide is the action_embed_size, which is going to be the size of our action space (5)
-         
-        super(CustomMaskModel, self).__init__(obs_space,
-            action_space, num_outputs, model_config, name)
-         
-        self.action_embed_model = FullyConnectedNetwork(
-            spaces.Box(-1, 1, shape=true_obs_shape), 
-                action_space, action_embed_size,
-            model_config, name + "_action_embedding")
-        # self.register_variables(self.action_embed_model.variables())
+class ActionMaskModel(TFModelV2):
+    """Model that handles simple discrete action masking.
+    This assumes the outputs are logits for a single Categorical action dist.
+    Getting this to work with a more complex output (e.g., if the action space
+    is a tuple of several distributions) is also possible but left as an
+    exercise to the reader.
+    """
 
+    def __init__(
+        self, obs_space, action_space, num_outputs, model_config, name, **kwargs
+    ):
+
+        orig_space = getattr(obs_space, "original_space", obs_space)
+        print("Original Space:", orig_space )
+        print("Original Space Shape", orig_space.shape)
+        # assert (
+        #     isinstance(orig_space, Dict)
+        #     and "action_mask" in orig_space.spaces
+        #     and "state" in orig_space.spaces
+        # )
+
+        super().__init__(obs_space, action_space, num_outputs, model_config, name)
+
+        self.internal_model = FullyConnectedNetwork(
+            orig_space["observations"],
+            action_space,
+            num_outputs,
+            model_config,
+            name + "_internal",
+        )
+
+        # disable action masking --> will likely lead to invalid actions
+        # self.no_masking = model_config["custom_model_config"].get("no_masking", False)
 
     def forward(self, input_dict, state, seq_lens):
-        
-        # The actual masking takes place in the forward method where we unpack the mask, actions, and state from 
-        # the observation dictionary provided by our environment. The state yields our action embeddings which gets 
-        # combined with our mask to provide logits with the smallest value we can provide. 
-        # This will get passed to a softmax output which will reduce the probability of selecting these actions to 0, 
-        # effectively blocking the agent from ever taking these illegal actions.
-        original_space = getattr(self.obs_space, "original_space", None) 
-        avail_actions = input_dict["obs"]["avail_actions"]
+        # Extract the available actions tensor from the observation.
         action_mask = input_dict["obs"]["action_mask"]
 
-        # bsize = input_dict['obs_flat'].shape[0]
-        # actual_obs_dict = input_dict['obs']['state']
-        # actual_obs_list = [tf.reshape(actual_obs_dict[key],[bsize, -1]) for key in original_space['state'].keys()]
-        # actual_obs_flat = tf.concat(actual_obs_list, -1)
-        action_embedding, _ = self.action_embed_model({
-            "obs": input_dict['obs']['state']})
+        # Compute the unmasked logits.
+        logits, _ = self.internal_model({"obs": input_dict["obs"]["observations"]})
 
-        # intent_vector = tf.expand_dims(action_embedding, 1)
-        # action_logits = tf.reduce_sum(avail_actions * intent_vector, axis=1)
-        # inf_mask = tf.maximum(tf.log(action_mask), tf.float32.min)
         
-        intent_vector = tf_api.expand_dims(action_embedding, 1)
-        action_logits = tf_api.reduce_sum(avail_actions * intent_vector, axis=1)
-        inf_mask = tf_api.maximum(tf_api.log(action_mask), tf_api.float32.min)
-        
-        return action_logits + inf_mask, state
+       
+
+        # Convert action_mask into a [0.0 || -inf]-type mask.
+        inf_mask = tf.maximum(tf.math.log(action_mask), tf.float32.min)
+        masked_logits = logits + inf_mask
+
+        # Return masked logits.
+        return masked_logits, state
 
     def value_function(self):
-        return self.action_embed_model.value_function()
+        return self.internal_model.value_function()
 
-ModelCatalog.register_custom_model("my_mask_model", CustomMaskModel)
-
-# class CustomModel2(TFModelV2):
-#     def _init_(self, obs_space, action_space, num_outputs, model_config, name, true_obs_shape=(70,5),
-#         action_embed_size=70):
-#         super(CustomModel2, self)._init_(obs_space, action_space, num_outputs, model_config, name)
-#         self.cost = tf.keras.layers.Input(shape=obs_space.shape['cost'], name="cost")
-#         self.remaining_distance = tf.keras.layers.Input(shape=obs_space.shape['remaining_distance'], name="remaining_distance")
-#         self.current_hub = tf.keras.layers.Input(shape=obs_space.shape['current_hub'], name="current_hub")
-#         self.final_hub = tf.keras.layers.Input(shape=obs_space.shape['final_hub'], name="final_hub")
-#         self.distinction = tf.keras.layers.Input(shape=obs_space.shape['distinction'], name="distinction")
-#         concatenated = tf.keras.layers.Concatenate()([self.cost, self.remaining_distance, self.current_hub, self.final_hub, self.distinction])
-        
-#         self.inputs = concatenated
-        
-#         layer_1 = tf.keras.layers.Dense(
-#             70,
-#             name="my_layer1",
-#             activation=tf.nn.relu,
-#             kernel_initializer=normc_initializer(1.0),
-#         )(self.inputs)
-#         layer_out = tf.keras.layers.Dense(
-#             action_embed_size,
-#             name="my_out",
-#             activation=None,
-#             kernel_initializer=normc_initializer(0.01),
-#         )(layer_1)
-#         value_out = tf.keras.layers.Dense(
-#             1,
-#             name="value_out",
-#             activation=None,
-#             kernel_initializer=normc_initializer(0.01),
-#         )(layer_1)
-#         self.base_model = tf.keras.Model(self.inputs, [layer_out, value_out])
-#         self.register_variables(self.base_model.variables)
-
-#     def forward(self, input_dict, state, seq_lens):
-# #         model_out, self._value_out = self.base_model(input_dict["obs"])
-# #         return model_out, state
-    
-#         avail_actions = input_dict["obs"]["avail_actions"]
-#         action_mask = input_dict["obs"]["action_mask"]
-#         action_embedding, _ = self.base_model({
-#             "obs": input_dict["obs"]["state"]})
-#         # intent_vector = tf.expand_dims(action_embedding, 1)
-#         # action_logits = tf.reduce_sum(avail_actions * intent_vector, axis=1)
-#         # inf_mask = tf.maximum(tf.log(action_mask), tf.float32.min)
-        
-#         intent_vector = tf_api.expand_dims(action_embedding, 1)
-#         action_logits = tf_api.reduce_sum(avail_actions * intent_vector, axis=1)
-#         inf_mask = tf_api.maximum(tf_api.log(action_mask), tf_api.float32.min)
-        
-#         return action_logits + inf_mask, state
-
-#     def value_function(self):
-#         return self.base_model.value_function()
-
-# ModelCatalog.register_custom_model("my_mask_model", CustomModel2)
-
-#  class CustomModel(TFModelV2):
-#     def __init__(self, obs_space, action_space, num_outputs, model_config, name):
-#         super(CustomModel, self).__init__(obs_space, action_space, num_outputs, model_config, name)
-#         self.inputs = tf.keras.layers.Input(shape=obs_space.shape, name="final_hub")
-#         layer_1 = tf.keras.layers.Dense(
-#             70,
-#             name="my_layer1",
-#             activation=tf.nn.relu,
-#             kernel_initializer=normc_initializer(1.0),
-#         )(self.inputs)
-#         layer_out = tf.keras.layers.Dense(
-#             num_outputs,
-#             name="my_out",
-#             activation=None,
-#             kernel_initializer=normc_initializer(0.01),
-#         )(layer_1)
-#         value_out = tf.keras.layers.Dense(
-#             1,
-#             name="value_out",
-#             activation=None,
-#             kernel_initializer=normc_initializer(0.01),
-#         )(layer_1)
-#         self.base_model = tf.keras.Model(self.inputs, [layer_out, value_out])
-
-#     def forward(self, input_dict, state, seq_lens):
-#         model_out, self._value_out = self.base_model(input_dict["obs"])
-#         return model_out, state
-
-#     def value_function(self):
-#         return tf.reshape(self._value_out, [-1])
-
-# ModelCatalog.register_custom_model("my_tf_model", CustomModel)
+ModelCatalog.register_custom_model("my_mask_model", ActionMaskModel)
 
 env=GraphEnv()
 
@@ -192,9 +107,10 @@ rainbow_config["gamma"] = 0.99
 rainbow_config["callbacks"] = CustomCallbacks
 #rainbow_config["hiddens"] = [70] # to try with 1024  //was also 516
 rainbow_config["model"] = {
-    "custom_model": "my_mask_model",
-    "fcnet_hiddens": [70],
-    "fcnet_activation": "relu",
+    "custom_model": ActionMaskModel,
+    # "fcnet_hiddens": [70],
+    # "fcnet_activation": "relu",
+    # "custom_model_config": {"no_masking": False},
 }
 
 #num_gpus and other gpu parameters in order to train with gpu
