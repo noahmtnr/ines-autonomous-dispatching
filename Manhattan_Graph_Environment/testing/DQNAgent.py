@@ -1,8 +1,8 @@
 # imports
 import sys
 sys.path.insert(0,"")
-from ManhattanGraph import ManhattanGraph
-from gym_graphenv.envs.GraphworldManhattan import GraphEnv
+from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
+from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv, CustomCallbacks
 import numpy as np
 import pandas as pd
 import json
@@ -41,7 +41,7 @@ class DQNAgent:
         "iterations":10,
 
         }
-        file_name="tmp/dqn\checkpoint_000010\checkpoint-10"  
+        file_name="tmp/dqn/graphworld\checkpoint_000010\checkpoint-10"  
         ppo_trainer.restore(file_name)
         env = gym.make(mode["env-name"])
         state = env.reset()

@@ -3,7 +3,7 @@ import sys
 
 sys.path.insert(0, "")
 from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
-from gym_graphenv.envs.GraphworldManhattan import GraphEnv, CustomCallbacks
+from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv, CustomCallbacks
 import numpy as np
 import pandas as pd
 import json

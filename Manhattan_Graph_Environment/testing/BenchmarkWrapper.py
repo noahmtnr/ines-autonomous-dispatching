@@ -5,8 +5,9 @@ from PPOAgent import PPOAgent
 sys.path.insert(0,"")
 from RandomAgent import RandomAgent
 from CostAgent import CostAgent
+from RainbowAgent import RainbowAgent
 from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
-from gym_graphenv.envs.GraphworldManhattan import GraphEnv, CustomCallbacks
+from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv, CustomCallbacks
 import numpy as np
 import pandas as pd
 import json
@@ -31,10 +32,11 @@ class BenchmarkWrapper:
      def file_read(self):
         if len(sys.argv) > 1:
             first_arg = sys.argv[1]
-            file_path='data/'+first_arg
+            file_path='data/others'+first_arg
             orders = pd.read_csv(file_path, nrows=2)
         else:
-            orders = pd.read_csv('data/random_orders.csv', nrows=2)
+            orders = pd.read_csv('data/others/random_orders.csv', nrows=2)
+
         return orders
 
      def read_orders(self):
@@ -61,7 +63,7 @@ class BenchmarkWrapper:
         with open('env_config.pkl', 'wb') as f:
             pickle.dump(env_config, f)
             
-        if self.name != "DQN" or self.name != "PPO":
+        if self.name != "DQN" or self.name != "PPO" or self.name != "Rainbow":
             env=GraphEnv(use_config=True)
 
         reward_list=[]
@@ -81,6 +83,10 @@ class BenchmarkWrapper:
                 print("PPO")
                 ppo_Agent=PPOAgent()
                 reward_list = ppo_Agent.run_one_episode(reward_list,env_config)
+            elif self.name == "Rainbow":
+                print("Rainbow")
+                Rainbow_Agent=RainbowAgent()
+                reward_list = Rainbow_Agent.run_one_episode(reward_list,env_config)
         return reward_list
 
 

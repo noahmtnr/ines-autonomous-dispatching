@@ -12,6 +12,9 @@ class Comparer:
         self.num_agents = num_agents
         self.agent_names = []
         self.agents_arg = []
+
+        print(num_agents)
+        print(agents_arg)
         i = 0
         while i < (self.num_agents*2):
             if i < self.num_agents:
@@ -19,8 +22,8 @@ class Comparer:
             else:
                 self.agents_arg.append(agents_arg[i])
             i += 1
-        # print("Names", self.agent_names)
-        # print("ARgs",self.agents_arg)
+        print("Names", self.agent_names)
+        print("ARgs",self.agents_arg)
         Comparer.set_agents(self)
 
     def set_agents(self):
@@ -28,6 +31,7 @@ class Comparer:
         # go through all agents
         for i in range(self.num_agents):
             # append each agent to the list, use name as key 
+            print("Ausgaben Start")
             print(self.agent_names[i])
             print(self.agents_arg[i])
             self.agents[self.agent_names[i]] = self.agents_arg[i]
@@ -39,6 +43,8 @@ class Comparer:
         # iterate over dictionary 
         counter = 0
         for key in self.agents.keys():
+            print("Ausgabe Zweite")
+            print(key, " : ", self.agents[key])
             array = self.agents[key].read_orders()
 
             # get the only order
@@ -156,9 +162,9 @@ w1 = BenchmarkWrapper("random")
 w2 = BenchmarkWrapper("cost")
 w3 = BenchmarkWrapper("PPO")
 w4 = BenchmarkWrapper("DQN")
-w5 = BenchmarkWrapper('Rainbow')
+w5 = BenchmarkWrapper("Rainbow")
 # c = Comparer(3,w1.name,w2.name,w3.name,w1,w2,w3)
-c = Comparer(4,w1.name,w2.name,w3.name,w4.name,w5.name,w1,w2,w3,w4,w5)
+c = Comparer(5,w1.name,w2.name,w3.name,w4.name,w5.name,w1,w2,w3,w4,w5)
 c.establish_compare_onetrip()
 # c.compare_multiple_trips()
 
