@@ -213,7 +213,7 @@ class GraphEnv(gym.Env):
 
         startTime = time.time()
 
-        self.done = False
+        #self.done = False
 
         # if agent is in time window 2 hours before deadline, we just move him to the final hub
         if((self.deadline - self.time).total_seconds()/60 <= 120):
@@ -309,11 +309,11 @@ class GraphEnv(gym.Env):
 
         reward, self.done, state_of_delivery = self.compute_reward(action)
 
-        if (self.done):
-             self.mean_rd=sum(self.rem_distance_values)/len(self.rem_distance_values)
-             #print("mean rd: ",self.mean_rd)
-             self.sd_rd=statistics.stdev(self.rem_distance_values)
-             #print("stdev rd: ",self.sd_rd)
+        # if (self.done):
+        #      self.mean_rd=sum(self.rem_distance_values)/len(self.rem_distance_values)
+        #      #print("mean rd: ",self.mean_rd)
+        #      self.sd_rd=statistics.stdev(self.rem_distance_values)
+        #      #print("stdev rd: ",self.sd_rd)
         self.state_of_delivery = state_of_delivery
         executionTime = (time.time() - startTime)
 
@@ -342,10 +342,11 @@ class GraphEnv(gym.Env):
 
         if(self.position == self.final_hub):
             self.done = True
-            state_of_delivery = DeliveryState.DELIVERED_ON_TIME
+            
             
         # came to final hub
             if(self.time <= self.deadline):
+                state_of_delivery = DeliveryState.DELIVERED_ON_TIME
                 # in time
                 print(f"DELIVERED IN TIME AFTER {self.count_actions} ACTIONS (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown}")
                 if(bookown == True):
@@ -371,26 +372,32 @@ class GraphEnv(gym.Env):
         else:
             if((self.time-self.deadline).total_seconds()/60 >= 120):
                 # # not delivered within 2 hours after deadline
-                # self.done = True
+                self.done = True
                 # reward = - 10000
                 # state_of_delivery = DeliveryState.NOT_DELIVERED
                 # print("BOX WAS NOT DELIVERED until 2 hours after deadline")
-                pass
+                
             else:
                 # intermediate action
                 self.done = False
                 state_of_delivery = DeliveryState.IN_DELIVERY
                 if(wait == True):
                     print("Action in Reward: Wait")
+                    print("Time:", self.time)
+                    print("Deadline:", self.deadline)
                     reward = 0
                 elif(bookown == True):
                     print("Action in Reward: Bookown")
+                    print("Time:", self.time)
+                    print("Deadline:", self.deadline)
                     if(self.allow_bookown == 0):
                         reward = old_distinction[action]*100000
                     else:
                         reward = (distance_gained/100) * 1000
                 elif(share == True):
                     print("Action in Reward: Share")
+                    print("Time:", self.time)
+                    print("Deadline:", self.deadline)
                     reward = (distance_gained/100) * 1000 + old_distinction[action]*1000
 
 
@@ -434,6 +441,8 @@ class GraphEnv(gym.Env):
         print(f"Action: {action}")
         #print(f"Old Distinction: {old_distinction}")
         #print(f"Rides Mask for Action {action}: {self.shared_rides_mask}")
+
+        print("Done:", self.done)
 
         return reward, self.done, state_of_delivery
 
