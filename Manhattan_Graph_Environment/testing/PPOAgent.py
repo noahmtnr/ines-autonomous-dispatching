@@ -25,7 +25,7 @@ class PPOAgent:
         #Set trainer configuration
         self.trainer_config = DEFAULT_CONFIG.copy()
         # self.trainer_config["train_batch_size"] = 400
-        self.trainer_config["framework"] = "torch"
+        # self.trainer_config["framework"] = "torch"
 
     def run_one_episode (self,reward_list,env_config):   
         # Initialize trainer
@@ -34,7 +34,7 @@ class PPOAgent:
         "env":GraphEnv,
         "iterations":10,
         }
-        file_name="tmp/ppo\checkpoint_000010\checkpoint-10"
+        file_name="tmp/ppo/graphworld\checkpoint_000010\checkpoint-10"
 
         #Restore the Trainer
         ppo_trainer.restore(file_name)

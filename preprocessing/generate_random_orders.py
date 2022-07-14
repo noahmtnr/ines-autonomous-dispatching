@@ -4,10 +4,10 @@ import random
 import sys
 import csv
 
-# sys.path.insert(0,"")
+sys.path.insert(0,"")
 
 #here sth needs to be fixed
-from rl.Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv
+from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv
 env=GraphEnv()
 
 random_orders=[]
@@ -29,7 +29,7 @@ for i in range(1000):
 
 field_names= ['pickup_node_id', 'delivery_node_id', 'pickup_timestamp','delivery_timestamp']
 
-with open('random_orders.csv', 'w', newline='') as csvfile:
+with open('data/others/random_orders.csv', 'w', newline='') as csvfile:
      writer = csv.DictWriter(csvfile, fieldnames=field_names)
      writer.writeheader()
      writer.writerows(random_orders)

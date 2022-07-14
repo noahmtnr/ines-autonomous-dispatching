@@ -38,7 +38,7 @@ class RainbowAgent:
 
         # here from trainRainbow die config
         # self.trainer_config["train_batch_size"] = 400
-        self.trainer_config["framework"] = "torch"
+        # self.trainer_config["framework"] = "torch"
 
     def run_one_episode(self, reward_list, env_config):
         # Initialize trainer

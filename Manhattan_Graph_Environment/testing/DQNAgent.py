@@ -28,7 +28,7 @@ class DQNAgent:
         self.trainer_config["train_batch_size"] = 400
         self.trainer_config["gamma"] = 0.95
         self.trainer_config["n_step"] = 10
-        self.trainer_config["framework"] = "torch"
+        # self.trainer_config["framework"] = "torch"
 
     def run_one_episode (self,reward_list,env_config):   
         config={"use_config":True}

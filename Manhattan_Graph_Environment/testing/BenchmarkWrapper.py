@@ -90,16 +90,16 @@ class BenchmarkWrapper:
         return reward_list
 
 
-# def main():
-#     # benchmark = BenchmarkWrapper("random")
-#     # results = benchmark.read_orders()
-#     # print("Random",results)
-#     # benchmark2 = BenchmarkWrapper("cost")
-#     # results = benchmark2.read_orders()
-#     # print("Cost",results)
-#     benchmark3 = BenchmarkWrapper("PPO")
-#     # DQNAgent()
-#     results = benchmark3.read_orders()
-#     print("PPO",results)
+def main():
+    # benchmark = BenchmarkWrapper("random")
+    # results = benchmark.read_orders()
+    # print("Random",results)
+    # benchmark2 = BenchmarkWrapper("cost")
+    # results = benchmark2.read_orders()
+    # print("Cost",results)
+    benchmark3 = BenchmarkWrapper("PPO")
+    # DQNAgent()
+    results = benchmark3.read_orders()
+    print("PPO",results)
 
-# main()
+main()
