@@ -73,6 +73,7 @@ class GraphEnv(gym.Env):
 
         self.trips = self.DB.getAvailableTrips(DB_LOWER_BOUNDARY, DB_UPPER_BOUNDARY)
         print(f"Initialized with {len(self.trips)} taxi rides within two weeks")
+        print(f"Initialized with {len(self.hubs)} hubs")
 
 
         self.state = None
