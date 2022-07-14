@@ -60,7 +60,7 @@ class GraphEnv(gym.Env):
         # else:
         self.env_config = None
 
-        self.n_hubs = 70
+        self.n_hubs = 120
         self.distance_matrix = None
 
         self.DB = DBConnection()
@@ -85,10 +85,10 @@ class GraphEnv(gym.Env):
         self.observation_space = spaces.Dict(
             {
             # 'cost': gym.spaces.Box(low=np.zeros(70)-10, high=np.zeros(70)+10, shape=(70,), dtype=np.float64),
-            'remaining_distance': gym.spaces.Box(low=np.zeros(70)-200000, high=np.zeros(70)+200000, shape=(70,), dtype=np.float64),
-            'current_hub': gym.spaces.Box(low=0, high=1, shape=(70,), dtype=np.float64),
-            'final_hub': gym.spaces.Box(low=0, high=1, shape=(70,), dtype=np.float64),
-            'distinction': gym.spaces.Box(low=np.zeros(70)-1, high=np.zeros(70)+1, shape=(70,), dtype=np.float64),
+            'remaining_distance': gym.spaces.Box(low=np.zeros(self.n_hubs)-200000, high=np.zeros(self.n_hubs)+200000, shape=(self.n_hubs,), dtype=np.float64),
+            'current_hub': gym.spaces.Box(low=0, high=1, shape=(self.n_hubs,), dtype=np.float64),
+            'final_hub': gym.spaces.Box(low=0, high=1, shape=(self.n_hubs,), dtype=np.float64),
+            'distinction': gym.spaces.Box(low=np.zeros(self.n_hubs)-1, high=np.zeros(self.n_hubs)+1, shape=(self.n_hubs,), dtype=np.float64),
             'allow_bookown': gym.spaces.Discrete(2)
         
         })
