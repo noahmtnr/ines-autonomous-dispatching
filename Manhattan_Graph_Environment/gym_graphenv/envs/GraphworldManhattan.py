@@ -219,6 +219,7 @@ class GraphEnv(gym.Env):
         if((self.deadline - self.time).total_seconds()/60 <= 120):
             self.allow_bookown = 1
             action = self.final_hub
+            print("Force Manual Delivery")
         else:
             self.allow_bookown = 0
             
@@ -345,11 +346,11 @@ class GraphEnv(gym.Env):
 
             
             
-        # came to final hub
-            if(self.time <= self.deadline):
+        # came to final hub 
+            if((self.deadline-self.time).total_seconds()/60 >= 120):
                 state_of_delivery = DeliveryState.DELIVERED_ON_TIME
                 # in time
-                print(f"DELIVERED IN TIME AFTER {self.count_actions} ACTIONS (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown}")
+                print(f"DELIVERED IN TIME AFTER {self.count_actions} ACTIONS (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown})")
                 if(bookown == True):
                     if(self.allow_bookown == 0):
                         # strong punishment for bookown before 2h window before deadline
@@ -361,12 +362,9 @@ class GraphEnv(gym.Env):
                     # high reward if agent comes to final hub with shared ride
                     reward = 100000
                     
-            elif((self.time-self.deadline).total_seconds()/60 < 120):
-                # with delay < 2 hours
-                # overtime = self.time - self.deadline
-                # overtime = round(overtime.total_seconds() / 60)
-                # reward = 10000
-                # reward -= overtime
+            else:
+                # in time delivered with delivery time < 2 hours to deadline
+                print(f"MANUAL DELIVERY WITH {(self.deadline-self.time).total_seconds()/60} MINUTES TO DEADLINE")
                 reward = 0
 
         # did not come to final hub:
@@ -376,6 +374,7 @@ class GraphEnv(gym.Env):
                 self.done = True
                 # reward = - 10000
                 state_of_delivery = DeliveryState.NOT_DELIVERED
+                print("Did not arrive => Error")
                 # print("BOX WAS NOT DELIVERED until 2 hours after deadline")
                 
             else:
