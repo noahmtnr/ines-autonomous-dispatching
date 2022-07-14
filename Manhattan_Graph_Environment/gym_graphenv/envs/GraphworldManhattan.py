@@ -308,14 +308,14 @@ class GraphEnv(gym.Env):
 
         self.count_actions += 1
 
-        reward, self.done, state_of_delivery = self.compute_reward(action)
+        reward, self.done, self.state_of_delivery = self.compute_reward(action)
 
         # if (self.done):
         #      self.mean_rd=sum(self.rem_distance_values)/len(self.rem_distance_values)
         #      #print("mean rd: ",self.mean_rd)
         #      self.sd_rd=statistics.stdev(self.rem_distance_values)
         #      #print("stdev rd: ",self.sd_rd)
-        self.state_of_delivery = state_of_delivery
+        #self.state_of_delivery = state_of_delivery
         executionTime = (time.time() - startTime)
 
         return self.state, reward,  self.done, {"timestamp": self.time,"step_travel_time":step_duration,"distance":self.distance_matrix[self.old_position][self.position], "count_hubs":self.count_hubs, "action": self.action_choice, "hub_index": action}
@@ -343,13 +343,10 @@ class GraphEnv(gym.Env):
 
         if(self.position == self.final_hub):
             self.done = True
-
-            
-            
         # came to final hub 
             if((self.deadline-self.time).total_seconds()/60 >= 120):
-                state_of_delivery = DeliveryState.DELIVERED_ON_TIME
                 # in time
+                state_of_delivery = DeliveryState.DELIVERED_ON_TIME
                 print(f"DELIVERED IN TIME AFTER {self.count_actions} ACTIONS (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown})")
                 if(bookown == True):
                     if(self.allow_bookown == 0):
@@ -364,41 +361,34 @@ class GraphEnv(gym.Env):
                     
             else:
                 # in time delivered with delivery time < 2 hours to deadline
+                state_of_delivery = DeliveryState.DELIVERED_ON_TIME
                 print(f"MANUAL DELIVERY WITH {(self.deadline-self.time).total_seconds()/60} MINUTES TO DEADLINE")
                 reward = 0
 
         # did not come to final hub:
         else:
-            if((self.time-self.deadline).total_seconds()/60 >= 120):
-                # # not delivered within 2 hours after deadline
-                self.done = True
-                # reward = - 10000
-                state_of_delivery = DeliveryState.NOT_DELIVERED
-                print("Did not arrive => Error")
-                # print("BOX WAS NOT DELIVERED until 2 hours after deadline")
-                
-            else:
-                # intermediate action
-                self.done = False
-                state_of_delivery = DeliveryState.IN_DELIVERY
-                if(wait == True):
-                    print("Action in Reward: Wait")
-                    print("Time:", self.time)
-                    print("Deadline:", self.deadline)
-                    reward = 0
-                elif(bookown == True):
-                    print("Action in Reward: Bookown")
-                    print("Time:", self.time)
-                    print("Deadline:", self.deadline)
-                    if(self.allow_bookown == 0):
-                        reward = old_distinction[action]*100000
-                    else:
-                        reward = (distance_gained/100) * 1000
-                elif(share == True):
-                    print("Action in Reward: Share")
-                    print("Time:", self.time)
-                    print("Deadline:", self.deadline)
-                    reward = (distance_gained/100) * 1000 + old_distinction[action]*1000
+            # intermediate action
+            self.done = False
+            state_of_delivery = DeliveryState.IN_DELIVERY
+            if(wait == True):
+                print("Action in Reward: Wait")
+                print("Time:", self.time)
+                print("Deadline:", self.deadline)
+                reward = 0
+            elif(bookown == True):
+                print("Action in Reward: Bookown")
+                print("Time:", self.time)
+                print("Deadline:", self.deadline)
+                if(self.allow_bookown == 0):
+                    reward = old_distinction[action]*100000
+                else:
+                    # kann eigentlich nicht sein dieser Case
+                    reward = (distance_gained/100) * 1000
+            elif(share == True):
+                print("Action in Reward: Share")
+                print("Time:", self.time)
+                print("Deadline:", self.deadline)
+                reward = (distance_gained/100) * 1000 + old_distinction[action]*1000
 
 
         # # if delay is greater than 2 hours (=120 minutes), terminate training episode
