@@ -239,12 +239,12 @@ class GraphEnv(gym.Env):
                     self.count_share += 1
                     self.action_choice = "Share"
                     print("action == share ")
-                    print(f"Rides Mask for Action {action}: {self.shared_rides_mask}")
+                    #print(f"Rides Mask for Action {action}: {self.shared_rides_mask}")
                 else:
                     self.count_bookown += 1
                     self.action_choice = "Book"
                     print("action == book own ")
-                    print(f"Rides Mask for Action {action}: {self.shared_rides_mask}")
+                    #print(f"Rides Mask for Action {action}: {self.shared_rides_mask}")
                 startTimeRide = time.time()
                 self.has_waited=False
                 self.count_hubs += 1
@@ -271,6 +271,8 @@ class GraphEnv(gym.Env):
                 executionTimeRide = (time.time() - startTimeRide)
                 # print(f"Time Ride: {str(executionTimeRide)}")
                 pass
+
+        # brauchen wir nicht mehr oder??
         else:
             print("invalid action")
             #print("avail actions: ",self.available_actions)
@@ -305,9 +307,9 @@ class GraphEnv(gym.Env):
 
         if (self.done):
              self.mean_rd=sum(self.rem_distance_values)/len(self.rem_distance_values)
-             print("mean rd: ",self.mean_rd)
+             #print("mean rd: ",self.mean_rd)
              self.sd_rd=statistics.stdev(self.rem_distance_values)
-             print("stdev rd: ",self.sd_rd)
+             #print("stdev rd: ",self.sd_rd)
         self.state_of_delivery = state_of_delivery
         executionTime = (time.time() - startTime)
 
@@ -319,48 +321,109 @@ class GraphEnv(gym.Env):
         distance_gained = self.old_state['remaining_distance'][self.position]
         old_distinction = self.old_state['distinction']
         cost_of_action = self.learn_graph.adjacency_matrix('cost')[self.old_position][action]
-        print(self.old_position, "->", action, cost_of_action)
+        print(self.old_position, "->", action, distance_gained)
         self.done = False
-        # if delay is greater than 2 hours (=120 minutes), terminate training episode
-        if((self.time-self.deadline).total_seconds()/60 >= 120 or self.count_actions>200):
-            self.done = True
-            reward = - 10000
-            state_of_delivery = DeliveryState.NOT_DELIVERED
-            print("BOX WAS NOT DELIVERED until 2 hours after deadline")
-        # if box is delivered to final hub in time
-        if (self.position == self.final_hub and self.time <= self.deadline):
-            print(f"DELIVERED IN TIME AFTER {self.count_actions} ACTIONS (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown}")
-            reward = 10000
+
+        bookown = False
+        wait = False
+        share = False
+        reward = 0
+
+        if(old_distinction[action] == -1): # book own
+            bookown = True
+        elif(old_distinction[action] == 0): # wait
+            wait = True
+        else:
+            share = True
+
+        if(self.position == self.final_hub):
             self.done = True
             state_of_delivery = DeliveryState.DELIVERED_ON_TIME
-        # if box is delivered to final hub with delay
-        elif(self.position == self.final_hub and (self.time-self.deadline).total_seconds()/60 < 120): #self.time > self.deadline):
-            overtime = self.time - self.deadline
-            overtime = round(overtime.total_seconds() / 60)
-            print(f"DELIVERED AFTER {self.count_actions} ACTIONS (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown} WITH DELAY: {overtime}")
-            reward = 10000 - overtime
-            self.done = True
-            state_of_delivery = DeliveryState.DELIVERED_WITH_DELAY
-        # if box is not delivered to final hub
-        elif(self.done==False):
-            # reward = distance_gained / 100 + old_distinction[action]*1000
-            # print("book available",self.allow_bookown)
-            # print("Distinction action available",old_distinction[action])
-            if(self.allow_bookown == 0 and old_distinction[action] == -1 ):
-                 reward = old_distinction[action]*100000
-            elif(self.allow_bookown == 1 and old_distinction[action] == -1):
-                reward = (distance_gained/100) * 1000
-            else:
-                reward = (distance_gained/100) * 1000 + old_distinction[action]*1000
-            # print(f"INTERMEDIATE STEP ACTIONS: (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown}")
-            state_of_delivery = DeliveryState.IN_DELIVERY
-            #done = False
+            print(f"DELIVERED IN TIME AFTER {self.count_actions} ACTIONS (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown}")
+        # came to final hub
+            if(self.time <= self.deadline):
+                # in time
+                if(bookown == True):
+                    if(self.allow_bookown == 0):
+                        # strong punishment for bookown before 2h window before deadline
+                        reward = old_distinction[action]*100000
+                        reward += 10000
+                    else:
+                        reward = 10000
+                elif(share == True):
+                    # high reward if agent comes to final hub with shared ride
+                    reward = 100000
+                    
+            elif((self.time-self.deadline).total_seconds()/60 < 120):
+                # with delay < 2 hours
+                overtime = self.time - self.deadline
+                overtime = round(overtime.total_seconds() / 60)
+                reward = 10000
+                reward -= overtime
 
-        print(self.old_position, "->", action, reward)
+        # did not come to final hub:
+        else:
+            if((self.time-self.deadline).total_seconds()/60 >= 120 or self.count_actions>200):
+                # not delivered within 2 hours after deadline
+                self.done = True
+                reward = - 10000
+                state_of_delivery = DeliveryState.NOT_DELIVERED
+                print("BOX WAS NOT DELIVERED until 2 hours after deadline")
+            else:
+                # intermediate action
+                self.done = False
+                state_of_delivery = DeliveryState.IN_DELIVERY
+                if(wait == True):
+                    reward = 0
+                elif(bookown == True):
+                    if(self.allow_bookown == 0):
+                        reward = old_distinction[action]*100000
+                    else:
+                        reward = (distance_gained/100) * 1000
+                else:
+                    reward = (distance_gained/100) * 1000 + old_distinction[action]*1000
+
+
+        # # if delay is greater than 2 hours (=120 minutes), terminate training episode
+        # if((self.time-self.deadline).total_seconds()/60 >= 120 or self.count_actions>200):
+        #     self.done = True
+        #     reward = - 10000
+        #     state_of_delivery = DeliveryState.NOT_DELIVERED
+        #     print("BOX WAS NOT DELIVERED until 2 hours after deadline")
+        # # if box is delivered to final hub in time
+        # if (self.position == self.final_hub and self.time <= self.deadline):
+        #     print(f"DELIVERED IN TIME AFTER {self.count_actions} ACTIONS (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown}")
+        #     reward = 10000
+        #     self.done = True
+        #     state_of_delivery = DeliveryState.DELIVERED_ON_TIME
+        # # if box is delivered to final hub with delay
+        # elif(self.position == self.final_hub and (self.time-self.deadline).total_seconds()/60 < 120): #self.time > self.deadline):
+        #     overtime = self.time - self.deadline
+        #     overtime = round(overtime.total_seconds() / 60)
+        #     print(f"DELIVERED AFTER {self.count_actions} ACTIONS (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown} WITH DELAY: {overtime}")
+        #     reward = 10000 - overtime
+        #     self.done = True
+        #     state_of_delivery = DeliveryState.DELIVERED_WITH_DELAY
+        # # if box is not delivered to final hub
+        # elif(self.done==False):
+        #     # reward = distance_gained / 100 + old_distinction[action]*1000
+        #     # print("book available",self.allow_bookown)
+        #     # print("Distinction action available",old_distinction[action])
+        #     if(self.allow_bookown == 0 and old_distinction[action] == -1 ):
+        #          reward = old_distinction[action]*100000
+        #     elif(self.allow_bookown == 1 and old_distinction[action] == -1):
+        #         reward = (distance_gained/100) * 1000
+        #     else:
+        #         reward = (distance_gained/100) * 1000 + old_distinction[action]*1000
+        #     # print(f"INTERMEDIATE STEP ACTIONS: (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown}")
+        #     state_of_delivery = DeliveryState.IN_DELIVERY
+        #     #done = False
+
+        #print(self.old_position, "->", action, reward)
         print(f"Reward: {reward}")
         print(f"Action: {action}")
-        print(f"Old Distinction: {old_distinction}")
-        print(f"Rides Mask for Action {action}: {self.shared_rides_mask}")
+        #print(f"Old Distinction: {old_distinction}")
+        #print(f"Rides Mask for Action {action}: {self.shared_rides_mask}")
 
         return reward, self.done, state_of_delivery
 
@@ -429,7 +492,7 @@ class GraphEnv(gym.Env):
 
         self.shared_rides_mask = shared_rides_mask
         # print(shared_rides_mask)
-        print(list_trips)
+        #print(list_trips)
 
         executionTime = (time.time() - startTime)
         # print('found '+ str(len(list_trips)) +' trips, ' + 'current time: ' + str(self.time))
