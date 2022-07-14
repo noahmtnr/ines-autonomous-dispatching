@@ -360,10 +360,11 @@ class GraphEnv(gym.Env):
                     
             elif((self.time-self.deadline).total_seconds()/60 < 120):
                 # with delay < 2 hours
-                overtime = self.time - self.deadline
-                overtime = round(overtime.total_seconds() / 60)
-                reward = 10000
-                reward -= overtime
+                # overtime = self.time - self.deadline
+                # overtime = round(overtime.total_seconds() / 60)
+                # reward = 10000
+                # reward -= overtime
+                reward = 0
 
         # did not come to final hub:
         else:
