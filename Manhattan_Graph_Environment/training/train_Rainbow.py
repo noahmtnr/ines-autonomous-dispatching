@@ -29,8 +29,8 @@ from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
 from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv, CustomCallbacks
 
 wandb.login(key="93aab2bcc48447dd2e8f74124d0258be2bf93859")
-# wandb.init(project="Comparison_Hypothese_Normalisiert", entity="hitchhike")
-wandb.init(project="New_Metrics_Total_Env", entity="hitchhike")
+wandb.init(project="Comparison_Hypothese_Normalisiert", entity="hitchhike")
+# wandb.init(project="New_Metrics_Total_Env", entity="hitchhike")
 
 # class CustomModel(TFModelV2):
 #     def __init__(self, obs_space, action_space, num_outputs, model_config, name):
