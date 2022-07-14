@@ -168,6 +168,9 @@ class GraphEnv(gym.Env):
         self.count_actions = 0
         self.count_wait = 0
         self.count_bookown = 0
+        # whetherr it has booked any own
+        self.booked_own = 0
+
         self.count_share = 0
         self.count_steps = 0
         self.action_choice = None
@@ -185,6 +188,12 @@ class GraphEnv(gym.Env):
             self.allow_bookown = 0
 
       
+        # new metrics for shares and bookowns
+        self.count_shared_available = 0
+        self.boolean_shared_available = 0
+        self.count_shared_available_useful = 0
+        self.count_shared_taken_useful = 0
+        self.boolean_useful_shares_available = 0
 
         self.state = {
             # 'cost' : ((self.learn_graph.adjacency_matrix('cost')[self.position]-self.mean1)/self.stdev1).astype(np.float64),
@@ -215,6 +224,25 @@ class GraphEnv(gym.Env):
 
         self.done =  False
 
+        # determine whether shared ride was useful (= whether remaining distance was reduced)
+        # compute the number of shared available actions and the number of useful shared available actions
+        counter = 0
+        boolean_available_temp = False
+        boolean_useful_temp = False
+        for hub in self.shared_rides_mask:
+            if hub == 1:
+                # self.boolean_shared_available = 1
+                # count on step-base
+                boolean_available_temp = True
+                self.count_shared_available += 1
+                # check whether remaining distance decreases with new position
+                if self.state["remaining_distance"][counter] > 0:
+                    # count on ride-base
+                    self.count_shared_available_useful += 1
+                    # self.boolean_useful_shares_available = 1
+                    # count on step-base
+                    boolean_useful_temp = True
+
         # set old position to current position before changing current position
         self.old_position = self.position
         step_duration = 0
@@ -229,7 +257,7 @@ class GraphEnv(gym.Env):
                 self.own_ride = False
                 self.count_wait += 1
                 self.action_choice = "Wait"
-                print("action == wait ")
+                # print("action == wait ")
                 executionTimeWait = (time.time() - startTimeWait)
                 pass
 
@@ -238,13 +266,18 @@ class GraphEnv(gym.Env):
                 if(self.shared_rides_mask[action] == 1):
                     self.count_share += 1
                     self.action_choice = "Share"
-                    print("action == share ")
-                    print(f"Rides Mask for Action {action}: {self.shared_rides_mask}")
+                    # print("action == share ")
+                    # print(f"Rides Mask for Action {action}: {self.shared_rides_mask}")
+                    
+                    # check whether current action is useful
+                    if self.state["remaining_distance"][action] > 0:
+                        self.count_shared_taken_useful += 1
+
                 else:
                     self.count_bookown += 1
                     self.action_choice = "Book"
-                    print("action == book own ")
-                    print(f"Rides Mask for Action {action}: {self.shared_rides_mask}")
+                    # print("action == book own ")
+                    # print(f"Rides Mask for Action {action}: {self.shared_rides_mask}")
                 startTimeRide = time.time()
                 self.has_waited=False
                 self.count_hubs += 1
@@ -311,6 +344,26 @@ class GraphEnv(gym.Env):
         self.state_of_delivery = state_of_delivery
         executionTime = (time.time() - startTime)
 
+        if self.count_bookown > 0:
+            self.booked_own = 1
+
+        # counting on step-base (not individual ride-base)
+        if boolean_available_temp == True:
+            self.boolean_shared_available += 1
+        if boolean_useful_temp == True:
+            self.boolean_useful_shares_available += 1
+
+        # test prints for counters
+        # print("Out of ", self.count_actions, " steps, in ", self.boolean_shared_available, " steps shared rides were available")
+        """
+        if self.boolean_shared_available == 1:
+            print("In Step ", self.count_actions, " some share is available, number: ", self.count_shared_available)
+        else:
+            print("In Step ", self.count_actions, " there is no share available")
+        """
+        # print("In Step ", self.count_actions, " a useful share is available, number: ", self.boolean_useful_shares_available)            
+
+        # print("Step End")
         return self.state, reward,  self.done, {"timestamp": self.time,"step_travel_time":step_duration,"distance":self.distance_matrix[self.old_position][self.position], "count_hubs":self.count_hubs, "action": self.action_choice, "hub_index": action}
 
 
@@ -327,10 +380,13 @@ class GraphEnv(gym.Env):
             reward = - 10000
             state_of_delivery = DeliveryState.NOT_DELIVERED
             print("BOX WAS NOT DELIVERED until 2 hours after deadline")
+            print("")
         # if box is delivered to final hub in time
         if (self.position == self.final_hub and self.time <= self.deadline):
             print(f"DELIVERED IN TIME AFTER {self.count_actions} ACTIONS (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown}")
+            print("")
             reward = 10000
+            # reward -= (cost_of_action / 100)
             self.done = True
             state_of_delivery = DeliveryState.DELIVERED_ON_TIME
         # if box is delivered to final hub with delay
@@ -338,6 +394,7 @@ class GraphEnv(gym.Env):
             overtime = self.time - self.deadline
             overtime = round(overtime.total_seconds() / 60)
             print(f"DELIVERED AFTER {self.count_actions} ACTIONS (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown} WITH DELAY: {overtime}")
+            print("")
             reward = 10000 - overtime
             self.done = True
             state_of_delivery = DeliveryState.DELIVERED_WITH_DELAY
@@ -357,10 +414,10 @@ class GraphEnv(gym.Env):
             #done = False
 
         print(self.old_position, "->", action, reward)
-        print(f"Reward: {reward}")
-        print(f"Action: {action}")
-        print(f"Old Distinction: {old_distinction}")
-        print(f"Rides Mask for Action {action}: {self.shared_rides_mask}")
+        # print(f"Reward: {reward}")
+        # print(f"Action: {action}")
+        # print(f"Old Distinction: {old_distinction}")
+        # print(f"Rides Mask for Action {action}: {self.shared_rides_mask}")
 
         return reward, self.done, state_of_delivery
 
@@ -381,6 +438,7 @@ class GraphEnv(gym.Env):
 
         available_actions = [wait,ownRide,*available_rides]
         self.available_actions = available_actions
+
         return available_actions
 
     def availableTrips(self, time_window=5):
@@ -503,6 +561,16 @@ class CustomCallbacks(DefaultCallbacks):
     count_delivered_with_delay = 0
     count_delivered_on_time = 0
 
+    # new metrics for shares and bookowns
+    count_shared_available = 0
+    count_shared_available_useful = 0
+    count_shared_taken = 0
+    last_count_bookowns = 0
+    count_bookowns = 0
+    count_shared_taken_useful = 0
+    boolean_useful_shares_available = 0
+    boolean_shared_available = 0
+
     def on_algorithm_init(
         self,
         *,
@@ -521,6 +589,18 @@ class CustomCallbacks(DefaultCallbacks):
         self.count_delivered_on_time = 0
         self.count_delivered_with_delay = 0
         self.count_not_delivered = 0
+
+        # metrics for shares and bookowns
+        self.count_shared_available = 0
+        self.boolean_shared_available = 0
+        self.count_shared_taken = 0
+        self.count_bookowns = 0
+
+        self.count_shared_available_useful = 0
+        self.count_shared_taken_useful = 0
+        self.boolean_useful_shares_available = 0
+        
+        
         
 
     def on_episode_start(
@@ -543,6 +623,14 @@ class CustomCallbacks(DefaultCallbacks):
         episode.custom_metrics["count_not_delivered"] = 0
         episode.custom_metrics["count_delivered_with_delay"] = 0
         episode.custom_metrics["count_delivered_on_time"] = 0
+
+        # metrics for shares and bookowns
+        #episode.custom_metrics["count_shared_available"] = 0
+        #episode.custom_metrics["count_shared_taken"] = 0
+        episode.custom_metrics["boolean_has_booked_any_own"] = 0
+        episode.custom_metrics["count_shared_available_useful"] = 0
+        #episode.custom_metrics["count_shared_taken_useful"] = 0
+        
 
     def on_episode_step(
         self,
@@ -590,6 +678,35 @@ class CustomCallbacks(DefaultCallbacks):
         episode.custom_metrics["share_share"] = float(episode.env.count_share / episode.env.count_actions)
         episode.custom_metrics["share_to_own_ratio"] = episode.env.count_share if episode.env.count_bookown == 0 else float(episode.env.count_share / episode.env.count_bookown)
         episode.custom_metrics["share_to_own_ratio"] = episode.env.count_share if episode.env.count_bookown == 0 else float(episode.env.count_share / episode.env.count_bookown)
+        
+        # metrics for shares and bookowns
+        # ratio of shared taken when a shared is available
+        if episode.env.boolean_shared_available == 0:
+            episode.custom_metrics["shared_taken_to_shared_available"] = 0
+        else:
+            episode.custom_metrics["shared_taken_to_shared_available"] =  float(episode.env.count_share / episode.env.boolean_shared_available)
+        # counting the shared availables (if one is available in a step, then +1)
+        episode.custom_metrics["count_shared_available"] = episode.env.boolean_shared_available
+        episode.custom_metrics["ratio_shared_available_to_all_steps"] = episode.env.boolean_shared_available / episode.env.count_steps
+        # ratio: useful available shares (reducing remaining distance) of available shares
+        if episode.env.count_shared_available == 0:
+            episode.custom_metrics["shared_available_useful_to_shared_available"] = 0
+        else:
+            episode.custom_metrics["shared_available_useful_to_shared_available"] = float(episode.env.count_shared_available_useful/episode.env.count_shared_available)
+        
+        # counting the useful available shared rides
+        episode.custom_metrics["count_shared_available_useful"] = episode.env.boolean_useful_shares_available
+        # ratio: useful shares taken of useful shares available
+        if episode.env.boolean_useful_shares_available == 0:
+            episode.custom_metrics["shared_taken_useful_to_shared_available_useful"] = 0
+        else:
+            episode.custom_metrics["shared_taken_useful_to_shared_available_useful"] = float(episode.env.count_shared_taken_useful/episode.env.boolean_useful_shares_available)
+
+        # displays 1 if any trip was booked and 0 if none was booked
+        if episode.env.count_bookown > 0:
+            episode.custom_metrics["boolean_has_booked_any_own"] = 1
+        else:
+            episode.custom_metrics["boolean_has_booked_any_own"] = 0
 
         if (episode.env.state_of_delivery == DeliveryState.DELIVERED_ON_TIME):
             self.count_delivered_on_time +=1
@@ -640,7 +757,8 @@ class CustomCallbacks(DefaultCallbacks):
 
         result["count_delivered_on_time"] = result['custom_metrics']["count_delivered_on_time_max"] - CustomCallbacks.last_count_delivered_on_time
         result["count_delivered_with_delay"] = result['custom_metrics']["count_delivered_with_delay_max"] - CustomCallbacks.last_count_delivered_with_delay
-
+        if result["count_delivered_with_delay"] < 0:
+            result["count_delivered_with_delay"] = 0
         """
         print("COUNTER AUSGABE")
         print("Erg:", result['custom_metrics']["count_not_delivered_max"])
@@ -654,3 +772,13 @@ class CustomCallbacks(DefaultCallbacks):
         CustomCallbacks.last_count_not_delivered = CustomCallbacks.last_count_not_delivered + result["count_not_delivered"]
         CustomCallbacks.last_count_delivered_with_delay = CustomCallbacks.last_count_delivered_with_delay + result["count_delivered_with_delay"]
         CustomCallbacks.last_count_delivered_on_time = CustomCallbacks.last_count_delivered_on_time + result["count_delivered_on_time"]
+
+        # metrics für shares and bookowns
+        result["boolean_has_booked_any_own"] = result['custom_metrics']["boolean_has_booked_any_own_mean"] # - CustomCallbacks.last_count_bookowns
+        # CustomCallbacks.last_count_bookowns = CustomCallbacks.last_count_bookowns + result["count_booked_own"]
+        result["shared_taken_to_shared_available"] = result['custom_metrics']["shared_taken_to_shared_available_mean"]
+        result["count_shared_available"] = result['custom_metrics']["count_shared_available_mean"]
+        result["ratio_shared_available_to_all_steps"] = result['custom_metrics']["ratio_shared_available_to_all_steps_mean"]
+        result["shared_available_useful_to_shared_available"] = result['custom_metrics']["shared_available_useful_to_shared_available_mean"]
+        result["shared_taken_useful_to_shared_available_useful"] = result['custom_metrics']["shared_taken_useful_to_shared_available_useful_mean"]
+        result["count_shared_available_useful"] = result['custom_metrics']["count_shared_available_useful_mean"]
