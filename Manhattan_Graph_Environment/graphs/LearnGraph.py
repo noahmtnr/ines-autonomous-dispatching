@@ -2,7 +2,9 @@ import networkx as nx
 import osmnx as ox
 from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
 import numpy as np
-myManhattan = ManhattanGraph('simple',70)
+N_HUBS = 120
+myManhattan = ManhattanGraph('simple',N_HUBS)
+
 class LearnGraph:
         
     def __init__(self, n_hubs: int, manhattan_graph, final_hub):
@@ -19,9 +21,9 @@ class LearnGraph:
         return nx.to_numpy_array(self.G, weight=layer)
 
     def fill_distance_matrix(self):
-        distances = np.zeros((70,70))
-        for i in range(70):
-            for j in range(70):
+        distances = np.zeros((N_HUBS,N_HUBS))
+        for i in range(N_HUBS):
+            for j in range(N_HUBS):
                 if(i==j):
                     distances[i,j] = 0
                 else:
@@ -56,8 +58,8 @@ class LearnGraph:
         #print(f"available trips: {available_trips}")
         #print(f"distance matrix: {distance_matrix}")
         # wait
-        for k in range(70):
-            for l in range(70):
+        for k in range(N_HUBS):
+            for l in range(N_HUBS):
                 if(k==l):
                     edges[(k,l,0)] = 0
                     edges_distinction[(k,l,0)] = 0
@@ -85,8 +87,8 @@ class LearnGraph:
                     #self.wait_till_departure_times[pickup_hub_index,dropoff_hub_index] = 120
 
 
-        for k in range(70):
-            for l in range(70):
+        for k in range(N_HUBS):
+            for l in range(N_HUBS):
                 if(k==l):
                     edges[(k,l,0)] = 0
                     edges_distinction[(k,l,0)] = 0
