@@ -1,8 +1,10 @@
 # imports
+
 import sys
 sys.path.insert(0,"")
+# print("System path",sys.path)
 from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
-from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv
+
 import numpy as np
 import pandas as pd
 import json
@@ -11,11 +13,14 @@ import shutil
 import gym
 import pickle
 from datetime import datetime, timedelta
+from config.definitions import ROOT_DIR
 import random
 import ray
 import warnings
 warnings.filterwarnings('ignore')
 from ray.rllib.agents.ppo import PPOTrainer, DEFAULT_CONFIG
+from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv, CustomCallbacks
+sys.path.append(os.path.join(ROOT_DIR, "Manhattan_Graph_Environment", "gym_graphenv"))
 
 
 # class for PPO Agent
@@ -32,7 +37,7 @@ class PPOAgent:
         ppo_trainer=PPOTrainer(self.trainer_config,env=GraphEnv)
         mode={ "env-name":"graphworld-v0",
         "env":GraphEnv,
-        "iterations":10,
+        "iterations":1,
         }
         file_name="tmp/ppo/graphworld\checkpoint_000010\checkpoint-10"
 
@@ -51,7 +56,7 @@ class PPOAgent:
         sum_distance = 0
         results = []
 
-        for i in range(30):
+        while not done:
             action = ppo_trainer.compute_action(state)
             state, reward, done, info = env.step(action)
             sum_reward += reward
@@ -75,7 +80,7 @@ class PPOAgent:
             sum_reward += reward
             
             # check if finished
-            if done==1:
+            if done == True:
                 print("DELIVERY DONE! sum_reward: ",sum_reward)
                 print("DELIVERY DONE! Route: ",route)
                 print("DELIVERY DONE! Travel Time: ",sum_travel_time)

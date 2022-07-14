@@ -2,8 +2,6 @@
 import sys
 
 sys.path.insert(0, "")
-from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
-from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv, CustomCallbacks
 import numpy as np
 import pandas as pd
 import json
@@ -15,9 +13,12 @@ from datetime import datetime, timedelta
 import random
 import ray
 import warnings
-
 warnings.filterwarnings('ignore')
 from ray.rllib.agents.dqn import DQNTrainer, DEFAULT_CONFIG
+from config.definitions import ROOT_DIR
+from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
+from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv, CustomCallbacks
+sys.path.append(os.path.join(ROOT_DIR, "Manhattan_Graph_Environment", "gym_graphenv"))
 
 
 # class for Rainbow Agent
@@ -45,14 +46,14 @@ class RainbowAgent:
         rainbow_trainer = DQNTrainer(self.trainer_config, env=GraphEnv)
         mode = {"env-name": "graphworld-v0",
                 "env": GraphEnv,
-                "iterations": 10,
+                "iterations": 1,
                 }
         # checkpoint anpassen
-        file_name = "tmp/rainbow/graphworld\checkpoint_000010\checkpoint-10"
+        file_name = os.path.join(ROOT_DIR, 'tmp', 'rainbow', 'graphworld','checkpoint_000001','checkpoint-1')
 
         # Restore the Trainer
         rainbow_trainer.restore(file_name)
-        env = gym.make(mode["env-name"])
+        env = gym.make('graphworld-v0')
         state = env.reset()
         print("reset done")
 
@@ -64,16 +65,18 @@ class RainbowAgent:
         print(sum_travel_time)
         sum_distance = 0
         results = []
-
-        for i in range(30):
+        done = False
+        while not done:
             action = rainbow_trainer.compute_action(state)
             state, reward, done, info = env.step(action)
             sum_reward += reward
             # env.render()
+            """
             if done == True:
                 print("cumulative reward", sum_reward)
                 state = env.reset()
                 sum_reward = 0
+            """
 
             # get data from action
             route.append(action)
@@ -88,7 +91,7 @@ class RainbowAgent:
             sum_reward += reward
 
             # check if finished
-            if done == 1:
+            if done == True:
                 print("DELIVERY DONE! sum_reward: ", sum_reward)
                 print("DELIVERY DONE! Route: ", route)
                 print("DELIVERY DONE! Travel Time: ", sum_travel_time)

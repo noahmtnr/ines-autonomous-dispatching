@@ -16,6 +16,7 @@ import ray
 import warnings
 warnings.filterwarnings('ignore')
 from ray.rllib.agents.dqn import DQNTrainer, DEFAULT_CONFIG
+from config.definitions import ROOT_DIR
 
 
 # class for DQN Agent
@@ -34,15 +35,16 @@ class DQNAgent:
         config={"use_config":True}
         
         # Initialize trainer
-        ppo_trainer=DQNTrainer(self.trainer_config,env=GraphEnv)
+        dqn_trainer=DQNTrainer(self.trainer_config,env=GraphEnv)
         
         mode={ "env-name":"graphworld-v0",
         "env":GraphEnv,
         "iterations":10,
 
         }
-        file_name="tmp/dqn/graphworld\checkpoint_000010\checkpoint-10"  
-        ppo_trainer.restore(file_name)
+        # file_name="tmp/rainbow/graphworld\checkpoint_000001\checkpoint-1"  
+        file_name = os.path.join(ROOT_DIR, 'tmp', 'rainbow', 'graphworld','checkpoint_000001','checkpoint-1')
+        dqn_trainer.restore(file_name)
         env = gym.make(mode["env-name"])
         state = env.reset()
         print("reset done")
@@ -55,8 +57,8 @@ class DQNAgent:
         print(sum_travel_time)
         sum_distance = 0
         results = []
-        for i in range(30):
-            action = ppo_trainer.compute_action(state)
+        while not done:
+            action = dqn_trainer.compute_action(state)
             state, reward, done, info = env.step(action)
             sum_reward += reward
             #env.render()
@@ -79,7 +81,7 @@ class DQNAgent:
             sum_reward += reward
             
             # check if finished
-            if done==1:
+            if done == True:
                 print("DELIVERY DONE! sum_reward: ",sum_reward)
                 print("DELIVERY DONE! Route: ",route)
                 print("DELIVERY DONE! Travel Time: ",sum_travel_time)
