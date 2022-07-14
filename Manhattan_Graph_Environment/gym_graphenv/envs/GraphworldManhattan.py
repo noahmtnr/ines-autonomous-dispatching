@@ -342,6 +342,7 @@ class GraphEnv(gym.Env):
 
         if(self.position == self.final_hub):
             self.done = True
+
             
             
         # came to final hub
@@ -374,7 +375,7 @@ class GraphEnv(gym.Env):
                 # # not delivered within 2 hours after deadline
                 self.done = True
                 # reward = - 10000
-                # state_of_delivery = DeliveryState.NOT_DELIVERED
+                state_of_delivery = DeliveryState.NOT_DELIVERED
                 # print("BOX WAS NOT DELIVERED until 2 hours after deadline")
                 
             else:

@@ -70,7 +70,7 @@ ray.init()
 
 
 rainbow_config = DEFAULT_CONFIG.copy()
-rainbow_config['num_workers'] = 3
+rainbow_config['num_workers'] = 1
 rainbow_config["train_batch_size"] = 400
 rainbow_config["gamma"] = 0.99
 # rainbow_config["framework"] = "torch"
