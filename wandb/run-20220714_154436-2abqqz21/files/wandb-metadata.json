@@ -1,0 +1,24 @@
+{
+    "os": "Windows-10-10.0.19044-SP0",
+    "python": "3.9.12",
+    "heartbeatAt": "2022-07-14T12:44:38.865688",
+    "startedAt": "2022-07-14T12:44:36.297126",
+    "docker": null,
+    "gpu": "NVIDIA GeForce RTX 3050 Laptop GPU",
+    "gpu_count": 1,
+    "cpu_count": 8,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "c:\\Users\\cosmi\\Documents\\Mannheim\\ines-autonomous-dispatching\\Manhattan_Graph_Environment\\training\\train_PPO.py",
+    "codePath": "Manhattan_Graph_Environment\\training\\train_PPO.py",
+    "git": {
+        "remote": "https://github.com/noahmtnr/ines-autonomous-dispatching.git",
+        "commit": "cad20e6edc094b65c717322d9fb97e95ef55604d"
+    },
+    "email": "cosmina.ionut@stud.ubbcluj.ro",
+    "root": "C:/Users/cosmi/Documents/Mannheim/ines-autonomous-dispatching",
+    "host": "LAPTOP-FDVI9MUH",
+    "username": "cosmi",
+    "executable": "C:\\Users\\cosmi\\anaconda3\\envs\\teamproject\\python.exe"
+}
