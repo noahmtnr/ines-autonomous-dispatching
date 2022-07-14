@@ -213,7 +213,15 @@ class GraphEnv(gym.Env):
 
         startTime = time.time()
 
-        self.done =  False
+        self.done = False
+
+        # if agent is in time window 2 hours before deadline, we just move him to the final hub
+        if((self.deadline - self.time).total_seconds()/60 <= 120):
+            self.allow_bookown = 1
+            action = self.final_hub
+        else:
+            self.allow_bookown = 0
+            
 
         # set old position to current position before changing current position
         self.old_position = self.position
@@ -279,10 +287,6 @@ class GraphEnv(gym.Env):
             print("action: ",action)
             print("action space: ",self.action_space)
 
-        if((self.deadline - self.time).total_seconds()/60 <= 120):
-            self.allow_bookown = 1
-        else:
-            self.allow_bookown = 0
         # refresh travel cost layer after each step
         self.learn_graph.add_travel_cost_layer(self.availableTrips(), self.distance_matrix)
         self.learn_graph.add_remaining_distance_layer(current_hub=self.position, distance_matrix=self.distance_matrix)
