@@ -165,8 +165,8 @@ for n in range(n_iter):
                'shared_available_useful_to_shared_available': float(result["shared_available_useful_to_shared_available"]),
                'shared_taken_useful_to_shared_available_useful': float(result["shared_taken_useful_to_shared_available_useful"]),
 
-               # count without bookown
                # share delivered without bookown von allen delivered
+               'ratio_delivered_without_bookown_to_all_delivered': float(result["ratio_delivered_without_bookown_to_all_delivered"]),
                # share delivered without bookown oder von allen
                # Anteil des Weges den man hätte durch shared rides abdecken können + den den wir tatsächlich mit shares abgedeckt haben
                }
@@ -199,6 +199,8 @@ for n in range(n_iter):
                 'shared_available_useful_to_shared_available': result["shared_available_useful_to_shared_available"],
                 'shared_taken_useful_to_shared_available_useful': result["shared_taken_useful_to_shared_available_useful"],
                 "ratio_shared_available_to_all_steps": result["ratio_shared_available_to_all_steps"],
+
+                "ratio_delivered_without_bookown_to_all_delivered": result["ratio_delivered_without_bookown_to_all_delivered"],
     })
 
     print(f'{n + 1:3d}: Min/Mean/Max reward: {result["episode_reward_min"]:8.4f}/{result["episode_reward_mean"]:8.4f}/{result["episode_reward_max"]:8.4f}, len mean: {result["episode_len_mean"]:8.4f}. Checkpoint saved to {file_name}')

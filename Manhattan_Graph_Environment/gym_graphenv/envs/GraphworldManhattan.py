@@ -194,6 +194,8 @@ class GraphEnv(gym.Env):
         self.count_shared_available_useful = 0
         self.count_shared_taken_useful = 0
         self.boolean_useful_shares_available = 0
+        self.orders_delivered_without_booked =  0
+        # self.count_delive
 
         self.state = {
             # 'cost' : ((self.learn_graph.adjacency_matrix('cost')[self.position]-self.mean1)/self.stdev1).astype(np.float64),
@@ -570,6 +572,7 @@ class CustomCallbacks(DefaultCallbacks):
     count_shared_taken_useful = 0
     boolean_useful_shares_available = 0
     boolean_shared_available = 0
+    orders_delivered_without_booked = 0
 
     def on_algorithm_init(
         self,
@@ -599,9 +602,7 @@ class CustomCallbacks(DefaultCallbacks):
         self.count_shared_available_useful = 0
         self.count_shared_taken_useful = 0
         self.boolean_useful_shares_available = 0
-        
-        
-        
+        self.orders_delivered_without_booked = 0
 
     def on_episode_start(
         self,
@@ -629,8 +630,7 @@ class CustomCallbacks(DefaultCallbacks):
         #episode.custom_metrics["count_shared_taken"] = 0
         episode.custom_metrics["boolean_has_booked_any_own"] = 0
         episode.custom_metrics["count_shared_available_useful"] = 0
-        #episode.custom_metrics["count_shared_taken_useful"] = 0
-        
+        #episode.custom_metrics["count_shared_taken_useful"] = 0        
 
     def on_episode_step(
         self,
@@ -711,12 +711,18 @@ class CustomCallbacks(DefaultCallbacks):
         if (episode.env.state_of_delivery == DeliveryState.DELIVERED_ON_TIME):
             self.count_delivered_on_time +=1
             episode.custom_metrics["count_delivered_on_time"] = self.count_delivered_on_time
+            self.orders_delivered_without_booked += 1
         elif (episode.env.state_of_delivery == DeliveryState.DELIVERED_WITH_DELAY):
             self.count_delivered_with_delay +=1
             episode.custom_metrics["count_delivered_with_delay"] = self.count_delivered_with_delay
         elif (episode.env.state_of_delivery == DeliveryState.NOT_DELIVERED):
             self.count_not_delivered +=1
             episode.custom_metrics["count_not_delivered"] = self.count_not_delivered
+
+        if (self.count_delivered_on_time==0):
+            episode.custom_metrics["ratio_delivered_without_bookown_to_all_delivered"] = 0
+        else:
+            episode.custom_metrics["ratio_delivered_without_bookown_to_all_delivered"] = float(episode.env.orders_delivered_without_booked/self.count_delivered_on_time)
 
         # zum Vergleich ohne Abzug später
         # episode.custom_metrics["count_not_delivered_first"] = self.count_not_delivered
@@ -782,3 +788,5 @@ class CustomCallbacks(DefaultCallbacks):
         result["shared_available_useful_to_shared_available"] = result['custom_metrics']["shared_available_useful_to_shared_available_mean"]
         result["shared_taken_useful_to_shared_available_useful"] = result['custom_metrics']["shared_taken_useful_to_shared_available_useful_mean"]
         result["count_shared_available_useful"] = result['custom_metrics']["count_shared_available_useful_mean"]
+
+        result["ratio_delivered_without_bookown_to_all_delivered"] = result['custom_metrics']["ratio_delivered_without_bookown_to_all_delivered_mean"]
