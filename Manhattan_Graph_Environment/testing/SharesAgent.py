@@ -35,7 +35,7 @@ class SharesAgent:
             # select most useful shared ride, otherwise wait
             best_gain = 0
             best_hub = 0
-            for hub in env.action_space:
+            for hub in range(env.action_space.n):
                 # check distance gained
                 if (env.state["remaining_distance"][hub] > 0) and (env.state["remaining_distance"][hub] > best_gain):
                     best_hub = hub

@@ -104,8 +104,7 @@ class BenchmarkWrapper:
                 reward_list = Rainbow_Agent.run_one_episode(reward_list, env_config)
             elif self.name == "Shares":
                 print("Shares")
-                Shares_Agent = SharesAgent()
-                reward_list = Shares_Agent.run_one_episode(reward_list, env_config)
+                reward_list = SharesAgent.run_one_episode(env,reward_list, env_config)
             elif self.name == "Bookown":
                 print("Bookown")
                 reward_list = BookownAgent.run_one_episode(env, reward_list, env_config)
