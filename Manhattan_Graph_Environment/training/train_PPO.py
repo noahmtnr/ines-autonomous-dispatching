@@ -18,7 +18,7 @@ from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
 from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv, CustomCallbacks
 
 wandb.login(key="93aab2bcc48447dd2e8f74124d0258be2bf93859")
-wandb.init(project="Comparison_remaindist", entity="hitchhike")
+wandb.init(project="Comparison_Hypothese_Normalisiert", entity="hitchhike")
 
 env=GraphEnv()
 
@@ -28,7 +28,7 @@ ray.init()
 
 #Set trainer configuration
 trainer_config = DEFAULT_CONFIG.copy()
-# trainer_config['num_workers'] = 1
+trainer_config['num_workers'] = 3
 # trainer_config["train_batch_size"] = 400
 # trainer_config["gamma"] = 0.95
 # trainer_config["n_step"] = 10
@@ -38,7 +38,7 @@ trainer_config["explore"] = True
 trainer_config["exploration_config"] = {
     "type": "EpsilonGreedy",
     "initial_epsilon": 1.0,
-    "final_epsilon": 0.02,
+    "final_epsilon": 0.05,
 }
 #trainer_config["num_gpus"] = int(os.environ.get("RLLIB_NUM_GPUS", "0"))
 
