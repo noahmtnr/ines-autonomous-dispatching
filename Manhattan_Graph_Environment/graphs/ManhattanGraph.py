@@ -32,7 +32,7 @@ class ManhattanGraph:
         # filepath = os.path.join(ROOT_DIR, 'data', 'hubs', 'new_hubs.csv')
         filepath = "/Users/noah/Desktop/Repositories/ines-autonomous-dispatching/data/hubs/new_hubs.csv" 
         hubs_file = pd.read_csv(filepath)
-        print("Read hubs successfully")
+        #print("Read hubs successfully")
         hubs = []
         i=0
         for row in hubs_file.index:    

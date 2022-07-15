@@ -23,6 +23,7 @@ from colorama import Fore, Back, Style
 import sys
 from PIL import Image, ImageDraw
 import math 
+import plotly.express as px
 #from mpl_toolkits.basemap import Basemap
 import plotly.express as px
 RAY_ENABLE_MAC_LARGE_OBJECT_STORE=1.
@@ -477,6 +478,13 @@ class GraphEnv(gym.Env):
         df['actions']=actions
 
         graph = self.manhattan_graph.inner_graph
+
+        px.set_mapbox_access_token(open("mapbox_token").read())
+        #df = px.data.carshare()
+        fig = px.scatter_mapbox(df, lat="latitude", lon="longitude", hover_name ="id", color="actions", #size="car_hours",
+                  color_continuous_scale=px.colors.cyclical.IceFire, size_max=15, zoom=10)  
+        fig.show()
+
         #fig, ax = ox.plot_graph(graph, figsize=(25,25), bgcolor='#89cff0',node_color=colors, node_size = node_sizes, edge_linewidth=1, show=False, save=True, filepath='try1.png')
         
         # nx.draw_circular(graph, with_labels = True)
@@ -520,12 +528,12 @@ class GraphEnv(gym.Env):
         # img = Image.open('try1.png')
         # d1 = ImageDraw.Draw(img)
 
-        for hub in self.hubs:
-            print('Hub:', hub)
-            index = self.manhattan_graph.get_hub_index_by_nodeid(hub)
-            hub_x = self.manhattan_graph.get_node_by_index(index)['x']
-            hub_y = self.manhattan_graph.get_node_by_index(index)['y']
-            print(hub_x, hub_y)
+        # for hub in self.hubs:
+        #     print('Hub:', hub)
+        #     index = self.manhattan_graph.get_hub_index_by_nodeid(hub)
+        #     hub_x = self.manhattan_graph.get_node_by_index(index)['x']
+        #     hub_y = self.manhattan_graph.get_node_by_index(index)['y']
+        #     print(hub_x, hub_y)
             # x, y = m(hub_x, hub_y)
             # plt.plot(x, y, 'ok', markersize=5)
             # plt.text(x, y, str(index), fontsize=12)
@@ -573,13 +581,13 @@ class GraphEnv(gym.Env):
         # fig.text(0.5, 0.5, '0.5,0.5', style = 'normal', fontsize = 10, color = "green")
 
 
-        current_pos_y = self.manhattan_graph.get_node_by_index(self.position)['y']
-        print("Legend HUBS:")
-        print(Fore.RED + 'RED - SHARED')
-        print(Fore.CYAN + 'TURQUISE - BOOK OWN')
-        print(Fore.MAGENTA + 'LILA - CURRENT')
-        print(Fore.GREEN + 'GREEN - START')
-        print(Fore.BLUE + 'BLUE - FINAL')
+        # current_pos_y = self.manhattan_graph.get_node_by_index(self.position)['y']
+        # print("Legend HUBS:")
+        # print(Fore.RED + 'RED - SHARED')
+        # print(Fore.CYAN + 'TURQUISE - BOOK OWN')
+        # print(Fore.MAGENTA + 'LILA - CURRENT')
+        # print(Fore.GREEN + 'GREEN - START')
+        # print(Fore.BLUE + 'BLUE - FINAL')
         # fig.show()
         # plt.show()
 
