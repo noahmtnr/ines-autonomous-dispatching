@@ -13,6 +13,7 @@ sys.path.insert(0, "")
 sys.path.append(os.path.join(ROOT_DIR, "Manhattan_Graph_Environment", "gym_graphenv"))
 from RandomAgent import RandomAgent
 from CostAgent import CostAgent
+from SharesAgent import SharesAgent
 from RainbowAgent import RainbowAgent
 from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
 from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv, CustomCallbacks
@@ -98,9 +99,12 @@ class BenchmarkWrapper:
                 print("Rainbow")
                 Rainbow_Agent = RainbowAgent()
                 reward_list = Rainbow_Agent.run_one_episode(reward_list, env_config)
+            elif self.name == "Shares":
+                print("Shares")
+                Shares_Agent = SharesAgent()
+                reward_list = Shares_Agent.run_one_episode(reward_list, env_config)
         return reward_list
 
-"""
 def main():
     # benchmark = BenchmarkWrapper("random")
     # results = benchmark.read_orders()
@@ -108,11 +112,13 @@ def main():
     # benchmark2 = BenchmarkWrapper("cost")
     # results = benchmark2.read_orders()
     # print("Cost",results)
-    benchmark3 = BenchmarkWrapper("Rainbow")
+    # benchmark3 = BenchmarkWrapper("Rainbow")
     # DQNAgent()
-    results = benchmark3.read_orders()
-    print("Rainbow", results)
+    # results = benchmark3.read_orders()
+    # print("Rainbow", results)
+    benchmark = BenchmarkWrapper("Shares")
+    results = benchmark.read_orders()
+    print("SharesAgent: ", results)
 
 
 main()
-"""
