@@ -46,7 +46,6 @@ class Comparer:
             print("Ausgabe Zweite")
             print(key, " : ", self.agents[key])
             array = self.agents[key].read_orders()
-
             # get the only order
             for current in array:
                 # get individual aspects out of dictionary
@@ -158,15 +157,15 @@ class Comparer:
 
 
 # test comparer
-# w1 = BenchmarkWrapper("random")
-# w2 = BenchmarkWrapper("cost")
+w1 = BenchmarkWrapper("random")
+w2 = BenchmarkWrapper("cost")
 w3 = BenchmarkWrapper("PPO")
-# w4 = BenchmarkWrapper("DQN")
+w4 = BenchmarkWrapper("DQN")
 w5 = BenchmarkWrapper("Rainbow")
 # c = Comparer(1,w5.name,w5)
-c = Comparer(2,w3.name,w5.name,w3,w5)
+# c = Comparer(2,w3.name,w5.name,w3,w5)
 # c = Comparer(3,w1.name,w2.name,w3.name,w1,w2,w3)
-# c = Comparer(5,w1.name,w2.name,w3.name,w4.name,w5.name,w1,w2,w3,w4,w5)
+c = Comparer(5,w1.name,w2.name,w3.name,w4.name,w5.name,w1,w2,w3,w4,w5)
 c.establish_compare_onetrip()
 # c.compare_multiple_trips()
 

@@ -39,11 +39,11 @@ class DQNAgent:
         
         mode={ "env-name":"graphworld-v0",
         "env":GraphEnv,
-        "iterations":10,
+        "iterations":1,
 
         }
         # file_name="tmp/rainbow/graphworld\checkpoint_000001\checkpoint-1"  
-        file_name = os.path.join(ROOT_DIR, 'tmp', 'rainbow', 'graphworld','checkpoint_000001','checkpoint-1')
+        file_name = os.path.join(ROOT_DIR, 'tmp', 'dqn', 'graphworld','checkpoint_000001','checkpoint-1')
         dqn_trainer.restore(file_name)
         env = gym.make(mode["env-name"])
         state = env.reset()
@@ -57,6 +57,7 @@ class DQNAgent:
         print(sum_travel_time)
         sum_distance = 0
         results = []
+        done = False
         while not done:
             action = dqn_trainer.compute_action(state)
             state, reward, done, info = env.step(action)

@@ -9,7 +9,6 @@ from unittest import result
 from DQNAgent import DQNAgent
 from config.definitions import ROOT_DIR
 
-# from Manhattan_Graph_Environment.gym_graphenv.envs.PPOAgent import PPOAgent
 sys.path.insert(0, "")
 sys.path.append(os.path.join(ROOT_DIR, "Manhattan_Graph_Environment", "gym_graphenv"))
 from RandomAgent import RandomAgent
@@ -17,6 +16,7 @@ from CostAgent import CostAgent
 from RainbowAgent import RainbowAgent
 from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
 from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv, CustomCallbacks
+from PPOAgent import PPOAgent
 import numpy as np
 import pandas as pd
 import json
@@ -92,8 +92,8 @@ class BenchmarkWrapper:
                 reward_list = dqn_Agent.run_one_episode(reward_list, env_config)
             elif self.name == "PPO":
                 print("PPO")
-                # ppo_Agent=PPOAgent()
-                # reward_list = ppo_Agent.run_one_episode(reward_list,env_config)
+                ppo_Agent = PPOAgent()
+                reward_list = ppo_Agent.run_one_episode(reward_list,env_config)
             elif self.name == "Rainbow":
                 print("Rainbow")
                 Rainbow_Agent = RainbowAgent()

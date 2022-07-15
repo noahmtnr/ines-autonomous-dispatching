@@ -39,7 +39,8 @@ class PPOAgent:
         "env":GraphEnv,
         "iterations":1,
         }
-        file_name="tmp/ppo/graphworld\checkpoint_000010\checkpoint-10"
+        # checkpoint anpassen
+        file_name = os.path.join(ROOT_DIR, 'tmp', 'ppo', 'graphworld', 'checkpoint_000010', 'checkpoint-10')
 
         #Restore the Trainer
         ppo_trainer.restore(file_name)
@@ -56,6 +57,7 @@ class PPOAgent:
         sum_distance = 0
         results = []
 
+        done = False
         while not done:
             action = ppo_trainer.compute_action(state)
             state, reward, done, info = env.step(action)
