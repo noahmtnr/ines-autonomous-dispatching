@@ -42,6 +42,9 @@ class GraphEnv(gym.Env):
 
     REWARD_AWAY = -1
     REWARD_GOAL = 100
+    WAIT_TIME_SECONDS = 300 
+    WAIT_TIME_MINUTES= WAIT_TIME_SECONDS/60
+
 
     def __init__(self, use_config: bool = True ):
         DB_LOWER_BOUNDARY = '2016-01-01 00:00:00'
@@ -97,6 +100,9 @@ class GraphEnv(gym.Env):
         self.rd_mean=120.2
         self.rd_stdev=5571.48
 
+        self.distance_covered_with_shared=0
+        self.distance_covered_with_ownrides=0
+
     def one_hot(self, pos):
         one_hot_vector = np.zeros(len(self.hubs))
         one_hot_vector[pos] = 1
@@ -146,6 +152,10 @@ class GraphEnv(gym.Env):
             self.total_travel_time = 0
             self.deadline=datetime.strptime(self.env_config['delivery_timestamp'], '%Y-%m-%d %H:%M:%S')
             self.current_wait = 0
+        self.distance_covered_with_shared=0
+        self.distance_covered_with_ownrides=0
+        self.distance_reduced_with_shared=0 #to final hub
+        self.distance_reduced_with_ownrides=0 #to final hub
 
 
 
@@ -208,6 +218,7 @@ class GraphEnv(gym.Env):
             }
         self.rem_distance_values.extend(self.learn_graph.adjacency_matrix('remaining_distance')[self.position].astype(np.float64))
 
+        self.shortest_distance=self.learn_graph.adjacency_matrix('remaining_distance')[self.position][self.final_hub]
 
         resetExecutionTime = (time.time() - resetExecutionStart)
         # print(f"Reset() Execution Time: {str(resetExecutionTime)}")
@@ -264,7 +275,7 @@ class GraphEnv(gym.Env):
             self.count_steps +=1
             if(action == self.position):
             # action = wait
-                step_duration = 300
+                step_duration = WAIT_TIME * 60
                 self.has_waited=True
                 self.own_ride = False
                 self.count_wait += 1
@@ -275,6 +286,23 @@ class GraphEnv(gym.Env):
 
             # action = share ride or book own ride
             else:
+                pickup_nodeid = self.manhattan_graph.get_nodeid_by_hub_index(self.position)
+                dropoff_nodeid = self.manhattan_graph.get_nodeid_by_hub_index(action)
+
+                route = ox.shortest_path(self.manhattan_graph.inner_graph, pickup_nodeid,  dropoff_nodeid, weight='travel_time')
+                route_travel_time = ox.utils_graph.get_route_edge_attributes(self.manhattan_graph.inner_graph,route,attribute='travel_time')
+                route_travel_distance = ox.utils_graph.get_route_edge_attributes(self.manhattan_graph.inner_graph,route,attribute='length')
+
+
+                if(self.learn_graph.wait_till_departure_times[(self.position,action)] == WAIT_TIME_SECONDS):
+                    step_duration = sum(route_travel_time)+ WAIT_TIME_SECONDS#we add 5 minutes (300 seconds) so the taxi can arrive
+                elif(self.learn_graph.wait_till_departure_times[(self.position,action)] != WAIT_TIME_SECONDS and self.learn_graph.wait_till_departure_times[(self.position,action)] != 0):
+                    step_duration = sum(route_travel_time)
+                    # TODO: String conversion von departure time besser direkt beim erstellen der Matrix
+                    departure_time = datetime.strptime(self.learn_graph.wait_till_departure_times[(self.position,action)], '%Y-%m-%d %H:%M:%S')
+                    self.current_wait = ( departure_time - self.time).seconds
+                    step_duration += self.current_wait
+                    self.time = departure_time
                 if(self.shared_rides_mask[action] == 1):
                     self.count_share += 1
                     self.action_choice = "Share"
@@ -284,31 +312,22 @@ class GraphEnv(gym.Env):
                     # check whether current action is useful
                     if self.state["remaining_distance"][action] > 0:
                         self.count_shared_taken_useful += 1
+                    self.distance_covered_with_shared+=self.route_travel_distance
+                    self.distance_reduced_with_shared+=self.learn_graph.adjacency_matrix('remaining_distance')[self.old_position][action]
+
 
                 else:
                     self.count_bookown += 1
                     self.action_choice = "Book"
                     # print("action == book own ")
                     # print(f"Rides Mask for Action {action}: {self.shared_rides_mask}")
+                    self.distance_covered_with_ownrides+=self.route_travel_distance
+                    self.distance_reduced_with_ownrides+=self.learn_graph.adjacency_matrix('remaining_distance')[self.old_position][action]
+
                 startTimeRide = time.time()
                 self.has_waited=False
                 self.count_hubs += 1
 
-                pickup_nodeid = self.manhattan_graph.get_nodeid_by_hub_index(self.position)
-                dropoff_nodeid = self.manhattan_graph.get_nodeid_by_hub_index(action)
-
-                route = ox.shortest_path(self.manhattan_graph.inner_graph, pickup_nodeid,  dropoff_nodeid, weight='travel_time')
-                route_travel_time = ox.utils_graph.get_route_edge_attributes(self.manhattan_graph.inner_graph,route,attribute='travel_time')
-
-                if(self.learn_graph.wait_till_departure_times[(self.position,action)] == 300):
-                    step_duration = sum(route_travel_time)+300 #we add 5 minutes (300 seconds) so the taxi can arrive
-                elif(self.learn_graph.wait_till_departure_times[(self.position,action)] != 300 and self.learn_graph.wait_till_departure_times[(self.position,action)] != 0):
-                    step_duration = sum(route_travel_time)
-                    # TODO: String conversion von departure time besser direkt beim erstellen der Matrix
-                    departure_time = datetime.strptime(self.learn_graph.wait_till_departure_times[(self.position,action)], '%Y-%m-%d %H:%M:%S')
-                    self.current_wait = ( departure_time - self.time).seconds
-                    step_duration += self.current_wait
-                    self.time = departure_time
 
                 self.old_position = self.position
                 self.position = action
@@ -796,6 +815,19 @@ class CustomCallbacks(DefaultCallbacks):
         # zum Vergleich ohne Abzug später
         # episode.custom_metrics["count_not_delivered_first"] = self.count_not_delivered
 
+        episode.custom_metrics['bookown_distance_reduced_share']=1-(self.distance_covered_with_ownrides/self.shortest_path)
+        episode.custom_metrics['bookown_distance_reduced_mean']=self.shortest_path-self.distance_covered_with_ownrides
+        
+        episode.custom_metrics['distance_reduced_with_ownrides']=self.distance_reduced_with_ownrides
+        episode.custom_metrics['distance_reduced_with_shared']=self.distance_reduced_with_shared
+
+
+        episode.custom_metrics['distance_reduced_with_ownrides_share']=self.distance_reduced_with_ownrides/self.shortest_path
+        episode.custom_metrics['distance_reduced_with_shared_share']=self.distance_reduced_with_shared/self.shortest_path
+
+        episode
+
+
     def on_train_result(self, *, trainer, result: dict, **kwargs):
         print(
             "trainer.train() result: {} -> {} episodes".format(
@@ -806,6 +838,8 @@ class CustomCallbacks(DefaultCallbacks):
         result["count_wait_min"] = result['custom_metrics']['count_wait_min']
         result["count_wait_max"] = result['custom_metrics']['count_wait_max']
         result["count_wait_mean"] = result['custom_metrics']['count_wait_mean']
+        result["waiting_time_mean"] = result['custom_metrics']['count_wait_mean']*WAIT_TIME_MINUTES
+
         result["count_bookown_min"] = result['custom_metrics']['count_bookown_min']
         result["count_bookown_max"] = result['custom_metrics']['count_bookown_max']
         result["count_bookown_mean"] = result['custom_metrics']['count_bookown_mean']
@@ -859,3 +893,4 @@ class CustomCallbacks(DefaultCallbacks):
         result["count_shared_available_useful"] = result['custom_metrics']["count_shared_available_useful_mean"]
 
         result["ratio_delivered_without_bookown_to_all_delivered"] = result['custom_metrics']["ratio_delivered_without_bookown_to_all_delivered_mean"]
+        #result["bookown_distance_saved"]
