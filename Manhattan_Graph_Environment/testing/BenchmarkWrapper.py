@@ -1,5 +1,7 @@
 import warnings
 
+
+
 warnings.filterwarnings('ignore')
 warnings.filterwarnings('ignore', category=UserWarning)
 
@@ -17,6 +19,7 @@ from RainbowAgent import RainbowAgent
 from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
 from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv, CustomCallbacks
 from PPOAgent import PPOAgent
+from BookownAgent import BookownAgent
 import numpy as np
 import pandas as pd
 import json
@@ -98,21 +101,25 @@ class BenchmarkWrapper:
                 print("Rainbow")
                 Rainbow_Agent = RainbowAgent()
                 reward_list = Rainbow_Agent.run_one_episode(reward_list, env_config)
+            elif self.name == "Bookown":
+                print("Bookown")
+                reward_list = BookownAgent.run_one_episode(env, reward_list, env_config)
         return reward_list
 
-"""
-def main():
-    # benchmark = BenchmarkWrapper("random")
-    # results = benchmark.read_orders()
-    # print("Random",results)
-    # benchmark2 = BenchmarkWrapper("cost")
-    # results = benchmark2.read_orders()
-    # print("Cost",results)
-    benchmark3 = BenchmarkWrapper("Rainbow")
-    # DQNAgent()
-    results = benchmark3.read_orders()
-    print("Rainbow", results)
+#
+# def main():
+#     # benchmark = BenchmarkWrapper("random")
+#     # results = benchmark.read_orders()
+#     # print("Random",results)
+#     # benchmark2 = BenchmarkWrapper("cost")
+#     # results = benchmark2.read_orders()
+#     # print("Cost",results)
+#
+#     benchmark3 = BenchmarkWrapper("Bookown")
+#     # DQNAgent()
+#     results = benchmark3.read_orders()
+#     print("Bookown", results)
+#
+#
+# main()
 
-
-main()
-"""
