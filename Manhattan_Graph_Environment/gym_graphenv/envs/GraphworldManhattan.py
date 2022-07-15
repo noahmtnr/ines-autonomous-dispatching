@@ -21,6 +21,11 @@ import matplotlib.pyplot as plt
 import networkx as nx 
 from colorama import Fore, Back, Style
 import sys
+from PIL import Image, ImageDraw
+import math 
+#from mpl_toolkits.basemap import Basemap
+import plotly.express as px
+RAY_ENABLE_MAC_LARGE_OBJECT_STORE=1.
 sys.path.insert(0,"")
 # from config.definitions import ROOT_DIR
 ROOT_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
@@ -466,21 +471,107 @@ class GraphEnv(gym.Env):
                                 colors.append('c')
                                 node_sizes.append(70)
                             else:
-                                colors.append('w')
+                                #colors.append('w')
                                 node_sizes.append(0)
-                
+        df = pd.read_csv("ines-autonomous-dispatching/data/hubs/longlist.csv")
+        df['color']=colors
+
         graph = self.manhattan_graph.inner_graph
-        fig, ax = ox.plot_graph(graph, figsize=(15,15), node_color=colors, node_size = node_sizes, edge_linewidth=1, show=False)
+        #fig, ax = ox.plot_graph(graph, figsize=(25,25), bgcolor='#89cff0',node_color=colors, node_size = node_sizes, edge_linewidth=1, show=False, save=True, filepath='try1.png')
+        
+        # nx.draw_circular(graph, with_labels = True)
+        # plt.savefig("nx2.png")
+        gdf_nodes = ox.graph_to_gdfs(graph, edges=False, node_geometry=False)[["x", "y"]]
+        west, south = gdf_nodes.min()
+        east, north = gdf_nodes.max()
+
         
 
+        fig = px.scatter_geo(df,lat='latitude',lon='longitude', hover_name="id")
+        fig.update_layout(title = 'World map', title_x=0.5)
+        fig.show()
+
+        print('west', west)
+        print('east', east)
+        print('south', south)
+        print('north', north)
+
+        # fig = plt.figure(figsize=(8, 8))
+        # m = Basemap(projection='lcc', resolution=None,
+        #             width=8E6, height=8E6, 
+        #             lat_0=south, lon_0=west)
+        # m.etopo(scale=0.5, alpha=0.5)
+
+        # Map (long, lat) to (x, y) for plotting
+        
+
+        # rx = -486.913544
+        # ry = 188.544021
+
+        # rrx = 0.1517852
+        # rry = 0.2168104
+
+        total_vertical = abs(north - south) 
+        total_horizontal = abs(east - west)
+
+        upper_mapx = 2712
+        upper_mapy = 5662
+
+        # img = Image.open('try1.png')
+        # d1 = ImageDraw.Draw(img)
+
         for hub in self.hubs:
-            print(type(hub))
-            print(type(int(hub)))
             print('Hub:', hub)
             index = self.manhattan_graph.get_hub_index_by_nodeid(hub)
             hub_x = self.manhattan_graph.get_node_by_index(index)['x']
             hub_y = self.manhattan_graph.get_node_by_index(index)['y']
-            fig.text(hub_x, hub_y, str(index), style = 'normal', fontsize = 10, color = "green")
+            print(hub_x, hub_y)
+            # x, y = m(hub_x, hub_y)
+            # plt.plot(x, y, 'ok', markersize=5)
+            # plt.text(x, y, str(index), fontsize=12)
+            #ax.annotate(str(index), (hub_x, hub_y))
+
+            # x1 = hub_x/rx
+            # y1 = hub_y/ry
+
+            # print(x1, y1)
+
+            # final_x = x1/rrx
+            # final_y = y1/rry
+
+            #r= 6.371
+
+
+            # final_x = -(hub_x)/total_horizontal * upper_mapx/1000
+            # final_y = (hub_y)/total_vertical * upper_mapy/1000
+
+            # final_x = -r * hub_x * math.cos(total_vertical/2)*10
+            # final_y = r * hub_y*10
+
+            #final_x = hub_x/west + 1
+            #final_y = hub_y/north
+
+
+            # final_x = hub_x + west
+            # final_y = hub_y - south
+
+            #print(final_x, final_y)
+            #d1.text((final_x, final_y), str(index), fill=(255, 0, 0))
+            
+           
+            # d1.text((28, 36), "Hello, TutorialsPoint!", fill=(255, 0, 0))
+            # d1.text((0, 0), "Hello, 0", fill=(255, 0, 0))
+            # d1.text((2000, 5000), "AAAAaaaaaa", fill=(255, 0, 0))
+
+        #img.show()
+        #img.save("try1.png")
+            #fig.text(final_x, final_y, str(index), style = 'normal', fontsize = 10, color = "green")
+        
+        # fig.text(1, 1, '1,1', style = 'normal', fontsize = 10, color = "green")
+        # fig.text(0, 0, '0,0', style = 'normal', fontsize = 10, color = "green")
+
+        # fig.text(0.5, 0.5, '0.5,0.5', style = 'normal', fontsize = 10, color = "green")
+
 
         current_pos_y = self.manhattan_graph.get_node_by_index(self.position)['y']
         print("Legend HUBS:")
@@ -489,7 +580,8 @@ class GraphEnv(gym.Env):
         print(Fore.MAGENTA + 'LILA - CURRENT')
         print(Fore.GREEN + 'GREEN - START')
         print(Fore.BLUE + 'BLUE - FINAL')
-        fig.show()
+        # fig.show()
+        # plt.show()
 
 
 class DeliveryState:
