@@ -449,52 +449,52 @@ class GraphEnv(gym.Env):
         start = self.manhattan_graph.get_nodeid_by_index(self.start_hub)
 
         node_sizes = list()
-        colors = []
+        actions = []
         for n in self.manhattan_graph.nodes():
             if n == position:
-                colors.append('#59326A')
+                actions.append('position')
                 node_sizes.append(70)
             else:
                 if n == final:
-                    colors.append('b')
+                    actions.append('final')
                     node_sizes.append(70)
                 else:
                     if n == start:
-                        colors.append('g')
+                        actions.append('start')
                         node_sizes.append(70)
                     else:
                         if n in shared_ids:
-                            colors.append('r')
+                            actions.append('shared')
                             node_sizes.append(70)
                         else:
                             if n in book_own_ids:
-                                colors.append('c')
+                                actions.append('book')
                                 node_sizes.append(70)
                             else:
                                 #colors.append('w')
                                 node_sizes.append(0)
         df = pd.read_csv("ines-autonomous-dispatching/data/hubs/longlist.csv")
-        df['color']=colors
+        df['actions']=actions
 
         graph = self.manhattan_graph.inner_graph
         #fig, ax = ox.plot_graph(graph, figsize=(25,25), bgcolor='#89cff0',node_color=colors, node_size = node_sizes, edge_linewidth=1, show=False, save=True, filepath='try1.png')
         
         # nx.draw_circular(graph, with_labels = True)
         # plt.savefig("nx2.png")
-        gdf_nodes = ox.graph_to_gdfs(graph, edges=False, node_geometry=False)[["x", "y"]]
-        west, south = gdf_nodes.min()
-        east, north = gdf_nodes.max()
+        # gdf_nodes = ox.graph_to_gdfs(graph, edges=False, node_geometry=False)[["x", "y"]]
+        # west, south = gdf_nodes.min()
+        # east, north = gdf_nodes.max()
 
         
 
-        fig = px.scatter_geo(df,lat='latitude',lon='longitude', hover_name="id")
-        fig.update_layout(title = 'World map', title_x=0.5)
-        fig.show()
+        # fig = px.scatter_geo(df,lat='latitude',lon='longitude', hover_name="id")
+        # fig.update_layout(title = 'World map', title_x=0.5)
+        # fig.show()
 
-        print('west', west)
-        print('east', east)
-        print('south', south)
-        print('north', north)
+        # print('west', west)
+        # print('east', east)
+        # print('south', south)
+        # print('north', north)
 
         # fig = plt.figure(figsize=(8, 8))
         # m = Basemap(projection='lcc', resolution=None,
@@ -511,11 +511,11 @@ class GraphEnv(gym.Env):
         # rrx = 0.1517852
         # rry = 0.2168104
 
-        total_vertical = abs(north - south) 
-        total_horizontal = abs(east - west)
+        # total_vertical = abs(north - south) 
+        # total_horizontal = abs(east - west)
 
-        upper_mapx = 2712
-        upper_mapy = 5662
+        # upper_mapx = 2712
+        # upper_mapy = 5662
 
         # img = Image.open('try1.png')
         # d1 = ImageDraw.Draw(img)
