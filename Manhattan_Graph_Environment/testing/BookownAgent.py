@@ -16,7 +16,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 
-class RandomAgent:
+class BookownAgent:
 
     def run_one_episode (env,reward_list,env_config):
         route = [env_config["pickup_hub_index"]]
@@ -28,9 +28,9 @@ class RandomAgent:
         sum_travel_time = timedelta(seconds=0)
         print(sum_travel_time)
         sum_distance = 0
-        # for i in range(30):
+        done = False
         while not done:
-            action = env.action_space.sample()
+            action = env_config["delivery_hub_index"]
             # action = final hub
             state, reward, done, info = env.step(action)
             route.append(action)
@@ -55,6 +55,7 @@ class RandomAgent:
             print("sum_reward: ",sum_reward)
             # print("sum_reward: ",sum_reward, " time: ",env.time, "deadline time: ", env.deadline, "pickup time: ", env.pickup_time)
         reward_list={"pickup_hub":env_config['pickup_hub_index'],"delivery_hub":env_config['delivery_hub_index'],"reward":sum_reward, "hubs":number_hubs, "route":route, "time":str(sum_travel_time), "dist":sum_distance, "time_until_deadline":time_until_deadline, "timestamps":route_timestamps}
+        print(reward_list)
         return reward_list
 
     

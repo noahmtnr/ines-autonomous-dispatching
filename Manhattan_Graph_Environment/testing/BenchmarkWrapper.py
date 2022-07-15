@@ -1,5 +1,7 @@
 import warnings
 
+
+
 warnings.filterwarnings('ignore')
 warnings.filterwarnings('ignore', category=UserWarning)
 
@@ -18,6 +20,7 @@ from RainbowAgent import RainbowAgent
 from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
 from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv, CustomCallbacks
 from PPOAgent import PPOAgent
+from BookownAgent import BookownAgent
 import numpy as np
 import pandas as pd
 import json
@@ -103,6 +106,10 @@ class BenchmarkWrapper:
                 print("Shares")
                 Shares_Agent = SharesAgent()
                 reward_list = Shares_Agent.run_one_episode(reward_list, env_config)
+            elif self.name == "Bookown":
+                print("Bookown")
+                reward_list = BookownAgent.run_one_episode(env, reward_list, env_config)
+        return reward_list           
         return reward_list
 
 def main():
@@ -122,3 +129,4 @@ def main():
 
 
 main()
+
