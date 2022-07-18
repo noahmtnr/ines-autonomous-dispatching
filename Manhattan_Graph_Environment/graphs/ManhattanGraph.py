@@ -34,7 +34,7 @@ class ManhattanGraph:
         hubs = []
         i=0
         for row in hubs_file.index:    
-            hubs.append(ox.distance.nearest_nodes(self.inner_graph,(hubs_file["latitude"], hubs_file["longitude"])))
+            hubs.append(ox.get_nearest_node(self.inner_graph,(hubs_file.loc[row,"latitude"], hubs_file.loc[row,"longitude"])))
         # if opt == 0:
         #     # the code below is for mapping the pre-defined hubs (customer/store/trips) to nodes in the graph
         #     hubs_file = pd.read_csv("data/hubs/manual_hubs.CSV")
