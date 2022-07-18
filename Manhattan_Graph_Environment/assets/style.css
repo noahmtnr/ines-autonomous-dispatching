@@ -1,0 +1,31 @@
+.left-dashboard {
+  background-color: #dddddd;
+  width: 60%;
+  margin-left: 0;
+  padding: 10px 10px;
+  display: inline-block;
+}
+
+.right-dashboard {
+  background-color: #dddddd;
+  width: 35%;
+  margin-left: 30px;
+  margin-right: 0px;
+  margin-top: 50px;
+  padding: 10px 10px;
+  display: inline-block;
+  vertical-align: top;
+  font-size: 20px;
+}
+
+.right-input {
+  background-color: white;
+  width: 35%;
+  margin-left: 30px;
+  margin-right: 0px;
+  margin-top: 50px;
+  padding: 10px 10px;
+  display: inline-block;
+  vertical-align: top;
+  font-size: 25px;
+}
