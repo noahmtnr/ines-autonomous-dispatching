@@ -815,8 +815,10 @@ class CustomCallbacks(DefaultCallbacks):
         # zum Vergleich ohne Abzug später
         # episode.custom_metrics["count_not_delivered_first"] = self.count_not_delivered
 
-        episode.custom_metrics['bookown_distance_reduced_share']=1-(self.distance_covered_with_ownrides/self.shortest_path)
-        episode.custom_metrics['bookown_distance_reduced_mean']=self.shortest_path-self.distance_covered_with_ownrides
+        #ow much distance (in %) we don't have to ride with book own 
+        episode.custom_metrics['bookown_distance_not_covered_share']=1-(self.distance_covered_with_ownrides/self.shortest_path)
+        #how much distance we don't have to ride with book own 
+        episode.custom_metrics['bookown_distance_not_covered_mean']=self.shortest_path-self.distance_covered_with_ownrides
         
         episode.custom_metrics['distance_reduced_with_ownrides']=self.distance_reduced_with_ownrides
         episode.custom_metrics['distance_reduced_with_shared']=self.distance_reduced_with_shared
@@ -825,7 +827,6 @@ class CustomCallbacks(DefaultCallbacks):
         episode.custom_metrics['distance_reduced_with_ownrides_share']=self.distance_reduced_with_ownrides/self.shortest_path
         episode.custom_metrics['distance_reduced_with_shared_share']=self.distance_reduced_with_shared/self.shortest_path
 
-        episode
 
 
     def on_train_result(self, *, trainer, result: dict, **kwargs):
@@ -893,4 +894,14 @@ class CustomCallbacks(DefaultCallbacks):
         result["count_shared_available_useful"] = result['custom_metrics']["count_shared_available_useful_mean"]
 
         result["ratio_delivered_without_bookown_to_all_delivered"] = result['custom_metrics']["ratio_delivered_without_bookown_to_all_delivered_mean"]
-        #result["bookown_distance_saved"]
+
+
+
+        #metrics about bookown distance reduced and rem distance reduced
+        result['bookown_distance_not_covered_share']=result['custom_metrics']['bookown_distance_not_covered_share']
+        result['bookown_distance_not_covered_mean']=result['custom_metrics']['bookown_distance_not_covered_mean']
+        result['distance_reduced_with_ownrides']=result['custom_metrics']['distance_reduced_with_ownrides']
+        result['distance_reduced_with_shared']=result['custom_metrics']['distance_reduced_with_shared']
+        result['distance_reduced_with_ownrides_share']=result['custom_metrics']['distance_reduced_with_ownrides_share']
+        result['distance_reduced_with_shared_share']=result['custom_metrics']['distance_reduced_with_shared_share']
+

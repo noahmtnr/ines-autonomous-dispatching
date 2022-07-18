@@ -29,7 +29,7 @@ from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
 from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv, CustomCallbacks
 
 wandb.login(key="93aab2bcc48447dd2e8f74124d0258be2bf93859")
-wandb.init(project="Comparison_Hypothese_Normalisiert", entity="hitchhike")
+wandb.init(project="tests_metrics", entity="hitchhike")
 # wandb.init(project="New_Metrics_Total_Env", entity="hitchhike")
 
 # class CustomModel(TFModelV2):
@@ -169,6 +169,16 @@ for n in range(n_iter):
                'ratio_delivered_without_bookown_to_all_delivered': float(result["ratio_delivered_without_bookown_to_all_delivered"]),
                # share delivered without bookown oder von allen
                # Anteil des Weges den man hätte durch shared rides abdecken können + den den wir tatsächlich mit shares abgedeckt haben
+
+               #new metrics bookown distance reduced and rem distnce reduced
+                'bookown_distance_not_covered_share':float(result['bookown_distance_not_covered_share']),
+                'bookown_distance_not_covered_mean': float(result['bookown_distance_not_covered_mean']),
+                'distance_reduced_with_ownrides':float(result['distance_reduced_with_ownrides']),
+                'distance_reduced_with_shared':float(result['distance_reduced_with_shared']),
+                'distance_reduced_with_ownrides_share':float(result['distance_reduced_with_ownrides_share']),
+                'distance_reduced_with_shared_share':float(result['distance_reduced_with_shared_share']),
+
+
                }
     episode_data.append(episode)
     episode_json.append(json.dumps(episode))
@@ -201,6 +211,15 @@ for n in range(n_iter):
                 "ratio_shared_available_to_all_steps": result["ratio_shared_available_to_all_steps"],
 
                 "ratio_delivered_without_bookown_to_all_delivered": result["ratio_delivered_without_bookown_to_all_delivered"],
+
+
+                'bookown_distance_not_covered_share': result['bookown_distance_not_covered_share'],
+                'bookown_distance_not_covered_mean': result['bookown_distance_not_covered_mean'],
+                'distance_reduced_with_ownrides':result['distance_reduced_with_ownrides'],
+                'distance_reduced_with_shared':result['distance_reduced_with_shared'],
+                'distance_reduced_with_ownrides_share':result['distance_reduced_with_ownrides_share'],
+                'distance_reduced_with_shared_share':result['distance_reduced_with_shared_share'],
+
     })
 
     print(f'{n + 1:3d}: Min/Mean/Max reward: {result["episode_reward_min"]:8.4f}/{result["episode_reward_mean"]:8.4f}/{result["episode_reward_max"]:8.4f}, len mean: {result["episode_len_mean"]:8.4f}. Checkpoint saved to {file_name}')
