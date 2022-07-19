@@ -1,3 +1,4 @@
+import gym
 import ray
 import ray.rllib.agents.dqn as dqn
 from ray import serve
@@ -6,7 +7,9 @@ from ray.rllib.agents.dqn import DQNTrainer, DEFAULT_CONFIG
 from gym_graphenv.envs.GraphworldManhattan import GraphEnv
 import gym
 import requests
-checkpoint_path = "C:\\Users\\cosmi\\Documents\\Mannheim\\ines-autonomous-dispatching\\results\\tmp\\dqn\\graphworld\\checkpoint_000001\\checkpoint-1"
+# checkpoint_path = "C:\\Users\\cosmi\\Documents\\Mannheim\\ines-autonomous-dispatching\\results\\tmp\\dqn\\graphworld\\checkpoint_000001\\checkpoint-1"
+
+checkpoint_path = '/Users/noah/Desktop/Repositories/ines-autonomous-dispatching/Manhattan_Graph_Environment/tmp/dqn/graphworld/checkpoint_000010/checkpoint-10'
 rainbow_config = DEFAULT_CONFIG.copy()
 rainbow_config['num_workers'] = 3
 rainbow_config["train_batch_size"] = 400
