@@ -1,11 +1,34 @@
+.main-body {
+  background-color: #dddddd;
+  width: 100%;
+  display: inline-block;
+}
 .left-dashboard {
   background-color: #dddddd;
   width: 60%;
   margin-left: 0;
   padding: 10px 10px;
   display: inline-block;
+  margin-bottom: 0;
 }
 
+#destination-hub {
+  background-color: beige;
+  border-style: solid;
+  border-color: blueviolet;
+}
+
+#available-shared {
+  background-color: beige;
+  border-style: solid;
+  border-color: blueviolet;
+}
+
+#actions-taken-titel {
+  background-color: beige;
+  display: inline;
+  margin-right: 20px;
+}
 #my-graph {
   height: 650px;
 }
@@ -15,6 +38,12 @@
 }
 
 #calc-route {
+  background-color: beige;
+  border-style: solid;
+  border-color: blueviolet;
+}
+
+#titel-analysis {
   display: inline-block;
 }
 
@@ -38,7 +67,7 @@
 }
 
 .right-input {
-  background-color: white;
+  background-color: #dab3ff;
   width: 35%;
   margin-left: 30px;
   margin-right: 0px;
@@ -50,7 +79,22 @@
 }
 
 #start-button {
-  margin-left: 0;
+  margin-left: 10px;
+  width: 80px;
+  height: 40px;
+  font-size: 20px;
+  background-color: beige;
+  border-style: solid;
+  border-color: blueviolet;
+  border-width: 5px;
+}
+
+.grid-container {
+  display: inline-grid;
+  padding-right: 50px;
+  border-style: solid;
+  border-color: blueviolet;
+  border-width: 5px;
   width: 70px;
-  height: 35px;
+  height: 30px;
 }

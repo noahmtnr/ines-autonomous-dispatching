@@ -165,8 +165,6 @@ class GraphEnv(gym.Env):
             self.deadline=datetime.strptime(self.env_config['delivery_timestamp'], '%Y-%m-%d %H:%M:%S')
             self.current_wait = 0
 
-
-
         print(f"Reset initialized pickup: {self.position}")
         print(f"Reset initialized dropoff: {self.final_hub}")
         print(f"Reset initialized time: {self.time}")
