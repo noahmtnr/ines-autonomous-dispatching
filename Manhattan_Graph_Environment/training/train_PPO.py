@@ -18,7 +18,7 @@ from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
 from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv, CustomCallbacks
 
 wandb.login(key="93aab2bcc48447dd2e8f74124d0258be2bf93859")
-wandb.init(project="Comparison-Total_Env", entity="hitchhike")
+wandb.init(project="Comparison_Hypothese_Normalisiert", entity="hitchhike")
 
 env=GraphEnv()
 
@@ -28,7 +28,7 @@ ray.init()
 
 #Set trainer configuration
 trainer_config = DEFAULT_CONFIG.copy()
-# trainer_config['num_workers'] = 1
+trainer_config['num_workers'] = 3
 # trainer_config["train_batch_size"] = 400
 # trainer_config["gamma"] = 0.95
 # trainer_config["n_step"] = 10
@@ -38,7 +38,7 @@ trainer_config["explore"] = True
 trainer_config["exploration_config"] = {
     "type": "EpsilonGreedy",
     "initial_epsilon": 1.0,
-    "final_epsilon": 0.02,
+    "final_epsilon": 0.05,
 }
 #trainer_config["num_gpus"] = int(os.environ.get("RLLIB_NUM_GPUS", "0"))
 
@@ -97,11 +97,37 @@ for n in range(n_iter):
                'count_delivered_on_time': int(result["count_delivered_on_time"]),
                'count_delivered_with_delay': int(result["count_delivered_with_delay"]),
                'count_not_delivered': int(result["count_not_delivered"]),
-               'share_delivered_on_time': float(result["count_delivered_on_time"]/result['episodes_this_iter'])
+                'share_delivered_on_time': float(result["count_delivered_on_time"]/result['episodes_this_iter']),
+
+               # new metrics
+               'boolean_has_booked_any_own': int(result["boolean_has_booked_any_own"]),
+               # 'bookowns_to_all': float(result["bookowns_to_all"]),
+               'count_shared_available': int(result["count_shared_available"]),
+               "ratio_shared_available_to_all_steps": float(result["ratio_shared_available_to_all_steps"]),
+               'count_shared_available_useful': int(result["count_shared_available_useful"]),
+               'shared_taken_to_shared_available': float(result["shared_taken_to_shared_available"]),
+               'shared_available_useful_to_shared_available': float(result["shared_available_useful_to_shared_available"]),
+               'shared_taken_useful_to_shared_available_useful': float(result["shared_taken_useful_to_shared_available_useful"]),
+
+               # share delivered without bookown von allen delivered
+               'ratio_delivered_without_bookown_to_all_delivered': float(result["ratio_delivered_without_bookown_to_all_delivered"]),
+               # share delivered without bookown oder von allen
+               # Anteil des Weges den man hätte durch shared rides abdecken können + den den wir tatsächlich mit shares abgedeckt haben
+
+               #new metrics bookown distance reduced and rem distnce reduced
+                'bookown_distance_not_covered_share':float(result['bookown_distance_not_covered_share_mean']),
+                'bookown_distance_not_covered': float(result['bookown_distance_not_covered_mean']),
+                'distance_reduced_with_ownrides':float(result['distance_reduced_with_ownrides_mean']),
+                'distance_reduced_with_shared':float(result['distance_reduced_with_shared_mean']),
+                'distance_reduced_with_ownrides_share':float(result['distance_reduced_with_ownrides_share_mean']),
+                'distance_reduced_with_shared_share':float(result['distance_reduced_with_shared_share_mean']),
+
+
                }
     episode_data.append(episode)
     episode_json.append(json.dumps(episode))
     file_name = trainer.save(checkpoint_root)
+    wandb.save(file_name)
     wandb.log({"n_trained_episodes": result['episodes_this_iter'],
                 "mean_reward": result['episode_reward_mean'],
                 "max_reward": result['episode_reward_max'],
@@ -117,7 +143,28 @@ for n in range(n_iter):
                 'count_delivered_on_time': result["count_delivered_on_time"],
                 'count_delivered_with_delay': result["count_delivered_with_delay"],
                 'count_not_delivered': result["count_not_delivered"],
-                'share_delivered_on_time': result["count_delivered_on_time"]/result['episodes_this_iter']
+                'share_delivered_on_time': result["count_delivered_on_time"]/result['episodes_this_iter'],
+
+                # new metrics
+                'boolean_has_booked_any_own': result["boolean_has_booked_any_own"],
+                #'bookowns_to_all': result["bookowns_to_all"],
+                'count_shared_available': result["count_shared_available"],
+                'count_shared_available_useful': result["count_shared_available_useful"],
+                'shared_taken_to_shared_available': result["shared_taken_to_shared_available"],
+                'shared_available_useful_to_shared_available': result["shared_available_useful_to_shared_available"],
+                'shared_taken_useful_to_shared_available_useful': result["shared_taken_useful_to_shared_available_useful"],
+                "ratio_shared_available_to_all_steps": result["ratio_shared_available_to_all_steps"],
+
+                "ratio_delivered_without_bookown_to_all_delivered": result["ratio_delivered_without_bookown_to_all_delivered"],
+
+
+                'bookown_distance_not_covered_share': result['bookown_distance_not_covered_share_mean'],
+                'bookown_distance_not_covered': result['bookown_distance_not_covered_mean'],
+                'distance_reduced_with_ownrides':result['distance_reduced_with_ownrides_mean'],
+                'distance_reduced_with_shared':result['distance_reduced_with_shared_mean'],
+                'distance_reduced_with_ownrides_share':result['distance_reduced_with_ownrides_share_mean'],
+                'distance_reduced_with_shared_share':result['distance_reduced_with_shared_share_mean'],
+
     })
 
     print(f'{n + 1:3d}: Min/Mean/Max reward: {result["episode_reward_min"]:8.4f}/{result["episode_reward_mean"]:8.4f}/{result["episode_reward_max"]:8.4f}, len mean: {result["episode_len_mean"]:8.4f}. Checkpoint saved to {file_name}')
