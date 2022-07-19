@@ -49,6 +49,9 @@ app = dash.Dash(__name__)
 )
 def next_step(input_value):
 
+    if input_value is None: 
+        return dash.no_update
+
     taken_steps.append(input_value)
 
     actions = ['book' for i in range(120)]
@@ -63,9 +66,6 @@ def next_step(input_value):
     df['action'] = actions # start hub
 
     shared_hubs = {'1':7, '2':10, '3':-5}
-    wait =1
-    share = 0
-    book = 0
     return dcc.Graph(figure=create_map_from_df(df, taken_steps), id='my-graph'), [html.Div("{}:  {} km".format( i, shared_hubs[i])) for i in shared_hubs]
 
 
