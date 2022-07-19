@@ -71,7 +71,7 @@ html.Div(children=[
 
     ], className='right-dashboard'),
      
-     html.Button('Start', id='start-button', n_clicks=0),
+    html.Button('Start', id='start-button', n_clicks=0),
    
     # html.Div([
     #     "Destination HUB: ",

@@ -10,8 +10,19 @@
   height: 650px;
 }
 
-.svg-container {
-  width: 800px;
+#step-by-step {
+  display: inline-block;
+}
+
+#calc-route {
+  display: inline-block;
+}
+
+#route-button {
+  display: inline-block;
+  margin-right: 10px;
+  width: 70px;
+  height: 35px;
 }
 
 .right-dashboard {
@@ -34,7 +45,7 @@
   margin-top: 50px;
   padding: 10px 10px;
   display: inline-block;
-  vertical-align: top;
+  vertical-align: baseline;
   font-size: 25px;
 }
 
