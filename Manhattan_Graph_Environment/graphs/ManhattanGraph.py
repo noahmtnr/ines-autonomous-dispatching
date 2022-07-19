@@ -3,6 +3,7 @@ import pandas as pd
 import random
 from datetime import datetime, timedelta
 import os
+import config
 
 ROOT_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
 #graph to be used: full.graphml (all nodes)
@@ -10,16 +11,16 @@ ROOT_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
 class ManhattanGraph:
 
     def __init__(self, filename, num_hubs):
-        # filepath = os.path.join(ROOT_DIR, 'data', 'graph', ("%s.graphml") % (filename))
+        #filepath = os.path.join('data', 'graph', ("%s.graphml") % (filename))
         #filepath = "/Users/noah/Desktop/Repositories/ines-autonomous-dispatching/data/graph/simple.graphml"
-        filepath = "D:\ines-autonomous-dispatching\data\graph\simple.graphml"
+        filepath = "D:/ines-autonomous-dispatching/data/graph/simple.graphml"
         self.inner_graph = ox.load_graphml(filepath)
         self.inner_graph = ox.add_edge_speeds(self.inner_graph,fallback=30)
         self.inner_graph = ox.add_edge_travel_times(self.inner_graph)
         ox.utils_graph.remove_isolated_nodes(self.inner_graph)
         self.generate_hubs(num_hubs)
 
-    def generate_hubs(self, num_hubs: int = 70):#, opt: int = 0):
+    def generate_hubs(self, num_hubs: int = 120):#, opt: int = 0):
         # the code below is for loading the hubs specified in data/trips/manual_hubs.csv
         """Generates random bubs within the graph
 
@@ -30,9 +31,9 @@ class ManhattanGraph:
             self.hubs(list): List of hubs in graph
         """
         # the code below is for mapping the pre-defined hubs (customer/store/trips) to nodes in the graph
-        # filepath = os.path.join(ROOT_DIR, 'data', 'hubs', 'new_hubs.csv')
+        #filepath = os.path.join(ROOT_DIR, 'data', 'hubs', 'new_hubs.csv')
         #filepath = "/Users/noah/Desktop/Repositories/ines-autonomous-dispatching/data/hubs/new_hubs.csv" 
-        filepath = "..\..\data\hubs\new_hubs.csv"
+        filepath = "D:/ines-autonomous-dispatching/data/hubs/longlist.csv"
         hubs_file = pd.read_csv(filepath)
         #print("Read hubs successfully")
         hubs = []

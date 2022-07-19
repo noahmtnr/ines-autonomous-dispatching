@@ -15,6 +15,7 @@ df['action'] = actions
 
 taken_steps = []
 
+
 # define list containing hubs/actions that were taken (will later come from tested agent)
 # list_actions = [3,20,20,5,7,7,7,110,112,112,2]
 # type_of_actions = ['','book','wait','share', 'share', 'wait', 'wait', 'share', 'share', 'wait', 'book']
