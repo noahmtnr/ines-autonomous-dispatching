@@ -29,7 +29,7 @@ from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
 from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv, CustomCallbacks
 
 wandb.login(key="93aab2bcc48447dd2e8f74124d0258be2bf93859")
-wandb.init(project="tests_metrics", entity="hitchhike")
+wandb.init(project="Comparison_Hypothese_Normalisiert", entity="hitchhike")
 # wandb.init(project="New_Metrics_Total_Env", entity="hitchhike")
 
 # class CustomModel(TFModelV2):
@@ -114,7 +114,7 @@ shutil.rmtree(ray_results, ignore_errors=True, onerror=None)   # clean up old ru
 results = []
 episode_data = []
 episode_json = []
-n_iter = 100
+n_iter = 200
 for n in range(n_iter):
     result = trainer.train()
     results.append(result)
@@ -172,7 +172,7 @@ for n in range(n_iter):
 
                #new metrics bookown distance reduced and rem distnce reduced
                 'bookown_distance_not_covered_share':float(result['bookown_distance_not_covered_share']),
-                'bookown_distance_not_covered_mean': float(result['bookown_distance_not_covered_mean']),
+                'bookown_distance_not_covered': float(result['bookown_distance_not_covered']),
                 'distance_reduced_with_ownrides':float(result['distance_reduced_with_ownrides']),
                 'distance_reduced_with_shared':float(result['distance_reduced_with_shared']),
                 'distance_reduced_with_ownrides_share':float(result['distance_reduced_with_ownrides_share']),
@@ -183,6 +183,8 @@ for n in range(n_iter):
     episode_data.append(episode)
     episode_json.append(json.dumps(episode))
     file_name = trainer.save(checkpoint_root)
+    trainer.save(os.path.join(wandb.run.dir, "checkpoint"))
+    # wandb.save(file_name)
     wandb.log({"n_trained_episodes": result['episodes_this_iter'],
                 "mean_reward": result['episode_reward_mean'],
                 "max_reward": result['episode_reward_max'],
@@ -214,7 +216,7 @@ for n in range(n_iter):
 
 
                 'bookown_distance_not_covered_share': result['bookown_distance_not_covered_share'],
-                'bookown_distance_not_covered_mean': result['bookown_distance_not_covered_mean'],
+                'bookown_distance_not_covered': result['bookown_distance_not_covered'],
                 'distance_reduced_with_ownrides':result['distance_reduced_with_ownrides'],
                 'distance_reduced_with_shared':result['distance_reduced_with_shared'],
                 'distance_reduced_with_ownrides_share':result['distance_reduced_with_ownrides_share'],
