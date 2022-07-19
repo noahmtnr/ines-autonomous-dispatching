@@ -4,14 +4,15 @@ import random
 from datetime import datetime, timedelta
 import os
 
-ROOT_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
+ROOT_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), '../..'))
+print("root",ROOT_DIR)
 #graph to be used: full.graphml (all nodes)
 #if we use small_manhattan.graphml, we do not have all nodes which are in the trips and then we get Key Error
 class ManhattanGraph:
 
     def __init__(self, filename, num_hubs):
-        # filepath = os.path.join(ROOT_DIR, 'data', 'graph', ("%s.graphml") % (filename))
-        filepath = "/Users/noah/Desktop/Repositories/ines-autonomous-dispatching/data/graph/simple.graphml"
+        filepath = os.path.join(ROOT_DIR, 'data', 'graph', ("%s.graphml") % (filename))
+        # filepath = "/Users/noah/Desktop/Repositories/ines-autonomous-dispatching/data/graph/simple.graphml"
         self.inner_graph = ox.load_graphml(filepath)
         self.inner_graph = ox.add_edge_speeds(self.inner_graph,fallback=30)
         self.inner_graph = ox.add_edge_travel_times(self.inner_graph)
@@ -29,8 +30,8 @@ class ManhattanGraph:
             self.hubs(list): List of hubs in graph
         """
         # the code below is for mapping the pre-defined hubs (customer/store/trips) to nodes in the graph
-        # filepath = os.path.join(ROOT_DIR, 'data', 'hubs', 'new_hubs.csv')
-        filepath = "/Users/noah/Desktop/Repositories/ines-autonomous-dispatching/data/hubs/new_hubs.csv" 
+        filepath = os.path.join(ROOT_DIR, 'data', 'hubs', 'new_hubs.csv')
+        # filepath = "/Users/noah/Desktop/Repositories/ines-autonomous-dispatching/data/hubs/new_hubs.csv" 
         hubs_file = pd.read_csv(filepath)
         #print("Read hubs successfully")
         hubs = []
@@ -93,8 +94,8 @@ class ManhattanGraph:
         # add mobility providers randomly
         provider_column=[]
         totalprice_column=[]
-        # filepath = os.path.join(ROOT_DIR, 'data', 'others', 'Provider.csv')
-        filepath = "/Users/noah/Desktop/Repositories/ines-autonomous-dispatching/data/others/Provider.csv"
+        filepath = os.path.join(ROOT_DIR, 'data', 'others', 'Provider.csv')
+        # filepath = "/Users/noah/Desktop/Repositories/ines-autonomous-dispatching/data/others/Provider.csv"
         providers = pd.read_csv(filepath)
         for i in self.trips.index:
             provider_id = providers['id'].sample(n=1).iloc[0]

@@ -304,10 +304,10 @@ class GraphEnv(gym.Env):
         self.state_of_delivery = state_of_delivery
         executionTime = (time.time() - startTime)
 
-        self.route_taken.append(route)
-        print(self.route_taken)
+        # self.route_taken.append(route)
+        # print(self.route_taken)
 
-        return self.state, reward,  self.done, {"timestamp": self.time,"step_travel_time":step_duration,"distance":self.distance_matrix[self.old_position][self.position], "count_hubs":self.count_hubs, "action": self.action_choice, "hub_index": action, "route": self.route_taken}
+        return self.state, reward,  self.done, {"timestamp": self.time,"step_travel_time":step_duration,"distance":self.distance_matrix[self.old_position][self.position], "count_hubs":self.count_hubs, "action": self.action_choice, "hub_index": action, "route": route}
 
     
     def compute_reward(self, action):
