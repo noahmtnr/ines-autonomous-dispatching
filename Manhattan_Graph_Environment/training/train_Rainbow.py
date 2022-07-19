@@ -183,7 +183,8 @@ for n in range(n_iter):
     episode_data.append(episode)
     episode_json.append(json.dumps(episode))
     file_name = trainer.save(checkpoint_root)
-    wandb.save(file_name)
+    trainer.save(os.path.join(wandb.run.dir, "checkpoint"))
+    # wandb.save(file_name)
     wandb.log({"n_trained_episodes": result['episodes_this_iter'],
                 "mean_reward": result['episode_reward_mean'],
                 "max_reward": result['episode_reward_max'],
