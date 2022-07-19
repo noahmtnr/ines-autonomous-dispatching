@@ -130,6 +130,7 @@ class GraphEnv(gym.Env):
         pickup_day = np.random.randint(low=1,high=14)
         pickup_hour =  np.random.randint(24)
         pickup_minute = np.random.randint(60) 
+        self.route_taken = []
         self.START_TIME = datetime(2016,1,pickup_day,pickup_hour,pickup_minute,0).strftime('%Y-%m-%d %H:%M:%S')
 
         if (self.env_config == None or self.env_config == {}):
@@ -240,6 +241,7 @@ class GraphEnv(gym.Env):
                 print("action == wait ")
                 executionTimeWait = (time.time() - startTimeWait)
                 # print(f"Time Wait: {str(executionTimeWait)}")
+                route = [self.manhattan_graph.get_nodeid_by_hub_index(self.position)]
                 pass
 
             # action = share ride or book own ride
@@ -302,7 +304,10 @@ class GraphEnv(gym.Env):
         self.state_of_delivery = state_of_delivery
         executionTime = (time.time() - startTime)
 
-        return self.state, reward,  self.done, {"timestamp": self.time,"step_travel_time":step_duration,"distance":self.distance_matrix[self.old_position][self.position], "count_hubs":self.count_hubs, "action": self.action_choice, "hub_index": action}
+        self.route_taken.append(route)
+        print(self.route_taken)
+
+        return self.state, reward,  self.done, {"timestamp": self.time,"step_travel_time":step_duration,"distance":self.distance_matrix[self.old_position][self.position], "count_hubs":self.count_hubs, "action": self.action_choice, "hub_index": action, "route": self.route_taken}
 
     
     def compute_reward(self, action):
