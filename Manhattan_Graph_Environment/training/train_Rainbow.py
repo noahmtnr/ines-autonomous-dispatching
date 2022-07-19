@@ -171,12 +171,12 @@ for n in range(n_iter):
                # Anteil des Weges den man hätte durch shared rides abdecken können + den den wir tatsächlich mit shares abgedeckt haben
 
                #new metrics bookown distance reduced and rem distnce reduced
-                'bookown_distance_not_covered_share':float(result['bookown_distance_not_covered_share_mean']),
-                'bookown_distance_not_covered': float(result['bookown_distance_not_covered_mean']),
-                'distance_reduced_with_ownrides':float(result['distance_reduced_with_ownrides_mean']),
-                'distance_reduced_with_shared':float(result['distance_reduced_with_shared_mean']),
-                'distance_reduced_with_ownrides_share':float(result['distance_reduced_with_ownrides_share_mean']),
-                'distance_reduced_with_shared_share':float(result['distance_reduced_with_shared_share_mean']),
+                'bookown_distance_not_covered_share':float(result['bookown_distance_not_covered_share']),
+                'bookown_distance_not_covered': float(result['bookown_distance_not_covered']),
+                'distance_reduced_with_ownrides':float(result['distance_reduced_with_ownrides']),
+                'distance_reduced_with_shared':float(result['distance_reduced_with_shared']),
+                'distance_reduced_with_ownrides_share':float(result['distance_reduced_with_ownrides_share']),
+                'distance_reduced_with_shared_share':float(result['distance_reduced_with_shared_share']),
 
 
                }
@@ -214,12 +214,12 @@ for n in range(n_iter):
                 "ratio_delivered_without_bookown_to_all_delivered": result["ratio_delivered_without_bookown_to_all_delivered"],
 
 
-                'bookown_distance_not_covered_share': result['bookown_distance_not_covered_share_mean'],
-                'bookown_distance_not_covered': result['bookown_distance_not_covered_mean'],
-                'distance_reduced_with_ownrides':result['distance_reduced_with_ownrides_mean'],
-                'distance_reduced_with_shared':result['distance_reduced_with_shared_mean'],
-                'distance_reduced_with_ownrides_share':result['distance_reduced_with_ownrides_share_mean'],
-                'distance_reduced_with_shared_share':result['distance_reduced_with_shared_share_mean'],
+                'bookown_distance_not_covered_share': result['bookown_distance_not_covered_share'],
+                'bookown_distance_not_covered': result['bookown_distance_not_covered'],
+                'distance_reduced_with_ownrides':result['distance_reduced_with_ownrides'],
+                'distance_reduced_with_shared':result['distance_reduced_with_shared'],
+                'distance_reduced_with_ownrides_share':result['distance_reduced_with_ownrides_share'],
+                'distance_reduced_with_shared_share':result['distance_reduced_with_shared_share'],
 
     })
 
