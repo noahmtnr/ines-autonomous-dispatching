@@ -6,6 +6,14 @@
   display: inline-block;
 }
 
+#my-graph {
+  height: 650px;
+}
+
+.svg-container {
+  width: 800px;
+}
+
 .right-dashboard {
   background-color: #dddddd;
   width: 35%;
@@ -28,4 +36,10 @@
   display: inline-block;
   vertical-align: top;
   font-size: 25px;
+}
+
+#start-button {
+  margin-left: 0;
+  width: 70px;
+  height: 35px;
 }
