@@ -1,8 +1,10 @@
+import gym
 import ray
 import ray.rllib.agents.dqn as dqn
 from ray import serve
 from starlette.requests import Request
 from ray.rllib.agents.dqn import DQNTrainer, DEFAULT_CONFIG
+from gym_graphenv.envs.GraphworldManhattan import GraphEnv
 
 checkpoint_path = '/Users/noah/Desktop/Repositories/ines-autonomous-dispatching/Manhattan_Graph_Environment/tmp/dqn/graphworld/checkpoint_000010/checkpoint-10'
 rainbow_config = DEFAULT_CONFIG.copy()
@@ -23,7 +25,7 @@ class ServeRainbowModel:
     def __init__(self, checkpoint_path) -> None:
         self.trainer = dqn.DQNTrainer(
             config=rainbow_config,
-            env="graphworld-v0",
+            env=GraphEnv,
         )
         self.trainer.restore(checkpoint_path)
 
