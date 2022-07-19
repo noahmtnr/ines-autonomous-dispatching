@@ -11,7 +11,8 @@ class ManhattanGraph:
 
     def __init__(self, filename, num_hubs):
         # filepath = os.path.join(ROOT_DIR, 'data', 'graph', ("%s.graphml") % (filename))
-        filepath = "/Users/noah/Desktop/Repositories/ines-autonomous-dispatching/data/graph/simple.graphml"
+        #filepath = "/Users/noah/Desktop/Repositories/ines-autonomous-dispatching/data/graph/simple.graphml"
+        filepath = "D:\ines-autonomous-dispatching\data\graph\simple.graphml"
         self.inner_graph = ox.load_graphml(filepath)
         self.inner_graph = ox.add_edge_speeds(self.inner_graph,fallback=30)
         self.inner_graph = ox.add_edge_travel_times(self.inner_graph)
@@ -30,7 +31,8 @@ class ManhattanGraph:
         """
         # the code below is for mapping the pre-defined hubs (customer/store/trips) to nodes in the graph
         # filepath = os.path.join(ROOT_DIR, 'data', 'hubs', 'new_hubs.csv')
-        filepath = "/Users/noah/Desktop/Repositories/ines-autonomous-dispatching/data/hubs/new_hubs.csv" 
+        #filepath = "/Users/noah/Desktop/Repositories/ines-autonomous-dispatching/data/hubs/new_hubs.csv" 
+        filepath = "..\..\data\hubs\new_hubs.csv"
         hubs_file = pd.read_csv(filepath)
         #print("Read hubs successfully")
         hubs = []

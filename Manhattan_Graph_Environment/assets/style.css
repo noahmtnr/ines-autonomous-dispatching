@@ -12,7 +12,13 @@
   margin-bottom: 0;
 }
 
-#destination-hub {
+#destination-hub-1 {
+  background-color: beige;
+  border-style: solid;
+  border-color: blueviolet;
+}
+
+#destination-hub-2 {
   background-color: beige;
   border-style: solid;
   border-color: blueviolet;
@@ -37,7 +43,13 @@
   display: inline-block;
 }
 
-#calc-route {
+#calc-route-1 {
+  background-color: beige;
+  border-style: solid;
+  border-color: blueviolet;
+}
+
+#calc-route-2 {
   background-color: beige;
   border-style: solid;
   border-color: blueviolet;
@@ -45,13 +57,6 @@
 
 #titel-analysis {
   display: inline-block;
-}
-
-#route-button {
-  display: inline-block;
-  margin-right: 10px;
-  width: 70px;
-  height: 35px;
 }
 
 .right-dashboard {
@@ -78,7 +83,22 @@
   font-size: 25px;
 }
 
-#start-button {
+.tab-label {
+  font-size: 40px;
+}
+
+#start-button-1 {
+  margin-left: 10px;
+  width: 80px;
+  height: 40px;
+  font-size: 20px;
+  background-color: beige;
+  border-style: solid;
+  border-color: blueviolet;
+  border-width: 5px;
+}
+
+#start-button-2 {
   margin-left: 10px;
   width: 80px;
   height: 40px;
