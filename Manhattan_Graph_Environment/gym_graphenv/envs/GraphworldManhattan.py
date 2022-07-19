@@ -82,6 +82,7 @@ class GraphEnv(gym.Env):
         self.state = None
         self.state_of_delivery = DeliveryState.IN_DELIVERY
         self.allow_bookown = 0
+        self.route_travel_distance=0
 
 
         self.action_space = gym.spaces.Discrete(self.n_hubs)
@@ -275,7 +276,7 @@ class GraphEnv(gym.Env):
             self.count_steps +=1
             if(action == self.position):
             # action = wait
-                step_duration = WAIT_TIME * 60
+                step_duration = self.WAIT_TIME_SECONDS
                 self.has_waited=True
                 self.own_ride = False
                 self.count_wait += 1
@@ -291,12 +292,12 @@ class GraphEnv(gym.Env):
 
                 route = ox.shortest_path(self.manhattan_graph.inner_graph, pickup_nodeid,  dropoff_nodeid, weight='travel_time')
                 route_travel_time = ox.utils_graph.get_route_edge_attributes(self.manhattan_graph.inner_graph,route,attribute='travel_time')
-                route_travel_distance = ox.utils_graph.get_route_edge_attributes(self.manhattan_graph.inner_graph,route,attribute='length')
+                self.route_travel_distance = sum(ox.utils_graph.get_route_edge_attributes(self.manhattan_graph.inner_graph,route,attribute='length'))
 
 
-                if(self.learn_graph.wait_till_departure_times[(self.position,action)] == WAIT_TIME_SECONDS):
-                    step_duration = sum(route_travel_time)+ WAIT_TIME_SECONDS#we add 5 minutes (300 seconds) so the taxi can arrive
-                elif(self.learn_graph.wait_till_departure_times[(self.position,action)] != WAIT_TIME_SECONDS and self.learn_graph.wait_till_departure_times[(self.position,action)] != 0):
+                if(self.learn_graph.wait_till_departure_times[(self.position,action)] == self.WAIT_TIME_SECONDS):
+                    step_duration = sum(route_travel_time)+ self.WAIT_TIME_SECONDS#we add 5 minutes (300 seconds) so the taxi can arrive
+                elif(self.learn_graph.wait_till_departure_times[(self.position,action)] != self.WAIT_TIME_SECONDS and self.learn_graph.wait_till_departure_times[(self.position,action)] != 0):
                     step_duration = sum(route_travel_time)
                     # TODO: String conversion von departure time besser direkt beim erstellen der Matrix
                     departure_time = datetime.strptime(self.learn_graph.wait_till_departure_times[(self.position,action)], '%Y-%m-%d %H:%M:%S')
@@ -815,17 +816,17 @@ class CustomCallbacks(DefaultCallbacks):
         # zum Vergleich ohne Abzug später
         # episode.custom_metrics["count_not_delivered_first"] = self.count_not_delivered
 
-        #ow much distance (in %) we don't have to ride with book own 
-        episode.custom_metrics['bookown_distance_not_covered_share']=1-(self.distance_covered_with_ownrides/self.shortest_path)
+        #how much distance (in % of total distance) we don't have to ride with book own 
+        episode.custom_metrics['bookown_distance_not_covered_share']=1-(episode.env.distance_covered_with_ownrides/episode.env.shortest_distance)
         #how much distance we don't have to ride with book own 
-        episode.custom_metrics['bookown_distance_not_covered_mean']=self.shortest_path-self.distance_covered_with_ownrides
+        episode.custom_metrics['bookown_distance_not_covered']=episode.env.shortest_distance-episode.env.distance_covered_with_ownrides
         
-        episode.custom_metrics['distance_reduced_with_ownrides']=self.distance_reduced_with_ownrides
-        episode.custom_metrics['distance_reduced_with_shared']=self.distance_reduced_with_shared
+        episode.custom_metrics['distance_reduced_with_ownrides']=episode.env.distance_reduced_with_ownrides
+        episode.custom_metrics['distance_reduced_with_shared']=episode.env.distance_reduced_with_shared
 
 
-        episode.custom_metrics['distance_reduced_with_ownrides_share']=self.distance_reduced_with_ownrides/self.shortest_path
-        episode.custom_metrics['distance_reduced_with_shared_share']=self.distance_reduced_with_shared/self.shortest_path
+        episode.custom_metrics['distance_reduced_with_ownrides_share']=episode.env.distance_reduced_with_ownrides/episode.env.shortest_distance
+        episode.custom_metrics['distance_reduced_with_shared_share']=episode.env.distance_reduced_with_shared/episode.env.shortest_distance
 
 
 
@@ -839,7 +840,7 @@ class CustomCallbacks(DefaultCallbacks):
         result["count_wait_min"] = result['custom_metrics']['count_wait_min']
         result["count_wait_max"] = result['custom_metrics']['count_wait_max']
         result["count_wait_mean"] = result['custom_metrics']['count_wait_mean']
-        result["waiting_time_mean"] = result['custom_metrics']['count_wait_mean']*WAIT_TIME_MINUTES
+        result["waiting_time_mean"] = result['custom_metrics']['count_wait_mean']*5
 
         result["count_bookown_min"] = result['custom_metrics']['count_bookown_min']
         result["count_bookown_max"] = result['custom_metrics']['count_bookown_max']
@@ -898,10 +899,10 @@ class CustomCallbacks(DefaultCallbacks):
 
 
         #metrics about bookown distance reduced and rem distance reduced
-        result['bookown_distance_not_covered_share']=result['custom_metrics']['bookown_distance_not_covered_share']
-        result['bookown_distance_not_covered_mean']=result['custom_metrics']['bookown_distance_not_covered_mean']
-        result['distance_reduced_with_ownrides']=result['custom_metrics']['distance_reduced_with_ownrides']
-        result['distance_reduced_with_shared']=result['custom_metrics']['distance_reduced_with_shared']
-        result['distance_reduced_with_ownrides_share']=result['custom_metrics']['distance_reduced_with_ownrides_share']
-        result['distance_reduced_with_shared_share']=result['custom_metrics']['distance_reduced_with_shared_share']
+        result['bookown_distance_not_covered_share']=result['custom_metrics']['bookown_distance_not_covered_share_mean']
+        result['bookown_distance_not_covered']=result['custom_metrics']['bookown_distance_not_covered_mean']
+        result['distance_reduced_with_ownrides']=result['custom_metrics']['distance_reduced_with_ownrides_mean']
+        result['distance_reduced_with_shared']=result['custom_metrics']['distance_reduced_with_shared_mean']
+        result['distance_reduced_with_ownrides_share']=result['custom_metrics']['distance_reduced_with_ownrides_share_mean']
+        result['distance_reduced_with_shared_share']=result['custom_metrics']['distance_reduced_with_shared_share_mean']
 
