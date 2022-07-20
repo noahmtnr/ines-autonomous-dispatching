@@ -247,6 +247,7 @@ class GraphEnv(gym.Env):
         """
 
         startTime = time.time()
+        print("Start Time ", self.time)
 
         #self.done = False
 
@@ -310,13 +311,24 @@ class GraphEnv(gym.Env):
 
                 if(self.learn_graph.wait_till_departure_times[(self.position,action)] == self.WAIT_TIME_SECONDS):
                     step_duration = sum(route_travel_time)+ self.WAIT_TIME_SECONDS#we add 5 minutes (300 seconds) so the taxi can arrive
+                    print("Travel Times ", route_travel_time)
+                    print("Sum Travel Time ", sum(route_travel_time))
+                    print("Wait Time ", self.WAIT_TIME_SECONDS)
                 elif(self.learn_graph.wait_till_departure_times[(self.position,action)] != self.WAIT_TIME_SECONDS and self.learn_graph.wait_till_departure_times[(self.position,action)] != 0):
                     step_duration = sum(route_travel_time)
                     # TODO: String conversion von departure time besser direkt beim erstellen der Matrix
                     departure_time = datetime.strptime(self.learn_graph.wait_till_departure_times[(self.position,action)], '%Y-%m-%d %H:%M:%S')
+                    print("Departure Time: ", departure_time)
                     self.current_wait = ( departure_time - self.time).seconds
                     step_duration += self.current_wait
                     self.time = departure_time
+                    print("Travel Times ", route_travel_time)
+                    print("Sum Travel Time ", sum(route_travel_time))
+                    print("Current Wait ", self.current_wait)
+
+                
+                print("Step Duration: ", step_duration)
+
                 if(self.shared_rides_mask[action] == 1):
                     self.count_share += 1
                     self.action_choice = "Share"
@@ -329,6 +341,7 @@ class GraphEnv(gym.Env):
                     self.distance_covered_with_shared+=self.route_travel_distance
                     self.distance_reduced_with_shared+=self.learn_graph.adjacency_matrix('remaining_distance')[self.old_position][action]
 
+                    print("Share Step Duration: ", step_duration)
 
                 else:
                     self.count_bookown += 1
@@ -374,6 +387,7 @@ class GraphEnv(gym.Env):
         # print(self.state)
 
         self.time += timedelta(seconds=step_duration)
+        print("End Time ", self.time)
 
         self.count_actions += 1
 
