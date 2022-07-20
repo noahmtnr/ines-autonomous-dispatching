@@ -59,9 +59,15 @@ class Comparer:
                 time = current.get("time")
                 # travelled hubs
                 num_hubs = current.get("hubs")
+                # number of steps
+                num_steps = current.get("steps")
+                # booked own
+                num_booked_own = current.get("count_bookowns")
+                # share to own ratio
+                ratio = current.get("ratio_share_to_own")
 
                 # for one order
-            self.compare_dict[key]= [reward,route,dist,time,num_hubs]
+            self.compare_dict[key]= [reward,route,dist,time,num_hubs,num_booked_own,ratio,num_steps]
 
             print(self.compare_dict)
 
@@ -70,20 +76,54 @@ class Comparer:
         Comparer.compare_onetrip(self)
     
     def compare_onetrip(self):
+
+        # show overview of all compared agents
+        print("Overview of Compared Agents")
+        for elem in self.compare_dict.items():
+            print(elem[0], " Agent: ", elem[1][7], " steps / ", elem[1][4], " hubs / ", elem[1][2], " distance / ", elem[1][3], " time / ", elem[1][0], " reward / ", elem[1][1], " route")
+
         # do ranking on each aspect
-        # rank on reward (max)
-        reward_sort = sorted(self.compare_dict.items(), key=lambda i: i[1][0], reverse=True)
+        print("Rankings of Compared Agents")
+        # number of steps to compare
+
+        # rank on hubs (min)
+        hub_sort = sorted(self.compare_dict.items(), key=lambda i: i[1][4])
         i = 1
-        print("Ranking by Reward")
-        for elem in reward_sort:
-            print(f"Rank {i}: {elem[0]} with reward of {reward_sort[i-1][1][0]}")
+        print("\n Ranking by Number of Hubs")
+        for elem in hub_sort:
+            print(f"Rank {i}: {elem[0]} with {hub_sort[i - 1][1][4]} hubs")
             i += 1
 
+        # rank on distance (min)
         dist_sort = sorted(self.compare_dict.items(), key=lambda i: i[1][2])
         i = 1
         print("\n Ranking by Distance")
         for elem in dist_sort:
-            print(f"Rank {i}: {elem[0]} with distance of {dist_sort[i-1][1][2]}")
+            print(f"Rank {i}: {elem[0]} with distance of {dist_sort[i - 1][1][2]}")
+            i += 1
+
+        # whether has booked any own rides and how many (min)
+        booked_own_sort = sorted(self.compare_dict.items(),key=lambda i: i[1][5])
+        i = 1
+        print("\n Ranking by Number of booked owns")
+        for elem in booked_own_sort:
+            print(f"Rank {i}: {elem[0]} with number of bookowns of {booked_own_sort[i - 1][1][5]}")
+            i += 1
+
+        # share to own ratio (max)
+        ratio_sort = sorted(self.compare_dict.items(), key=lambda i: i[1][6], reverse=True)
+        i = 1
+        print("\n Ranking by Ratio of Shares to Booked Owns")
+        for elem in ratio_sort:
+            print(f"Rank {i}: {elem[0]} with ratio of {ratio_sort[i - 1][1][6]} shares to book-owns")
+            i += 1
+
+        # rank on reward (max)
+        reward_sort = sorted(self.compare_dict.items(), key=lambda i: i[1][0], reverse=True)
+        i = 1
+        print("\n Ranking by Reward")
+        for elem in reward_sort:
+            print(f"Rank {i}: {elem[0]} with reward of {reward_sort[i-1][1][0]}")
             i += 1
 
         # rank on time (min)
@@ -93,19 +133,13 @@ class Comparer:
         for elem in time_sort:
             print(f"Rank {i}: {elem[0]} with travel time of {time_sort[i-1][1][3]}")
             i += 1
-
-        # rank on ratio of travelled and remaining time
-        # rank on hubs (min)
-        hub_sort = sorted(self.compare_dict.items(), key=lambda i: i[1][4])
-        i = 1
-        print("\n Ranking by Number of Hubs")
-        for elem in hub_sort:
-            print(f"Rank {i}: {elem[0]} with {hub_sort[i-1][1][4]} hubs")
-            i += 1
         
         # display the route each agent took
         # TODO - do the visualization of Aga & Denisa here
-    
+        # Route bekommen (Liste von Hub IDs): self.compare_dict.items()[1][1]
+        # plotten mit Funktionsaufruf der Visualisierung
+
+    # this method does not work yet (state: 19.07.2022)
     def compare_multipletrips(self):
         self.compare_dict = {}
         i = 1
@@ -156,17 +190,26 @@ class Comparer:
         set_agents(self.num_agents,self.agents_arg)
 
 
-# test comparer
-# w1 = BenchmarkWrapper("random")
-# w2 = BenchmarkWrapper("cost")
-# w3 = BenchmarkWrapper("PPO")
-# w4 = BenchmarkWrapper("DQN")
-# w5 = BenchmarkWrapper("Rainbow")
+# possible agents to be compared
+w1 = BenchmarkWrapper("random")
+w2 = BenchmarkWrapper("cost")
+w3 = BenchmarkWrapper("PPO")
+# w4 = BenchmarkWrapper("DQN") # hat noch Fehler
+w5 = BenchmarkWrapper("Rainbow")
+w6 = BenchmarkWrapper("Shares")
 w7 = BenchmarkWrapper("Bookown")
-c = Comparer(1,w7.name,w7)
+
+# possible combinations of comparisons
+# c = Comparer(1,w7.name,w7)
+# c = Comparer(3,w5.name,w6.name,w7.name,w5,w6,w7)
+# c = Comparer(1,w4.name,w4)
 # c = Comparer(2,w3.name,w5.name,w3,w5)
 # c = Comparer(3,w1.name,w2.name,w3.name,w1,w2,w3)
+c = Comparer(6,w1.name,w2.name,w3.name,w5.name,w6.name,w7.name,w1,w2,w3,w5,w6,w7)
 # c = Comparer(5,w1.name,w2.name,w3.name,w4.name,w5.name,w1,w2,w3,w4,w5)
+# c = Comparer(7,w1.name,w2.name,w3.name,w4.name,w5.name,w6.name,w7.name,w1,w2,w3,w4,w5,w6,w7)
+
+# compute the commparison
 c.establish_compare_onetrip()
 # c.compare_multiple_trips()
 

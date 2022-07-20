@@ -63,10 +63,6 @@ class PPOAgent:
             state, reward, done, info = env.step(action)
             sum_reward += reward
             #env.render()
-            if done == True:
-                print("cumulative reward", sum_reward)
-                state = env.reset()
-                sum_reward = 0
 
             # get data from action
             route.append(action)
@@ -89,7 +85,10 @@ class PPOAgent:
                 print("DELIVERY DONE! Distance: ",sum_distance)
                 print("DELIVERY DONE! Hubs: ",number_hubs)
                 print("DELIVERY DONE! unitl deadline: ",time_until_deadline)
-                break
+
+                # print("cumulative reward", sum_reward)
+                # state = env.reset()
+                # sum_reward = 0
 
             # print("sum_reward: ",sum_reward)
             # print("sum_reward: ",sum_reward, " time: ",env.time, "deadline time: ", env.deadline, "pickup time: ", env.pickup_time)

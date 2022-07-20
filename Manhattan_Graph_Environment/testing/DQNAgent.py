@@ -2,7 +2,6 @@
 import sys
 sys.path.insert(0,"")
 from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
-from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv, CustomCallbacks
 import numpy as np
 import pandas as pd
 import json
@@ -15,8 +14,11 @@ import random
 import ray
 import warnings
 warnings.filterwarnings('ignore')
+from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv, CustomCallbacks
+# sys.path.append(os.path.join(ROOT_DIR, "Manhattan_Graph_Environment", "gym_graphenv"))
 from ray.rllib.agents.dqn import DQNTrainer, DEFAULT_CONFIG
 from config.definitions import ROOT_DIR
+sys.path.append(os.path.join(ROOT_DIR, "Manhattan_Graph_Environment", "gym_graphenv"))
 
 
 # class for DQN Agent
@@ -31,7 +33,7 @@ class DQNAgent:
         self.trainer_config["n_step"] = 10
         # self.trainer_config["framework"] = "torch"
 
-    def run_one_episode (self,reward_list,env_config):   
+    def run_one_episode(self,reward_list,env_config):
         config={"use_config":True}
         
         # Initialize trainer

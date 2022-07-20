@@ -93,7 +93,7 @@ class BenchmarkWrapper:
             elif self.name == "DQN":
                 print("DQN")
                 dqn_Agent = DQNAgent()
-                reward_list = dqn_Agent.run_one_episode(reward_list, env_config)
+                reward_list = dqn_Agent.run_one_episode(reward_list,env_config)
             elif self.name == "PPO":
                 print("PPO")
                 ppo_Agent = PPOAgent()
@@ -108,9 +108,9 @@ class BenchmarkWrapper:
             elif self.name == "Bookown":
                 print("Bookown")
                 reward_list = BookownAgent.run_one_episode(env, reward_list, env_config)
-        return reward_list           
         return reward_list
 
+"""
 def main():
     # benchmark = BenchmarkWrapper("random")
     # results = benchmark.read_orders()
@@ -128,4 +128,4 @@ def main():
 
 
 main()
-
+"""
