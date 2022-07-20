@@ -639,23 +639,23 @@ class GraphEnv(gym.Env):
         for n in self.manhattan_graph.nodes():
             if n == position:
                 actions.append('position')
-                node_sizes.append(70)
+                node_sizes.append(120)
             else:
                 if n == final:
                     actions.append('final')
-                    node_sizes.append(70)
+                    node_sizes.append(120)
                 else:
                     if n == start:
                         actions.append('start')
-                        node_sizes.append(70)
+                        node_sizes.append(120)
                     else:
                         if n in shared_ids:
                             actions.append('shared')
-                            node_sizes.append(70)
+                            node_sizes.append(120)
                         else:
                             if n in book_own_ids:
                                 actions.append('book')
-                                node_sizes.append(70)
+                                node_sizes.append(120)
                             else:
                                 #colors.append('w')
                                 node_sizes.append(0)

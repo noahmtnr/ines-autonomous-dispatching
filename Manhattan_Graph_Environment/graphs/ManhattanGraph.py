@@ -31,7 +31,7 @@ class ManhattanGraph:
             self.hubs(list): List of hubs in graph
         """
         # the code below is for mapping the pre-defined hubs (customer/store/trips) to nodes in the graph
-        filepath = os.path.join(ROOT_DIR, 'data', 'hubs', 'new_hubs.csv')
+        filepath = os.path.join(ROOT_DIR, 'data', 'hubs', 'longlist.csv')
         # filepath = "/Users/noah/Desktop/Repositories/ines-autonomous-dispatching/data/hubs/new_hubs.csv" 
         hubs_file = pd.read_csv(filepath)
         #print("Read hubs successfully")
