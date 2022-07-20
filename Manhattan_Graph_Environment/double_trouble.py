@@ -61,6 +61,8 @@ def create_map_from_df(df_hubs, df_route, hubs=[]):
 
 app = dash.Dash(__name__,  suppress_callback_exceptions = True)
 
+
+#to be modified (calculate nodes between hubs with step() function)
 @app.callback(
     Output(component_id='map-2', component_property='children'),
     Output(component_id='shared', component_property='children'),
@@ -71,6 +73,12 @@ def next_step(input_value):
 
     if input_value is None: 
         return dash.no_update
+    
+    # hub_node_id = manhattan_graph.get_nodeid_by_hub_index(input_value)
+
+    # for i in range(len(taken_steps), len(nodes)):
+    #     if(nodes[i] != hub_node_id)
+    #         taken_steps.append()
 
     taken_steps.append(input_value)
 
@@ -87,7 +95,7 @@ def next_step(input_value):
 
     shared_hubs = {'1':7, '2':10, '3':-5}
     #to modify
-    return dcc.Graph(figure=create_map_from_df(df_hubs, df_route, taken_steps), id='my-graph'), [html.Div("{}:  {} km".format( i, shared_hubs[i])) for i in shared_hubs]
+    return dcc.Graph(figure=create_map_from_df(df_hubs, taken_steps), id='my-graph'), [html.Div("{}:  {} km".format( i, shared_hubs[i])) for i in shared_hubs]
 
 
 app.layout = html.Div([
