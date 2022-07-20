@@ -64,6 +64,18 @@ def create_map_from_df(df_hubs, df_route=pd.DataFrame(), hubs=[], test_id=0):
             hovertext  = [hub_node_ids.index(n) if n in hub_node_ids else ' ' for n in df_test['Nodes'][test_id]]))
     return fig
 
+
+def create_piechart(wait=1, share=1, book=1):
+    colors = ['LightSteelBlue', 'Gainsboro', 'LightSlateGrey']
+    labels = ['wait','share','book']
+    values = [wait,share,book]
+    # pull is given as a fraction of the pie radius
+    fig = go.Figure(data=[go.Pie(labels=labels, values=values, pull=[0, 0.1, 0], text=labels, textposition='inside', textfont_size=18, showlegend=False, hoverinfo='text+value+percent', textinfo='value+text')])
+    fig.update_traces(marker=dict(colors=colors))
+    fig.update_layout(margin=dict(t=0, b=0, l=0, r=0))
+
+    return fig
+
 app = dash.Dash(__name__,  suppress_callback_exceptions = True)
 
 
@@ -129,9 +141,10 @@ html.Div(children=[
         html.H4('CURRENT ORDER: ', id='destination-hub-1'),
         html.H4('Calculated route: ',  id='calc-route-1'),
         html.H4('Actions taken:', id= 'actions-taken-titel'),
-        html.Div(className = 'grid-container', id='wait-1'),
-        html.Div(className = 'grid-container', id='share-1'),
-        html.Div(className = 'grid-container', id='book-1'),
+        html.Div(dcc.Graph(figure=create_piechart(), id='graph_actions'), id='div-piechart'),
+        # html.Div(className = 'grid-container', id='wait-1'),
+        # html.Div(className = 'grid-container', id='share-1'),
+        # html.Div(className = 'grid-container', id='book-1'),
     ], className='right-dashboard'),
      
 ], className = 'main-body'
@@ -172,10 +185,12 @@ html.Div(children=[
     #Output()
     Output('destination-hub-1', 'children'),
     Output(component_id='map-1', component_property='children'),
-    Output(component_id='wait-1', component_property='children'),
-    Output(component_id='share-1', component_property='children'),
-    Output(component_id='book-1', component_property='children'),
+    # Output(component_id='wait-1', component_property='children'),
+    # Output(component_id='share-1', component_property='children'),
+    # Output(component_id='book-1', component_property='children'),
     Output(component_id='calc-route-1', component_property='children'),
+    #Output(component_id='actions-taken-titel', component_property='children'),
+    Output(component_id='div-piechart', component_property='children'),
     Input('dropdown1', 'value'),
     ## replace start button with drop down 
     #Input('start-button-1', 'n_clicks'),
@@ -195,21 +210,21 @@ def start_order_1(value):
     df_hubs['action'][start_hub] = 'start'
     df_hubs['action'][final_hub] = 'final'
 
-    #df_test['Actions'][test_id][start_hub]='start'
-    #df_test['Actions'][test_id][final_hub]='final'
-
     nr_wait = 0
     nr_shared = 0
     nr_book = 0
     route_string='Calculated route: '
 
     for i in df_test['Actions'][test_id]:
-        if i == 'wait':
+        if i == 'Wait':
             nr_wait+=1
-        if i == 'share':
+        if i == 'Share':
             nr_shared+=1
-        if i == 'book':
+        if i == 'Book':
             nr_book+=1
+    print("Wait:",nr_wait)
+    print("Share:",nr_shared)
+    print("Book:",nr_book)
     for i in range(len(df_test['Hubs'][test_id])):
         route_string += str(df_test['Hubs'][test_id][i]) + ' ->'
     route_string = route_string[0:-3]
@@ -225,7 +240,7 @@ def start_order_1(value):
         df_route['latitude'][i] = results[1]
     #print(df_route)
 
-    return html.Div('CURRENT ORDER: {} -> {}'.format(start_hub, final_hub)), dcc.Graph( figure=create_map_from_df(df_hubs, df_route, df_test['Hubs'][test_id], test_id),id='my-graph'), 'Wait: {}'.format(nr_wait), 'Book: {}'.format(nr_book), 'Share: {}'.format(nr_shared), route_string
+    return html.Div('CURRENT ORDER: {} -> {}'.format(start_hub, final_hub)), dcc.Graph( figure=create_map_from_df(df_hubs, df_route, df_test['Hubs'][test_id], test_id),id='my-graph'), route_string, dcc.Graph(figure=create_piechart(nr_wait,nr_shared,nr_book), id='graph_actions')
 
 
 @app.callback(

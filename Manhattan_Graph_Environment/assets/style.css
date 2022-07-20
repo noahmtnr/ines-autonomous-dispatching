@@ -58,6 +58,13 @@
   display: inline;
   margin-right: 20px;
 }
+
+#graph_actions {
+  height: 200px;
+  width: 200px;
+  margin-top: 20px;
+}
+
 #my-graph {
   height: 650px;
 }
