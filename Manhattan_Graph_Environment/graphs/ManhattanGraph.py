@@ -96,7 +96,6 @@ class ManhattanGraph:
         provider_column=[]
         totalprice_column=[]
         filepath = os.path.join(ROOT_DIR, 'data', 'others', 'Provider.csv')
-        # filepath = "/Users/noah/Desktop/Repositories/ines-autonomous-dispatching/data/others/Provider.csv"
         providers = pd.read_csv(filepath)
         for i in self.trips.index:
             provider_id = providers['id'].sample(n=1).iloc[0]
@@ -143,19 +142,11 @@ class ManhattanGraph:
         return self.get_nodeids_list().index(nodeid)
     
     def get_coordinates_of_node(self, node_id): 
-        # manhattangraph = ManhattanGraph(filename='simple', num_hubs=70)
         nodes = self.inner_graph.nodes()
         return [nodes[node_id]['x'], nodes[node_id]['y']]
         
     def get_nodeid_by_hub_index(self, hub_index: int):
-        return self.hubs[hub_index]
-
-    # def get_coordinates_of_node_by_hub_index(self, node_index): 
-    #     # manhattangraph = ManhattanGraph(filename='simple', num_hubs=70)
-    #     nodes = self.inner_graph.nodes()
-    #     get_node_by_index(node_index):
-
-    #     return [nodes[node_id]['x'], nodes[node_id]['y']]       
+        return self.hubs[hub_index] 
 
     def get_hub_index_by_nodeid(self, nodeid: int):
         return self.hubs.index(nodeid)
@@ -173,6 +164,5 @@ class ManhattanGraph:
         return self.get_index_by_nodeid(self.get_nodeid_by_hub_index(hub_index))
     
     def get_coordinates_of_node(self, node_id): 
-        # manhattangraph = ManhattanGraph(filename='simple', num_hubs=70)
         nodes = self.inner_graph.nodes()
         return [nodes[node_id]['x'], nodes[node_id]['y']]
