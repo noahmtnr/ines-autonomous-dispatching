@@ -149,7 +149,7 @@ class GraphEnv(gym.Env):
             self.pickup_time = datetime.strptime(self.START_TIME,'%Y-%m-%d %H:%M:%S')
             self.time = self.pickup_time
             self.total_travel_time = 0
-            self.deadline=self.pickup_time+timedelta(hours=12)
+            self.deadline=self.pickup_time+timedelta(hours=24)
             self.current_wait = 1 ## to avoid dividing by 0
         else:
             print("Started Reset() with config")
@@ -247,7 +247,6 @@ class GraphEnv(gym.Env):
         """
 
         startTime = time.time()
-        print("Start Time ", self.time)
 
         #self.done = False
 
@@ -313,20 +312,13 @@ class GraphEnv(gym.Env):
 
                 if(self.learn_graph.wait_till_departure_times[(self.position,action)] == self.WAIT_TIME_SECONDS):
                     step_duration = sum(route_travel_time)+ self.WAIT_TIME_SECONDS#we add 5 minutes (300 seconds) so the taxi can arrive
-                    print("Travel Times ", route_travel_time)
-                    print("Sum Travel Time ", sum(route_travel_time))
-                    print("Wait Time ", self.WAIT_TIME_SECONDS)
                 elif(self.learn_graph.wait_till_departure_times[(self.position,action)] != self.WAIT_TIME_SECONDS and self.learn_graph.wait_till_departure_times[(self.position,action)] != 0):
                     step_duration = sum(route_travel_time)
                     # TODO: String conversion von departure time besser direkt beim erstellen der Matrix
                     departure_time = datetime.strptime(self.learn_graph.wait_till_departure_times[(self.position,action)], '%Y-%m-%d %H:%M:%S')
-                    print("Departure Time: ", departure_time)
                     self.current_wait = ( departure_time - self.time).seconds
                     step_duration += self.current_wait
                     self.time = departure_time
-                    print("Travel Times ", route_travel_time)
-                    print("Sum Travel Time ", sum(route_travel_time))
-                    print("Current Wait ", self.current_wait)
 
                 
                 print("Step Duration: ", step_duration)
@@ -343,7 +335,6 @@ class GraphEnv(gym.Env):
                     self.distance_covered_with_shared+=self.route_travel_distance
                     self.distance_reduced_with_shared+=self.learn_graph.adjacency_matrix('remaining_distance')[self.old_position][action]
 
-                    print("Share Step Duration: ", step_duration)
 
                 else:
                     self.count_bookown += 1
@@ -372,6 +363,7 @@ class GraphEnv(gym.Env):
             print("action: ",action)
             print("action space: ",self.action_space)
 
+        self.time += timedelta(seconds=step_duration)
         # refresh travel cost layer after each step
         self.learn_graph.add_travel_cost_layer(self.availableTrips(), self.distance_matrix)
         self.learn_graph.add_remaining_distance_layer(current_hub=self.position, distance_matrix=self.distance_matrix)
@@ -388,7 +380,6 @@ class GraphEnv(gym.Env):
         # print("New State: ")        
         # print(self.state)
 
-        self.time += timedelta(seconds=step_duration)
         print("End Time ", self.time)
 
         self.count_actions += 1
@@ -466,7 +457,7 @@ class GraphEnv(gym.Env):
             else:
                 # in time delivered with delivery time < 2 hours to deadline
                 state_of_delivery = DeliveryState.DELIVERED_ON_TIME
-                print(f"MANUAL DELIVERY WITH {(self.deadline-self.time).total_seconds()/60} MINUTES TO DEADLINE")
+                print(f"MANUAL DELIVERY WITH {(self.deadline-self.time).total_seconds()/60} MINUTES TO DEADLINE - ACTIONS (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown})")
                 reward = 0
 
         # did not come to final hub:
@@ -492,7 +483,7 @@ class GraphEnv(gym.Env):
                 # print("Action in Reward: Share")
                 # print("Time:", self.time)
                 # print("Deadline:", self.deadline)
-                reward = (distance_gained/100) * 1000 + old_distinction[action]*1000
+                reward = (distance_gained/100) * 1000 + old_distinction[action]*10000
 
 
         # # if delay is greater than 2 hours (=120 minutes), terminate training episode

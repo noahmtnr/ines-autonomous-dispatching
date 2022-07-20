@@ -11,7 +11,7 @@ import requests
 
 checkpoint_path = '/Users/noah/Desktop/Repositories/ines-autonomous-dispatching/Manhattan_Graph_Environment/training/results/tmp/dqn/graphworld/checkpoint_000001/checkpoint-1'
 rainbow_config = DEFAULT_CONFIG.copy()
-rainbow_config['num_workers'] = 3
+rainbow_config['num_workers'] = 1
 rainbow_config["train_batch_size"] = 400
 rainbow_config["gamma"] = 0.99
 # rainbow_config["framework"] = "torch"
@@ -40,39 +40,39 @@ class ServeRainbowModel:
         
         return {"action": int(action)}
 
-# serve.start()
-# ServeRainbowModel.deploy(checkpoint_path)
+serve.start()
+ServeRainbowModel.deploy(checkpoint_path)
 
 # list_hubs=[]
-list_nodes=[]
-env = GraphEnv()
-obs = env.reset()
-print(obs)
-list_hubs=[env.position]
-list_actions=["start"]
-action_list=[0,7,1,1,13]
-for i in action_list:
+# list_nodes=[]
+# env = GraphEnv()
+# obs = env.reset()
+# print(obs)
+# list_hubs=[env.position]
+# list_actions=["start"]
+# action_list=[0,7,1,1,13]
+# for i in action_list:
    
 
-    # print(f"-> Sending observation {obs}")
-    # resp = requests.get(
-    #     "http://localhost:8000/graphworld-rainbow", json={"observation": obs.tolist()}
-    # )
+#     # print(f"-> Sending observation {obs}")
+#     # resp = requests.get(
+#     #     "http://localhost:8000/graphworld-rainbow", json={"observation": obs.tolist()}
+#     # )
    
-    # print(f"<- Received response {resp.json()}")
-    resp={'action': i}
-    action = resp["action"]
-    print(action)
-    obs, reward, done, info = env.step(action)
-    if(info["route"][-1] != env.final_hub and info["action"] != "Wait"):
-        print(list_nodes)
-        list_nodes.extend(info["route"][0:-1])
-        print(list_nodes)
-    list_hubs.append(action)
-    list_actions.append(info["action"])
+#     # print(f"<- Received response {resp.json()}")
+#     resp={'action': i}
+#     action = resp["action"]
+#     print(action)
+#     obs, reward, done, info = env.step(action)
+#     if(info["route"][-1] != env.final_hub and info["action"] != "Wait"):
+#         print(list_nodes)
+#         list_nodes.extend(info["route"][0:-1])
+#         print(list_nodes)
+#     list_hubs.append(action)
+#     list_actions.append(info["action"])
     
 
-    print("infos",info)
-    print("hubs",list_hubs)
-    print("nodes",list_nodes)
-    print("actions",list_actions)
+#     print("infos",info)
+#     print("hubs",list_hubs)
+#     print("nodes",list_nodes)
+#     print("actions",list_actions)
