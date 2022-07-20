@@ -26,7 +26,8 @@ class CostAgent:
         sum_distance = 0
         route = [env_config["pickup_hub_index"]]
         route_timestamps = [datetime.strptime(env_config["pickup_timestamp"], '%Y-%m-%d %H:%M:%S')]
-        for i in range(30):
+        done = False
+        while not done:
             # visualize current situation
             # env.render()
 
@@ -52,6 +53,8 @@ class CostAgent:
             #action = env.action_space[dest_hub]
             print(f"Our destination hub is: {action}")
             state, reward, done, info = env.step(action)
+            if action == env_config['delivery_hub_index']:
+                done = True
 
             route.append(action)
             route_timestamps.append(info.get('timestamp'))
