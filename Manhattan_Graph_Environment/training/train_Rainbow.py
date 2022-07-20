@@ -87,7 +87,7 @@ rainbow_config["callbacks"] = CustomCallbacks
 #rainbow parameters
 
 # N-step Q learning
-rainbow_config["n_step"]= 3 #[between 1 and 10]  //was 5 and 7
+rainbow_config["n_step"]= 4 #[between 1 and 10]  //was 5 and 7
 # Whether to use noisy network
 rainbow_config["noisy"] = True
 # rainbow_config["sigma0"] = 0.2
@@ -114,7 +114,7 @@ shutil.rmtree(ray_results, ignore_errors=True, onerror=None)   # clean up old ru
 results = []
 episode_data = []
 episode_json = []
-n_iter = 200
+n_iter = 150
 for n in range(n_iter):
     result = trainer.train()
     results.append(result)

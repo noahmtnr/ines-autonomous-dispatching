@@ -1,6 +1,6 @@
 import networkx as nx
 import osmnx as ox
-from graphs.ManhattanGraph import ManhattanGraph
+from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
 import numpy as np
 N_HUBS = 120
 myManhattan = ManhattanGraph('simple',N_HUBS)

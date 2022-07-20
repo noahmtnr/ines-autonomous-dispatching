@@ -42,10 +42,10 @@ from ray.rllib.policy import Policy
 
 
 # CHANGES
-from graphs.ManhattanGraph import ManhattanGraph
-from graphs.LearnGraph import LearnGraph
-from OneHotVector import OneHotVector
-from database_connection import DBConnection
+from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
+from Manhattan_Graph_Environment.graphs.LearnGraph import LearnGraph
+from Manhattan_Graph_Environment.OneHotVector import OneHotVector
+from Manhattan_Graph_Environment.database_connection import DBConnection
 # END OF CHANGES
 
 class GraphEnv(gym.Env):
@@ -387,11 +387,7 @@ class GraphEnv(gym.Env):
         #self.state_of_delivery = state_of_delivery
         executionTime = (time.time() - startTime)
 
-        # self.route_taken.append(route)
         # print(self.route_taken)
-
-        if self.count_bookown > 0:
-            self.booked_own = 1
 
         # counting on step-base (not individual ride-base)
         if boolean_available_temp == True:
@@ -463,23 +459,23 @@ class GraphEnv(gym.Env):
             self.done = False
             state_of_delivery = DeliveryState.IN_DELIVERY
             if(wait == True):
-                print("Action in Reward: Wait")
-                print("Time:", self.time)
-                print("Deadline:", self.deadline)
+                # print("Action in Reward: Wait")
+                # print("Time:", self.time)
+                # print("Deadline:", self.deadline)
                 reward = 0
             elif(bookown == True):
-                print("Action in Reward: Bookown")
-                print("Time:", self.time)
-                print("Deadline:", self.deadline)
+                # print("Action in Reward: Bookown")
+                # print("Time:", self.time)
+                # print("Deadline:", self.deadline)
                 if(self.allow_bookown == 0):
                     reward = old_distinction[action]*100000
                 else:
                     # kann eigentlich nicht sein dieser Case
                     reward = (distance_gained/100) * 1000
             elif(share == True):
-                print("Action in Reward: Share")
-                print("Time:", self.time)
-                print("Deadline:", self.deadline)
+                # print("Action in Reward: Share")
+                # print("Time:", self.time)
+                # print("Deadline:", self.deadline)
                 reward = (distance_gained/100) * 1000 + old_distinction[action]*1000
 
 
