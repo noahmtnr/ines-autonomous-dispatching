@@ -23,7 +23,7 @@
   background-color: beige;
   height: 50px;
   padding-top: 30px;
-  margin-top: 0px;
+  margin-top: 10px;
 }
 
 #destination-hub-2 {
@@ -37,6 +37,7 @@
   background-color: beige;
   height: 50px;
   padding-top: 30px;
+  margin-top: 10px;
 }
 
 #available-shared {
@@ -102,7 +103,7 @@
 
 .right-dashboard {
   background-color: #dddddd;
-  width: 35%;
+  width: 30%;
   margin-left: 30px;
   margin-right: 0px;
   margin-top: 50px;
@@ -114,7 +115,7 @@
 
 .right-input {
   background-color: #dab3ff;
-  width: 35%;
+  width: 30%;
   margin-left: 30px;
   margin-right: 0px;
   margin-top: 50px;
