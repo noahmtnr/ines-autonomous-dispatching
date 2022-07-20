@@ -68,10 +68,10 @@ class GraphEnv(gym.Env):
         # use_config=data['use_config']
         # print(use_config)
 
-        # if(use_config):
-        #     self.env_config = self.read_config()
-        # else:
-        self.env_config = None
+        if(use_config):
+            self.env_config = self.read_config()
+        else:
+            self.env_config = None
 
         self.n_hubs = 120
         self.distance_matrix = None
@@ -295,15 +295,17 @@ class GraphEnv(gym.Env):
                 # print("action == wait ")
                 executionTimeWait = (time.time() - startTimeWait)
                 # print(f"Time Wait: {str(executionTimeWait)}")
-                route = [self.manhattan_graph.get_nodeid_by_hub_index(self.position)]
+                route_taken = [self.manhattan_graph.get_nodeid_by_hub_index(self.position)]
                 pass
 
             # action = share ride or book own ride
             else:
                 pickup_nodeid = self.manhattan_graph.get_nodeid_by_hub_index(self.position)
                 dropoff_nodeid = self.manhattan_graph.get_nodeid_by_hub_index(action)
-
-                route = ox.shortest_path(self.manhattan_graph.inner_graph, pickup_nodeid,  dropoff_nodeid, weight='travel_time')
+                route=ox.shortest_path(self.manhattan_graph.inner_graph, pickup_nodeid,  dropoff_nodeid, weight='travel_time')
+                route_taken = [pickup_nodeid]
+                route_taken.extend(route)
+                route_taken.append(dropoff_nodeid)
                 route_travel_time = ox.utils_graph.get_route_edge_attributes(self.manhattan_graph.inner_graph,route,attribute='travel_time')
                 self.route_travel_distance = sum(ox.utils_graph.get_route_edge_attributes(self.manhattan_graph.inner_graph,route,attribute='length'))
 
@@ -406,7 +408,7 @@ class GraphEnv(gym.Env):
         # print("In Step ", self.count_actions, " a useful share is available, number: ", self.boolean_useful_shares_available)            
 
         # print("Step End")
-        return self.state, reward,  self.done, {"timestamp": self.time,"step_travel_time":step_duration,"distance":self.distance_matrix[self.old_position][self.position], "count_hubs":self.count_hubs, "action": self.action_choice, "hub_index": action, "route": route}
+        return self.state, reward,  self.done, {"timestamp": self.time,"step_travel_time":step_duration,"distance":self.distance_matrix[self.old_position][self.position], "count_hubs":self.count_hubs, "action": self.action_choice, "hub_index": action, "route": route_taken}
 
 
     def compute_reward(self, action):

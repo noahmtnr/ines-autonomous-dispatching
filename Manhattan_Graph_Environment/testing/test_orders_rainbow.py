@@ -111,29 +111,36 @@ class TestOrders:
 
 
 def create_test_order():
-    env_config = {'pickup_hub_index': 13,
-                      'delivery_hub_index': 40,
-                      'pickup_timestamp': "2016-01-10 11:43:00",
-                      'delivery_timestamp': "2016-01-10 23:43:00",
+    pickup_hub=111
+    delivery_hub=67
+    pickup_timestamp="2016-01-02 09:05:00"
+    delivery_timestamp="2016-01-02 21:05:00"
+    env_config = {'pickup_hub_index': pickup_hub,
+                      'delivery_hub_index': delivery_hub,
+                      'pickup_timestamp':pickup_timestamp,
+                      'delivery_timestamp': delivery_timestamp,
                       }
-    filepath = os.path.join(ROOT_DIR, 'Manhattan_Graph_Environment', 'env_config.pkl')
-    with open(filepath, 'wb') as f:
+    with open('env_config.pkl', 'wb') as f:
         pickle.dump(env_config, f)
 
     test = TestOrders()
     list_hubs, list_actions, list_nodes = test.test_order()
-    write_in_file_orders(list_hubs,list_actions,list_nodes)
+    write_in_file_orders(list_hubs,list_actions,list_nodes,pickup_hub,delivery_hub,pickup_timestamp,delivery_timestamp)
 
 
-def write_in_file_orders(hubs,actions,nodes):
+def write_in_file_orders(hubs,actions,nodes,pickup_hub,delivery_hub,pickup_timestamp,delivery_timestamp):
     
     filepath = os.path.join(ROOT_DIR, 'data', 'others', 'test_orders_dashboard.csv')
     mycsv = csv.reader(open(filepath))
+    
     for row in mycsv:
         id = row[0]
-    idInt=int(id)
+    try:
+        idInt = int(id)
+    except:
+        idInt = 0
     idInt +=1
-    row_list = [[idInt, hubs, actions, nodes],]
+    row_list = [[idInt,pickup_hub,delivery_hub,pickup_timestamp,delivery_timestamp, hubs, actions, nodes],]
 
     with open(filepath, 'a+', newline='') as file:
         writer = csv.writer(file)
