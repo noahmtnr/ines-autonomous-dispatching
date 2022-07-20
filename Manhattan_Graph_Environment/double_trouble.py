@@ -10,12 +10,14 @@ import dash_bootstrap_components as dbc
 import sys
 import ast
 from graphs.ManhattanGraph import ManhattanGraph
+import pickle
 # sys.path.insert(0,"")
-# from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv
-# env = GraphEnv()
+from gym_graphenv.envs.GraphworldManhattan import GraphEnv
+env = GraphEnv(use_config=True)
+env.reset()
 
 # read test dataframe 
-df_test = pd.read_csv('C:/Users/kirch/OneDrive/Dokumente/Uni/Mannheim/FSS2022/Teamproject/ines-autonomous-dispatching/Manhattan_Graph_Environment/test_orders_dashboard.csv')
+df_test = pd.read_csv('D:/ines-autonomous-dispatching/Manhattan_Graph_Environment/test_orders_dashboard.csv')
 for i in range(len(df_test['Hubs'])):
     df_test['Hubs'][i] = ast.literal_eval(df_test['Hubs'][i])
     df_test['Actions'][i] = ast.literal_eval(df_test['Actions'][i])
@@ -49,13 +51,13 @@ manhattan_graph = ManhattanGraph(filename='simple', num_hubs=120)
 # print(manhattan_graph.get_coordinates_of_node(42445635))
 
 # Function to create map
-def create_map_from_df(df_hubs, df_route=pd.DataFrame(), hubs=[], test_id=0):
+def create_map_from_df(df_hubs, df_route=pd.DataFrame(), test_id=0):
 
     px.set_mapbox_access_token(open("Manhattan_Graph_Environment/mapbox_token").read())
     fig = px.scatter_mapbox(df_hubs, lat="latitude", lon="longitude", hover_name ="id", color="action", #size="car_hours",
                     color_continuous_scale=px.colors.cyclical.IceFire, size_max=30, zoom=11)
 
-    if(len(hubs)!=0):
+    if(df_route.empty == False):
         fig.add_trace(go.Scattermapbox(
             mode = "lines",
             lon = [df_route['longitude'][i] for i in range(len(df_route['longitude']))],
@@ -70,7 +72,7 @@ app = dash.Dash(__name__,  suppress_callback_exceptions = True)
 #to be modified (calculate nodes between hubs with step() function)
 @app.callback(
     Output(component_id='map-2', component_property='children'),
-    Output(component_id='shared', component_property='children'),
+    #Output(component_id='shared', component_property='children'),
     Input(component_id='next-hub-input', component_property='value'),
     prevent_initial_call=True
 )
@@ -85,22 +87,77 @@ def next_step(input_value):
     #     if(nodes[i] != hub_node_id)
     #         taken_steps.append()
 
-    taken_steps.append(input_value)
+    #taken_steps.append(input_value)
 
-    actions = ['book' for i in range(120)]
-    actions[0] = 'share' # share
-    actions[1] = 'share' # share
-    actions[2] = 'share' # share
-    actions[3] = 'share' # share
-    actions[input_value] = 'current' # current pos
-    actions[5] = 'final' # final hub
-    actions[6] = 'start' # start hub
+    shared_rides = list()
+    shared_ids = list()
+    state, reward,  done, info = env.step(input_value)
+    print('Info: ',info)
+    #append nodes of route
+    taken_steps.extend(info['route'])
 
-    df_hubs['action'] = actions # start hub
+    df_route = pd.DataFrame()
+    df_route['longitude'] = [0.0 for i in range(len(taken_steps))]
+    df_route['latitude'] = [0.0 for i in range(len(taken_steps))]
 
-    shared_hubs = {'1':7, '2':10, '3':-5}
+    for i in range(len(taken_steps)):
+        results = manhattan_graph.get_coordinates_of_node(taken_steps[i])
+        #print(results)
+        df_route['longitude'][i] = results[0]
+        df_route['latitude'][i] = results[1]
+    
+
+    print(df_route)
+    #convert node ids list in df_route with coordinates
+    trips = env.availableTrips()
+        
+    for i, trip in enumerate(trips):
+        shared_ids.append(trip['target_hub'])
+        
+    all_hubs = env.hubs
+
+    book_own_ids = list(set(all_hubs) - set(shared_ids))
+    
+    position = env.manhattan_graph.get_nodeid_by_hub_index(env.position)
+    final = env.manhattan_graph.get_nodeid_by_hub_index(env.final_hub)
+    print(env.final_hub)
+    start = env.manhattan_graph.get_nodeid_by_hub_index(env.start_hub)
+
+    actions = []
+    for n in all_hubs:
+        if n == position:
+            actions.append('position')
+        else:
+            if n == final:
+                actions.append('final')
+            else:
+                if n == start:
+                    actions.append('start')
+                else:
+                    if n in shared_ids:
+                        actions.append('shared')
+                    else:
+                        if n in book_own_ids:
+                            actions.append('book') 
+    df_hubs['action'] = actions
+
+    print(df_hubs)
+
+
+    # actions = ['book' for i in range(120)]
+    # actions[0] = 'share' # share
+    # actions[1] = 'share' # share
+    # actions[2] = 'share' # share
+    # actions[3] = 'share' # share
+    # actions[input_value] = 'current' # current pos
+    # actions[5] = 'final' # final hub
+    # actions[6] = 'start' # start hub
+
+    # df_hubs['action'] = actions # start hub
+
+    # shared_hubs = {'1':7, '2':10, '3':-5}
     #to modify
-    return dcc.Graph(figure=create_map_from_df(df_hubs, taken_steps), id='my-graph'), [html.Div("{}:  {} km".format( i, shared_hubs[i])) for i in shared_hubs]
+    return dcc.Graph(figure=create_map_from_df(df_hubs, df_route, test_id), id='my-graph')
 
 
 app.layout = html.Div([
@@ -124,7 +181,7 @@ html.Div(children=[
     ], className='left-dashboard', id='map-1'),
 
     html.Div(children=[
-        html.Div(dcc.Dropdown(['Test 1', 'Test2'], placeholder="Select an order", id='dropdown1')),
+        html.Div(dcc.Dropdown(['Test 1', 'Test 2', 'Test 3'], placeholder="Select an order", id='dropdown1')),
 
         html.H4('CURRENT ORDER: ', id='destination-hub-1'),
         html.H4('Calculated route: ',  id='calc-route-1'),
@@ -146,6 +203,7 @@ html.Div(children=[
     ], className='left-dashboard', id='map-2'),
 
     html.Div(children=[
+        html.Div(dcc.Dropdown(['Test 1', 'Test 2', 'Test 3'], placeholder="Select an order", id='dropdown2')),
 
         html.H4('CURRENT ORDER: ', id='destination-hub-2'),
         html.H4('Calculated route: ',  id='calc-route-2'),
@@ -183,10 +241,14 @@ html.Div(children=[
 )
 def start_order_1(value):
     # hier jetzt in dataframe schauen bei id
-    if(value=='Test 1'):
+    if(value =='Test 1'):
         test_id = 0
-    elif(value == 'Test 2'):
-        test_id = 1
+    else:
+        if(value == 'Test 2'):
+            test_id = 1
+        else:
+            if(value == 'Test 3'):
+                test_id = 2
 
     start_hub = df_test['Hubs'][test_id][0] #list_actions[0] 
     final_hub = df_test['Hubs'][test_id][-1] #list_actions[-1]
@@ -204,11 +266,11 @@ def start_order_1(value):
     route_string='Calculated route: '
 
     for i in df_test['Actions'][test_id]:
-        if i == 'wait':
+        if i == 'Wait':
             nr_wait+=1
-        if i == 'share':
+        if i == 'Share':
             nr_shared+=1
-        if i == 'book':
+        if i == 'Book':
             nr_book+=1
     for i in range(len(df_test['Hubs'][test_id])):
         route_string += str(df_test['Hubs'][test_id][i]) + ' ->'
@@ -225,46 +287,80 @@ def start_order_1(value):
         df_route['latitude'][i] = results[1]
     #print(df_route)
 
-    return html.Div('CURRENT ORDER: {} -> {}'.format(start_hub, final_hub)), dcc.Graph( figure=create_map_from_df(df_hubs, df_route, df_test['Hubs'][test_id], test_id),id='my-graph'), 'Wait: {}'.format(nr_wait), 'Book: {}'.format(nr_book), 'Share: {}'.format(nr_shared), route_string
+    return html.Div('CURRENT ORDER: {} -> {}'.format(start_hub, final_hub)), dcc.Graph( figure=create_map_from_df(df_hubs, df_route, test_id),id='my-graph'), 'Wait: {}'.format(nr_wait), 'Book: {}'.format(nr_book), 'Share: {}'.format(nr_shared), route_string
 
 
 @app.callback(
     Output('destination-hub-2', 'children'),
     #Output(component_id='map-2', component_property='children'),
-    Output(component_id='wait-2', component_property='children'),
-    Output(component_id='share-2', component_property='children'),
-    Output(component_id='book-2', component_property='children'),
+    # Output(component_id='wait-2', component_property='children'),
+    # Output(component_id='share-2', component_property='children'),
+    # Output(component_id='book-2', component_property='children'),
     Output(component_id='calc-route-2', component_property='children'),
-    Input('start-button-2', 'n_clicks'),
+    Input('dropdown2', 'value'),
     prevent_initial_call=True
 )
-def start_order_2(n_clicks):
-    start_hub = list_actions[0]
-    final_hub = list_actions[-1]
+def start_order_2(value):
+    # start_hub = list_actions[0]
+    # final_hub = list_actions[-1]
     global taken_steps
     taken_steps = []
 
-    df_hubs['action'][start_hub]='start'
-    df_hubs['action'][final_hub]='final'
-    nr_wait = 0
-    nr_shared = 0
-    nr_book = 0
+    # df_hubs['action'][start_hub]='start'
+    # df_hubs['action'][final_hub]='final'
+    global test_id
+    if(value =='Test 1'):
+        test_id = 0
+    else:
+        if(value == 'Test 2'):
+            test_id = 1
+        else:
+            if(value == 'Test 3'):
+                test_id = 2
+
+
+    start_hub = df_test['Hubs'][test_id][0] #list_actions[0] 
+    final_hub = df_test['Hubs'][test_id][-1] #list_actions[-1]
+
+    # manipulate hubs dataframe based on start and final hub of test case
+    df_hubs['action'][start_hub] = 'start'
+    df_hubs['action'][final_hub] = 'final'
+
+    env_config = {'pickup_hub_index': df_test['Pickup Hub'][test_id],
+                      'delivery_hub_index': df_test['Delivery Hub'][test_id],
+                      'pickup_timestamp': df_test['Pickup Time'][test_id],
+                      'delivery_timestamp': df_test['Delivery Time'][test_id],
+                      }
+
+    #filepath = os.path.join(ROOT_DIR, 'Manhattan_Graph_Environment', 'env_config.pkl')
+    #filepath = 'env_config.pkl'
+    with open('env_config.pkl', 'wb') as f:
+        pickle.dump(env_config, f)
+    
+    env.reset()
+    print('-----',env.start_hub, env.final_hub, '------')
+
+    # nr_wait = 0
+    # nr_shared = 0
+    # nr_book = 0
     route_string='Calculated route: '
 
-    for i in type_of_actions:
-        if i == 'wait':
-            nr_wait+=1
-        if i == 'share':
-            nr_shared+=1
-        if i == 'book':
-            nr_book+=1
+    # for i in type_of_actions:
+    #     if i == 'wait':
+    #         nr_wait+=1
+    #     if i == 'share':
+    #         nr_shared+=1
+    #     if i == 'book':
+    #         nr_book+=1
 
-    for i in range(len(list_actions)):
-        route_string+= f'{list_actions[i]} -> '
+    for i in range(len(df_test['Hubs'][test_id])):
+        route_string += str(df_test['Hubs'][test_id][i]) + ' ->'
     route_string = route_string[0:-3]
-    return html.Div('CURRENT ORDER: {} -> {}'.format(start_hub,final_hub)), 'Wait: {}'.format(nr_wait), 'Book: {}'.format(nr_book), 'Share: {}'.format(nr_shared), route_string
+
+
+    return html.Div('CURRENT ORDER: {} -> {}'.format(start_hub,final_hub)), route_string
 
 
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server()
