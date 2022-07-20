@@ -86,6 +86,7 @@ def next_step(input_value):
     df_hubs['action'] = actions # start hub
 
     shared_hubs = {'1':7, '2':10, '3':-5}
+    #to modify
     return dcc.Graph(figure=create_map_from_df(df_hubs, df_route, taken_steps), id='my-graph'), [html.Div("{}:  {} km".format( i, shared_hubs[i])) for i in shared_hubs]
 
 
@@ -184,7 +185,7 @@ def start_order_1(n_clicks):
     for i in range(len(list_actions)):
         route_string+= f'{list_actions[i]} -> '
     route_string = route_string[0:-3]
-    return html.Div('CURRENT ORDER: {} -> {}'.format(start_hub,final_hub)), dcc.Graph( figure=create_map_from_df(df_hubs, df_route, list_actions),id='my-graph'), 'Wait: {}'.format(nr_wait), 'Book: {}'.format(nr_book), 'Share: {}'.format(nr_shared), route_string
+    return html.Div('CURRENT ORDER: {} -> {}'.format(start_hub, final_hub)), dcc.Graph( figure=create_map_from_df(df_hubs, df_route, list_actions),id='my-graph'), 'Wait: {}'.format(nr_wait), 'Book: {}'.format(nr_book), 'Share: {}'.format(nr_shared), route_string
 
 
 @app.callback(

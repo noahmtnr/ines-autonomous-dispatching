@@ -13,21 +13,43 @@
 }
 
 #destination-hub-1 {
-  background-color: beige;
+  /* background-color: beige;
   border-style: solid;
-  border-color: blueviolet;
+  border-color: blueviolet; */
+
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+  border-radius: 5px; /* 5px rounded corners */
+  background-color: beige;
+  height: 50px;
+  padding-top: 30px;
+  margin-top: 0px;
 }
 
 #destination-hub-2 {
-  background-color: beige;
+  /* background-color: beige;
   border-style: solid;
-  border-color: blueviolet;
+  border-color: blueviolet; */
+
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+  border-radius: 5px; /* 5px rounded corners */
+  background-color: beige;
+  height: 50px;
+  padding-top: 30px;
 }
 
 #available-shared {
-  background-color: beige;
+  /* background-color: beige;
   border-style: solid;
-  border-color: blueviolet;
+  border-color: blueviolet; */
+
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+  border-radius: 5px; /* 5px rounded corners */
+  background-color: beige;
+  height: 50px;
+  padding-top: 30px;
 }
 
 #actions-taken-titel {
@@ -41,18 +63,37 @@
 
 #step-by-step {
   display: inline-block;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+  border-radius: 5px;
+  background-color: beige;
+  margin-top: 20px;
 }
 
 #calc-route-1 {
-  background-color: beige;
+  /* background-color: beige;
   border-style: solid;
-  border-color: blueviolet;
+  border-color: blueviolet; */
+
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+  border-radius: 5px; /* 5px rounded corners */
+  background-color: beige;
+  height: 50px;
+  padding-top: 30px;
 }
 
 #calc-route-2 {
-  background-color: beige;
+  /* background-color: beige;
   border-style: solid;
-  border-color: blueviolet;
+  border-color: blueviolet; */
+
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+  border-radius: 5px; /* 5px rounded corners */
+  background-color: beige;
+  height: 50px;
+  padding-top: 30px;
 }
 
 #titel-analysis {
@@ -81,6 +122,9 @@
   display: inline-block;
   vertical-align: baseline;
   font-size: 25px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+  border-radius: 5px;
 }
 
 .tab-label {

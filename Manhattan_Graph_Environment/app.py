@@ -51,20 +51,20 @@ app = dash.Dash(__name__)
 app.layout = html.Div(children=[
 
 html.H1(children='Hitchhike Dashboard'),
-html.Div([html.Button('Start', id='start-button', n_clicks=0)]),
+html.Div([html.Button('Start', id='start-button-1', n_clicks=0)]),
 html.Div(children=[
        dcc.Graph( figure=create_map_from_df(df), id='my-graph')
 
-    ], className='left-dashboard', id='map'),
+    ], className='left-dashboard', id='map-1'),
 
     html.Div(children=[
 
-        html.H4('CURRENT ORDER: ', id='destination-hub'),
-        html.H4('Calculated route: ',  id='calc-route'),
-        html.H4('Actions taken:', id= 'actions-taken-titel'),
-        html.Div(className = 'grid-container', id='wait'),
-        html.Div(className = 'grid-container', id='share'),
-        html.Div(className = 'grid-container', id='book'),
+        html.H4('CURRENT ORDER: ', id='destination-hub-1'),
+        html.H4('Calculated route: ',  id='calc-route-1'),
+        html.H4('Actions taken:', id= 'actions-taken-titel-1'),
+        html.Div(className = 'grid-container', id='wait-1'),
+        html.Div(className = 'grid-container', id='share-1'),
+        html.Div(className = 'grid-container', id='book-1'),
     ], className='right-dashboard'),
      
     # html.Div([
@@ -77,13 +77,13 @@ html.Div(children=[
 
 
 @app.callback(
-    Output('destination-hub', 'children'),
-    Output(component_id='map', component_property='children'),
-    Output(component_id='wait', component_property='children'),
-    Output(component_id='share', component_property='children'),
-    Output(component_id='book', component_property='children'),
-    Output(component_id='calc-route', component_property='children'),
-    Input('start-button', 'n_clicks'),
+    Output('destination-hub-1', 'children'),
+    Output(component_id='map-1', component_property='children'),
+    Output(component_id='wait-1', component_property='children'),
+    Output(component_id='share-1', component_property='children'),
+    Output(component_id='book-1', component_property='children'),
+    Output(component_id='calc-route-1', component_property='children'),
+    Input('start-button-1', 'n_clicks'),
     prevent_initial_call=True
 )
 def update_order(n_clicks):
