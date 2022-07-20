@@ -136,8 +136,15 @@ class Comparer:
         
         # display the route each agent took
         # TODO - do the visualization of Aga & Denisa here
-        # Route bekommen (Liste von Hub IDs): self.compare_dict.items()[1][1]
+        # Route bekommen (Liste von Hub IDs): self.compare_dict.items()[1
         # plotten mit Funktionsaufruf der Visualisierung
+        allRoutes = {}
+        for elem in self.compare_dict.items():
+            # route for current agent in the loop
+            currentRoute =elem[1][1]
+            currentAgentName = elem[0]
+            allRoutes[currentAgentName] = currentRoute
+        # visualize by calling method xy
 
     # this method does not work yet (state: 19.07.2022)
     def compare_multipletrips(self):
@@ -191,21 +198,21 @@ class Comparer:
 
 
 # possible agents to be compared
-w1 = BenchmarkWrapper("random")
-w2 = BenchmarkWrapper("cost")
-w3 = BenchmarkWrapper("PPO")
+#w1 = BenchmarkWrapper("random")
+#w2 = BenchmarkWrapper("cost")
+#w3 = BenchmarkWrapper("PPO")
 # w4 = BenchmarkWrapper("DQN") # hat noch Fehler
-w5 = BenchmarkWrapper("Rainbow")
-w6 = BenchmarkWrapper("Shares")
+#w5 = BenchmarkWrapper("Rainbow")
+#w6 = BenchmarkWrapper("Shares")
 w7 = BenchmarkWrapper("Bookown")
 
 # possible combinations of comparisons
-# c = Comparer(1,w7.name,w7)
+c = Comparer(1,w7.name,w7)
 # c = Comparer(3,w5.name,w6.name,w7.name,w5,w6,w7)
 # c = Comparer(1,w4.name,w4)
 # c = Comparer(2,w3.name,w5.name,w3,w5)
 # c = Comparer(3,w1.name,w2.name,w3.name,w1,w2,w3)
-c = Comparer(6,w1.name,w2.name,w3.name,w5.name,w6.name,w7.name,w1,w2,w3,w5,w6,w7)
+# c = Comparer(6,w1.name,w2.name,w3.name,w5.name,w6.name,w7.name,w1,w2,w3,w5,w6,w7)
 # c = Comparer(5,w1.name,w2.name,w3.name,w4.name,w5.name,w1,w2,w3,w4,w5)
 # c = Comparer(7,w1.name,w2.name,w3.name,w4.name,w5.name,w6.name,w7.name,w1,w2,w3,w4,w5,w6,w7)
 
