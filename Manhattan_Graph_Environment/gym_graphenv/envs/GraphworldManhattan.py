@@ -169,8 +169,6 @@ class GraphEnv(gym.Env):
         self.distance_reduced_with_shared=0 #to final hub
         self.distance_reduced_with_ownrides=0 #to final hub
 
-
-
         print(f"Reset initialized pickup: {self.position}")
         print(f"Reset initialized dropoff: {self.final_hub}")
         print(f"Reset initialized time: {self.time}")

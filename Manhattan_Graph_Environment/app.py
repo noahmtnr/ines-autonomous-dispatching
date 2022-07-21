@@ -51,42 +51,39 @@ app = dash.Dash(__name__)
 app.layout = html.Div(children=[
 
 html.H1(children='Hitchhike Dashboard'),
+html.Div([html.Button('Start', id='start-button-1', n_clicks=0)]),
 html.Div(children=[
        dcc.Graph( figure=create_map_from_df(df), id='my-graph')
 
-    ], className='left-dashboard', id='map'),
+    ], className='left-dashboard', id='map-1'),
 
     html.Div(children=[
 
-        html.P('CURRENT ORDER: ', id='destination-hub'),
-        # html.H4('Available Shared Rides:'),
-        # html.P('---Destination Reduction of distance to find hub---'),
-        # html.Div(id='shared'),
-        html.H4('Actions taken:'),
-        html.Div(id='actions-taken'),
-    #     html.Div([
-    #     "Next step HUB: ",
-    #     dcc.Input(id='next-hub-input', value= None, type='number')
-    # ], className='right-input'),
-
+        html.H4('CURRENT ORDER: ', id='destination-hub-1'),
+        html.H4('Calculated route: ',  id='calc-route-1'),
+        html.H4('Actions taken:', id= 'actions-taken-titel-1'),
+        html.Div(className = 'grid-container', id='wait-1'),
+        html.Div(className = 'grid-container', id='share-1'),
+        html.Div(className = 'grid-container', id='book-1'),
     ], className='right-dashboard'),
      
-     html.Button('Start', id='start-button', n_clicks=0),
-   
     # html.Div([
     #     "Destination HUB: ",
     #     dcc.Input(id='dest-hub-input', value=None, type='text')
     # ])
 
-], style={'width': '100%', 'display': 'inline-block'}
+], className = 'main-body'
 )
 
 
 @app.callback(
-    Output('destination-hub', 'children'),
-    Output(component_id='map', component_property='children'),
-    Output(component_id='actions-taken', component_property='children'),
-    Input('start-button', 'n_clicks'),
+    Output('destination-hub-1', 'children'),
+    Output(component_id='map-1', component_property='children'),
+    Output(component_id='wait-1', component_property='children'),
+    Output(component_id='share-1', component_property='children'),
+    Output(component_id='book-1', component_property='children'),
+    Output(component_id='calc-route-1', component_property='children'),
+    Input('start-button-1', 'n_clicks'),
     prevent_initial_call=True
 )
 def update_order(n_clicks):
@@ -98,6 +95,7 @@ def update_order(n_clicks):
     nr_wait = 0
     nr_shared = 0
     nr_book = 0
+    route_string='Calculated route: '
 
     for i in type_of_actions:
         if i == 'Wait':
@@ -106,8 +104,11 @@ def update_order(n_clicks):
             nr_shared+=1
         if i == 'Book':
             nr_book+=1
+    for i in range(len(list_actions)):
+        route_string+= f'{list_actions[i]} -> '
+    route_string = route_string[0:-3]
 
-    return html.Div('CURRENT ORDER: {} -> {}'.format(start_hub,final_hub)), dcc.Graph( figure=create_map_from_df(df, list_actions),id='my-graph'), html.Div([html.Div('Wait: {}'.format(nr_wait)), html.Div('Book: {}'.format(nr_book)), html.Div('Share: {}'.format(nr_shared))])
+    return html.Div('CURRENT ORDER: {} -> {}'.format(start_hub,final_hub)), dcc.Graph( figure=create_map_from_df(df, list_actions),id='my-graph'), 'Wait: {}'.format(nr_wait), 'Book: {}'.format(nr_book), 'Share: {}'.format(nr_shared), route_string
 
 # @app.callback(
 #     Output(component_id='destination-hub', component_property='children'),
