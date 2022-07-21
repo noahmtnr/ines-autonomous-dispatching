@@ -24,8 +24,8 @@ df['action'] = actions
 # list_actions = [3,20,20,5,7,7,7,110,112,112,2]
 # type_of_actions = ['','book','wait','share', 'share', 'wait', 'wait', 'share', 'share', 'wait', 'book']
 
-list_actions = [3,112,2]
-type_of_actions = ['', 'share', 'book']
+list_actions = [13, 0, 7, 1, 1, 13]
+type_of_actions = ['start', 'Book', 'Book', 'Book', 'Wait', 'Book']
 
 
 # Function to create map
@@ -98,11 +98,11 @@ def update_order(n_clicks):
     route_string='Calculated route: '
 
     for i in type_of_actions:
-        if i == 'wait':
+        if i == 'Wait':
             nr_wait+=1
-        if i == 'share':
+        if i == 'Share':
             nr_shared+=1
-        if i == 'book':
+        if i == 'Book':
             nr_book+=1
     for i in range(len(list_actions)):
         route_string+= f'{list_actions[i]} -> '

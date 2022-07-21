@@ -8,14 +8,14 @@ import time
 class DBConnection:
   def __init__(self):
     # try:
-      # self.mydb = mysql.connector.connect(
-      #   host="localhost",
-      #   user="root",
-      #   password="root",
-      #   database="mannheimprojekt",
-      #   auth_plugin='mysql_native_password'
-      # )
-      # print("Using local db")
+    #   self.mydb = mysql.connector.connect(
+    #     host="localhost",
+    #     user="root",
+    #     password="root",
+    #     database="mannheimprojekt",
+    #     auth_plugin='mysql_native_password'
+    #   )
+    #   print("Using local db")
     # except:
     self.mydb = mysql.connector.connect(
       host="mannheimprojekt.mysql.database.azure.com",
@@ -93,7 +93,7 @@ class DBConnection:
 
   def getAvailableTrips(self, start_date, end_date):
     startTime = time.time()
-    sql = "select * from PREFILTERED_TRIPS_VIEW_01 where date_time between %s and %s LIMIT 5000"
+    sql = "select * from PREFILTERED_TRIPS_VIEW_01 where date_time between %s and %s"
     val = (start_date, end_date)
     tripsId_list=[]
     nodes_list=[]
