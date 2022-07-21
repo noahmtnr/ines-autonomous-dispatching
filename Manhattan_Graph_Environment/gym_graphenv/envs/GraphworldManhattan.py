@@ -86,7 +86,7 @@ class GraphEnv(gym.Env):
 
         self.trips = self.DB.getAvailableTrips(DB_LOWER_BOUNDARY, DB_UPPER_BOUNDARY)
         print(f"Initialized with {len(self.trips)} taxi rides within two weeks")
-        print(f"Initialized with {len(self.hubs)} hubs")
+        #print(f"Initialized with {len(self.hubs)} hubs")
 
 
         self.state = None
@@ -319,7 +319,7 @@ class GraphEnv(gym.Env):
                     self.time = departure_time
 
                 
-                print("Step Duration: ", step_duration)
+                #print("Step Duration: ", step_duration)
 
                 if(self.shared_rides_mask[action] == 1):
                     self.count_share += 1
@@ -378,7 +378,7 @@ class GraphEnv(gym.Env):
         # print("New State: ")        
         # print(self.state)
 
-        print("End Time ", self.time)
+        #print("End Time ", self.time)
 
         self.count_actions += 1
 
@@ -520,12 +520,12 @@ class GraphEnv(gym.Env):
         #     #done = False
 
         #print(self.old_position, "->", action, reward)
-        print(f"Reward: {reward}")
-        print(f"Action: {action}")
+        #print(f"Reward: {reward}")
+        #print(f"Action: {action}")
         #print(f"Old Distinction: {old_distinction}")
         #print(f"Rides Mask for Action {action}: {self.shared_rides_mask}")
 
-        print("Done:", self.done)
+        #print("Done:", self.done)
 
         return reward, self.done, state_of_delivery
 
