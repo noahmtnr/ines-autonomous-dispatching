@@ -6,7 +6,7 @@ import os
 #import config
 
 ROOT_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), '../..'))
-print("root",ROOT_DIR)
+
 #graph to be used: full.graphml (all nodes)
 #if we use small_manhattan.graphml, we do not have all nodes which are in the trips and then we get Key Error
 class ManhattanGraph:
@@ -39,29 +39,9 @@ class ManhattanGraph:
         filepath = "./data/hubs/longlist.csv"
 
         hubs_file = pd.read_csv(filepath)
-
-        hubs = []
-        i=0
-        for row in hubs_file.index:    
-            hubs.append(ox.get_nearest_node(self.inner_graph,(hubs_file.loc[row,"latitude"], hubs_file.loc[row,"longitude"])))
-        # if opt == 0:
-        #     # the code below is for mapping the pre-defined hubs (customer/store/trips) to nodes in the graph
-        #     hubs_file = pd.read_csv("data/hubs/manual_hubs.CSV")
-        #     hubs = []
-        #     i=0
-        #     for row in hubs_file.index:    
-        #         hubs.append(ox.get_nearest_node(self.inner_graph,(hubs_file.loc[row,"latitude"], hubs_file.loc[row,"longitude"])))
-        #         #hubs.append(hubs_file.loc[row])
-        # else:
-        #     hubs_file = pd.read_csv('rl/Manhattan_Graph_Environment/top_nodes.csv')
-        #     hubs = []
-        #     i=0
-        #     for row in hubs_file.index:    
-        #         hubs.append(hubs_file.loc[row])
-         
-        #self.hubs = random.sample(hubs,num_hubs)
-        self.hubs = hubs
-        # pd.DataFrame(self.hubs).to_csv("hub_nodeids.csv")
+     
+        self.hubs = ox.distance.nearest_nodes(self.inner_graph,hubs_file["latitude"], hubs_file["longitude"])
+        
         return self.hubs
 
     def setup_trips(self, start_time: datetime):
