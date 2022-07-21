@@ -315,7 +315,7 @@ class GraphEnv(gym.Env):
                     # TODO: String conversion von departure time besser direkt beim erstellen der Matrix
                     departure_time = datetime.strptime(self.learn_graph.wait_till_departure_times[(self.position,action)], '%Y-%m-%d %H:%M:%S')
                     self.current_wait = ( departure_time - self.time).seconds
-                    step_duration += self.current_wait
+                    #step_duration += self.current_wait
                     self.time = departure_time
 
                 
