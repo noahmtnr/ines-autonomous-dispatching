@@ -56,21 +56,13 @@ class ManhattanGraph:
         filepath = "data/trips/preprocessed_trips.csv"
         all_trips = pd.read_csv(filepath)
         self.trips = self.prefilter_trips(all_trips, start_time).reset_index(drop=True)
-
-        #compute trip length and add to csv
-        #generate random passenger count between 1 and 4 and add to csv
         route_length_column=[]
         for i in self.trips.index:
             current_route_string = self.trips.iloc[i]["route"]
             string_split = current_route_string.replace('[','').replace(']','').split(',')
             current_route = [int(el) for el in string_split]
-            #print(current_route)
             route_length = 0
             for j in range(len(current_route)-1):
-                #print(self.inner_graph.nodes()[current_route[j]])
-                #print(current_route[j])
-                #print(self.get_node_by_nodeid(current_route[j]))
-                #print(self.nodes())
                 route_length += ox.distance.great_circle_vec(self.inner_graph.nodes()[current_route[j]]['y'], self.inner_graph.nodes()[current_route[j]]['x'],
                 self.inner_graph.nodes()[current_route[j+1]]['y'], self.inner_graph.nodes()[current_route[j+1]]['x'])
             route_length_column.append(route_length)
