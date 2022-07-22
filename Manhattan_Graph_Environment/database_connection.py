@@ -154,19 +154,16 @@ class DBConnection:
 
     self.mycursor.execute(sql)
     result = self.mycursor.fetchall()
-    #print(result)
-    return result
+    processed_hubs = []
+    print(result)
+
+    for hub in result:
+      processed_hubs.append(hub[0])
+    
+    return processed_hubs
 
 
   def close_connection(self):
     self.cursor.close()
     self.mydb.close()
-
-db = DBConnection()
-hubs = db.getAllHubs()
-processed_hubs = []
-for hub in hubs:
-  processed_hubs.append(hub[0])
-
-print(len(processed_hubs))
 

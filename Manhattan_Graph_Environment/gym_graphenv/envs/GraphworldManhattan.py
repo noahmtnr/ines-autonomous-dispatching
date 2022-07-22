@@ -77,15 +77,15 @@ class GraphEnv(gym.Env):
         self.distance_matrix = None
 
         self.DB = DBConnection()
-
-        manhattan_graph = ManhattanGraph(filename='simple', num_hubs=self.n_hubs)
+        hubs = self.DB.getAllHubs()
+        manhattan_graph = ManhattanGraph(filename='simple', hubs=hubs)
         #manhattan_graph.setup_trips(self.START_TIME)
         self.manhattan_graph = manhattan_graph
 
         self.hubs = manhattan_graph.hubs
 
         self.trips = self.DB.getAvailableTrips(DB_LOWER_BOUNDARY, DB_UPPER_BOUNDARY)
-        print(f"Initialized with {len(self.trips)} taxi rides within two weeks")
+        print(f"Initialized with {len(self.hubs)} hubs and {len(self.trips)} taxi rides within two weeks")
         #print(f"Initialized with {len(self.hubs)} hubs")
 
 
