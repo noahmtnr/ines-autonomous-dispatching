@@ -29,7 +29,6 @@ actions = ['hub' for i in range(120)]
 df_hubs['id'] = ids
 df_hubs['action'] = actions
 
-#hub_node_ids = [42423296, 42423307, 42437644, 42427915, 371188750, 371188756, 371239958, 42449945, 42433058, 42450468, 42440743, 1825841704, 42433066, 42445867, 42445357, 5426969134, 2054405680, 370912817, 42428980, 9140654137, 370892861, 42445374, 42427965, 42427968, 42427970, 42427972, 42445392, 42445916, 42440798, 561035358, 371188320, 42435684, 42450025, 42446959, 371207282, 406006393, 277482105, 42446977, 370894980, 42449029, 370924677, 4779073677, 4779073680, 42438809, 4320028826, 7490266268, 42440350, 42444457, 42442415, 205020852, 42442937, 205024444, 42450634, 3843180751, 371209940, 589099734, 42424025, 42445018, 3579432156, 42442463, 42442475, 370914027, 42437358, 370915061, 42423549, 42423039, 42451712, 42447105, 278608643, 42423051, 595295501, 42428174, 42443534, 370897166, 561042199, 42447132, 42430253, 42457401, 595352904, 42439497, 42424145, 42432856, 42430304, 5779545445, 4886250352, 42454391, 42427769, 42432889, 42455929, 42430333, 42450820, 42436486, 42433422, 1919595922, 4145735059, 42430361, 42443674, 370924957, 42429342, 370888100, 42430375, 42453934, 42428863, 595314119, 589929417, 1061531596, 42427863, 42432985, 42423774, 370913758, 3099327970, 9177424868, 248708582, 3099327976, 100522479, 42426865, 370913779, 596775930, 370898427, 1692433919]
 hub_node_ids = [42423039, 42423051, 42423296, 42423307, 42423549, 42423774, 42424025, 42424145, 42426865, 42427769, 42427863, 42427915, 42427965, 42427968, 42427970, 42427972, 42428174, 42428863, 42428980, 42429342, 42430253, 42430304, 42430333, 42430361, 42430375, 42432856, 42432889, 42432985, 42433058, 42433066, 42433422, 42435684, 42436486, 42437358, 42437644, 42438809, 42439497, 42440350, 42440743, 42440798, 42442415, 42442463, 42442475, 42442937, 42443534, 42443674, 42444457, 42445018, 424457, 370913758, 370913779, 370914027, 370915061, 370924677, 370924957, 371188320, 371188750, 371188756, 371207282, 371209940, 371239958, 406006393, 561035358, 561042199, 589099734, 589929417, 595295501, 595314119, 595352904, 596775930, 1061531596, 1692433919, 1825841704, 1919595922, 2054405680, 3099327970, 3099327976, 3579432156, 3843180751, 4145735059, 4320028826, 4779073677, 4779073680, 4886250352, 5426969134, 5779545445, 7490266268, 9140654137, 9177424868]
 
 manhattan_graph = ManhattanGraph(filename='simple', num_hubs=120)
@@ -48,6 +47,18 @@ def create_map_from_df(df_hubs, df_route=pd.DataFrame(), test_id=0):
             lat = [df_route['latitude'][i] for i in range(len(df_route['latitude']))],
             marker = {'size': 10},
             hovertext  = [manhattan_graph.get_hub_index_by_nodeid(n) for n in df_route['node_id']]))
+    return fig
+
+
+def create_piechart(wait=1, share=1, book=1):
+    colors = ['LightSteelBlue', 'Gainsboro', 'LightSlateGrey']
+    labels = ['wait','share','book']
+    values = [wait,share,book]
+    # pull is given as a fraction of the pie radius
+    fig = go.Figure(data=[go.Pie(labels=labels, values=values, pull=[0, 0.1, 0], text=labels, textposition='inside', textfont_size=18, showlegend=False, hoverinfo='text+value+percent', textinfo='value+text')])
+    fig.update_traces(marker=dict(colors=colors))
+    fig.update_layout(margin=dict(t=0, b=0, l=0, r=0))
+
     return fig
 
 app = dash.Dash(__name__,  suppress_callback_exceptions = True)
@@ -153,9 +164,10 @@ html.Div(children=[
         html.H4('CURRENT ORDER: ', id='destination-hub-1'),
         html.H4('Calculated route: ',  id='calc-route-1'),
         html.H4('Actions taken:', id= 'actions-taken-titel'),
-        html.Div(className = 'grid-container', id='wait-1'),
-        html.Div(className = 'grid-container', id='share-1'),
-        html.Div(className = 'grid-container', id='book-1'),
+        html.Div(dcc.Graph(figure=create_piechart(), id='graph_actions'), id='div-piechart'),
+        # html.Div(className = 'grid-container', id='wait-1'),
+        # html.Div(className = 'grid-container', id='share-1'),
+        # html.Div(className = 'grid-container', id='book-1'),
     ], className='right-dashboard'),
      
 ], className = 'main-body'
@@ -197,10 +209,12 @@ html.Div(children=[
     #Output()
     Output('destination-hub-1', 'children'),
     Output(component_id='map-1', component_property='children'),
-    Output(component_id='wait-1', component_property='children'),
-    Output(component_id='share-1', component_property='children'),
-    Output(component_id='book-1', component_property='children'),
+    # Output(component_id='wait-1', component_property='children'),
+    # Output(component_id='share-1', component_property='children'),
+    # Output(component_id='book-1', component_property='children'),
     Output(component_id='calc-route-1', component_property='children'),
+    #Output(component_id='actions-taken-titel', component_property='children'),
+    Output(component_id='div-piechart', component_property='children'),
     Input('dropdown1', 'value'),
     ## replace start button with drop down 
     #Input('start-button-1', 'n_clicks'),
@@ -236,6 +250,9 @@ def start_order_1(value):
             nr_shared+=1
         if i == 'Book':
             nr_book+=1
+    print("Wait:",nr_wait)
+    print("Share:",nr_shared)
+    print("Book:",nr_book)
     for i in range(len(df_test['Hubs'][test_id])):
         route_string += str(df_test['Hubs'][test_id][i]) + ' ->'
     route_string = route_string[0:-3]
@@ -253,7 +270,7 @@ def start_order_1(value):
         df_route['node_id'][i] = df_test['Nodes'][test_id][i]
     #print(df_route)
 
-    return html.Div('CURRENT ORDER: {} -> {}'.format(start_hub, final_hub)), dcc.Graph( figure=create_map_from_df(df_hubs, df_route, test_id),id='my-graph'), 'Wait: {}'.format(nr_wait), 'Book: {}'.format(nr_book), 'Share: {}'.format(nr_shared), route_string
+    return html.Div('CURRENT ORDER: {} -> {}'.format(start_hub, final_hub)), dcc.Graph( figure=create_map_from_df(df_hubs, df_route, df_test['Hubs'][test_id], test_id),id='my-graph'), route_string, dcc.Graph(figure=create_piechart(nr_wait,nr_shared,nr_book), id='graph_actions')
 
 
 @app.callback(

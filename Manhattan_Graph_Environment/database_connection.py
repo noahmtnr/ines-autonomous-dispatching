@@ -8,14 +8,14 @@ import time
 class DBConnection:
   def __init__(self):
     # try:
-      # self.mydb = mysql.connector.connect(
-      #   host="localhost",
-      #   user="root",
-      #   password="root",
-      #   database="mannheimprojekt",
-      #   auth_plugin='mysql_native_password'
-      # )
-      # print("Using local db")
+    #   self.mydb = mysql.connector.connect(
+    #     host="localhost",
+    #     user="root",
+    #     password="root",
+    #     database="mannheimprojekt",
+    #     auth_plugin='mysql_native_password'
+    #   )
+    #   print("Using local db")
     # except:
     self.mydb = mysql.connector.connect(
       host="mannheimprojekt.mysql.database.azure.com",
