@@ -247,8 +247,6 @@ class GraphEnv(gym.Env):
         """
 
         startTime = time.time()
-        print("Start Time ", self.time)
-
         #self.done = False
 
         # if agent is in time window 2 hours before deadline, we just move him to the final hub
@@ -425,20 +423,20 @@ class GraphEnv(gym.Env):
         distance_gained = self.old_state['remaining_distance'][self.position]
         old_distinction = self.old_state['distinction']
         cost_of_action = self.learn_graph.adjacency_matrix('cost')[self.old_position][action]
-        print(self.old_position, "->", action, distance_gained)
         self.done = False
 
+        action_type = None
         bookown = False
         wait = False
         share = False
         reward = 0
 
         if(old_distinction[action] == -1): # book own
-            bookown = True
+            action_type = ActionType.OWN
         elif(old_distinction[action] == 0): # wait
-            wait = True
+            action_type = ActionType.WAIT
         else:
-            share = True
+            action_type = ActionType.SHARE
 
         if(self.position == self.final_hub):
             self.done = True
@@ -447,14 +445,14 @@ class GraphEnv(gym.Env):
                 # in time
                 state_of_delivery = DeliveryState.DELIVERED_ON_TIME
                 print(f"DELIVERED IN TIME AFTER {self.count_actions} ACTIONS (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown})")
-                if(bookown == True):
+                if(action_type == ActionType.OWN):
                     if(self.allow_bookown == 0):
                         # strong punishment for bookown before 2h window before deadline
                         reward = old_distinction[action]*100000
                         reward += 10000
                     else:
                         reward = 0
-                elif(share == True):
+                elif(action_type == ActionType.SHARE):
                     # high reward if agent comes to final hub with shared ride
                     reward = 100000
                     
@@ -469,68 +467,19 @@ class GraphEnv(gym.Env):
             # intermediate action
             self.done = False
             state_of_delivery = DeliveryState.IN_DELIVERY
-            if(wait == True):
-                # print("Action in Reward: Wait")
-                # print("Time:", self.time)
-                # print("Deadline:", self.deadline)
+            if(action_type == ActionType.WAIT):
                 reward = 0
-            elif(bookown == True):
-                # print("Action in Reward: Bookown")
-                # print("Time:", self.time)
-                # print("Deadline:", self.deadline)
+            elif(action_type == ActionType.OWN):
                 if(self.allow_bookown == 0):
                     reward = old_distinction[action]*100000
                 else:
                     # kann eigentlich nicht sein dieser Case
                     reward = (distance_gained/100) * 1000
-            elif(share == True):
-                # print("Action in Reward: Share")
-                # print("Time:", self.time)
-                # print("Deadline:", self.deadline)
+            elif(action_type == ActionType.SHARE):
+
                 reward = (distance_gained/100) * 1000 + old_distinction[action]*10000
 
-        # # if delay is greater than 2 hours (=120 minutes), terminate training episode
-        # if((self.time-self.deadline).total_seconds()/60 >= 120 or self.count_actions>200):
-        #     self.done = True
-        #     reward = - 10000
-        #     state_of_delivery = DeliveryState.NOT_DELIVERED
-        #     print("BOX WAS NOT DELIVERED until 2 hours after deadline")
-        # # if box is delivered to final hub in time
-        # if (self.position == self.final_hub and self.time <= self.deadline):
-        #     print(f"DELIVERED IN TIME AFTER {self.count_actions} ACTIONS (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown}")
-        #     reward = 10000
-        #     self.done = True
-        #     state_of_delivery = DeliveryState.DELIVERED_ON_TIME
-        # # if box is delivered to final hub with delay
-        # elif(self.position == self.final_hub and (self.time-self.deadline).total_seconds()/60 < 120): #self.time > self.deadline):
-        #     overtime = self.time - self.deadline
-        #     overtime = round(overtime.total_seconds() / 60)
-        #     print(f"DELIVERED AFTER {self.count_actions} ACTIONS (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown} WITH DELAY: {overtime}")
-        #     reward = 10000 - overtime
-        #     self.done = True
-        #     state_of_delivery = DeliveryState.DELIVERED_WITH_DELAY
-        # # if box is not delivered to final hub
-        # elif(self.done==False):
-        #     # reward = distance_gained / 100 + old_distinction[action]*1000
-        #     # print("book available",self.allow_bookown)
-        #     # print("Distinction action available",old_distinction[action])
-        #     if(self.allow_bookown == 0 and old_distinction[action] == -1 ):
-        #          reward = old_distinction[action]*100000
-        #     elif(self.allow_bookown == 1 and old_distinction[action] == -1):
-        #         reward = (distance_gained/100) * 1000
-        #     else:
-        #         reward = (distance_gained/100) * 1000 + old_distinction[action]*1000
-        #     # print(f"INTERMEDIATE STEP ACTIONS: (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown}")
-        #     state_of_delivery = DeliveryState.IN_DELIVERY
-        #     #done = False
-
-        #print(self.old_position, "->", action, reward)
-        #print(f"Reward: {reward}")
-        #print(f"Action: {action}")
-        #print(f"Old Distinction: {old_distinction}")
-        #print(f"Rides Mask for Action {action}: {self.shared_rides_mask}")
-
-        #print("Done:", self.done)
+        print(self.old_position, "->", action, action_type, "D:", distance_gained, "R:", reward)
 
         return reward, self.done, state_of_delivery
 
@@ -610,9 +559,9 @@ class GraphEnv(gym.Env):
         return action < self.n_hubs
 
     def read_config(self):
-        #filepath = os.path.join(ROOT_DIR,'env_config.pkl')
+        filepath = os.path.join(ROOT_DIR,'env_config.pkl')
         #filepath = "/Users/noah/Desktop/Repositories/ines-autonomous-dispatching/Manhattan_Graph_Environment/env_config.pkl"
-        filepath = "env_config.pkl"
+        #filepath = "env_config.pkl"
         with open(filepath,'rb') as f:
             loaded_dict = pickle.load(f)
         self.env_config = loaded_dict
@@ -785,7 +734,8 @@ class GraphEnv(gym.Env):
         # fig.show()
         # plt.show()
 
-
+class ActionType:
+    WAIT,SHARE,OWN = range(3)
 class DeliveryState:
     DELIVERED_ON_TIME, DELIVERED_WITH_DELAY, NOT_DELIVERED, IN_DELIVERY = range(4)
 
