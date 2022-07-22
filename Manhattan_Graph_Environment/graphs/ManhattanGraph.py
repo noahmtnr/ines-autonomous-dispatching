@@ -3,7 +3,7 @@ import pandas as pd
 import random
 from datetime import datetime, timedelta
 import os
-import config
+from database_connection import DBConnection
 
 ROOT_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), '../..'))
 
@@ -46,8 +46,14 @@ class ManhattanGraph:
 
         hubs_file = pd.read_csv(filepath)
      
-        self.hubs = ox.distance.nearest_nodes(self.inner_graph,hubs_file["latitude"], hubs_file["longitude"])
-        
+        #self.hubs = ox.distance.nearest_nodes(self.inner_graph,hubs_file["latitude"], hubs_file["longitude"])
+        db = DBConnection()
+        hubs = db.getAllHubs()
+        processed_hubs = []
+        for hub in hubs:
+            processed_hubs.append(hub[0])
+        self.hubs = processed_hubs
+
         return self.hubs
 
     def setup_trips(self, start_time: datetime):

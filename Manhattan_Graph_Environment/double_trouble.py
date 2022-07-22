@@ -99,6 +99,7 @@ def next_step(input_value):
         df_route['longitude'][i] = results[0]
         df_route['latitude'][i] = results[1]
         df_route['node_id'][i] = taken_steps[i]
+    #print(df_route)
 
     #convert node ids list in df_route with coordinates
     trips = env.availableTrips()
@@ -117,6 +118,7 @@ def next_step(input_value):
     start = env.manhattan_graph.get_nodeid_by_hub_index(env.start_hub)
 
     actions = []
+    #print(all_hubs)
     for n in all_hubs:
         if n == position:
             actions.append('position')
@@ -270,7 +272,7 @@ def start_order_1(value):
         df_route['node_id'][i] = df_test['Nodes'][test_id][i]
     #print(df_route)
 
-    return html.Div('CURRENT ORDER: {} -> {}'.format(start_hub, final_hub)), dcc.Graph( figure=create_map_from_df(df_hubs, df_route, df_test['Hubs'][test_id], test_id),id='my-graph'), route_string, dcc.Graph(figure=create_piechart(nr_wait,nr_shared,nr_book), id='graph_actions')
+    return html.Div('CURRENT ORDER: {} -> {}'.format(start_hub, final_hub)), dcc.Graph( figure=create_map_from_df(df_hubs, df_route, test_id),id='my-graph'), route_string, dcc.Graph(figure=create_piechart(nr_wait,nr_shared,nr_book), id='graph_actions')
 
 
 @app.callback(
