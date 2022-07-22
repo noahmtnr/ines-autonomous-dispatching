@@ -17,7 +17,9 @@ env = GraphEnv(use_config=True)
 env.reset()
 
 # read test dataframe 
-df_test = pd.read_csv('D:/ines-autonomous-dispatching/Manhattan_Graph_Environment/test_orders_dashboard.csv')
+filepath = "test_orders_dashboard.csv"
+df_test = pd.read_csv(filepath)
+#df_test = pd.read_csv('D:/ines-autonomous-dispatching/Manhattan_Graph_Environment/test_orders_dashboard.csv')
 for i in range(len(df_test['Hubs'])):
     df_test['Hubs'][i] = ast.literal_eval(df_test['Hubs'][i])
     df_test['Actions'][i] = ast.literal_eval(df_test['Actions'][i])
@@ -50,6 +52,7 @@ def create_map_from_df(df_hubs, df_route=pd.DataFrame(), test_id=0):
     return fig
 
 
+# TODO: change initial values to 0
 def create_piechart(wait=1, share=1, book=1):
     colors = ['LightSteelBlue', 'Gainsboro', 'LightSlateGrey']
     labels = ['wait','share','book']
@@ -68,6 +71,8 @@ app = dash.Dash(__name__,  suppress_callback_exceptions = True)
 @app.callback(
     Output(component_id='map-2', component_property='children'),
     #Output(component_id='shared', component_property='children'),
+    # TODO: show line below
+    #Output(component_id='div-piechart2', component_property='children'),
     Input(component_id='next-hub-input', component_property='value'),
     prevent_initial_call=True
 )
@@ -136,8 +141,27 @@ def next_step(input_value):
                         if n in book_own_ids:
                             actions.append('book') 
     df_hubs['action'] = actions
+
+    ###
+    # either take current action or look it up in df_test and then count up actions
+    # current_action = df_hubs['action'][input_value]
+    # previous_test_case = -1
+    # current_test_case = test_id
+    # # initialize all actions with 0 if test case changes
+    # if previous_test_case != current_test_case:
+    #     number_wait = 0
+    #     number_book = 0
+    #     number_share = 0
+    # else:
+    #     if current_action == 'position':
+    #         number_wait += 1
+    #     elif current_action == 'book':
+    #         number_book += 1
+    #     else:
+    #         number_share += 1
+
     #to modify
-    return dcc.Graph(figure=create_map_from_df(df_hubs, df_route, test_id), id='my-graph')
+    return dcc.Graph(figure=create_map_from_df(df_hubs, df_route, test_id), id='my-graph')#, dcc.Graph(figure=create_piechart(number_wait,number_shared,number_book), id='graph_actions2')
 
 
 app.layout = html.Div([
@@ -190,6 +214,8 @@ html.Div(children=[
         html.H4('Calculated route: ',  id='calc-route-2'),
                
         html.H4('Actions taken:', id= 'actions-taken-titel'),
+        #html.Div(dcc.Graph(figure=create_piechart(), id='graph_actions2'), id='div-piechart2'),
+        # TODO: delete following 3 lines and show upper line
         html.Div(className = 'grid-container', id='wait-2'),
         html.Div(className = 'grid-container', id='share-2'),
         html.Div(className = 'grid-container', id='book-2'),
