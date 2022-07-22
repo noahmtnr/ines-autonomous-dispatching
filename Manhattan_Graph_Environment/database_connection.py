@@ -155,8 +155,7 @@ class DBConnection:
     self.mycursor.execute(sql)
     result = self.mycursor.fetchall()
     processed_hubs = []
-    print(result)
-
+    
     for hub in result:
       processed_hubs.append(hub[0])
     
