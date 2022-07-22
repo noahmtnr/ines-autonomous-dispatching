@@ -159,7 +159,9 @@ class ManhattanGraph:
     #     return [nodes[node_id]['x'], nodes[node_id]['y']]       
 
     def get_hub_index_by_nodeid(self, nodeid: int):
-        return self.hubs.index(nodeid)
+        if(nodeid in self.hubs):
+            return self.hubs.index(nodeid)
+        return ' '
 
     def get_hub_index_by_node_index(self, node_index: int):
         return self.get_hub_index_by_nodeid(self.get_nodeid_by_index(node_index))

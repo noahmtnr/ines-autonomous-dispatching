@@ -93,7 +93,7 @@ class DBConnection:
 
   def getAvailableTrips(self, start_date, end_date):
     startTime = time.time()
-    sql = "select * from PREFILTERED_TRIPS_VIEW_01 where date_time between %s and %s LIMIT 5000"
+    sql = "select * from PREFILTERED_TRIPS_VIEW_01 where date_time between %s and %s"
     val = (start_date, end_date)
     tripsId_list=[]
     nodes_list=[]
@@ -154,11 +154,19 @@ class DBConnection:
 
     self.mycursor.execute(sql)
     result = self.mycursor.fetchall()
-    print(result)
+    #print(result)
     return result
 
 
   def close_connection(self):
     self.cursor.close()
     self.mydb.close()
+
+db = DBConnection()
+hubs = db.getAllHubs()
+processed_hubs = []
+for hub in hubs:
+  processed_hubs.append(hub[0])
+
+print(len(processed_hubs))
 

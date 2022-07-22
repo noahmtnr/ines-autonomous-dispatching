@@ -29,26 +29,10 @@ actions = ['hub' for i in range(120)]
 df_hubs['id'] = ids
 df_hubs['action'] = actions
 
-# taken_steps = []
-# list_actions = [3,112,2]
-# type_of_actions = ['', 'share', 'book']
-
-# nodes =  [42437644, 42446701, 42443680, 42451674, 42437686, 42427786, 42438544, 42434800, 42429874, 7372860100, 
-# 42453624, 449581627, 42428206, 42437881, 42434268, 42443671, 42427369, 42428183, 42428179, 42428174, 4597668026, 4597668036, 4597668023, 4597668035, 42428493, 42428491, 42428489, 42428483, 42428480, 42428476, 42428473, 42428471, 42428468, 42428464, 42428460, 42428458, 42428454, 1692433919, 42428447, 1919595915, 42428444, 42428441, 42428438, 42428436, 42428434, 42428433, 42428431, 42428428, 42428425, 42428420, 5706569905, 42428411, 42428408, 42428405, 42428402, 272195271, 2821304136, 2821304137, 2821304138, 272195270, 8262936580, 42428391, 
-# 42428385, 42428379, 42453934, 8840333846, 8840333851, 42453952, 42430004, 42429562, 42449597, 42431611, 42445356, 42430550, 42429830, 42452817, 42448171, 4143851142, 4143851144, 42453777, 42447249, 42447246, 42440825, 
-# 8996353563, 42452040, 42432152, 42442273, 42456197, 1919595917, 1919595925, 1919595915, 1918039880, 1918039897, 42445511, 1692433916, 42445520, 42431165, 42445534, 42439236, 42445543, 42439249, 42434140, 42443296, 42443298, 4235734225, 3892037906, 42430898, 42430903, 42454994, 42446547, 42436943, 42440743, 42440737, 42436942, 42442870, 42442862, 42430898, 42442857, 42434142, 42434201, 42442851, 42442850, 42442848, 42437333, 42442843, 42442842, 42442838, 42443127, 1918039877, 42432083, 42437113, 486869282, 42429754, 42432085, 42452067, 42445603, 42437580, 5161246301, 5161246307, 1773063789, 1773063787, 1773060097, 1773060099, 1773055865, 588455743, 4158807592, 42439813, 42437749, 42444277, 3884569931, 3884569924, 588455738, 205019740, 4145735057, 4145735066, 4147546533, 42431902, 370880739, 4145735059, 205020852, 42422270, 278608643, 42423307, 370892861, 370894980, 370897166, 370913758, 42422509, 42457925, 42457940, 42445392, 42445390, 42445387, 5131026388, 42445382, 
-# 42445378, 42445374, 3786901743, 561042190, 42445365]
-
-hub_node_ids = [42423296, 42423307, 42437644, 42427915, 371188750, 371188756, 371239958, 42449945, 42433058, 42450468, 42440743, 1825841704, 42433066, 42445867, 42445357, 5426969134, 2054405680, 370912817, 42428980, 9140654137, 370892861, 42445374, 42427965, 42427968, 42427970, 42427972, 42445392, 42445916, 42440798, 561035358, 371188320, 42435684, 42450025, 42446959, 371207282, 406006393, 277482105, 42446977, 370894980, 42449029, 370924677, 4779073677, 4779073680, 42438809, 4320028826, 7490266268, 42440350, 42444457, 42442415, 205020852, 42442937, 205024444, 42450634, 3843180751, 371209940, 589099734, 42424025, 42445018, 3579432156, 42442463, 42442475, 370914027, 42437358, 370915061, 42423549, 42423039, 42451712, 42447105, 278608643, 42423051, 595295501, 42428174, 42443534, 370897166, 561042199, 42447132, 42430253, 42457401, 595352904, 42439497, 42424145, 42432856, 42430304, 5779545445, 4886250352, 42454391, 42427769, 42432889, 42455929, 42430333, 42450820, 42436486, 42433422, 1919595922, 4145735059, 42430361, 42443674, 370924957, 42429342, 370888100, 42430375, 42453934, 42428863, 595314119, 589929417, 1061531596, 42427863, 42432985, 42423774, 370913758, 3099327970, 9177424868, 248708582, 3099327976, 100522479, 42426865, 370913779, 596775930, 370898427, 1692433919]
-
-
+#hub_node_ids = [42423296, 42423307, 42437644, 42427915, 371188750, 371188756, 371239958, 42449945, 42433058, 42450468, 42440743, 1825841704, 42433066, 42445867, 42445357, 5426969134, 2054405680, 370912817, 42428980, 9140654137, 370892861, 42445374, 42427965, 42427968, 42427970, 42427972, 42445392, 42445916, 42440798, 561035358, 371188320, 42435684, 42450025, 42446959, 371207282, 406006393, 277482105, 42446977, 370894980, 42449029, 370924677, 4779073677, 4779073680, 42438809, 4320028826, 7490266268, 42440350, 42444457, 42442415, 205020852, 42442937, 205024444, 42450634, 3843180751, 371209940, 589099734, 42424025, 42445018, 3579432156, 42442463, 42442475, 370914027, 42437358, 370915061, 42423549, 42423039, 42451712, 42447105, 278608643, 42423051, 595295501, 42428174, 42443534, 370897166, 561042199, 42447132, 42430253, 42457401, 595352904, 42439497, 42424145, 42432856, 42430304, 5779545445, 4886250352, 42454391, 42427769, 42432889, 42455929, 42430333, 42450820, 42436486, 42433422, 1919595922, 4145735059, 42430361, 42443674, 370924957, 42429342, 370888100, 42430375, 42453934, 42428863, 595314119, 589929417, 1061531596, 42427863, 42432985, 42423774, 370913758, 3099327970, 9177424868, 248708582, 3099327976, 100522479, 42426865, 370913779, 596775930, 370898427, 1692433919]
+hub_node_ids = [42423039, 42423051, 42423296, 42423307, 42423549, 42423774, 42424025, 42424145, 42426865, 42427769, 42427863, 42427915, 42427965, 42427968, 42427970, 42427972, 42428174, 42428863, 42428980, 42429342, 42430253, 42430304, 42430333, 42430361, 42430375, 42432856, 42432889, 42432985, 42433058, 42433066, 42433422, 42435684, 42436486, 42437358, 42437644, 42438809, 42439497, 42440350, 42440743, 42440798, 42442415, 42442463, 42442475, 42442937, 42443534, 42443674, 42444457, 42445018, 424457, 370913758, 370913779, 370914027, 370915061, 370924677, 370924957, 371188320, 371188750, 371188756, 371207282, 371209940, 371239958, 406006393, 561035358, 561042199, 589099734, 589929417, 595295501, 595314119, 595352904, 596775930, 1061531596, 1692433919, 1825841704, 1919595922, 2054405680, 3099327970, 3099327976, 3579432156, 3843180751, 4145735059, 4320028826, 4779073677, 4779073680, 4886250352, 5426969134, 5779545445, 7490266268, 9140654137, 9177424868]
 
 manhattan_graph = ManhattanGraph(filename='simple', num_hubs=120)
-
-# print(manhattan_graph.get_coordinates_of_node(df_test['Nodes'][0][0]))
-# print(manhattan_graph.get_coordinates_of_node(42445867))
-# print(manhattan_graph.get_coordinates_of_node(42445365))
-# print(manhattan_graph.get_coordinates_of_node(42445635))
 
 # Function to create map
 def create_map_from_df(df_hubs, df_route=pd.DataFrame(), test_id=0):
@@ -63,7 +47,7 @@ def create_map_from_df(df_hubs, df_route=pd.DataFrame(), test_id=0):
             lon = [df_route['longitude'][i] for i in range(len(df_route['longitude']))],
             lat = [df_route['latitude'][i] for i in range(len(df_route['latitude']))],
             marker = {'size': 10},
-            hovertext  = [hub_node_ids.index(n) if n in hub_node_ids else ' ' for n in df_test['Nodes'][test_id]]))
+            hovertext  = [manhattan_graph.get_hub_index_by_nodeid(n) for n in df_route['node_id']]))
     return fig
 
 app = dash.Dash(__name__,  suppress_callback_exceptions = True)
@@ -80,39 +64,38 @@ def next_step(input_value):
 
     if input_value is None: 
         return dash.no_update
-    
-    # hub_node_id = manhattan_graph.get_nodeid_by_hub_index(input_value)
 
-    # for i in range(len(taken_steps), len(nodes)):
-    #     if(nodes[i] != hub_node_id)
-    #         taken_steps.append()
-
-    #taken_steps.append(input_value)
 
     shared_rides = list()
     shared_ids = list()
     state, reward,  done, info = env.step(input_value)
-    print('Info: ',info)
-    #append nodes of route
+
+    rem_distance = state['remaining_distance']
+
+
+    print('Trips: ', env.available_actions)
+    print('Position: ', env.position)
     taken_steps.extend(info['route'])
 
     df_route = pd.DataFrame()
     df_route['longitude'] = [0.0 for i in range(len(taken_steps))]
     df_route['latitude'] = [0.0 for i in range(len(taken_steps))]
+    df_route['node_id'] = [0 for i in range(len(taken_steps))]
 
     for i in range(len(taken_steps)):
         results = manhattan_graph.get_coordinates_of_node(taken_steps[i])
         #print(results)
         df_route['longitude'][i] = results[0]
         df_route['latitude'][i] = results[1]
-    
+        df_route['node_id'][i] = taken_steps[i]
 
-    print(df_route)
     #convert node ids list in df_route with coordinates
     trips = env.availableTrips()
+    print('Trips: ',trips)
         
     for i, trip in enumerate(trips):
         shared_ids.append(trip['target_hub'])
+    print('Shared: ', shared_ids)
         
     all_hubs = env.hubs
 
@@ -120,7 +103,6 @@ def next_step(input_value):
     
     position = env.manhattan_graph.get_nodeid_by_hub_index(env.position)
     final = env.manhattan_graph.get_nodeid_by_hub_index(env.final_hub)
-    print(env.final_hub)
     start = env.manhattan_graph.get_nodeid_by_hub_index(env.start_hub)
 
     actions = []
@@ -135,27 +117,12 @@ def next_step(input_value):
                     actions.append('start')
                 else:
                     if n in shared_ids:
+                        print('Aici e share', n)
                         actions.append('shared')
                     else:
                         if n in book_own_ids:
                             actions.append('book') 
     df_hubs['action'] = actions
-
-    print(df_hubs)
-
-
-    # actions = ['book' for i in range(120)]
-    # actions[0] = 'share' # share
-    # actions[1] = 'share' # share
-    # actions[2] = 'share' # share
-    # actions[3] = 'share' # share
-    # actions[input_value] = 'current' # current pos
-    # actions[5] = 'final' # final hub
-    # actions[6] = 'start' # start hub
-
-    # df_hubs['action'] = actions # start hub
-
-    # shared_hubs = {'1':7, '2':10, '3':-5}
     #to modify
     return dcc.Graph(figure=create_map_from_df(df_hubs, df_route, test_id), id='my-graph')
 
@@ -257,9 +224,6 @@ def start_order_1(value):
     df_hubs['action'][start_hub] = 'start'
     df_hubs['action'][final_hub] = 'final'
 
-    #df_test['Actions'][test_id][start_hub]='start'
-    #df_test['Actions'][test_id][final_hub]='final'
-
     nr_wait = 0
     nr_shared = 0
     nr_book = 0
@@ -279,12 +243,14 @@ def start_order_1(value):
     df_route = pd.DataFrame()
     df_route['longitude'] = [0.0 for i in range(len(df_test['Nodes'][test_id]))]
     df_route['latitude'] = [0.0 for i in range(len(df_test['Nodes'][test_id]))]
+    df_route['node_id'] = [0 for i in range (len(df_test['Nodes'][test_id]))]
 
     for i in range(len(df_test['Nodes'][test_id])):
         results = manhattan_graph.get_coordinates_of_node(df_test['Nodes'][test_id][i])
         #print(results)
         df_route['longitude'][i] = results[0]
         df_route['latitude'][i] = results[1]
+        df_route['node_id'][i] = df_test['Nodes'][test_id][i]
     #print(df_route)
 
     return html.Div('CURRENT ORDER: {} -> {}'.format(start_hub, final_hub)), dcc.Graph( figure=create_map_from_df(df_hubs, df_route, test_id),id='my-graph'), 'Wait: {}'.format(nr_wait), 'Book: {}'.format(nr_book), 'Share: {}'.format(nr_shared), route_string
@@ -331,14 +297,15 @@ def start_order_2(value):
                       'pickup_timestamp': df_test['Pickup Time'][test_id],
                       'delivery_timestamp': df_test['Delivery Time'][test_id],
                       }
-
-    #filepath = os.path.join(ROOT_DIR, 'Manhattan_Graph_Environment', 'env_config.pkl')
-    #filepath = 'env_config.pkl'
+                      
     with open('env_config.pkl', 'wb') as f:
         pickle.dump(env_config, f)
     
     env.reset()
     print('-----',env.start_hub, env.final_hub, '------')
+
+    print('Start, Final: ',env.start_hub, env.final_hub, env.position)
+    print('Trips: ', env.available_actions)
 
     # nr_wait = 0
     # nr_shared = 0

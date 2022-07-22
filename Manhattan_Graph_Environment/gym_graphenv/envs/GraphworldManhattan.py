@@ -152,7 +152,9 @@ class GraphEnv(gym.Env):
             self.deadline=self.pickup_time+timedelta(hours=12)
             self.current_wait = 1 ## to avoid dividing by 0
         else:
+            self.env_config = self.read_config()
             print("Started Reset() with config")
+            print(self.env_config)
             self.final_hub = self.env_config['delivery_hub_index']
 
             self.start_hub = self.env_config['pickup_hub_index']
