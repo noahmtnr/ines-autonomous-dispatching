@@ -119,7 +119,16 @@ class GraphEnv(gym.Env):
         one_hot_vector[pos] = 1
         return one_hot_vector
 
-    def reset(self):
+    def reset(self, start_parameters:{}=None) :
+        ##start_parameters requires: dropoff, pickup, time, deadline
+        # Example:
+        # pickup = 25
+        # dropoff = 70
+        # time = datetime.strptime('2016-01-03 14:00:00', '%Y-%m-%d %H:%M:%S')
+        # deadline = datetime.strptime('2016-01-03 17:00:00', '%Y-%m-%d %H:%M:%S')
+        # env.reset({'time': time,'dropoff':dropoff,'pickup':pickup})
+        ############################
+
         # two cases depending if we have env config
         #super().reset()
 
@@ -132,40 +141,48 @@ class GraphEnv(gym.Env):
         self.route_taken = []
         self.START_TIME = datetime(2016,1,pickup_day,pickup_hour,pickup_minute,0).strftime('%Y-%m-%d %H:%M:%S')
 
-        if (self.env_config == None or self.env_config == {}):
-            print("Started Reset() without config")
-            #self.final_hub = self.manhattan_graph.get_nodeids_list().index(random.sample(self.hubs,1)[0])
-            self.final_hub = random.randint(0,self.n_hubs-1)
-            #self.start_hub = self.manhattan_graph.get_nodeids_list().index(random.sample(self.hubs,1)[0])
-            self.start_hub = random.randint(0,self.n_hubs-1)
-
-            # just in case ;)
-            if(self.start_hub == self.final_hub):
+        if(start_parameters != None):
+            print("Reset with start parameters")
+            self.final_hub = start_parameters['dropoff']
+            self.start_hub = start_parameters['pickup']
+            self.position = self.start_hub
+            self.pickup_time = start_parameters['time']
+            self.time = self.pickup_time
+            self.deadline=start_parameters['deadline']
+            self.total_travel_time = 0
+        else:
+            if (self.env_config == None or self.env_config == {}):
+                print("Started Reset() without config")
+                self.final_hub = random.randint(0,self.n_hubs-1)
                 self.start_hub = random.randint(0,self.n_hubs-1)
 
-            self.position = self.start_hub
+                # just in case ;)
+                if(self.start_hub == self.final_hub):
+                    self.start_hub = random.randint(0,self.n_hubs-1)
 
-        # time for pickup
-            self.pickup_time = datetime.strptime(self.START_TIME,'%Y-%m-%d %H:%M:%S')
-            self.time = self.pickup_time
-            self.total_travel_time = 0
-            self.deadline=self.pickup_time+timedelta(hours=24)
-            self.current_wait = 1 ## to avoid dividing by 0
-        else:
-            self.env_config = self.read_config()
-            print("Started Reset() with config")
-            print(self.env_config)
-            self.final_hub = self.env_config['delivery_hub_index']
+                self.position = self.start_hub
 
-            self.start_hub = self.env_config['pickup_hub_index']
+            # time for pickup
+                self.pickup_time = datetime.strptime(self.START_TIME,'%Y-%m-%d %H:%M:%S')
+                self.time = self.pickup_time
+                self.total_travel_time = 0
+                self.deadline=self.pickup_time+timedelta(hours=24)
+                self.current_wait = 1 ## to avoid dividing by 0
+            else:
+                self.env_config = self.read_config()
+                print("Started Reset() with config")
+                print(self.env_config)
+                self.final_hub = self.env_config['delivery_hub_index']
 
-            self.position = self.start_hub
+                self.start_hub = self.env_config['pickup_hub_index']
 
-            self.pickup_time = self.env_config['pickup_timestamp']
-            self.time = datetime.strptime(self.pickup_time, '%Y-%m-%d %H:%M:%S')
-            self.total_travel_time = 0
-            self.deadline=datetime.strptime(self.env_config['delivery_timestamp'], '%Y-%m-%d %H:%M:%S')
-            self.current_wait = 0
+                self.position = self.start_hub
+
+                self.pickup_time = self.env_config['pickup_timestamp']
+                self.time = datetime.strptime(self.pickup_time, '%Y-%m-%d %H:%M:%S')
+                self.total_travel_time = 0
+                self.deadline=datetime.strptime(self.env_config['delivery_timestamp'], '%Y-%m-%d %H:%M:%S')
+                self.current_wait = 0
         self.distance_covered_with_shared=0
         self.distance_covered_with_ownrides=0
         self.distance_reduced_with_shared=0 #to final hub

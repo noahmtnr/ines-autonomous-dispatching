@@ -162,7 +162,7 @@ def next_step(input_value, start_dynamic=False):
     global number_wait
     global number_book
     global number_share
-    
+
     if start_dynamic == True:
         number_wait = 0
         number_book = 0
