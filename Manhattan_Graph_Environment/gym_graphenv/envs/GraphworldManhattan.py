@@ -559,9 +559,10 @@ class GraphEnv(gym.Env):
         return action < self.n_hubs
 
     def read_config(self):
-        filepath = os.path.join(ROOT_DIR,'env_config.pkl')
+        #filepath = os.path.join(ROOT_DIR,'env_config.pkl')
         #filepath = "/Users/noah/Desktop/Repositories/ines-autonomous-dispatching/Manhattan_Graph_Environment/env_config.pkl"
-        #filepath = "env_config.pkl"
+        filepath = "env_config.pkl"
+        #filepath = "C:/Users/kirch/OneDrive/Dokumente/Uni/Mannheim/FSS2022/Teamproject/ines-autonomous-dispatching/env_config.pkl"
         with open(filepath,'rb') as f:
             loaded_dict = pickle.load(f)
         self.env_config = loaded_dict
