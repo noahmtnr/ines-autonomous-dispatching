@@ -150,7 +150,7 @@ class DBConnection:
     self.mydb.commit()
 
   def getAllHubs(self):
-    sql = "SELECT * FROM HUBS"
+    sql = "SELECT * FROM HUBS ORDER BY id ASC"
 
     self.mycursor.execute(sql)
     result = self.mycursor.fetchall()

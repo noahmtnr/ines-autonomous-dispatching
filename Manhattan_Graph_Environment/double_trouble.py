@@ -15,30 +15,44 @@ import pickle
 from gym_graphenv.envs.GraphworldManhattan import GraphEnv
 env = GraphEnv(use_config=True)
 env.reset()
+hubs = env.hubs
+manhattan_graph = env.manhattan_graph
 
 # global start_dynamic
 # start_dynamic = False
 
 # read test dataframe 
-filepath = "C:/Users/kirch/OneDrive/Dokumente/Uni/Mannheim/FSS2022/Teamproject/ines-autonomous-dispatching/Manhattan_Graph_Environment/test_orders_dashboard.csv" #"test_orders_dashboard.csv"
-df_test = pd.read_csv(filepath)
-#df_test = pd.read_csv('D:/ines-autonomous-dispatching/Manhattan_Graph_Environment/test_orders_dashboard.csv')
+#filepath = "C:/Users/kirch/OneDrive/Dokumente/Uni/Mannheim/FSS2022/Teamproject/ines-autonomous-dispatching/Manhattan_Graph_Environment/test_orders_dashboard.csv" #"test_orders_dashboard.csv"
+#df_test = pd.read_csv(filepath)
+df_test = pd.read_csv('D:/ines-autonomous-dispatching/Manhattan_Graph_Environment/test_orders_dashboard.csv')
+
 for i in range(len(df_test['Hubs'])):
     df_test['Hubs'][i] = ast.literal_eval(df_test['Hubs'][i])
     df_test['Actions'][i] = ast.literal_eval(df_test['Actions'][i])
     df_test['Nodes'][i] = ast.literal_eval(df_test['Nodes'][i])
 
-df_hubs = pd.read_csv("./data/hubs/longlist.csv")
+#df_hubs = pd.read_csv("./data/hubs/longlist.csv")
 #df_hubs = pd.read_csv("data/hubs/longlist.csv")
-ids = [i for i in range(120)]
+
+df_hubs = pd.DataFrame()
+df_hubs['longitude'] = [0.0 for i in range(len(hubs))]
+df_hubs['latitude'] = [0.0 for i in range(len(hubs))]
+df_hubs['id'] = [i for i in range(len(hubs))]
+for i in range(len(hubs)):
+    results = manhattan_graph.get_coordinates_of_node(hubs[i])
+        #print(results)
+    df_hubs['longitude'][i] = results[0]
+    df_hubs['latitude'][i] = results[1]
+        
+#ids = [i for i in range(120)]
 actions = ['hub' for i in range(120)]
-df_hubs['id'] = ids
+#df_hubs['id'] = ids
 df_hubs['action'] = actions
 
 hub_node_ids = [42423039, 42423051, 42423296, 42423307, 42423549, 42423774, 42424025, 42424145, 42426865, 42427769, 42427863, 42427915, 42427965, 42427968, 42427970, 42427972, 42428174, 42428863, 42428980, 42429342, 42430253, 42430304, 42430333, 42430361, 42430375, 42432856, 42432889, 42432985, 42433058, 42433066, 42433422, 42435684, 42436486, 42437358, 42437644, 42438809, 42439497, 42440350, 42440743, 42440798, 42442415, 42442463, 42442475, 42442937, 42443534, 42443674, 42444457, 42445018, 424457, 370913758, 370913779, 370914027, 370915061, 370924677, 370924957, 371188320, 371188750, 371188756, 371207282, 371209940, 371239958, 406006393, 561035358, 561042199, 589099734, 589929417, 595295501, 595314119, 595352904, 596775930, 1061531596, 1692433919, 1825841704, 1919595922, 2054405680, 3099327970, 3099327976, 3579432156, 3843180751, 4145735059, 4320028826, 4779073677, 4779073680, 4886250352, 5426969134, 5779545445, 7490266268, 9140654137, 9177424868]
 
 #manhattan_graph = ManhattanGraph(filename='simple', hubs=hub_node_ids)
-manhattan_graph = env.manhattan_graph
+
 
 image_path = 'assets/ines_image.jpeg'
 
@@ -58,7 +72,7 @@ def create_map_from_df(df_hubs, df_route=pd.DataFrame(), test_id=0):
             #lon = [df_hubs['longitude'][i] for i in df_test['Hubs'][test_id]],
             #lat = [df_hubs['latitude'][i] for i in df_test['Hubs'][test_id]],
             marker = {'size': 10},
-            #hovertext  = [manhattan_graph.get_hub_index_by_nodeid(n) for n in df_route['node_id']]
+            hovertext  = [manhattan_graph.get_hub_index_by_nodeid(n) for n in df_route['node_id']]
             ))
     return fig
 
@@ -87,11 +101,13 @@ app = dash.Dash(__name__,  suppress_callback_exceptions = True)
     Input(component_id='next-hub-input', component_property='value'),
     prevent_initial_call=True
 )
-def next_step(input_value, start_dynamic=False):
+def next_step(input_value, start_dynamic=True):
 
-    if input_value is None: 
+    if input_value is None:
+        print('ceau nu') 
         return dash.no_update
 
+    print('ceau da')
 
     shared_rides = list()
     shared_ids = list()
@@ -103,12 +119,14 @@ def next_step(input_value, start_dynamic=False):
     #print('Trips: ', env.available_actions)
     #print('Position: ', env.position)
     taken_steps.extend(info['route'])
+    print('Taken steps', taken_steps)
 
     df_route = pd.DataFrame()
     df_route['longitude'] = [0.0 for i in range(len(taken_steps))]
     df_route['latitude'] = [0.0 for i in range(len(taken_steps))]
     df_route['node_id'] = [0 for i in range(len(taken_steps))]
 
+    print('13 coordinates: ', manhattan_graph.get_coordinates_of_node(42427968))
     for i in range(len(taken_steps)):
         results = manhattan_graph.get_coordinates_of_node(taken_steps[i])
         #print(results)
@@ -126,6 +144,7 @@ def next_step(input_value, start_dynamic=False):
     #print('Shared: ', shared_ids)
         
     all_hubs = env.hubs
+    print('Hubs', all_hubs)
 
     book_own_ids = list(set(all_hubs) - set(shared_ids))
     
@@ -153,9 +172,9 @@ def next_step(input_value, start_dynamic=False):
                             actions.append('book') 
 
     current_action_string = info['action'] # 'Wait', 'Share' or 'Book'
-
+    print('Info actions: ', info['action'])
     df_hubs['action'] = actions
-    print(f"Hubs DF: {df_hubs}")
+    #print(f"Hubs DF: {df_hubs}")
 
     ###
     # either take current action or look it up in df_test and then count up actions
@@ -405,11 +424,11 @@ def start_order_2(value):
         route_string += str(df_test['Hubs'][test_id][i]) + ' ->'
     route_string = route_string[0:-3]
 
-    next_step(start_hub, start_dynamic)
+    #next_step(start_hub, start_dynamic)
 
     return html.Div('CURRENT ORDER: {} -> {}'.format(start_hub,final_hub)), route_string
 
 
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server()
