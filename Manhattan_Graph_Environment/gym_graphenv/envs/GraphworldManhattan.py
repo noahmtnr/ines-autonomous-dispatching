@@ -73,7 +73,7 @@ class GraphEnv(gym.Env):
         else:
             self.env_config = None
 
-        self.n_hubs = 120
+        self.n_hubs = 92
         self.distance_matrix = None
 
         self.DB = DBConnection()
@@ -119,7 +119,7 @@ class GraphEnv(gym.Env):
         one_hot_vector[pos] = 1
         return one_hot_vector
 
-    def reset(self, start_parameters={}) :
+    def reset(self, start_parameters:{}=None) :
         ##start_parameters requires: dropoff, pickup, time, deadline
         # Example:
         # pickup = 25

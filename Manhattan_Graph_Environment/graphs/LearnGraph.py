@@ -2,7 +2,7 @@ import networkx as nx
 import osmnx as ox
 from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
 import numpy as np
-N_HUBS = 120
+N_HUBS = 92
 myManhattan = ManhattanGraph('simple',N_HUBS)
 
 class LearnGraph:
