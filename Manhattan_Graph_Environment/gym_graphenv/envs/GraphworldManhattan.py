@@ -30,8 +30,8 @@ RAY_ENABLE_MAC_LARGE_OBJECT_STORE=1.
 sys.path.insert(0,"")
 # from config.definitions import ROOT_DIR
 import statistics
-# ROOT_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
-from config.definitions import ROOT_DIR
+ROOT_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
+# from config.definitions import ROOT_DIR
 from typing import Dict
 
 from ray.rllib.agents.callbacks import DefaultCallbacks
@@ -577,9 +577,7 @@ class GraphEnv(gym.Env):
 
     def read_config(self):
         #filepath = os.path.join(ROOT_DIR,'env_config.pkl')
-        #filepath = "/Users/noah/Desktop/Repositories/ines-autonomous-dispatching/Manhattan_Graph_Environment/env_config.pkl"
         filepath = "env_config.pkl"
-        #filepath = "C:/Users/kirch/OneDrive/Dokumente/Uni/Mannheim/FSS2022/Teamproject/ines-autonomous-dispatching/env_config.pkl"
         with open(filepath,'rb') as f:
             loaded_dict = pickle.load(f)
         self.env_config = loaded_dict
