@@ -1,3 +1,5 @@
+from calendar import c
+from distutils.log import debug
 import os 
 os.environ['HDF5_DISABLE_VERSION_CHECK']='2'
 import dash
@@ -17,6 +19,15 @@ env = GraphEnv(use_config=True)
 env.reset()
 hubs = env.hubs
 manhattan_graph = env.manhattan_graph
+
+global number_wait
+global number_book
+global number_share
+
+
+number_wait = 0
+number_book = 0
+number_share = 0
 
 # global start_dynamic
 # start_dynamic = False
@@ -40,13 +51,10 @@ df_hubs['latitude'] = [0.0 for i in range(len(hubs))]
 df_hubs['id'] = [i for i in range(len(hubs))]
 for i in range(len(hubs)):
     results = manhattan_graph.get_coordinates_of_node(hubs[i])
-        #print(results)
     df_hubs['longitude'][i] = results[0]
     df_hubs['latitude'][i] = results[1]
         
-#ids = [i for i in range(120)]
 actions = ['hub' for i in range(120)]
-#df_hubs['id'] = ids
 df_hubs['action'] = actions
 
 hub_node_ids = [42423039, 42423051, 42423296, 42423307, 42423549, 42423774, 42424025, 42424145, 42426865, 42427769, 42427863, 42427915, 42427965, 42427968, 42427970, 42427972, 42428174, 42428863, 42428980, 42429342, 42430253, 42430304, 42430333, 42430361, 42430375, 42432856, 42432889, 42432985, 42433058, 42433066, 42433422, 42435684, 42436486, 42437358, 42437644, 42438809, 42439497, 42440350, 42440743, 42440798, 42442415, 42442463, 42442475, 42442937, 42443534, 42443674, 42444457, 42445018, 424457, 370913758, 370913779, 370914027, 370915061, 370924677, 370924957, 371188320, 371188750, 371188756, 371207282, 371209940, 371239958, 406006393, 561035358, 561042199, 589099734, 589929417, 595295501, 595314119, 595352904, 596775930, 1061531596, 1692433919, 1825841704, 1919595922, 2054405680, 3099327970, 3099327976, 3579432156, 3843180751, 4145735059, 4320028826, 4779073677, 4779073680, 4886250352, 5426969134, 5779545445, 7490266268, 9140654137, 9177424868]
@@ -93,117 +101,6 @@ app = dash.Dash(__name__,  suppress_callback_exceptions = True)
 
 
 #to be modified (calculate nodes between hubs with step() function)
-@app.callback(
-    Output(component_id='map-2', component_property='children'),
-    #Output(component_id='shared', component_property='children'),
-    # TODO: show line below
-    Output(component_id='div-piechart2', component_property='children'),
-    Input(component_id='next-hub-input', component_property='value'),
-    prevent_initial_call=True
-)
-def next_step(input_value, start_dynamic=True):
-
-    if input_value is None:
-        print('ceau nu') 
-        return dash.no_update
-
-    print('ceau da')
-
-    shared_rides = list()
-    shared_ids = list()
-    state, reward, done, info = env.step(input_value)
-
-    rem_distance = state['remaining_distance']
-
-
-    #print('Trips: ', env.available_actions)
-    #print('Position: ', env.position)
-    taken_steps.extend(info['route'])
-    print('Taken steps', taken_steps)
-
-    df_route = pd.DataFrame()
-    df_route['longitude'] = [0.0 for i in range(len(taken_steps))]
-    df_route['latitude'] = [0.0 for i in range(len(taken_steps))]
-    df_route['node_id'] = [0 for i in range(len(taken_steps))]
-
-    print('13 coordinates: ', manhattan_graph.get_coordinates_of_node(42427968))
-    for i in range(len(taken_steps)):
-        results = manhattan_graph.get_coordinates_of_node(taken_steps[i])
-        #print(results)
-        df_route['longitude'][i] = results[0]
-        df_route['latitude'][i] = results[1]
-        df_route['node_id'][i] = taken_steps[i]
-    #print(df_route)
-
-    #convert node ids list in df_route with coordinates
-    trips = env.availableTrips()
-    #print('Trips: ',trips)
-        
-    for i, trip in enumerate(trips):
-        shared_ids.append(trip['target_hub'])
-    #print('Shared: ', shared_ids)
-        
-    all_hubs = env.hubs
-    print('Hubs', all_hubs)
-
-    book_own_ids = list(set(all_hubs) - set(shared_ids))
-    
-    position = env.manhattan_graph.get_nodeid_by_hub_index(env.position)
-    final = env.manhattan_graph.get_nodeid_by_hub_index(env.final_hub)
-    start = env.manhattan_graph.get_nodeid_by_hub_index(env.start_hub)
-
-    actions = []
-    #print(all_hubs)
-    for n in all_hubs:
-        if n == position:
-            actions.append('position')
-        else:
-            if n == final:
-                actions.append('final')
-            else:
-                if n == start:
-                    actions.append('start')
-                else:
-                    if n in shared_ids:
-                        #print('Aici e share', n)
-                        actions.append('shared')
-                    else:
-                        if n in book_own_ids:
-                            actions.append('book') 
-
-    current_action_string = info['action'] # 'Wait', 'Share' or 'Book'
-    print('Info actions: ', info['action'])
-    df_hubs['action'] = actions
-    #print(f"Hubs DF: {df_hubs}")
-
-    ###
-    # either take current action or look it up in df_test and then count up actions
-    #current_action = df_hubs['action'][input_value]
-    print(f"Current Action: {current_action_string}")
-    # previous_test_case = None
-    # current_test_case = test_id
-    # initialize all actions with 0 if test case changes
-    global number_wait
-    global number_book
-    global number_share
-
-    if start_dynamic == True:
-        number_wait = 0
-        number_book = 0
-        number_share = 0
-    else:
-        if current_action_string == 'Wait': #'position':
-            number_wait += 1
-        elif current_action_string == 'Book': #'book':
-            number_book += 1
-        else:
-            number_share += 1
-
-    #start_dynamic = False
-
-    #to modify
-    return dcc.Graph(figure=create_map_from_df(df_hubs, df_route, test_id), id='my-graph'), dcc.Graph(figure=create_piechart(number_wait,number_share,number_book), id='graph_actions2')
-
 
 app.layout = html.Div([
     html.Div(
@@ -317,21 +214,21 @@ def start_order_1(value):
     df_hubs['action'][start_hub] = 'start'
     df_hubs['action'][final_hub] = 'final'
 
-    nr_wait = 0
-    nr_shared = 0
-    nr_book = 0
+    nr_wait_ = 0
+    nr_shared_ = 0
+    nr_book_ = 0
     route_string='Calculated route: '
 
     for i in df_test['Actions'][test_id]:
         if i == 'Wait':
-            nr_wait+=1
+            nr_wait_+=1
         if i == 'Share':
-            nr_shared+=1
+            nr_shared_+=1
         if i == 'Book':
-            nr_book+=1
-    print("Wait:",nr_wait)
-    print("Share:",nr_shared)
-    print("Book:",nr_book)
+            nr_book_+=1
+    print("Wait:",nr_wait_)
+    print("Share:",nr_shared_)
+    print("Book:",nr_book_)
     for i in range(len(df_test['Hubs'][test_id])):
         route_string += str(df_test['Hubs'][test_id][i]) + ' ->'
     route_string = route_string[0:-3]
@@ -349,7 +246,7 @@ def start_order_1(value):
         df_route['node_id'][i] = df_test['Nodes'][test_id][i]
     #print(df_route)
 
-    return html.Div('CURRENT ORDER: {} -> {}'.format(start_hub, final_hub)), dcc.Graph( figure=create_map_from_df(df_hubs, df_route, test_id),id='my-graph'), route_string, dcc.Graph(figure=create_piechart(nr_wait,nr_shared,nr_book), id='graph_actions')
+    return html.Div('CURRENT ORDER: {} -> {}'.format(start_hub, final_hub)), dcc.Graph( figure=create_map_from_df(df_hubs, df_route, test_id),id='my-graph'), route_string, dcc.Graph(figure=create_piechart(nr_wait_,nr_shared_,nr_book_), id='graph_actions')
 
 
 @app.callback(
@@ -370,6 +267,14 @@ def start_order_2(value):
     # final_hub = list_actions[-1]
     global test_id
     global taken_steps
+    global number_wait
+    global number_book
+    global number_share
+
+   
+    number_wait = 0
+    number_book = 0
+    number_share = 0
     taken_steps = []
 
     # df_hubs['action'][start_hub]='start'
@@ -424,9 +329,113 @@ def start_order_2(value):
         route_string += str(df_test['Hubs'][test_id][i]) + ' ->'
     route_string = route_string[0:-3]
 
+    #this does not work right, it causes a Wait in start position
     #next_step(start_hub, start_dynamic)
 
     return html.Div('CURRENT ORDER: {} -> {}'.format(start_hub,final_hub)), route_string
+
+@app.callback(
+    Output(component_id='map-2', component_property='children'),
+    #Output(component_id='shared', component_property='children'),
+    # TODO: show line below
+    Output(component_id='div-piechart2', component_property='children'),
+    Input(component_id='next-hub-input', component_property='n_submit'),
+    Input(component_id='next-hub-input', component_property='value'),
+    prevent_initial_call=True
+)
+def next_step(submit, input_value, start_dynamic=True):
+
+    if input_value is None:
+        return dash.no_update
+
+    shared_rides = list()
+    shared_ids = list()
+    state, reward, done, info = env.step(input_value)
+    print('Trips....',env.available_actions)
+
+    rem_distance = state['remaining_distance']
+
+    taken_steps.extend(info['route'])
+    print('Taken steps', taken_steps)
+
+    df_route = pd.DataFrame()
+    df_route['longitude'] = [0.0 for i in range(len(taken_steps))]
+    df_route['latitude'] = [0.0 for i in range(len(taken_steps))]
+    df_route['node_id'] = [0 for i in range(len(taken_steps))]
+
+    for i in range(len(taken_steps)):
+        results = manhattan_graph.get_coordinates_of_node(taken_steps[i])
+        df_route['longitude'][i] = results[0]
+        df_route['latitude'][i] = results[1]
+        df_route['node_id'][i] = taken_steps[i]
+
+    #convert node ids list in df_route with coordinates
+    trips = env.availableTrips()
+        
+    for i, trip in enumerate(trips):
+        shared_ids.append(trip['target_hub'])
+        
+    all_hubs = env.hubs
+
+    book_own_ids = list(set(all_hubs) - set(shared_ids))
+    
+    position = env.manhattan_graph.get_nodeid_by_hub_index(env.position)
+    final = env.manhattan_graph.get_nodeid_by_hub_index(env.final_hub)
+    start = env.manhattan_graph.get_nodeid_by_hub_index(env.start_hub)
+    print('Pos, final, start', env.position, env.start_hub, env.final_hub)
+
+    actions = []
+    for n in all_hubs:
+        if n == position:
+            actions.append('position')
+        else:
+            if n == final:
+                actions.append('final')
+            else:
+                if n == start:
+                    actions.append('start')
+                else:
+                    if n in shared_ids:
+                        actions.append('shared')
+                    else:
+                        if n in book_own_ids:
+                            actions.append('book') 
+
+    current_action_string = info['action'] # 'Wait', 'Share' or 'Book'
+    print('Info actions: ', info['action'])
+    df_hubs['action'] = actions
+    #print(f"Hubs DF: {df_hubs}")
+
+    ###
+    # either take current action or look it up in df_test and then count up actions
+    #current_action = df_hubs['action'][input_value]
+    print(f"Current Action: {current_action_string}")
+    # previous_test_case = None
+    # current_test_case = test_id
+    # initialize all actions with 0 if test case changes
+    # global number_wait
+    # global number_book
+    # global number_share
+
+    # if start_dynamic == True:
+    #     number_wait = 0
+    #     number_book = 0
+    #     number_share = 0
+    # else:
+
+    global number_share
+    global number_wait
+    global number_book
+    if current_action_string == 'Wait': #'position':
+        number_wait += 1
+    elif current_action_string == 'Book': #'book':
+        number_book += 1
+    else:
+        number_share += 1
+
+    #start_dynamic = False
+
+    return dcc.Graph(figure=create_map_from_df(df_hubs, df_route, test_id), id='my-graph'), dcc.Graph(figure=create_piechart(number_wait,number_share,number_book), id='graph_actions2')
 
 
 

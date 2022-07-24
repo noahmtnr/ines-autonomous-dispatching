@@ -119,7 +119,7 @@ class GraphEnv(gym.Env):
         one_hot_vector[pos] = 1
         return one_hot_vector
 
-    def reset(self, start_parameters:{}=None) :
+    def reset(self, start_parameters={}) :
         ##start_parameters requires: dropoff, pickup, time, deadline
         # Example:
         # pickup = 25
