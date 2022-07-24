@@ -30,8 +30,8 @@ RAY_ENABLE_MAC_LARGE_OBJECT_STORE=1.
 sys.path.insert(0,"")
 # from config.definitions import ROOT_DIR
 import statistics
-ROOT_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
-
+# ROOT_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
+from config.definitions import ROOT_DIR
 from typing import Dict
 
 from ray.rllib.agents.callbacks import DefaultCallbacks
@@ -432,7 +432,7 @@ class GraphEnv(gym.Env):
         # print("In Step ", self.count_actions, " a useful share is available, number: ", self.boolean_useful_shares_available)            
 
         # print("Step End")
-        return self.state, reward,  self.done, {"timestamp": self.time,"step_travel_time":step_duration,"distance":self.distance_matrix[self.old_position][self.position], "count_hubs":self.count_hubs, "action": self.action_choice, "hub_index": action, "route": route_taken}
+        return self.state, reward,  self.done, {"timestamp": self.time,"step_travel_time":step_duration,"distance":self.distance_matrix[self.old_position][self.position], "count_hubs":self.count_hubs, "action": self.action_choice, "hub_index": action, "route": route_taken,"remaining_dist": self.learn_graph.adjacency_matrix('remaining_distance')[self.position][self.final_hub]}
 
 
     def compute_reward(self, action):

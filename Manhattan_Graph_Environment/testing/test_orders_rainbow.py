@@ -60,6 +60,7 @@ class TestOrders:
         list_nodes=[]
         list_hubs=[env.position]
         list_actions=["start"]
+        rem_dist=[]
         # route = [env_config["pickup_hub_index"]]
         # route_timestamps = [datetime.strptime(env_config["pickup_timestamp"], '%Y-%m-%d %H:%M:%S')]
         sum_reward = 0
@@ -80,6 +81,7 @@ class TestOrders:
                 print(list_nodes)
             list_hubs.append(info["hub_index"])
             list_actions.append(info["action"])
+            rem_dist.append(info["remaining_dist"])
                 
 
             # get data from action
@@ -107,28 +109,29 @@ class TestOrders:
         # reward_list = {"pickup_hub": env_config['pickup_hub_index'], "delivery_hub": env_config['delivery_hub_index'],
         #                "reward": sum_reward, "hubs": number_hubs, "route": route, "time": str(sum_travel_time),
         #                "dist": sum_distance, "time_until_deadline": time_until_deadline, "timestamps": route_timestamps}
-        return list_hubs, list_actions, list_nodes
+        return list_hubs, list_actions, list_nodes, rem_dist
 
 
 def create_test_order():
-    pickup_hub=111
-    delivery_hub=67
-    pickup_timestamp="2016-01-02 09:05:00"
-    delivery_timestamp="2016-01-02 21:05:00"
+    pickup_hub=50
+    delivery_hub=88
+    pickup_timestamp="2016-01-05 15:22:00"
+    delivery_timestamp="2016-01-06 03:22:00"
     env_config = {'pickup_hub_index': pickup_hub,
                       'delivery_hub_index': delivery_hub,
                       'pickup_timestamp':pickup_timestamp,
                       'delivery_timestamp': delivery_timestamp,
                       }
-    with open('env_config.pkl', 'wb') as f:
+    filepath = os.path.join(ROOT_DIR,'env_config.pkl')
+    with open(filepath, 'wb') as f:
         pickle.dump(env_config, f)
 
     test = TestOrders()
-    list_hubs, list_actions, list_nodes = test.test_order()
-    write_in_file_orders(list_hubs,list_actions,list_nodes,pickup_hub,delivery_hub,pickup_timestamp,delivery_timestamp)
+    list_hubs, list_actions, list_nodes, rem_dist = test.test_order()
+    write_in_file_orders(list_hubs,list_actions,list_nodes,pickup_hub,delivery_hub,pickup_timestamp,delivery_timestamp,rem_dist)
 
 
-def write_in_file_orders(hubs,actions,nodes,pickup_hub,delivery_hub,pickup_timestamp,delivery_timestamp):
+def write_in_file_orders(hubs,actions,nodes,pickup_hub,delivery_hub,pickup_timestamp,delivery_timestamp,rem_dist):
     
     filepath = os.path.join(ROOT_DIR, 'data', 'others', 'test_orders_dashboard.csv')
     mycsv = csv.reader(open(filepath))
@@ -140,7 +143,7 @@ def write_in_file_orders(hubs,actions,nodes,pickup_hub,delivery_hub,pickup_times
     except:
         idInt = 0
     idInt +=1
-    row_list = [[idInt,pickup_hub,delivery_hub,pickup_timestamp,delivery_timestamp, hubs, actions, nodes],]
+    row_list = [[idInt,pickup_hub,delivery_hub,pickup_timestamp,delivery_timestamp, hubs, actions, nodes, rem_dist],]
 
     with open(filepath, 'a+', newline='') as file:
         writer = csv.writer(file)
