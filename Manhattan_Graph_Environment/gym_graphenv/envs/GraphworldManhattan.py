@@ -31,7 +31,7 @@ sys.path.insert(0,"")
 # from config.definitions import ROOT_DIR
 import statistics
 ROOT_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
-
+# from config.definitions import ROOT_DIR
 from typing import Dict
 
 from ray.rllib.agents.callbacks import DefaultCallbacks
@@ -432,7 +432,7 @@ class GraphEnv(gym.Env):
         # print("In Step ", self.count_actions, " a useful share is available, number: ", self.boolean_useful_shares_available)            
 
         # print("Step End")
-        return self.state, reward,  self.done, {"timestamp": self.time,"step_travel_time":step_duration,"distance":self.distance_matrix[self.old_position][self.position], "count_hubs":self.count_hubs, "action": self.action_choice, "hub_index": action, "route": route_taken}
+        return self.state, reward,  self.done, {"timestamp": self.time,"step_travel_time":step_duration,"distance":self.distance_matrix[self.old_position][self.position], "count_hubs":self.count_hubs, "action": self.action_choice, "hub_index": action, "route": route_taken,"remaining_dist": self.learn_graph.adjacency_matrix('remaining_distance')[self.position][self.final_hub]}
 
 
     def compute_reward(self, action):
@@ -577,9 +577,7 @@ class GraphEnv(gym.Env):
 
     def read_config(self):
         #filepath = os.path.join(ROOT_DIR,'env_config.pkl')
-        #filepath = "/Users/noah/Desktop/Repositories/ines-autonomous-dispatching/Manhattan_Graph_Environment/env_config.pkl"
         filepath = "env_config.pkl"
-        #filepath = "C:/Users/kirch/OneDrive/Dokumente/Uni/Mannheim/FSS2022/Teamproject/ines-autonomous-dispatching/env_config.pkl"
         with open(filepath,'rb') as f:
             loaded_dict = pickle.load(f)
         self.env_config = loaded_dict
