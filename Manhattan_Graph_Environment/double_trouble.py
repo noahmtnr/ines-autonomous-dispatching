@@ -95,13 +95,13 @@ def next_step(input_value, start_dynamic=False):
 
     shared_rides = list()
     shared_ids = list()
-    state, reward,  done, info = env.step(input_value)
+    state, reward, done, info = env.step(input_value)
 
     rem_distance = state['remaining_distance']
 
 
-    print('Trips: ', env.available_actions)
-    print('Position: ', env.position)
+    #print('Trips: ', env.available_actions)
+    #print('Position: ', env.position)
     taken_steps.extend(info['route'])
 
     df_route = pd.DataFrame()
@@ -119,11 +119,11 @@ def next_step(input_value, start_dynamic=False):
 
     #convert node ids list in df_route with coordinates
     trips = env.availableTrips()
-    print('Trips: ',trips)
+    #print('Trips: ',trips)
         
     for i, trip in enumerate(trips):
         shared_ids.append(trip['target_hub'])
-    print('Shared: ', shared_ids)
+    #print('Shared: ', shared_ids)
         
     all_hubs = env.hubs
 
@@ -146,16 +146,21 @@ def next_step(input_value, start_dynamic=False):
                     actions.append('start')
                 else:
                     if n in shared_ids:
-                        print('Aici e share', n)
+                        #print('Aici e share', n)
                         actions.append('shared')
                     else:
                         if n in book_own_ids:
                             actions.append('book') 
+
+    current_action_string = info['action'] # 'Wait', 'Share' or 'Book'
+
     df_hubs['action'] = actions
+    print(f"Hubs DF: {df_hubs}")
 
     ###
     # either take current action or look it up in df_test and then count up actions
-    current_action = df_hubs['action'][input_value]
+    #current_action = df_hubs['action'][input_value]
+    print(f"Current Action: {current_action_string}")
     # previous_test_case = None
     # current_test_case = test_id
     # initialize all actions with 0 if test case changes
@@ -168,9 +173,9 @@ def next_step(input_value, start_dynamic=False):
         number_book = 0
         number_share = 0
     else:
-        if current_action == 'position':
+        if current_action_string == 'Wait': #'position':
             number_wait += 1
-        elif current_action == 'book':
+        elif current_action_string == 'Book': #'book':
             number_book += 1
         else:
             number_share += 1
@@ -378,10 +383,10 @@ def start_order_2(value):
         pickle.dump(env_config, f)
     
     env.reset()
-    print('-----',env.start_hub, env.final_hub, '------')
+    #print('-----',env.start_hub, env.final_hub, '------')
 
-    print('Start, Final: ',env.start_hub, env.final_hub, env.position)
-    print('Trips: ', env.available_actions)
+    #print('Start, Final: ',env.start_hub, env.final_hub, env.position)
+    #print('Trips: ', env.available_actions)
 
     # nr_wait = 0
     # nr_shared = 0
