@@ -7,24 +7,24 @@ import time
 
 class DBConnection:
   def __init__(self):
-    # try:
-    #   self.mydb = mysql.connector.connect(
-    #     host="localhost",
-    #     user="root",
-    #     password="root",
-    #     database="mannheimprojekt",
-    #     auth_plugin='mysql_native_password'
-    #   )
-    #   print("Using local db")
-    # except:
-    self.mydb = mysql.connector.connect(
-      host="mannheimprojekt.mysql.database.azure.com",
-      user="mannheim",
-      password="Projekt2022",
-      database="mannheimprojekt",
-      auth_plugin='mysql_native_password'
-    )
-    print("Using remote db")
+    try:
+      self.mydb = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="root",
+        database="mannheimprojekt",
+        auth_plugin='mysql_native_password'
+      )
+      print("Using local db")
+    except:
+      self.mydb = mysql.connector.connect(
+        host="mannheimprojekt.mysql.database.azure.com",
+        user="mannheim",
+        password="Projekt2022",
+        database="mannheimprojekt",
+        auth_plugin='mysql_native_password'
+      )
+      print("Using remote db")
     self.mycursor = self.mydb.cursor()
 
   def initialiazeTables(self):
