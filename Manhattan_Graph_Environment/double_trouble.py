@@ -147,7 +147,7 @@ html.Div(children=[
     ], className='left-dashboard', id='map-1'),
 
     html.Div(children=[
-        html.Div(dcc.Dropdown(['Test 1', 'Test 2', 'Test 3'], placeholder="Select an order", id='dropdown1'), id='dd-output-container'),
+        html.Div(dcc.Dropdown(['Test 1', 'Test 2', 'Test 3', 'Test 4'], placeholder="Select an order", id='dropdown1'), id='dd-output-container'),
         #html.Div(id='dd-output-container')),
 
         html.H4('CURRENT ORDER: ', id='destination-hub-1'),
@@ -171,7 +171,7 @@ html.Div(children=[
     ], className='left-dashboard', id='map-2'),
 
     html.Div(children=[
-        html.Div(dcc.Dropdown(['Test 1', 'Test 2', 'Test 3'], placeholder="Select an order", id='dropdown2')),
+        html.Div(dcc.Dropdown(['Test 1', 'Test 2', 'Test 3', 'Test 4'], placeholder="Select an order", id='dropdown2')),
 
         html.H4('CURRENT ORDER: ', id='destination-hub-2'),
         html.H4('Calculated route: ',  id='calc-route-2'),
@@ -221,6 +221,9 @@ def start_order_1(value):
         else:
             if(value == 'Test 3'):
                 test_id = 2
+            else:
+                if(value == 'Test 4'):
+                    test_id = 3
 
     start_hub = df_test['Hubs'][test_id][0] #list_actions[0] 
     final_hub = df_test['Hubs'][test_id][-1] #list_actions[-1]
@@ -315,6 +318,9 @@ def start_order_2(value):
         else:
             if(value == 'Test 3'):
                 test_id = 2
+            else:
+                if(value == 'Test 4'):
+                    test_id = 3
 
 
     start_hub = df_test['Hubs'][test_id][0] #list_actions[0] 
@@ -423,6 +429,8 @@ def next_step(submit, input_value, start_dynamic=True):
         shared_ids.append(trip['target_hub'])
         
     all_hubs = env.hubs
+
+    print(all_hubs)
 
     book_own_ids = list(set(all_hubs) - set(shared_ids))
     
