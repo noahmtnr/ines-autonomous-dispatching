@@ -31,6 +31,7 @@ class TestOrders:
         self.trainer_config["train_batch_size"] = 400
         self.trainer_config["gamma"] = 0.99
         self.trainer_config["callbacks"] = CustomCallbacks
+        self.trainer_config["hiddens"] = [600, 500, 400, 300, 120]
         self.trainer_config["n_step"] = 3  # [between 1 and 10]  //was 5 and 7
         self.trainer_config["noisy"] = True
         self.trainer_config["num_atoms"] = 70  # [more than 1] //was 51,20
@@ -113,10 +114,10 @@ class TestOrders:
 
 
 def create_test_order():
-    pickup_hub=50
-    delivery_hub=88
-    pickup_timestamp="2016-01-05 15:22:00"
-    delivery_timestamp="2016-01-06 03:22:00"
+    pickup_hub = 19
+    delivery_hub = 28
+    pickup_timestamp="2016-01-05 10:41:00"
+    delivery_timestamp="2016-01-05 22:41:00"
     env_config = {'pickup_hub_index': pickup_hub,
                       'delivery_hub_index': delivery_hub,
                       'pickup_timestamp':pickup_timestamp,
