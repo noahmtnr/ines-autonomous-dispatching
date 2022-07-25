@@ -44,11 +44,13 @@ def create_map_from_df(df, hubs=[]):
     #fig.show()
 
     return fig
-
+image_path = 'assets/ines_image.jpeg'
 
 app = dash.Dash(__name__)
 
 app.layout = html.Div(children=[
+    html.Div(
+        html.Img(src=image_path, style={'width': '300px', 'display': 'inline-block', 'vertical-align': 'top', 'height': 'auto'}), id='image', style={'width':'300px','float':'right'}),
 
 html.H1(children='Hitchhike Dashboard'),
 html.Div([html.Button('Start', id='start-button-1', n_clicks=0)]),

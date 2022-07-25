@@ -17,7 +17,9 @@
   width: 50px;
 }
 
-p { margin: 0 }
+p {
+  margin: 0;
+}
 
 #destination-hub-1 {
   /* background-color: beige;
@@ -99,7 +101,7 @@ p { margin: 0 }
 }
 
 #my-graph {
-  height: 650px;
+  height: 800px;
 }
 
 #step-by-step {
@@ -120,10 +122,11 @@ p { margin: 0 }
   transition: 0.3s;
   border-radius: 5px; /* 5px rounded corners */
   background-color: rgb(255, 255, 255);
-  height: 50px;
+  height: 70px;
   padding-top: 10px;
   padding-left: 10px;
   padding-right: 10px;
+  overflow-y: scroll;
 }
 
 #calc-route-2 {
@@ -135,10 +138,11 @@ p { margin: 0 }
   transition: 0.3s;
   border-radius: 5px; /* 5px rounded corners */
   background-color: rgb(255, 255, 255);
-  height: 50px;
+  height: 70px;
   padding-top: 10px;
   padding-left: 10px;
   padding-right: 10px;
+  overflow-y: scroll;
 }
 
 #titel-analysis {
