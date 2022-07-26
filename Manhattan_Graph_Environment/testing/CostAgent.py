@@ -27,6 +27,10 @@ class CostAgent:
         route = [env_config["pickup_hub_index"]]
         route_timestamps = [datetime.strptime(env_config["pickup_timestamp"], '%Y-%m-%d %H:%M:%S')]
         done = False
+        count_shares = 0
+        count_bookowns = 0
+        count_wait = 0
+        steps = 0
         while not done:
             # visualize current situation
             # env.render()
@@ -65,6 +69,15 @@ class CostAgent:
             number_hubs=info.get('count_hubs')
             # add reward
             sum_reward+=reward
+            action_choice = info.get("action")
+
+            if action_choice == "Share":
+                count_shares += 1
+            elif action_choice == "Book":
+                count_bookowns += 1
+            elif action_choice == "Wait":
+                count_wait += 1
+            steps += 1
             
             if done:
                 print("DELIVERY DONE! sum_reward: ",sum_reward)
@@ -77,5 +90,5 @@ class CostAgent:
                 #     raise Exception("DID NOT ARRIVE IN FINAL HUB")
                 break
 
-        reward_list={"pickup_hub":env_config['pickup_hub_index'],"delivery_hub":env_config['delivery_hub_index'],"reward":sum_reward, "hubs":number_hubs, "route":route, "time":str(sum_travel_time), "dist":sum_distance, "time_until_deadline":time_until_deadline, "timestamps":route_timestamps}
+        reward_list={"pickup_hub":env_config['pickup_hub_index'],"delivery_hub":env_config['delivery_hub_index'],"reward":sum_reward, "hubs":number_hubs, "route":route, "time":str(sum_travel_time), "dist":sum_distance, "time_until_deadline":time_until_deadline, "timestamps":route_timestamps, "count_bookowns": count_bookowns, "steps": steps, "ratio_share_to_own": ratio}
         return reward_list

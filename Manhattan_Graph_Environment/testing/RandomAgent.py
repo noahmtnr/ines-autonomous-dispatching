@@ -27,7 +27,12 @@ class RandomAgent:
         sum_travel_time = timedelta(seconds=0)
         print(sum_travel_time)
         sum_distance = 0
-        for i in range(30):
+        count_shares = 0
+        count_bookowns = 0
+        count_wait = 0
+        steps = 0
+        done = False
+        while not done:
             action = env.action_space.sample()
             state, reward, done, info = env.step(action)
             route.append(action)
@@ -39,6 +44,16 @@ class RandomAgent:
             time_until_deadline= delivey_time-sum_travel_time
             sum_distance += info.get('distance')/1000
             number_hubs=info.get('count_hubs')
+
+            action_choice = info.get("action")
+
+            if action_choice == "Share":
+                count_shares += 1
+            elif action_choice == "Book":
+                count_bookowns += 1
+            elif action_choice == "Wait":
+                count_wait += 1
+            steps += 1
             #env.render()
             if done:
                 print("DELIVERY DONE! sum_reward: ",sum_reward)
@@ -51,7 +66,11 @@ class RandomAgent:
 
             print("sum_reward: ",sum_reward)
             # print("sum_reward: ",sum_reward, " time: ",env.time, "deadline time: ", env.deadline, "pickup time: ", env.pickup_time)
-        reward_list={"pickup_hub":env_config['pickup_hub_index'],"delivery_hub":env_config['delivery_hub_index'],"reward":sum_reward, "hubs":number_hubs, "route":route, "time":str(sum_travel_time), "dist":sum_distance, "time_until_deadline":time_until_deadline, "timestamps":route_timestamps}
+        if count_bookowns == 0:
+            ratio = 0
+        else:
+            ratio = float(count_shares/count_bookowns)
+        reward_list={"pickup_hub":env_config['pickup_hub_index'],"delivery_hub":env_config['delivery_hub_index'],"reward":sum_reward, "hubs":number_hubs, "route":route, "time":str(sum_travel_time), "dist":sum_distance, "time_until_deadline":time_until_deadline, "timestamps":route_timestamps, "count_bookowns": count_bookowns, "steps": steps, "ratio_share_to_own": ratio}
         return reward_list
 
     

@@ -28,13 +28,12 @@ class SharesAgent:
         route_timestamps = [datetime.strptime(env_config["pickup_timestamp"], '%Y-%m-%d %H:%M:%S')]
         done = False
         current_hub = env_config["pickup_hub_index"]
-        sum_travel_time = timedelta(seconds=0)
-        print(sum_travel_time)
+        time_until_deadline = 0
         count_shares = 0
         count_bookowns = 0
         count_wait = 0
         steps = 0
-        while not done:
+        while (not done) and (time_until_deadline.total_seconds()/60 >= 120):
             # visualize current situation
             # env.render()
 
@@ -65,7 +64,6 @@ class SharesAgent:
             number_hubs=info.get('count_hubs')
             # add reward
             sum_reward+=reward
-
             action_choice = info.get("action")
 
             if action_choice == "Share":
@@ -86,6 +84,31 @@ class SharesAgent:
                 # if action!=env_config["delivery_hub_index"]:
                 #     raise Exception("DID NOT ARRIVE IN FINAL HUB")
                 break
+
+        if(time_until_deadline.total_seconds()/60 <= 120):
+            print("Force Manual Delivery")
+            action = env_config["delivery_hub_index"]
+            # action = final hub
+            state, reward, done, info = env.step(action)
+            done = True
+            route.append(action)
+            print("Timestamps",info.get('timestamp') )
+            route_timestamps.append(info.get('timestamp'))
+            sum_reward += reward
+            sum_travel_time +=timedelta(seconds=info.get('step_travel_time'))
+            delivey_time = datetime.strptime(env_config["delivery_timestamp"], '%Y-%m-%d %H:%M:%S')
+            time_until_deadline= delivey_time-sum_travel_time
+            sum_distance += info.get('distance')/1000
+            number_hubs=info.get('count_hubs')
+            action_choice = info.get("action")
+
+            if action_choice == "Share":
+                count_shares += 1
+            elif action_choice == "Book":
+                count_bookowns += 1
+            elif action_choice == "Wait":
+                count_wait += 1
+            steps += 1
 
         if count_bookowns == 0:
             ratio = 0
