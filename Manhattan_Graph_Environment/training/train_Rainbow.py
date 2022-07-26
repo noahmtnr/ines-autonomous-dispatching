@@ -128,9 +128,9 @@ trainer = DQNTrainer(rainbow_config,GraphEnv )
 
 #Define the path where the results of the trainer should be saved
 checkpoint_root = "tmp/rainbow/graphworld"
-shutil.rmtree(checkpoint_root, ignore_errors=True, onerror=None)   # clean up old runs
+# shutil.rmtree(checkpoint_root, ignore_errors=True, onerror=None)   # clean up old runs
 ray_results = "{}/ray_results/".format(os.getenv("HOME"))
-shutil.rmtree(ray_results, ignore_errors=True, onerror=None)   # clean up old runs
+# shutil.rmtree(ray_results, ignore_errors=True, onerror=None)   # clean up old runs
 
 
 # Run trainer
