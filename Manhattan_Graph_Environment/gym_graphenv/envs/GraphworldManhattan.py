@@ -266,9 +266,6 @@ class GraphEnv(gym.Env):
         startTime = time.time()
         #self.done = False
 
-        # generate random shared rides for training
-        self.generate_rides()
-
         # if agent is in time window 2 hours before deadline, we just move him to the final hub
         if((self.deadline - self.time).total_seconds()/60 <= 120):
             self.allow_bookown = 1
@@ -337,7 +334,7 @@ class GraphEnv(gym.Env):
                 elif(self.learn_graph.wait_till_departure_times[(self.position,action)] != self.WAIT_TIME_SECONDS and self.learn_graph.wait_till_departure_times[(self.position,action)] != 0):
                     step_duration = sum(route_travel_time)
                     # TODO: String conversion von departure time besser direkt beim erstellen der Matrix
-                    departure_time = datetime.strptime(self.learn_graph.wait_till_departure_times[(self.position,action)], '%Y-%m-%d %H:%M:%S')
+                    departure_time = self.learn_graph.wait_till_departure_times[(self.position,action)]
                     # print("Departure Time: ", departure_time)
                     self.current_wait = ( departure_time - self.time).seconds
                     self.time = departure_time
@@ -548,7 +545,7 @@ class GraphEnv(gym.Env):
                     isNotFinalNode = True
                     if isNotFinalNode:
                         index_in_route = route.index(position)
-                        position_timestamp = times[index_in_route]
+                        position_timestamp = datetime.strptime(times[index_in_route], '%Y-%m-%d %H:%M:%S')
                         route_to_target_node=route[index_in_route::]
                         hubsOnRoute = any(node in route_to_target_node for node in self.hubs)
                         if hubsOnRoute:
@@ -559,8 +556,10 @@ class GraphEnv(gym.Env):
                                 route_to_target_hub = route[index_in_route:index_hub_in_route]
                                 if(hub != position):
                                     trip = {'departure_time': position_timestamp, 'target_hub': hub, 'route': route_to_target_hub, 'trip_row_id': tripId}
+                                    print(type(position_timestamp))
                                     list_trips.append(trip)
         self.available_actions = list_trips
+        # generate random shared rides for training
 
         # create index vector
         shared_rides_mask = np.zeros(self.n_hubs)
@@ -568,6 +567,7 @@ class GraphEnv(gym.Env):
             shared_rides_mask[self.manhattan_graph.get_hub_index_by_nodeid(list_trips[i]['target_hub'])] = 1
 
         self.shared_rides_mask = shared_rides_mask
+        self.available_actions += self.generate_rides() #Uses shared_rides_mask to oversample available shares and writes them into shared_rides_mask and available_actions
         # print(shared_rides_mask)
         #print(list_trips)
 
@@ -610,8 +610,6 @@ class GraphEnv(gym.Env):
         # modify maks and available actions
         for hub in target_hub_list:
             self.shared_rides_mask[hub] = 1
-
-        self.available_actions += generated_trips_list
 
         return generated_trips_list
 
