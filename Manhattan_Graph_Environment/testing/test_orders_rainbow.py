@@ -61,7 +61,7 @@ class TestOrders:
         list_nodes=[]
         list_hubs=[env.position]
         list_actions=["start"]
-        rem_dist=[]
+        rem_dist=[env.learn_graph.adjacency_matrix('remaining_distance')[env.position][env.final_hub]]
         # route = [env_config["pickup_hub_index"]]
         # route_timestamps = [datetime.strptime(env_config["pickup_timestamp"], '%Y-%m-%d %H:%M:%S')]
         sum_reward = 0
@@ -114,10 +114,10 @@ class TestOrders:
 
 
 def create_test_order():
-    pickup_hub = 19
-    delivery_hub = 28
-    pickup_timestamp="2016-01-05 10:41:00"
-    delivery_timestamp="2016-01-05 22:41:00"
+    pickup_hub = 12
+    delivery_hub = 20
+    pickup_timestamp="2016-01-05 15:22:00"
+    delivery_timestamp="2016-01-06 03:22:00"
     env_config = {'pickup_hub_index': pickup_hub,
                       'delivery_hub_index': delivery_hub,
                       'pickup_timestamp':pickup_timestamp,
