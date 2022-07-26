@@ -3,6 +3,8 @@ import sys
 import pandas as pd
 import numpy as np
 from BenchmarkWrapper import BenchmarkWrapper
+from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
+from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv, CustomCallbacks
 import operator
 sys.path.insert(0,"")
 
@@ -66,8 +68,18 @@ class Comparer:
                 # share to own ratio
                 ratio = current.get("ratio_share_to_own")
 
+                # distance covered with shares
+                dist_shares = current.get("dist_covered_shares")
+                print(dist_shares)
+                print(type(dist_shares))
+                # distance covered with bookowns
+                dist_bookowns = current.get("dist_covered_bookown")
+                # compute share of distance covered with shares and bookowns
+                ratio_dist_shares = float(dist_shares/dist)
+                ratio_dist_bookowns = float(dist_bookowns/dist)
+
                 # for one order
-            self.compare_dict[key]= [reward,route,dist,time,num_hubs,num_booked_own,ratio,num_steps]
+            self.compare_dict[key]= [reward,route,dist,time,num_hubs,num_booked_own,ratio,num_steps,ratio_dist_shares,ratio_dist_bookowns]
 
             print(self.compare_dict)
 
@@ -138,6 +150,7 @@ class Comparer:
         # TODO - do the visualization of Aga & Denisa here
         # Route bekommen (Liste von Hub IDs): self.compare_dict.items()[1
         # plotten mit Funktionsaufruf der Visualisierung
+        """
         allRoutes = {}
         for elem in self.compare_dict.items():
             # route for current agent in the loop
@@ -145,6 +158,15 @@ class Comparer:
             currentAgentName = elem[0]
             allRoutes[currentAgentName] = currentRoute
         # visualize by calling method xy
+        """
+
+        # rank on ratio of distance reduced with shares (max)
+        dist_reduce_sort = sorted(self.compare_dict.items(), key=lambda i: i[1][8], reverse=True)
+        i = 1
+        print("\n Ranking by Ratio Distance Reduced with Shares to Whole Distance")
+        for elem in time_sort:
+            print(f"Rank {i}: {elem[0]} with travel time of {time_sort[i-1][1][8]}")
+            i += 1
 
     # this method does not work yet (state: 19.07.2022)
     def compare_multipletrips(self):
@@ -204,7 +226,8 @@ class Comparer:
 # w4 = BenchmarkWrapper("DQN") # hat noch Fehler
 #w5 = BenchmarkWrapper("Rainbow")
 #w6 = BenchmarkWrapper("Shares")
-w7 = BenchmarkWrapper("Bookown")
+env = GraphEnv(use_config=True)
+w7 = BenchmarkWrapper("Bookown",env)
 
 # possible combinations of comparisons
 c = Comparer(1,w7.name,w7)

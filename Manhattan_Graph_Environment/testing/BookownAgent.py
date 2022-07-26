@@ -47,6 +47,8 @@ class BookownAgent:
             time_until_deadline= delivey_time-sum_travel_time
             sum_distance += info.get('distance')/1000
             number_hubs=info.get('count_hubs')
+            dist_shares = info.get("dist_covered_shares")
+            dist_bookowns = info.get("dist_covered_bookown")
             action_choice = info.get("action")
 
             if action_choice == "Share":
@@ -73,7 +75,7 @@ class BookownAgent:
             ratio = 0
         else:
             ratio = float(count_shares/count_bookowns)
-        reward_list={"pickup_hub":env_config['pickup_hub_index'],"delivery_hub":env_config['delivery_hub_index'],"reward":sum_reward, "hubs":number_hubs, "route":route, "time":str(sum_travel_time), "dist":sum_distance, "time_until_deadline":time_until_deadline, "timestamps":route_timestamps, "count_bookowns": count_bookowns, "steps": steps, "ratio_share_to_own": ratio}
+        reward_list={"pickup_hub":env_config['pickup_hub_index'],"delivery_hub":env_config['delivery_hub_index'],"reward":sum_reward, "hubs":number_hubs, "route":route, "time":str(sum_travel_time), "dist":sum_distance, "time_until_deadline":time_until_deadline, "timestamps":route_timestamps, "count_bookowns": count_bookowns, "steps": steps, "ratio_share_to_own": ratio,"dist_covered_shares": dist_shares, "dist_covered_bookown": dist_bookowns}
         print(reward_list)
         return reward_list
 

@@ -15,7 +15,7 @@ import ray
 import warnings
 warnings.filterwarnings('ignore')
 
-class SharesAgent:
+class SharesBookEndAgent:
 
     def run_one_episode (env,reward_list,env_config):
         env.reset()
