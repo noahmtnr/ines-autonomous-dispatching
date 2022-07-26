@@ -25,6 +25,8 @@ manhattan_graph = env.manhattan_graph
 global number_wait
 global number_book
 global number_share
+global start_hub
+global entered_hub
 
 app = dash.Dash(__name__,  suppress_callback_exceptions = True)
 
@@ -33,6 +35,8 @@ manhattan_graph = env.manhattan_graph
 number_wait = 0
 number_book = 0
 number_share = 0
+start_hub = 0
+entered_hub = False
 
 # global start_dynamic
 # start_dynamic = False
@@ -46,9 +50,6 @@ for i in range(len(df_test['Hubs'])):
     df_test['Hubs'][i] = ast.literal_eval(df_test['Hubs'][i])
     df_test['Actions'][i] = ast.literal_eval(df_test['Actions'][i])
     df_test['Nodes'][i] = ast.literal_eval(df_test['Nodes'][i])
-
-#df_hubs = pd.read_csv("./data/hubs/longlist.csv")
-#df_hubs = pd.read_csv("data/hubs/longlist.csv")
 
 df_hubs = pd.DataFrame()
 df_hubs['longitude'] = [0.0 for i in range(len(hubs))]
@@ -175,7 +176,7 @@ html.Div(children=[
 
         html.H4('CURRENT ORDER: ', id='destination-hub-2'),
         html.H4('Calculated route: ',  id='calc-route-2'),
-        html.Div(dcc.Input(id='next-hub-input', type='number', debounce=True, placeholder="Next Hub")),
+        html.Div(dcc.Input(id='next-hub-input', type='number', debounce=True, placeholder="Enter next hub ID")),
         html.H4('Current Time: ', id='current-time'),
                
         html.H4('Actions taken:', id= 'actions-taken-titel'),
@@ -339,8 +340,10 @@ def start_order_2(value):
             else:
                 if(value == 'Test 4'):
                     test_id = 3
-
-
+    global entered_hub
+    entered_hub = False
+    
+    global start_hub
     start_hub = df_test['Hubs'][test_id][0] #list_actions[0] 
     final_hub = df_test['Hubs'][test_id][-1] #list_actions[-1]
 
@@ -431,55 +434,29 @@ def next_step(submit, input_value, start_dynamic=True):
 
     if input_value is None:
         return dash.no_update
-
-    shared_rides = list()
-    shared_ids = list()
-    state, reward, done, info = env.step(input_value)
-    print('Trips....',env.available_actions)
-
-    #rem_distance = state['remaining_distance']
-    action_type = env.old_state['distinction'][input_value]
-    print(action_type)
-
-    current_time = info['timestamp']
-
-    taken_steps.extend(info['route'])
-    print('Taken steps', taken_steps)
-
-    df_route = pd.DataFrame()
-    df_route['longitude'] = [0.0 for i in range(len(taken_steps))]
-    df_route['latitude'] = [0.0 for i in range(len(taken_steps))]
-    df_route['node_id'] = [0 for i in range(len(taken_steps))]
-    df_route['action_type'] = [action_type for i in range(len(taken_steps))]
-
-    for i in range(len(taken_steps)):
-        results = manhattan_graph.get_coordinates_of_node(taken_steps[i])
-        df_route['longitude'][i] = results[0]
-        df_route['latitude'][i] = results[1]
-        df_route['node_id'][i] = taken_steps[i]
-
-    #convert node ids list in df_route with coordinates
-    trips = env.availableTrips()
-        
-    for i, trip in enumerate(trips):
-        shared_ids.append(trip['target_hub'])
-        
-    all_hubs = env.hubs
-
-    #print(all_hubs)
-
-    book_own_ids = list(set(all_hubs) - set(shared_ids))
+    global entered_hub
     
-    position = env.manhattan_graph.get_nodeid_by_hub_index(env.position)
-    final = env.manhattan_graph.get_nodeid_by_hub_index(env.final_hub)
-    start = env.manhattan_graph.get_nodeid_by_hub_index(env.start_hub)
-    print('Pos, final, start', env.position, env.start_hub, env.final_hub)
+    if(input_value == start_hub and entered_hub == False):
+        print('First')
+        entered_hub = True
 
-    actions = []
-    for n in all_hubs:
-        if n == position:
-            actions.append('position')
-        else:
+        trips = env.availableTrips()
+        shared_ids = list()
+        
+        for i, trip in enumerate(trips):
+            shared_ids.append(trip['target_hub'])
+        
+        all_hubs = env.hubs
+
+        book_own_ids = list(set(all_hubs) - set(shared_ids))
+        
+        position = env.manhattan_graph.get_nodeid_by_hub_index(env.position)
+        final = env.manhattan_graph.get_nodeid_by_hub_index(env.final_hub)
+        start = env.manhattan_graph.get_nodeid_by_hub_index(env.start_hub)
+        print('Pos, final, start', env.position, env.start_hub, env.final_hub)
+
+        actions = []
+        for n in all_hubs:
             if n == final:
                 actions.append('final')
             else:
@@ -492,43 +469,113 @@ def next_step(submit, input_value, start_dynamic=True):
                         if n in book_own_ids:
                             actions.append('book') 
 
-    current_action_string = info['action'] # 'Wait', 'Share' or 'Book'
-    print('Info actions: ', info['action'])
-    df_hubs['action'] = actions
-    rem_distance = env.learn_graph.adjacency_matrix('remaining_distance')[env.position]
-    df_hubs['Rem. Distance'] = rem_distance
-    #print(f"Hubs DF: {df_hubs}")
+        # current_action_string = info['action'] # 'Wait', 'Share' or 'Book'
+        # print('Info actions: ', info['action'])
+        df_hubs['action'] = actions
+        rem_distance = env.learn_graph.adjacency_matrix('remaining_distance')[env.position]
+        df_hubs['Rem. Distance'] = rem_distance
+        df_route = pd.DataFrame()
 
-    ###
-    # either take current action or look it up in df_test and then count up actions
-    #current_action = df_hubs['action'][input_value]
-    print(f"Current Action: {current_action_string}")
-    # previous_test_case = None
-    # current_test_case = test_id
-    # initialize all actions with 0 if test case changes
-    # global number_wait
-    # global number_book
-    # global number_share
+        return dcc.Graph(figure=create_map_from_df(df_hubs, df_route, test_id), id='my-graph'), dcc.Graph(figure=create_piechart(0,0,0), id='graph_actions2'), '', ''
 
-    # if start_dynamic == True:
-    #     number_wait = 0
-    #     number_book = 0
-    #     number_share = 0
-    # else:
-
-    global number_share
-    global number_wait
-    global number_book
-    if current_action_string == 'Wait': #'position':
-        number_wait += 1
-    elif current_action_string == 'Book': #'book':
-        number_book += 1
     else:
-        number_share += 1
+        shared_rides = list()
+        shared_ids = list()
+        state, reward, done, info = env.step(input_value)
+        print('Trips....',env.available_actions)
+
+        #rem_distance = state['remaining_distance']
+        action_type = env.old_state['distinction'][input_value]
+        print(action_type)
+
+        current_time = info['timestamp']
+
+        taken_steps.extend(info['route'])
+        print('Taken steps', taken_steps)
+
+        df_route = pd.DataFrame()
+        df_route['longitude'] = [0.0 for i in range(len(taken_steps))]
+        df_route['latitude'] = [0.0 for i in range(len(taken_steps))]
+        df_route['node_id'] = [0 for i in range(len(taken_steps))]
+        df_route['action_type'] = [action_type for i in range(len(taken_steps))]
+
+        for i in range(len(taken_steps)):
+            results = manhattan_graph.get_coordinates_of_node(taken_steps[i])
+            df_route['longitude'][i] = results[0]
+            df_route['latitude'][i] = results[1]
+            df_route['node_id'][i] = taken_steps[i]
+
+        #convert node ids list in df_route with coordinates
+        trips = env.availableTrips()
+            
+        for i, trip in enumerate(trips):
+            shared_ids.append(trip['target_hub'])
+            
+        all_hubs = env.hubs
+
+        #print(all_hubs)
+
+        book_own_ids = list(set(all_hubs) - set(shared_ids))
+        
+        position = env.manhattan_graph.get_nodeid_by_hub_index(env.position)
+        final = env.manhattan_graph.get_nodeid_by_hub_index(env.final_hub)
+        start = env.manhattan_graph.get_nodeid_by_hub_index(env.start_hub)
+        print('Pos, final, start', env.position, env.start_hub, env.final_hub)
+
+        actions = []
+        for n in all_hubs:
+            if n == position:
+                actions.append('position')
+            else:
+                if n == final:
+                    actions.append('final')
+                else:
+                    if n == start:
+                        actions.append('start')
+                    else:
+                        if n in shared_ids:
+                            actions.append('shared')
+                        else:
+                            if n in book_own_ids:
+                                actions.append('book') 
+
+        current_action_string = info['action'] # 'Wait', 'Share' or 'Book'
+        print('Info actions: ', info['action'])
+        df_hubs['action'] = actions
+        rem_distance = env.learn_graph.adjacency_matrix('remaining_distance')[env.position]
+        df_hubs['Rem. Distance'] = rem_distance
+        #print(f"Hubs DF: {df_hubs}")
+
+        ###
+        # either take current action or look it up in df_test and then count up actions
+        #current_action = df_hubs['action'][input_value]
+        print(f"Current Action: {current_action_string}")
+        # previous_test_case = None
+        # current_test_case = test_id
+        # initialize all actions with 0 if test case changes
+        # global number_wait
+        # global number_book
+        # global number_share
+
+        # if start_dynamic == True:
+        #     number_wait = 0
+        #     number_book = 0
+        #     number_share = 0
+        # else:
+
+        global number_share
+        global number_wait
+        global number_book
+        if current_action_string == 'Wait': #'position':
+            number_wait += 1
+        elif current_action_string == 'Book': #'book':
+            number_book += 1
+        else:
+            number_share += 1
 
     #start_dynamic = False
 
-    return dcc.Graph(figure=create_map_from_df(df_hubs, df_route, test_id), id='my-graph'), dcc.Graph(figure=create_piechart(number_wait,number_share,number_book), id='graph_actions2'), html.P("Current time: %s-%s-%s %s:%s" % (current_time.year, current_time.month, current_time.day, current_time.hour, current_time.minute)), ''
+        return dcc.Graph(figure=create_map_from_df(df_hubs, df_route, test_id), id='my-graph'), dcc.Graph(figure=create_piechart(number_wait,number_share,number_book), id='graph_actions2'), html.P("Current time: %s-%s-%s %s:%s" % (current_time.year, current_time.month, current_time.day, current_time.hour, current_time.minute)), ''
 
 
 if __name__ == '__main__':
