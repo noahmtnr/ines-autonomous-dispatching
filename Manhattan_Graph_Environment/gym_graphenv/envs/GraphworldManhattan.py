@@ -464,20 +464,18 @@ class GraphEnv(gym.Env):
                 print(f"DELIVERED IN TIME AFTER {self.count_actions} ACTIONS (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown})")
                 if(action_type == ActionType.OWN):
                     if(self.allow_bookown == 0):
-                        # strong punishment for bookown before 2h window before deadline
-                        reward = old_distinction[action]*100000
-                        reward += 10000
+                        reward = -900
                     else:
-                        reward = 0
+                        reward = 1000
                 elif(action_type == ActionType.SHARE):
                     # high reward if agent comes to final hub with shared ride
-                    reward = 100000
+                    reward = 10000
                     
             else:
                 # in time delivered with delivery time < 2 hours to deadline
                 state_of_delivery = DeliveryState.DELIVERED_ON_TIME
                 print(f"MANUAL DELIVERY WITH {(self.deadline-self.time).total_seconds()/60} MINUTES TO DEADLINE - ACTIONS (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown})")
-                reward = 0
+                reward = 1000
 
         # did not come to final hub:
         else:
@@ -485,16 +483,18 @@ class GraphEnv(gym.Env):
             self.done = False
             state_of_delivery = DeliveryState.IN_DELIVERY
             if(action_type == ActionType.WAIT):
-                reward = 0
+                reward = 100
             elif(action_type == ActionType.OWN):
                 if(self.allow_bookown == 0):
-                    reward = old_distinction[action]*100000
+                    self.done = True ## Cancel when booking own ride without arriving
+                    state_of_delivery = DeliveryState.TERMINATED
+                    reward = -1000
                 else:
                     # kann eigentlich nicht sein dieser Case
-                    reward = (distance_gained/100) * 1000
+                    reward = (distance_gained/100) * 100
             elif(action_type == ActionType.SHARE):
 
-                reward = (distance_gained/100) * 1000 + old_distinction[action]*10000
+                reward = distance_gained * 100 + 100
 
         print(self.old_position, "->", action, action_type, "D:", distance_gained, "R:", reward)
 
@@ -753,13 +753,15 @@ class GraphEnv(gym.Env):
 class ActionType:
     WAIT,SHARE,OWN = range(3)
 class DeliveryState:
-    DELIVERED_ON_TIME, DELIVERED_WITH_DELAY, NOT_DELIVERED, IN_DELIVERY = range(4)
+    DELIVERED_ON_TIME, DELIVERED_WITH_DELAY, NOT_DELIVERED, IN_DELIVERY, TERMINATED = range(5)
 
 class CustomCallbacks(DefaultCallbacks):
     last_count_delivered_on_time = 0
     last_count_delivered_with_delay = 0
     last_count_not_delivered = 0
+    last_count_terminated = 0
     count_not_delivered = 0
+    count_terminated = 0
     count_delivered_with_delay = 0
     count_delivered_on_time = 0
 
@@ -790,6 +792,7 @@ class CustomCallbacks(DefaultCallbacks):
         self.count_delivered_on_time = 0
         self.count_delivered_with_delay = 0
         self.count_not_delivered = 0
+        self.count_terminated = 0
 
         # metrics for shares and bookowns
         self.count_shared_available = 0
@@ -822,6 +825,7 @@ class CustomCallbacks(DefaultCallbacks):
         episode.custom_metrics["count_not_delivered"] = 0
         episode.custom_metrics["count_delivered_with_delay"] = 0
         episode.custom_metrics["count_delivered_on_time"] = 0
+        episode.custom_metrics["count_terminated"] = 0
 
         # metrics for shares and bookowns
         #episode.custom_metrics["count_shared_available"] = 0
@@ -916,6 +920,9 @@ class CustomCallbacks(DefaultCallbacks):
         elif (episode.env.state_of_delivery == DeliveryState.NOT_DELIVERED):
             self.count_not_delivered +=1
             episode.custom_metrics["count_not_delivered"] = self.count_not_delivered
+        elif (episode.env.state_of_delivery == DeliveryState.TERMINATED):
+            self.count_terminated +=1
+            episode.custom_metrics["count_terminated"] = self.count_terminated
 
         if (self.count_delivered_on_time==0):
             episode.custom_metrics["ratio_delivered_without_bookown_to_all_delivered"] = 0
@@ -985,6 +992,7 @@ class CustomCallbacks(DefaultCallbacks):
         print("Abzug", self.last_count_not_delivered)
         """
 
+        result["count_terminated"] = result['custom_metrics']["count_terminated_max"] - CustomCallbacks.last_count_terminated
         result["count_not_delivered"] = result['custom_metrics']["count_not_delivered_max"] - CustomCallbacks.last_count_not_delivered
         # zum Vergleich ohne Abzug
         # result["count_not_delivered_first"] = result['custom_metrics']["count_not_delivered_max"]
@@ -992,6 +1000,7 @@ class CustomCallbacks(DefaultCallbacks):
         CustomCallbacks.last_count_not_delivered = CustomCallbacks.last_count_not_delivered + result["count_not_delivered"]
         CustomCallbacks.last_count_delivered_with_delay = CustomCallbacks.last_count_delivered_with_delay + result["count_delivered_with_delay"]
         CustomCallbacks.last_count_delivered_on_time = CustomCallbacks.last_count_delivered_on_time + result["count_delivered_on_time"]
+        CustomCallbacks.last_count_terminated = CustomCallbacks.last_count_terminated + result["count_terminated"]
 
         # metrics für shares and bookowns
         result["boolean_has_booked_any_own"] = result['custom_metrics']["boolean_has_booked_any_own_mean"] # - CustomCallbacks.last_count_bookowns

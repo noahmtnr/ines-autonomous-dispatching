@@ -119,8 +119,8 @@ rainbow_config["noisy"] = True
 # this is greater than 1, distributional Q-learning is used.
 # the discrete supports are bounded by v_min and v_max
 rainbow_config["num_atoms"] = 70 #[more than 1] //was 51,20
-rainbow_config["v_min"] =-20010000
-rainbow_config["v_max"]=210000 # (set v_min and v_max according to your expected range of returns).
+rainbow_config["v_min"] =-15000
+rainbow_config["v_max"]=15000# (set v_min and v_max according to your expected range of returns).
 
 
 # Initialize trainer
@@ -138,7 +138,7 @@ shutil.rmtree(ray_results, ignore_errors=True, onerror=None)   # clean up old ru
 results = []
 episode_data = []
 episode_json = []
-n_iter = 100
+n_iter = 60
 for n in range(n_iter):
     result = trainer.train()
     results.append(result)
