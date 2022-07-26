@@ -9,8 +9,6 @@ from dash import dcc, Input, Output
 import plotly.express as px
 import plotly.graph_objects as go
 import pandas as pd
-#from flask_caching import Cache
-#import dash_bootstrap_components as dbc
 import sys
 import ast
 from graphs.ManhattanGraph import ManhattanGraph
@@ -27,6 +25,7 @@ global number_book
 global number_share
 global start_hub
 global entered_hub
+global user_route
 
 app = dash.Dash(__name__,  suppress_callback_exceptions = True)
 
@@ -37,9 +36,7 @@ number_book = 0
 number_share = 0
 start_hub = 0
 entered_hub = False
-
-# global start_dynamic
-# start_dynamic = False
+user_route = []
 
 # read test dataframe 
 #filepath = "C:/Users/kirch/OneDrive/Dokumente/Uni/Mannheim/FSS2022/Teamproject/ines-autonomous-dispatching/Manhattan_Graph_Environment/test_orders_dashboard.csv" #"test_orders_dashboard.csv"
@@ -64,8 +61,6 @@ actions = ['hub' for i in range(92)]
 df_hubs['action'] = actions
 
 hub_node_ids = [42423039, 42423051, 42423296, 42423307, 42423549, 42423774, 42424025, 42424145, 42426865, 42427769, 42427863, 42427915, 42427965, 42427968, 42427970, 42427972, 42428174, 42428863, 42428980, 42429342, 42430253, 42430304, 42430333, 42430361, 42430375, 42432856, 42432889, 42432985, 42433058, 42433066, 42433422, 42435684, 42436486, 42437358, 42437644, 42438809, 42439497, 42440350, 42440743, 42440798, 42442415, 42442463, 42442475, 42442937, 42443534, 42443674, 42444457, 42445018, 424457, 370913758, 370913779, 370914027, 370915061, 370924677, 370924957, 371188320, 371188750, 371188756, 371207282, 371209940, 371239958, 406006393, 561035358, 561042199, 589099734, 589929417, 595295501, 595314119, 595352904, 596775930, 1061531596, 1692433919, 1825841704, 1919595922, 2054405680, 3099327970, 3099327976, 3579432156, 3843180751, 4145735059, 4320028826, 4779073677, 4779073680, 4886250352, 5426969134, 5779545445, 7490266268, 9140654137, 9177424868]
-
-#manhattan_graph = ManhattanGraph(filename='simple', hubs=hub_node_ids)
 
 
 image_path = 'assets/ines_image.jpeg'
@@ -116,9 +111,6 @@ def create_piechart(wait=0, share=0, book=0):
     return fig
 
 
-
-#to be modified (calculate nodes between hubs with step() function)
-
 app.layout = html.Div([
     html.Div(
         html.Img(src=image_path, style={'width': '300px', 'display': 'inline-block', 'vertical-align': 'top', 'height': 'auto'}), id='image', style={'width':'300px','float':'right'}),
@@ -165,7 +157,6 @@ html.Div(children=[
 
     elif tab == 'tab-2-example':
         return html.Div(children=[
-#html.Div([html.Button('Start', id='start-button-2', n_clicks=0)]),
 html.Div(children=[
        dcc.Graph( figure=create_map_from_df(df_hubs), id='my-graph')
 
@@ -181,13 +172,8 @@ html.Div(children=[
                
         html.H4('Actions taken:', id= 'actions-taken-titel'),
         html.Div(dcc.Graph(figure=create_piechart(), id='graph_actions2'), id='div-piechart2'),
+        html.H4('User route: ',  id='user-route-2'),
         
-        
-    #     html.Div( children=[
-    #         html.Div(html.H3('Step by Step Analysis: '), id = 'titel-analysis'),
-    #         html.Div([
-    #     "Next step HUB: ", dcc.Input(id='next-hub-input', value= None, type='number', debounce=True),
-    # ], className='right-input')], id = 'step-by-step'), 
     
     html.H4('Available Shared Rides:', id = 'available-shared'),  
     html.Div(id='shared'),   
@@ -320,14 +306,11 @@ def start_order_2(value):
     global number_book
     global number_share
 
-   
     number_wait = 0
     number_book = 0
     number_share = 0
     taken_steps = []
 
-    # df_hubs['action'][start_hub]='start'
-    # df_hubs['action'][final_hub]='final'
     
     if(value =='Test 1'):
         test_id = 0
@@ -342,6 +325,9 @@ def start_order_2(value):
                     test_id = 3
     global entered_hub
     entered_hub = False
+
+    global user_route
+    user_route = []
     
     global start_hub
     start_hub = df_test['Hubs'][test_id][0] #list_actions[0] 
@@ -361,23 +347,8 @@ def start_order_2(value):
         pickle.dump(env_config, f)
     
     env.reset()
-    #print('-----',env.start_hub, env.final_hub, '------')
 
-    #print('Start, Final: ',env.start_hub, env.final_hub, env.position)
-    #print('Trips: ', env.available_actions)
-
-    # nr_wait = 0
-    # nr_shared = 0
-    # nr_book = 0
     route_string='Calculated route: '
-
-    # for i in type_of_actions:
-    #     if i == 'wait':
-    #         nr_wait+=1
-    #     if i == 'share':
-    #         nr_shared+=1
-    #     if i == 'book':
-    #         nr_book+=1
 
     counter = 1
     for i in range(1,len(df_test['Hubs'][test_id])):
@@ -426,6 +397,7 @@ def start_order_2(value):
     Output('current-time', 'children'),
     #Output('step-by-step', 'children'),
     Output('next-hub-input', 'value'),
+    Output(component_id='user-route-2', component_property='children'),
     Input(component_id='next-hub-input', component_property='n_submit'),
     Input(component_id='next-hub-input', component_property='value'),
     prevent_initial_call=True
@@ -435,6 +407,15 @@ def next_step(submit, input_value, start_dynamic=True):
     if input_value is None:
         return dash.no_update
     global entered_hub
+
+    user_route.append(input_value)
+
+    user_route_string = 'User route: '
+
+    for i in range(len(user_route)):
+        user_route_string+= str(user_route[i]) + ' ->'
+    
+    user_route_string = user_route_string[0:-3]
     
     if(input_value == start_hub and entered_hub == False):
         print('First')
@@ -469,14 +450,12 @@ def next_step(submit, input_value, start_dynamic=True):
                         if n in book_own_ids:
                             actions.append('book') 
 
-        # current_action_string = info['action'] # 'Wait', 'Share' or 'Book'
-        # print('Info actions: ', info['action'])
         df_hubs['action'] = actions
         rem_distance = env.learn_graph.adjacency_matrix('remaining_distance')[env.position]
         df_hubs['Rem. Distance'] = rem_distance
         df_route = pd.DataFrame()
 
-        return dcc.Graph(figure=create_map_from_df(df_hubs, df_route, test_id), id='my-graph'), dcc.Graph(figure=create_piechart(0,0,0), id='graph_actions2'), '', ''
+        return dcc.Graph(figure=create_map_from_df(df_hubs, df_route, test_id), id='my-graph'), dcc.Graph(figure=create_piechart(0,0,0), id='graph_actions2'), '', '', user_route_string
 
     else:
         shared_rides = list()
@@ -492,6 +471,7 @@ def next_step(submit, input_value, start_dynamic=True):
 
         taken_steps.extend(info['route'])
         print('Taken steps', taken_steps)
+
 
         df_route = pd.DataFrame()
         df_route['longitude'] = [0.0 for i in range(len(taken_steps))]
@@ -513,7 +493,6 @@ def next_step(submit, input_value, start_dynamic=True):
             
         all_hubs = env.hubs
 
-        #print(all_hubs)
 
         book_own_ids = list(set(all_hubs) - set(shared_ids))
         
@@ -550,18 +529,6 @@ def next_step(submit, input_value, start_dynamic=True):
         # either take current action or look it up in df_test and then count up actions
         #current_action = df_hubs['action'][input_value]
         print(f"Current Action: {current_action_string}")
-        # previous_test_case = None
-        # current_test_case = test_id
-        # initialize all actions with 0 if test case changes
-        # global number_wait
-        # global number_book
-        # global number_share
-
-        # if start_dynamic == True:
-        #     number_wait = 0
-        #     number_book = 0
-        #     number_share = 0
-        # else:
 
         global number_share
         global number_wait
@@ -573,9 +540,7 @@ def next_step(submit, input_value, start_dynamic=True):
         else:
             number_share += 1
 
-    #start_dynamic = False
-
-        return dcc.Graph(figure=create_map_from_df(df_hubs, df_route, test_id), id='my-graph'), dcc.Graph(figure=create_piechart(number_wait,number_share,number_book), id='graph_actions2'), html.P("Current time: %s-%s-%s %s:%s" % (current_time.year, current_time.month, current_time.day, current_time.hour, current_time.minute)), ''
+        return dcc.Graph(figure=create_map_from_df(df_hubs, df_route, test_id), id='my-graph'), dcc.Graph(figure=create_piechart(number_wait,number_share,number_book), id='graph_actions2'), html.P("Current time: %s-%s-%s %s:%s" % (current_time.year, current_time.month, current_time.day, current_time.hour, current_time.minute)), '', user_route_string
 
 
 if __name__ == '__main__':
