@@ -334,7 +334,7 @@ class GraphEnv(gym.Env):
                 elif(self.learn_graph.wait_till_departure_times[(self.position,action)] != self.WAIT_TIME_SECONDS and self.learn_graph.wait_till_departure_times[(self.position,action)] != 0):
                     step_duration = sum(route_travel_time)
                     # TODO: String conversion von departure time besser direkt beim erstellen der Matrix
-                    departure_time = datetime.strptime(self.learn_graph.wait_till_departure_times[(self.position,action)], '%Y-%m-%d %H:%M:%S')
+                    departure_time = self.learn_graph.wait_till_departure_times[(self.position,action)]
                     # print("Departure Time: ", departure_time)
                     self.current_wait = ( departure_time - self.time).seconds
                     self.time = departure_time
@@ -545,7 +545,7 @@ class GraphEnv(gym.Env):
                     isNotFinalNode = True
                     if isNotFinalNode:
                         index_in_route = route.index(position)
-                        position_timestamp = times[index_in_route]
+                        position_timestamp = datetime.strptime(times[index_in_route], '%Y-%m-%d %H:%M:%S')
                         route_to_target_node=route[index_in_route::]
                         hubsOnRoute = any(node in route_to_target_node for node in self.hubs)
                         if hubsOnRoute:
@@ -556,8 +556,10 @@ class GraphEnv(gym.Env):
                                 route_to_target_hub = route[index_in_route:index_hub_in_route]
                                 if(hub != position):
                                     trip = {'departure_time': position_timestamp, 'target_hub': hub, 'route': route_to_target_hub, 'trip_row_id': tripId}
+                                    print(type(position_timestamp))
                                     list_trips.append(trip)
         self.available_actions = list_trips
+        # generate random shared rides for training
 
         # create index vector
         shared_rides_mask = np.zeros(self.n_hubs)
@@ -565,12 +567,51 @@ class GraphEnv(gym.Env):
             shared_rides_mask[self.manhattan_graph.get_hub_index_by_nodeid(list_trips[i]['target_hub'])] = 1
 
         self.shared_rides_mask = shared_rides_mask
+        self.available_actions += self.generate_rides() #Uses shared_rides_mask to oversample available shares and writes them into shared_rides_mask and available_actions
         # print(shared_rides_mask)
         #print(list_trips)
 
         executionTime = (time.time() - startTime)
         # print('found '+ str(len(list_trips)) +' trips, ' + 'current time: ' + str(self.time))
         return list_trips
+
+    def generate_rides(self,):
+        list_trips = []
+        depart_time_list = []
+        target_hub_list = []
+        route_list = []
+
+        # hubs where shared rides go to
+        shared_ride_hubs = []
+        for i in range(len(self.shared_rides_mask)):
+            if(self.shared_rides_mask[i] == 1):
+                shared_ride_hubs.append(i)
+        # create list of hubs where synthetic rides should go to
+        sampled_hub_list = np.random.choice(self.n_hubs,40,replace=False)
+        for i in range(len(sampled_hub_list)):
+            # create only shared rides to this hubs which are not already covered by a shared ride
+            if(sampled_hub_list[i] not in shared_ride_hubs):
+                target_hub_list.append(sampled_hub_list[i])
+
+        for i in range(len(target_hub_list)):
+            depart_time = self.time
+            depart_time += timedelta(seconds=180) # wait 3 minutes for departure of synthetic ride
+            depart_time_list.append(depart_time)
+
+            route = ox.shortest_path(self.manhattan_graph.inner_graph, self.manhattan_graph.get_nodeid_by_hub_index(self.position), self.manhattan_graph.get_nodeid_by_hub_index(target_hub_list[i]), weight='travel_time')
+            route_list.append(route)
+
+        # write all generated trips into a list of dicts
+        generated_trips_list = []
+        for i in range(len(target_hub_list)):
+            trip = {'departure_time': depart_time_list[i], 'target_hub': target_hub_list[i], 'route': route_list[i]}
+            generated_trips_list.append(trip)
+
+        # modify maks and available actions
+        for hub in target_hub_list:
+            self.shared_rides_mask[hub] = 1
+
+        return generated_trips_list
 
     def validateAction(self, action):
         return action < self.n_hubs
