@@ -100,10 +100,11 @@ rainbow_config["train_batch_size"] = 400
 rainbow_config["gamma"] = 0.99
 # rainbow_config["framework"] = "torch"
 rainbow_config["callbacks"] = CustomCallbacks
-# rainbow_config["hiddens"] = [600,500,400,300,120] # to try with 1024  //was also 516
-#rainbow_config["model"] = {
+rainbow_config["hiddens"] = [180,150,100] # to try with 1024  //was also 516
+rainbow_config["model"] = {
     # "custom_model": "my_tf_model",
-#}
+    "fcnet_activation": 'relu',
+}
 
 #num_gpus and other gpu parameters in order to train with gpu
 rainbow_config["num_gpus"] = int(os.environ.get("RLLIB_NUM_GPUS", "0"))
@@ -138,7 +139,7 @@ ray_results = "{}/ray_results/".format(os.getenv("HOME"))
 results = []
 episode_data = []
 episode_json = []
-n_iter = 60
+n_iter = 100
 for n in range(n_iter):
     result = trainer.train()
     results.append(result)
