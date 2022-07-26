@@ -63,20 +63,22 @@ p {
   height: 20px;
 }
 
-#available-shared {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  transition: 0.3s;
-  border-radius: 5px; /* 5px rounded corners */
-  background-color: rgb(255, 255, 255);
-  height: 50px;
-  padding-top: 30px;
-}
-
 #actions-taken-titel {
   background-color: rgb(255, 255, 255);
   display: inline;
   margin-right: 20px;
   padding-left: 10px;
+  padding-right: 10px;
+  margin-top: 20px;
+}
+
+#distance-titel {
+  background-color: rgb(255, 255, 255);
+  display: inline;
+  margin-right: 20px;
+  margin-top: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
   padding-right: 10px;
 }
 
@@ -90,6 +92,12 @@ p {
   height: 200px;
   width: 200px;
   margin-top: 0px;
+}
+
+#graph_distance {
+  height: 200px;
+  width: 400px;
+  margin-top: 20px;
 }
 
 #my-graph {
