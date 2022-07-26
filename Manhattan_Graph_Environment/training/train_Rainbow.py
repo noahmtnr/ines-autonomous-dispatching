@@ -100,13 +100,13 @@ rainbow_config["train_batch_size"] = 400
 rainbow_config["gamma"] = 0.99
 # rainbow_config["framework"] = "torch"
 rainbow_config["callbacks"] = CustomCallbacks
-rainbow_config["hiddens"] = [600,500,400,300,120] # to try with 1024  //was also 516
+# rainbow_config["hiddens"] = [600,500,400,300,120] # to try with 1024  //was also 516
 #rainbow_config["model"] = {
     # "custom_model": "my_tf_model",
 #}
 
 #num_gpus and other gpu parameters in order to train with gpu
-#rainbow_config["num_gpus"] = int(os.environ.get("RLLIB_NUM_GPUS", "0"))
+rainbow_config["num_gpus"] = int(os.environ.get("RLLIB_NUM_GPUS", "0"))
 
 #rainbow parameters
 
@@ -174,6 +174,7 @@ for n in range(n_iter):
                'count_steps_min': float(result["count_steps_min"]),
                'count_steps_max': float(result["count_steps_max"]),
                'count_steps_mean': float(result["count_steps_mean"]),
+               'count_terminated': int(result["count_terminated"]),
                'count_delivered_on_time': int(result["count_delivered_on_time"]),
                'count_delivered_with_delay': int(result["count_delivered_with_delay"]),
                'count_not_delivered': int(result["count_not_delivered"]),
@@ -221,6 +222,7 @@ for n in range(n_iter):
                 "share_to_own_ratio_max": result['share_to_own_ratio_max'],
                 "share_to_own_ratio_mean": result['share_to_own_ratio_mean'],
                 'count_steps_mean': result["count_steps_mean"],
+                'count_terminated': result["count_terminated"],
                 'count_delivered_on_time': result["count_delivered_on_time"],
                 'count_delivered_with_delay': result["count_delivered_with_delay"],
                 'count_not_delivered': result["count_not_delivered"],

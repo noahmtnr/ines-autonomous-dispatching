@@ -188,9 +188,7 @@ class GraphEnv(gym.Env):
         self.distance_reduced_with_shared=0 #to final hub
         self.distance_reduced_with_ownrides=0 #to final hub
 
-        print(f"Reset initialized pickup: {self.position}")
-        print(f"Reset initialized dropoff: {self.final_hub}")
-        print(f"Reset initialized time: {self.time}")
+        print(f"Reset pickup: {self.position} dropoff: {self.final_hub} time: {self.time}")
 
 
         learn_graph = LearnGraph(n_hubs=self.n_hubs, manhattan_graph=self.manhattan_graph, final_hub=self.final_hub)
@@ -346,7 +344,7 @@ class GraphEnv(gym.Env):
                 if(self.shared_rides_mask[action] == 1):
                     self.count_share += 1
                     self.action_choice = "Share"
-                    print("action == share ")
+                    # print("action == share ")
                     # print(f"Rides Mask for Action {action}: {self.shared_rides_mask}")
                     
                     # check whether current action is useful
@@ -464,7 +462,7 @@ class GraphEnv(gym.Env):
                 print(f"DELIVERED IN TIME AFTER {self.count_actions} ACTIONS (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown})")
                 if(action_type == ActionType.OWN):
                     if(self.allow_bookown == 0):
-                        reward = -900
+                        reward = -500 ## reduce to -500
                     else:
                         reward = 1000
                 elif(action_type == ActionType.SHARE):
@@ -489,6 +487,7 @@ class GraphEnv(gym.Env):
                     self.done = True ## Cancel when booking own ride without arriving
                     state_of_delivery = DeliveryState.TERMINATED
                     reward = -1000
+                    print("TERMINATED Because of BOOKED OWN NOT TO FINAL")
                 else:
                     # kann eigentlich nicht sein dieser Case
                     reward = (distance_gained/100) * 100
@@ -496,7 +495,7 @@ class GraphEnv(gym.Env):
 
                 reward = distance_gained * 100 + 100
 
-        print(self.old_position, "->", action, action_type, "D:", distance_gained, "R:", reward)
+        print(self.old_position, "->", action, "SHARE" if action_type == 1 else "BOOK" if action_type == 2 else "WAIT", "Distance:", distance_gained, "Reward:", reward)
 
         return reward, self.done, state_of_delivery
 
@@ -556,7 +555,6 @@ class GraphEnv(gym.Env):
                                 route_to_target_hub = route[index_in_route:index_hub_in_route]
                                 if(hub != position):
                                     trip = {'departure_time': position_timestamp, 'target_hub': hub, 'route': route_to_target_hub, 'trip_row_id': tripId}
-                                    print(type(position_timestamp))
                                     list_trips.append(trip)
         self.available_actions = list_trips
         # generate random shared rides for training
