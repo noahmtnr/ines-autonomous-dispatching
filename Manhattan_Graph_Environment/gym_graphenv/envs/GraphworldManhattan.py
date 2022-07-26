@@ -17,10 +17,21 @@ import pickle
 import logging
 import json
 import os
-import statistics
+import matplotlib.pyplot as plt
+import networkx as nx 
+from colorama import Fore, Back, Style
+import sys
+from PIL import Image, ImageDraw
+import math 
+import plotly.express as px
+#from mpl_toolkits.basemap import Basemap
+import plotly.express as px
+RAY_ENABLE_MAC_LARGE_OBJECT_STORE=1.
+sys.path.insert(0,"")
 # from config.definitions import ROOT_DIR
+import statistics
 ROOT_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
-
+# from config.definitions import ROOT_DIR
 from typing import Dict
 
 from ray.rllib.agents.callbacks import DefaultCallbacks
@@ -28,8 +39,7 @@ from ray.rllib.evaluation import Episode, RolloutWorker
 from ray.rllib.env import BaseEnv
 from ray.rllib.policy import Policy
 
-import sys
-sys.path.insert(0,"")
+
 
 # CHANGES
 from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
@@ -58,25 +68,25 @@ class GraphEnv(gym.Env):
         # use_config=data['use_config']
         # print(use_config)
 
-        # if(use_config):
-        #     self.env_config = self.read_config()
-        # else:
-        self.env_config = None
+        if(use_config):
+            self.env_config = self.read_config()
+        else:
+            self.env_config = None
 
-        self.n_hubs = 120
+        self.n_hubs = 92
         self.distance_matrix = None
 
         self.DB = DBConnection()
-
-        manhattan_graph = ManhattanGraph(filename='simple', num_hubs=self.n_hubs)
+        hubs = self.DB.getAllHubs()
+        manhattan_graph = ManhattanGraph(filename='simple', hubs=hubs)
         #manhattan_graph.setup_trips(self.START_TIME)
         self.manhattan_graph = manhattan_graph
 
         self.hubs = manhattan_graph.hubs
 
         self.trips = self.DB.getAvailableTrips(DB_LOWER_BOUNDARY, DB_UPPER_BOUNDARY)
-        print(f"Initialized with {len(self.trips)} taxi rides within two weeks")
-        print(f"Initialized with {len(self.hubs)} hubs")
+        print(f"Initialized with {len(self.hubs)} hubs and {len(self.trips)} taxi rides within two weeks")
+        #print(f"Initialized with {len(self.hubs)} hubs")
 
 
         self.state = None
@@ -109,7 +119,16 @@ class GraphEnv(gym.Env):
         one_hot_vector[pos] = 1
         return one_hot_vector
 
-    def reset(self):
+    def reset(self, start_parameters:{}=None) :
+        ##start_parameters requires: dropoff, pickup, time, deadline
+        # Example:
+        # pickup = 25
+        # dropoff = 70
+        # time = datetime.strptime('2016-01-03 14:00:00', '%Y-%m-%d %H:%M:%S')
+        # deadline = datetime.strptime('2016-01-03 17:00:00', '%Y-%m-%d %H:%M:%S')
+        # env.reset({'time': time,'dropoff':dropoff,'pickup':pickup})
+        ############################
+
         # two cases depending if we have env config
         #super().reset()
 
@@ -118,47 +137,56 @@ class GraphEnv(gym.Env):
 
         pickup_day = np.random.randint(low=1,high=14)
         pickup_hour =  np.random.randint(24)
-        pickup_minute = np.random.randint(60)
+        pickup_minute = np.random.randint(60) 
+        self.route_taken = []
         self.START_TIME = datetime(2016,1,pickup_day,pickup_hour,pickup_minute,0).strftime('%Y-%m-%d %H:%M:%S')
 
-        if (self.env_config == None or self.env_config == {}):
-            print("Started Reset() without config")
-            #self.final_hub = self.manhattan_graph.get_nodeids_list().index(random.sample(self.hubs,1)[0])
-            self.final_hub = random.randint(0,self.n_hubs-1)
-            #self.start_hub = self.manhattan_graph.get_nodeids_list().index(random.sample(self.hubs,1)[0])
-            self.start_hub = random.randint(0,self.n_hubs-1)
-
-            # just in case ;)
-            if(self.start_hub == self.final_hub):
+        if(start_parameters != None):
+            print("Reset with start parameters")
+            self.final_hub = start_parameters['dropoff']
+            self.start_hub = start_parameters['pickup']
+            self.position = self.start_hub
+            self.pickup_time = start_parameters['time']
+            self.time = self.pickup_time
+            self.deadline=start_parameters['deadline']
+            self.total_travel_time = 0
+        else:
+            if (self.env_config == None or self.env_config == {}):
+                print("Started Reset() without config")
+                self.final_hub = random.randint(0,self.n_hubs-1)
                 self.start_hub = random.randint(0,self.n_hubs-1)
 
-            self.position = self.start_hub
+                # just in case ;)
+                if(self.start_hub == self.final_hub):
+                    self.start_hub = random.randint(0,self.n_hubs-1)
 
-        # time for pickup
-            self.pickup_time = datetime.strptime(self.START_TIME,'%Y-%m-%d %H:%M:%S')
-            self.time = self.pickup_time
-            self.total_travel_time = 0
-            self.deadline=self.pickup_time+timedelta(hours=12)
-            self.current_wait = 1 ## to avoid dividing by 0
-        else:
-            print("Started Reset() with config")
-            self.final_hub = self.env_config['delivery_hub_index']
+                self.position = self.start_hub
 
-            self.start_hub = self.env_config['pickup_hub_index']
+            # time for pickup
+                self.pickup_time = datetime.strptime(self.START_TIME,'%Y-%m-%d %H:%M:%S')
+                self.time = self.pickup_time
+                self.total_travel_time = 0
+                self.deadline=self.pickup_time+timedelta(hours=24)
+                self.current_wait = 1 ## to avoid dividing by 0
+            else:
+                self.env_config = self.read_config()
+                print("Started Reset() with config")
+                print(self.env_config)
+                self.final_hub = self.env_config['delivery_hub_index']
 
-            self.position = self.start_hub
+                self.start_hub = self.env_config['pickup_hub_index']
 
-            self.pickup_time = self.env_config['pickup_timestamp']
-            self.time = datetime.strptime(self.pickup_time, '%Y-%m-%d %H:%M:%S')
-            self.total_travel_time = 0
-            self.deadline=datetime.strptime(self.env_config['delivery_timestamp'], '%Y-%m-%d %H:%M:%S')
-            self.current_wait = 0
+                self.position = self.start_hub
+
+                self.pickup_time = self.env_config['pickup_timestamp']
+                self.time = datetime.strptime(self.pickup_time, '%Y-%m-%d %H:%M:%S')
+                self.total_travel_time = 0
+                self.deadline=datetime.strptime(self.env_config['delivery_timestamp'], '%Y-%m-%d %H:%M:%S')
+                self.current_wait = 0
         self.distance_covered_with_shared=0
         self.distance_covered_with_ownrides=0
         self.distance_reduced_with_shared=0 #to final hub
         self.distance_reduced_with_ownrides=0 #to final hub
-
-
 
         print(f"Reset initialized pickup: {self.position}")
         print(f"Reset initialized dropoff: {self.final_hub}")
@@ -236,7 +264,6 @@ class GraphEnv(gym.Env):
         """
 
         startTime = time.time()
-
         #self.done = False
 
         # if agent is in time window 2 hours before deadline, we just move him to the final hub
@@ -283,27 +310,39 @@ class GraphEnv(gym.Env):
                 self.action_choice = "Wait"
                 # print("action == wait ")
                 executionTimeWait = (time.time() - startTimeWait)
+                # print(f"Time Wait: {str(executionTimeWait)}")
+                route_taken = [self.manhattan_graph.get_nodeid_by_hub_index(self.position)]
                 pass
 
             # action = share ride or book own ride
             else:
                 pickup_nodeid = self.manhattan_graph.get_nodeid_by_hub_index(self.position)
                 dropoff_nodeid = self.manhattan_graph.get_nodeid_by_hub_index(action)
-
-                route = ox.shortest_path(self.manhattan_graph.inner_graph, pickup_nodeid,  dropoff_nodeid, weight='travel_time')
+                route=ox.shortest_path(self.manhattan_graph.inner_graph, pickup_nodeid,  dropoff_nodeid, weight='travel_time')
+                route_taken = [pickup_nodeid]
+                route_taken.extend(route)
+                route_taken.append(dropoff_nodeid)
                 route_travel_time = ox.utils_graph.get_route_edge_attributes(self.manhattan_graph.inner_graph,route,attribute='travel_time')
                 self.route_travel_distance = sum(ox.utils_graph.get_route_edge_attributes(self.manhattan_graph.inner_graph,route,attribute='length'))
 
 
                 if(self.learn_graph.wait_till_departure_times[(self.position,action)] == self.WAIT_TIME_SECONDS):
                     step_duration = sum(route_travel_time)+ self.WAIT_TIME_SECONDS#we add 5 minutes (300 seconds) so the taxi can arrive
+                    # print("Travel Times ", route_travel_time)
+                    # print("Sum Travel Time ", sum(route_travel_time))
+                    # print("Wait Time ", self.WAIT_TIME_SECONDS)
                 elif(self.learn_graph.wait_till_departure_times[(self.position,action)] != self.WAIT_TIME_SECONDS and self.learn_graph.wait_till_departure_times[(self.position,action)] != 0):
                     step_duration = sum(route_travel_time)
                     # TODO: String conversion von departure time besser direkt beim erstellen der Matrix
                     departure_time = datetime.strptime(self.learn_graph.wait_till_departure_times[(self.position,action)], '%Y-%m-%d %H:%M:%S')
+                    # print("Departure Time: ", departure_time)
                     self.current_wait = ( departure_time - self.time).seconds
-                    step_duration += self.current_wait
                     self.time = departure_time
+                    # print("Travel Times ", route_travel_time)
+                    # print("Sum Travel Time ", sum(route_travel_time))
+                    # print("Current Wait ", self.current_wait)
+                    # print("Step Duration: ", step_duration)
+
                 if(self.shared_rides_mask[action] == 1):
                     self.count_share += 1
                     self.action_choice = "Share"
@@ -315,7 +354,6 @@ class GraphEnv(gym.Env):
                         self.count_shared_taken_useful += 1
                     self.distance_covered_with_shared+=self.route_travel_distance
                     self.distance_reduced_with_shared+=self.learn_graph.adjacency_matrix('remaining_distance')[self.old_position][action]
-
 
                 else:
                     self.count_bookown += 1
@@ -344,6 +382,7 @@ class GraphEnv(gym.Env):
             print("action: ",action)
             print("action space: ",self.action_space)
 
+        self.time += timedelta(seconds=step_duration)
         # refresh travel cost layer after each step
         self.learn_graph.add_travel_cost_layer(self.availableTrips(), self.distance_matrix)
         self.learn_graph.add_remaining_distance_layer(current_hub=self.position, distance_matrix=self.distance_matrix)
@@ -360,7 +399,7 @@ class GraphEnv(gym.Env):
         # print("New State: ")        
         # print(self.state)
 
-        self.time += timedelta(seconds=step_duration)
+        #print("End Time ", self.time)
 
         self.count_actions += 1
 
@@ -374,8 +413,7 @@ class GraphEnv(gym.Env):
         #self.state_of_delivery = state_of_delivery
         executionTime = (time.time() - startTime)
 
-        if self.count_bookown > 0:
-            self.booked_own = 1
+        # print(self.route_taken)
 
         # counting on step-base (not individual ride-base)
         if boolean_available_temp == True:
@@ -394,7 +432,7 @@ class GraphEnv(gym.Env):
         # print("In Step ", self.count_actions, " a useful share is available, number: ", self.boolean_useful_shares_available)            
 
         # print("Step End")
-        return self.state, reward,  self.done, {"timestamp": self.time,"step_travel_time":step_duration,"distance":self.distance_matrix[self.old_position][self.position], "count_hubs":self.count_hubs, "action": self.action_choice, "hub_index": action}
+        return self.state, reward,  self.done, {"timestamp": self.time,"step_travel_time":step_duration,"distance":self.distance_matrix[self.old_position][self.position], "count_hubs":self.count_hubs, "action": self.action_choice, "hub_index": action, "route": route_taken,"remaining_dist": self.learn_graph.adjacency_matrix('remaining_distance')[self.position][self.final_hub]}
 
 
     def compute_reward(self, action):
@@ -402,20 +440,20 @@ class GraphEnv(gym.Env):
         distance_gained = self.old_state['remaining_distance'][self.position]
         old_distinction = self.old_state['distinction']
         cost_of_action = self.learn_graph.adjacency_matrix('cost')[self.old_position][action]
-        print(self.old_position, "->", action, distance_gained)
         self.done = False
 
+        action_type = None
         bookown = False
         wait = False
         share = False
         reward = 0
 
         if(old_distinction[action] == -1): # book own
-            bookown = True
+            action_type = ActionType.OWN
         elif(old_distinction[action] == 0): # wait
-            wait = True
+            action_type = ActionType.WAIT
         else:
-            share = True
+            action_type = ActionType.SHARE
 
         if(self.position == self.final_hub):
             self.done = True
@@ -424,21 +462,21 @@ class GraphEnv(gym.Env):
                 # in time
                 state_of_delivery = DeliveryState.DELIVERED_ON_TIME
                 print(f"DELIVERED IN TIME AFTER {self.count_actions} ACTIONS (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown})")
-                if(bookown == True):
+                if(action_type == ActionType.OWN):
                     if(self.allow_bookown == 0):
                         # strong punishment for bookown before 2h window before deadline
                         reward = old_distinction[action]*100000
                         reward += 10000
                     else:
                         reward = 0
-                elif(share == True):
+                elif(action_type == ActionType.SHARE):
                     # high reward if agent comes to final hub with shared ride
                     reward = 100000
                     
             else:
                 # in time delivered with delivery time < 2 hours to deadline
                 state_of_delivery = DeliveryState.DELIVERED_ON_TIME
-                print(f"MANUAL DELIVERY WITH {(self.deadline-self.time).total_seconds()/60} MINUTES TO DEADLINE")
+                print(f"MANUAL DELIVERY WITH {(self.deadline-self.time).total_seconds()/60} MINUTES TO DEADLINE - ACTIONS (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown})")
                 reward = 0
 
         # did not come to final hub:
@@ -446,69 +484,19 @@ class GraphEnv(gym.Env):
             # intermediate action
             self.done = False
             state_of_delivery = DeliveryState.IN_DELIVERY
-            if(wait == True):
-                print("Action in Reward: Wait")
-                print("Time:", self.time)
-                print("Deadline:", self.deadline)
+            if(action_type == ActionType.WAIT):
                 reward = 0
-            elif(bookown == True):
-                print("Action in Reward: Bookown")
-                print("Time:", self.time)
-                print("Deadline:", self.deadline)
+            elif(action_type == ActionType.OWN):
                 if(self.allow_bookown == 0):
                     reward = old_distinction[action]*100000
                 else:
                     # kann eigentlich nicht sein dieser Case
                     reward = (distance_gained/100) * 1000
-            elif(share == True):
-                print("Action in Reward: Share")
-                print("Time:", self.time)
-                print("Deadline:", self.deadline)
-                reward = (distance_gained/100) * 1000 + old_distinction[action]*1000
+            elif(action_type == ActionType.SHARE):
 
+                reward = (distance_gained/100) * 1000 + old_distinction[action]*10000
 
-        # # if delay is greater than 2 hours (=120 minutes), terminate training episode
-        # if((self.time-self.deadline).total_seconds()/60 >= 120 or self.count_actions>200):
-        #     self.done = True
-        #     reward = - 10000
-        #     state_of_delivery = DeliveryState.NOT_DELIVERED
-        #     print("BOX WAS NOT DELIVERED until 2 hours after deadline")
-        # # if box is delivered to final hub in time
-        # if (self.position == self.final_hub and self.time <= self.deadline):
-        #     print(f"DELIVERED IN TIME AFTER {self.count_actions} ACTIONS (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown}")
-        #     reward = 10000
-        #     self.done = True
-        #     state_of_delivery = DeliveryState.DELIVERED_ON_TIME
-        # # if box is delivered to final hub with delay
-        # elif(self.position == self.final_hub and (self.time-self.deadline).total_seconds()/60 < 120): #self.time > self.deadline):
-        #     overtime = self.time - self.deadline
-        #     overtime = round(overtime.total_seconds() / 60)
-        #     print(f"DELIVERED AFTER {self.count_actions} ACTIONS (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown} WITH DELAY: {overtime}")
-        #     reward = 10000 - overtime
-        #     self.done = True
-        #     state_of_delivery = DeliveryState.DELIVERED_WITH_DELAY
-        # # if box is not delivered to final hub
-        # elif(self.done==False):
-        #     # reward = distance_gained / 100 + old_distinction[action]*1000
-        #     # print("book available",self.allow_bookown)
-        #     # print("Distinction action available",old_distinction[action])
-        #     if(self.allow_bookown == 0 and old_distinction[action] == -1 ):
-        #          reward = old_distinction[action]*100000
-        #     elif(self.allow_bookown == 1 and old_distinction[action] == -1):
-        #         reward = (distance_gained/100) * 1000
-        #     else:
-        #         reward = (distance_gained/100) * 1000 + old_distinction[action]*1000
-        #     # print(f"INTERMEDIATE STEP ACTIONS: (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown}")
-        #     state_of_delivery = DeliveryState.IN_DELIVERY
-        #     #done = False
-
-        #print(self.old_position, "->", action, reward)
-        print(f"Reward: {reward}")
-        print(f"Action: {action}")
-        #print(f"Old Distinction: {old_distinction}")
-        #print(f"Rides Mask for Action {action}: {self.shared_rides_mask}")
-
-        print("Done:", self.done)
+        print(self.old_position, "->", action, action_type, "D:", distance_gained, "R:", reward)
 
         return reward, self.done, state_of_delivery
 
@@ -588,7 +576,8 @@ class GraphEnv(gym.Env):
         return action < self.n_hubs
 
     def read_config(self):
-        filepath = os.path.join(ROOT_DIR,'env_config.pkl')
+        #filepath = os.path.join(ROOT_DIR,'env_config.pkl')
+        filepath = "env_config.pkl"
         with open(filepath,'rb') as f:
             loaded_dict = pickle.load(f)
         self.env_config = loaded_dict
@@ -602,45 +591,167 @@ class GraphEnv(gym.Env):
         Returns:
             _type_: _description_
         """
-        current_pos_x = self.manhattan_graph.get_node_by_index(self.position)['x']
-        current_pos_y = self.manhattan_graph.get_node_by_index(self.position)['y']
-        final_hub_x = self.manhattan_graph.get_node_by_index(self.final_hub)['x']
-        final_hub_y = self.manhattan_graph.get_node_by_index(self.final_hub)['y']
-        start_hub_x = self.manhattan_graph.get_node_by_index(self.start_hub)['x']
-        start_hub_y = self.manhattan_graph.get_node_by_index(self.start_hub)['y']
 
-        # Create plot
-        plot = ox.plot_graph_folium(self.manhattan_graph.inner_graph,fit_bounds=True, weight=2, color="#333333")
+        shared_rides = list()
+        shared_ids = list()
+       
+        for i, trip in enumerate(self.availableTrips()):
+            shared_ids.append(trip['target_hub'])
+          
+        #print('Shared: ', shared_ids)
+
+        all_hubs = self.hubs
+        book_own_ids = list(set(all_hubs) - set(shared_ids))
+        #print('Book owns: ', book_own_ids)
+           
+        position = self.manhattan_graph.get_nodeid_by_index(self.position)
+        final = self.manhattan_graph.get_nodeid_by_index(self.final_hub)
+        start = self.manhattan_graph.get_nodeid_by_index(self.start_hub)
+
+        node_sizes = list()
+        actions = []
+        for n in self.manhattan_graph.nodes():
+            if n == position:
+                actions.append('position')
+                node_sizes.append(120)
+            else:
+                if n == final:
+                    actions.append('final')
+                    node_sizes.append(120)
+                else:
+                    if n == start:
+                        actions.append('start')
+                        node_sizes.append(120)
+                    else:
+                        if n in shared_ids:
+                            actions.append('shared')
+                            node_sizes.append(120)
+                        else:
+                            if n in book_own_ids:
+                                actions.append('book')
+                                node_sizes.append(120)
+                            else:
+                                #colors.append('w')
+                                node_sizes.append(0)
+        df = pd.read_csv("ines-autonomous-dispatching/data/hubs/longlist.csv")
+        df['actions']=actions
+
+        graph = self.manhattan_graph.inner_graph
+
+        px.set_mapbox_access_token(open("mapbox_token").read())
+        #df = px.data.carshare()
+        fig = px.scatter_mapbox(df, lat="latitude", lon="longitude", hover_name ="id", color="actions", #size="car_hours",
+                  color_continuous_scale=px.colors.cyclical.IceFire, size_max=15, zoom=10)  
+        fig.show()
+
+        #fig, ax = ox.plot_graph(graph, figsize=(25,25), bgcolor='#89cff0',node_color=colors, node_size = node_sizes, edge_linewidth=1, show=False, save=True, filepath='try1.png')
+        
+        # nx.draw_circular(graph, with_labels = True)
+        # plt.savefig("nx2.png")
+        # gdf_nodes = ox.graph_to_gdfs(graph, edges=False, node_geometry=False)[["x", "y"]]
+        # west, south = gdf_nodes.min()
+        # east, north = gdf_nodes.max()
+
+        
+
+        # fig = px.scatter_geo(df,lat='latitude',lon='longitude', hover_name="id")
+        # fig.update_layout(title = 'World map', title_x=0.5)
+        # fig.show()
+
+        # print('west', west)
+        # print('east', east)
+        # print('south', south)
+        # print('north', north)
+
+        # fig = plt.figure(figsize=(8, 8))
+        # m = Basemap(projection='lcc', resolution=None,
+        #             width=8E6, height=8E6, 
+        #             lat_0=south, lon_0=west)
+        # m.etopo(scale=0.5, alpha=0.5)
+
+        # Map (long, lat) to (x, y) for plotting
+        
+
+        # rx = -486.913544
+        # ry = 188.544021
+
+        # rrx = 0.1517852
+        # rry = 0.2168104
+
+        # total_vertical = abs(north - south) 
+        # total_horizontal = abs(east - west)
+
+        # upper_mapx = 2712
+        # upper_mapy = 5662
+
+        # img = Image.open('try1.png')
+        # d1 = ImageDraw.Draw(img)
+
+        # for hub in self.hubs:
+        #     print('Hub:', hub)
+        #     index = self.manhattan_graph.get_hub_index_by_nodeid(hub)
+        #     hub_x = self.manhattan_graph.get_node_by_index(index)['x']
+        #     hub_y = self.manhattan_graph.get_node_by_index(index)['y']
+        #     print(hub_x, hub_y)
+            # x, y = m(hub_x, hub_y)
+            # plt.plot(x, y, 'ok', markersize=5)
+            # plt.text(x, y, str(index), fontsize=12)
+            #ax.annotate(str(index), (hub_x, hub_y))
+
+            # x1 = hub_x/rx
+            # y1 = hub_y/ry
+
+            # print(x1, y1)
+
+            # final_x = x1/rrx
+            # final_y = y1/rry
+
+            #r= 6.371
 
 
-        #Place markers for the random hubs
-        for hub in self.hubs:
-            hub_node = self.manhattan_graph.get_node_by_nodeid(hub)
-            hub_pos_x = hub_node['x']
-            hub_pos_y = hub_node['y']
-            popup = "HUB %d" % (hub)
-            folium.Marker(location=[hub_pos_y, hub_pos_x],popup=popup, icon=folium.Icon(color='orange', prefix='fa', icon='cube')).add_to(plot)
+            # final_x = -(hub_x)/total_horizontal * upper_mapx/1000
+            # final_y = (hub_y)/total_vertical * upper_mapy/1000
 
-        # Place markers for start, final and current position
-        folium.Marker(location=[final_hub_y, final_hub_x], icon=folium.Icon(color='red', prefix='fa', icon='flag-checkered')).add_to(plot)
-        folium.Marker(location=[start_hub_y, start_hub_x], popup = f"Pickup time: {self.pickup_time.strftime('%m/%d/%Y, %H:%M:%S')}", icon=folium.Icon(color='lightblue', prefix='fa', icon='caret-right')).add_to(plot)
-        folium.Marker(location=[current_pos_y, current_pos_x], popup = f"Current time: {self.time.strftime('%m/%d/%Y, %H:%M:%S')}", icon=folium.Icon(color='lightgreen', prefix='fa',icon='cube')).add_to(plot)
+            # final_x = -r * hub_x * math.cos(total_vertical/2)*10
+            # final_y = r * hub_y*10
+
+            #final_x = hub_x/west + 1
+            #final_y = hub_y/north
 
 
-        if(visualize_actionspace):
-            for i, trip in enumerate(self.availableTrips()):
-                target_hub=self.manhattan_graph.get_node_by_nodeid(trip['target_hub'])
-                target_node_x = target_hub['x']
-                target_node_y = target_hub['y']
-                popup = "%s: go to node %d" % (i, trip['target_hub'])
-                folium.Marker(location=[target_node_y, target_node_x], popup = popup, tooltip=str(i)).add_to(plot)
-                ox.plot_route_folium(G=self.manhattan_graph.inner_graph,route=trip['route'],route_map=plot)
-        # Plot
-        # pos_to_final = nx.shortest_path(self.manhattan_graph.inner_graph, self.manhattan_graph.get_nodeid_by_index(self.start_hub), self.manhattan_graph.get_nodeid_by_index(self.final_hub), weight="travel_time")
-        # if(not len(pos_to_final)< 2):
+            # final_x = hub_x + west
+            # final_y = hub_y - south
 
-        return plot
+            #print(final_x, final_y)
+            #d1.text((final_x, final_y), str(index), fill=(255, 0, 0))
+            
+           
+            # d1.text((28, 36), "Hello, TutorialsPoint!", fill=(255, 0, 0))
+            # d1.text((0, 0), "Hello, 0", fill=(255, 0, 0))
+            # d1.text((2000, 5000), "AAAAaaaaaa", fill=(255, 0, 0))
 
+        #img.show()
+        #img.save("try1.png")
+            #fig.text(final_x, final_y, str(index), style = 'normal', fontsize = 10, color = "green")
+        
+        # fig.text(1, 1, '1,1', style = 'normal', fontsize = 10, color = "green")
+        # fig.text(0, 0, '0,0', style = 'normal', fontsize = 10, color = "green")
+
+        # fig.text(0.5, 0.5, '0.5,0.5', style = 'normal', fontsize = 10, color = "green")
+
+
+        # current_pos_y = self.manhattan_graph.get_node_by_index(self.position)['y']
+        # print("Legend HUBS:")
+        # print(Fore.RED + 'RED - SHARED')
+        # print(Fore.CYAN + 'TURQUISE - BOOK OWN')
+        # print(Fore.MAGENTA + 'LILA - CURRENT')
+        # print(Fore.GREEN + 'GREEN - START')
+        # print(Fore.BLUE + 'BLUE - FINAL')
+        # fig.show()
+        # plt.show()
+
+class ActionType:
+    WAIT,SHARE,OWN = range(3)
 class DeliveryState:
     DELIVERED_ON_TIME, DELIVERED_WITH_DELAY, NOT_DELIVERED, IN_DELIVERY = range(4)
 
@@ -670,10 +781,8 @@ class CustomCallbacks(DefaultCallbacks):
         **kwargs,
     ):
         """Callback run when a new trainer instance has finished setup.
-
         This method gets called at the end of Trainer.setup() after all
         the initialization is done, and before actually training starts.
-
         Args:
             trainer: Reference to the trainer instance.
             kwargs: Forward compatibility placeholder.
