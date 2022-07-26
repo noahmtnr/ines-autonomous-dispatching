@@ -1,4 +1,5 @@
 from calendar import c
+from datetime import datetime, timedelta
 from distutils.log import debug
 import os 
 os.environ['HDF5_DISABLE_VERSION_CHECK']='2'
@@ -8,6 +9,7 @@ from dash import dcc, Input, Output
 import plotly.express as px
 import plotly.graph_objects as go
 import pandas as pd
+#from flask_caching import Cache
 #import dash_bootstrap_components as dbc
 import sys
 import ast
@@ -24,7 +26,10 @@ global number_wait
 global number_book
 global number_share
 
+app = dash.Dash(__name__,  suppress_callback_exceptions = True)
 
+hubs = env.hubs
+manhattan_graph = env.manhattan_graph
 number_wait = 0
 number_book = 0
 number_share = 0
@@ -68,10 +73,20 @@ image_path = 'assets/ines_image.jpeg'
 def create_map_from_df(df_hubs, df_route=pd.DataFrame(), test_id=0):
 
     px.set_mapbox_access_token(open("Manhattan_Graph_Environment/mapbox_token").read())
-    fig = px.scatter_mapbox(df_hubs, lat="latitude", lon="longitude", hover_name ="id", color="action", #size="car_hours",
+    if not 'Rem. Distance' in df_hubs.columns:
+        fig = px.scatter_mapbox(df_hubs, lat="latitude", lon="longitude", hover_name ="id", color="action", color_discrete_sequence=['Red', 'Navy', 'LightPink','OliveDrab','LightSlateGrey', 'LightSkyBlue'], category_orders={'action': ['start', 'final','position','shared','book','hub']},#size="car_hours",
+                        color_continuous_scale=px.colors.cyclical.IceFire, size_max=30, zoom=11)
+    else:
+        fig = px.scatter_mapbox(df_hubs, lat="latitude", lon="longitude", hover_name ="id", hover_data = ['Rem. Distance'], color="action", color_discrete_sequence=['Red', 'Navy', 'LightPink','Gainsboro','LightSlateGrey', 'LightSkyBlue'], category_orders={'action': ['start', 'final','position','shared','book','hub']},#size="car_hours",
                     color_continuous_scale=px.colors.cyclical.IceFire, size_max=30, zoom=11)
-
+    line_colors={
+        -1.0:'Green',
+        1.0:'Red',
+        0.0:'Blue'
+    }
     if(df_route.empty == False):
+        print(df_route)
+        # Split up df into share & book own and fig.add_trace individually with color specified individually 
         fig.add_trace(go.Scattermapbox(
             mode = "lines",
             # Change comment of following 2 lines if you want to show exact path of route
@@ -79,13 +94,15 @@ def create_map_from_df(df_hubs, df_route=pd.DataFrame(), test_id=0):
             lat = [df_route['latitude'][i] for i in range(len(df_route['latitude']))],
             #lon = [df_hubs['longitude'][i] for i in df_test['Hubs'][test_id]],
             #lat = [df_hubs['latitude'][i] for i in df_test['Hubs'][test_id]],
-            marker = {'size': 10},
+            marker=go.scattermapbox.Marker(
+                size= 10,
+                color=[line_colors[df_route['action_type'][i]] for i in range(len(df_route['action_type']))],
+            ),
             hovertext  = [manhattan_graph.get_hub_index_by_nodeid(n) for n in df_route['node_id']]
             ))
     return fig
 
 
-# TODO: change initial values to 0
 def create_piechart(wait=0, share=0, book=0):
     colors = ['LightSteelBlue', 'Gainsboro', 'LightSlateGrey']
     labels = ['wait','share','book']
@@ -97,17 +114,16 @@ def create_piechart(wait=0, share=0, book=0):
 
     return fig
 
-app = dash.Dash(__name__,  suppress_callback_exceptions = True)
 
 
 #to be modified (calculate nodes between hubs with step() function)
 
 app.layout = html.Div([
     html.Div(
-        html.H1('Hitchhike Dashboard'), style={'width': '49%', 'display': 'inline-block'}),
+        html.Img(src=image_path, style={'width': '300px', 'display': 'inline-block', 'vertical-align': 'top', 'height': 'auto'}), id='image', style={'width':'300px','float':'right'}),
     html.Div(
-        html.Img(src=image_path, style={'width': '60px', 'display': 'inline-block', 'vertical-align': 'top', 'height': '30px'}), id='image'),
-    # html.Div(
+        html.H1('Hitchhike Dashboard'), style={'width': '49%', 'display': 'inline-block'}),
+     # html.Div(
     dcc.Tabs(id="tabs-example", value='tab-1-example', children=[
         dcc.Tab(label='Static Visualization', value='tab-1-example', className = 'tab-label'),
         dcc.Tab(label='Interactive Visualization', value='tab-2-example', className = 'tab-label'),
@@ -131,7 +147,7 @@ html.Div(children=[
     ], className='left-dashboard', id='map-1'),
 
     html.Div(children=[
-        html.Div(dcc.Dropdown(['Test 1', 'Test 2', 'Test 3'], placeholder="Select an order", id='dropdown1'), id='dd-output-container'),
+        html.Div(dcc.Dropdown(['Test 1', 'Test 2', 'Test 3', 'Test 4'], placeholder="Select an order", id='dropdown1'), id='dd-output-container'),
         #html.Div(id='dd-output-container')),
 
         html.H4('CURRENT ORDER: ', id='destination-hub-1'),
@@ -155,23 +171,23 @@ html.Div(children=[
     ], className='left-dashboard', id='map-2'),
 
     html.Div(children=[
-        html.Div(dcc.Dropdown(['Test 1', 'Test 2', 'Test 3'], placeholder="Select an order", id='dropdown2')),
+        html.Div(dcc.Dropdown(['Test 1', 'Test 2', 'Test 3', 'Test 4'], placeholder="Select an order", id='dropdown2')),
 
         html.H4('CURRENT ORDER: ', id='destination-hub-2'),
         html.H4('Calculated route: ',  id='calc-route-2'),
+        html.Div(dcc.Input(id='next-hub-input', type='number', debounce=True, placeholder="Next Hub")),
+        html.H4('Current Time: ', id='current-time'),
                
         html.H4('Actions taken:', id= 'actions-taken-titel'),
         html.Div(dcc.Graph(figure=create_piechart(), id='graph_actions2'), id='div-piechart2'),
-        # TODO: delete following 3 lines and show upper line
-        # html.Div(className = 'grid-container', id='wait-2'),
-        # html.Div(className = 'grid-container', id='share-2'),
-        # html.Div(className = 'grid-container', id='book-2'),
         
-        html.Div( children=[
-            html.Div(html.H3('Step by Step Analysis: '), id = 'titel-analysis'),
-            html.Div([
-        "Next step HUB: ", dcc.Input(id='next-hub-input', value= None, type='number', debounce=True),
-    ], className='right-input')], id = 'step-by-step'), 
+        
+    #     html.Div( children=[
+    #         html.Div(html.H3('Step by Step Analysis: '), id = 'titel-analysis'),
+    #         html.Div([
+    #     "Next step HUB: ", dcc.Input(id='next-hub-input', value= None, type='number', debounce=True),
+    # ], className='right-input')], id = 'step-by-step'), 
+    
     html.H4('Available Shared Rides:', id = 'available-shared'),  
     html.Div(id='shared'),   
 
@@ -206,6 +222,9 @@ def start_order_1(value):
         else:
             if(value == 'Test 3'):
                 test_id = 2
+            else:
+                if(value == 'Test 4'):
+                    test_id = 3
 
     start_hub = df_test['Hubs'][test_id][0] #list_actions[0] 
     final_hub = df_test['Hubs'][test_id][-1] #list_actions[-1]
@@ -229,14 +248,32 @@ def start_order_1(value):
     print("Wait:",nr_wait_)
     print("Share:",nr_shared_)
     print("Book:",nr_book_)
-    for i in range(len(df_test['Hubs'][test_id])):
-        route_string += str(df_test['Hubs'][test_id][i]) + ' ->'
+    counter = 1
+    for i in range(1,len(df_test['Hubs'][test_id])):
+        if(df_test['Hubs'][test_id][i] == (df_test['Hubs'][test_id][i-1])):
+            counter +=1
+        else:
+            if(counter > 1):
+                route_string += str(df_test['Hubs'][test_id][i-1]) + '('+ str(counter)+')'+ ' ->'
+                counter = 1
+            else:
+                if(counter == 1):
+                     route_string += str(df_test['Hubs'][test_id][i-1]) + ' ->'
+    
+    if(counter > 1):
+        route_string += str(df_test['Hubs'][test_id][i]) + '('+ str(counter)+')'+ ' ->'
+        counter = 1
+    else:
+        if(counter == 1):
+                route_string += str(df_test['Hubs'][test_id][i]) + ' ->'
+
     route_string = route_string[0:-3]
 
     df_route = pd.DataFrame()
     df_route['longitude'] = [0.0 for i in range(len(df_test['Nodes'][test_id]))]
     df_route['latitude'] = [0.0 for i in range(len(df_test['Nodes'][test_id]))]
     df_route['node_id'] = [0 for i in range (len(df_test['Nodes'][test_id]))]
+    df_route['action_type'] = [1.0 for i in range (len(df_test['Nodes'][test_id]))]
 
     for i in range(len(df_test['Nodes'][test_id])):
         results = manhattan_graph.get_coordinates_of_node(df_test['Nodes'][test_id][i])
@@ -244,9 +281,20 @@ def start_order_1(value):
         df_route['longitude'][i] = results[0]
         df_route['latitude'][i] = results[1]
         df_route['node_id'][i] = df_test['Nodes'][test_id][i]
-    #print(df_route)
+    #{} -> {}'.format(start_hub, final_hub)
+    pickup_time = df_test['Pickup Time'][test_id]
+    pickup_time = datetime.strptime(pickup_time, '%Y-%m-%d %H:%M:%S')
+    deadline = pickup_time
+    step_duration = 86400 # one day
+    deadline += timedelta(seconds=step_duration)
 
-    return html.Div('CURRENT ORDER: {} -> {}'.format(start_hub, final_hub)), dcc.Graph( figure=create_map_from_df(df_hubs, df_route, test_id),id='my-graph'), route_string, dcc.Graph(figure=create_piechart(nr_wait_,nr_shared_,nr_book_), id='graph_actions')
+    return html.Div([
+        html.P("Current Order:"),
+        html.P(f"Start Hub:{start_hub}"), 
+        html.P(f"Final Hub:{final_hub}"),
+        html.P(f"Pickup Time: %s-%s-%s %s:%s" % (pickup_time.year, pickup_time.month, pickup_time.day, pickup_time.hour, pickup_time.minute)),
+        html.P(f"Deadline: %s-%s-%s %s:%s" % (deadline.year, deadline.month, deadline.day, deadline.hour, deadline.minute)),
+        ]), dcc.Graph(figure=create_map_from_df(df_hubs, df_route, test_id),id='my-graph'), route_string, dcc.Graph(figure=create_piechart(nr_wait_,nr_shared_,nr_book_), id='graph_actions')
 
 
 @app.callback(
@@ -288,6 +336,9 @@ def start_order_2(value):
         else:
             if(value == 'Test 3'):
                 test_id = 2
+            else:
+                if(value == 'Test 4'):
+                    test_id = 3
 
 
     start_hub = df_test['Hubs'][test_id][0] #list_actions[0] 
@@ -325,20 +376,53 @@ def start_order_2(value):
     #     if i == 'book':
     #         nr_book+=1
 
-    for i in range(len(df_test['Hubs'][test_id])):
-        route_string += str(df_test['Hubs'][test_id][i]) + ' ->'
+    counter = 1
+    for i in range(1,len(df_test['Hubs'][test_id])):
+        if(df_test['Hubs'][test_id][i] == (df_test['Hubs'][test_id][i-1])):
+            counter +=1
+        else:
+            if(counter > 1):
+                route_string += str(df_test['Hubs'][test_id][i-1]) + '('+ str(counter)+')'+ ' ->'
+                counter = 1
+            else:
+                if(counter == 1):
+                     route_string += str(df_test['Hubs'][test_id][i-1]) + ' ->'
+    
+    if(counter > 1):
+        route_string += str(df_test['Hubs'][test_id][i]) + '('+ str(counter)+')'+ ' ->'
+        counter = 1
+    else:
+        if(counter == 1):
+                route_string += str(df_test['Hubs'][test_id][i]) + ' ->'
     route_string = route_string[0:-3]
 
     #this does not work right, it causes a Wait in start position
     #next_step(start_hub, start_dynamic)
 
-    return html.Div('CURRENT ORDER: {} -> {}'.format(start_hub,final_hub)), route_string
+    pickup_time = df_test['Pickup Time'][test_id]
+    pickup_time = datetime.strptime(pickup_time, '%Y-%m-%d %H:%M:%S')
+    deadline = pickup_time
+    step_duration = 86400 # one day
+    deadline += timedelta(seconds=step_duration)
+
+    #return html.Div('CURRENT ORDER: {} -> {}'.format(start_hub,final_hub)), route_string
+    return html.Div([
+        html.P("Current Order:"),
+        html.P(f"Start Hub: {start_hub}"), 
+        html.P(f"Final Hub: {final_hub}"),
+        # html.P(f"Pickup Time: {pickup_time}"),
+        # html.P(f"Deadline: {deadline}"),
+        html.P(f"Pickup Time: %s-%s-%s %s:%s" % (pickup_time.year, pickup_time.month, pickup_time.day, pickup_time.hour, pickup_time.minute)),
+        html.P(f"Deadline: %s-%s-%s %s:%s" % (deadline.year, deadline.month, deadline.day, deadline.hour, deadline.minute)),
+        ]), route_string
 
 @app.callback(
     Output(component_id='map-2', component_property='children'),
     #Output(component_id='shared', component_property='children'),
-    # TODO: show line below
     Output(component_id='div-piechart2', component_property='children'),
+    Output('current-time', 'children'),
+    #Output('step-by-step', 'children'),
+    Output('next-hub-input', 'value'),
     Input(component_id='next-hub-input', component_property='n_submit'),
     Input(component_id='next-hub-input', component_property='value'),
     prevent_initial_call=True
@@ -353,7 +437,11 @@ def next_step(submit, input_value, start_dynamic=True):
     state, reward, done, info = env.step(input_value)
     print('Trips....',env.available_actions)
 
-    rem_distance = state['remaining_distance']
+    #rem_distance = state['remaining_distance']
+    action_type = env.old_state['distinction'][input_value]
+    print(action_type)
+
+    current_time = info['timestamp']
 
     taken_steps.extend(info['route'])
     print('Taken steps', taken_steps)
@@ -362,6 +450,7 @@ def next_step(submit, input_value, start_dynamic=True):
     df_route['longitude'] = [0.0 for i in range(len(taken_steps))]
     df_route['latitude'] = [0.0 for i in range(len(taken_steps))]
     df_route['node_id'] = [0 for i in range(len(taken_steps))]
+    df_route['action_type'] = [action_type for i in range(len(taken_steps))]
 
     for i in range(len(taken_steps)):
         results = manhattan_graph.get_coordinates_of_node(taken_steps[i])
@@ -376,6 +465,8 @@ def next_step(submit, input_value, start_dynamic=True):
         shared_ids.append(trip['target_hub'])
         
     all_hubs = env.hubs
+
+    #print(all_hubs)
 
     book_own_ids = list(set(all_hubs) - set(shared_ids))
     
@@ -404,6 +495,8 @@ def next_step(submit, input_value, start_dynamic=True):
     current_action_string = info['action'] # 'Wait', 'Share' or 'Book'
     print('Info actions: ', info['action'])
     df_hubs['action'] = actions
+    rem_distance = env.learn_graph.adjacency_matrix('remaining_distance')[env.position]
+    df_hubs['Rem. Distance'] = rem_distance
     #print(f"Hubs DF: {df_hubs}")
 
     ###
@@ -435,8 +528,7 @@ def next_step(submit, input_value, start_dynamic=True):
 
     #start_dynamic = False
 
-    return dcc.Graph(figure=create_map_from_df(df_hubs, df_route, test_id), id='my-graph'), dcc.Graph(figure=create_piechart(number_wait,number_share,number_book), id='graph_actions2')
-
+    return dcc.Graph(figure=create_map_from_df(df_hubs, df_route, test_id), id='my-graph'), dcc.Graph(figure=create_piechart(number_wait,number_share,number_book), id='graph_actions2'), html.P("Current time: %s-%s-%s %s:%s" % (current_time.year, current_time.month, current_time.day, current_time.hour, current_time.minute)), ''
 
 
 if __name__ == '__main__':
