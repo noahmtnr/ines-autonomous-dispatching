@@ -23,7 +23,7 @@ sys.path.append(os.path.join(ROOT_DIR, "Manhattan_Graph_Environment", "gym_graph
 
 # class for Rainbow Agent
 class RainbowAgent:
-    def __init__(self, ):
+    def __init__(self, env):
         sys.path.insert(0, "")
         # Set trainer configuration
         self.trainer_config = DEFAULT_CONFIG.copy()
@@ -36,7 +36,7 @@ class RainbowAgent:
         self.trainer_config["num_atoms"] = 70  # [more than 1] //was 51,20
         self.trainer_config["v_min"] = -210000
         self.trainer_config["v_max"] = 210000  # (set v_min and v_max according to your expected range of returns).
-
+        self.env = env
         # here from trainRainbow die config
         # self.trainer_config["train_batch_size"] = 400
         # self.trainer_config["framework"] = "torch"
@@ -53,7 +53,7 @@ class RainbowAgent:
 
         # Restore the Trainer
         rainbow_trainer.restore(file_name)
-        env = gym.make('graphworld-v0')
+        env = self.env
         state = env.reset()
         print("reset done")
 

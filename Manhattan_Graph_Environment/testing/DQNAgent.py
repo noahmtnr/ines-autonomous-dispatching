@@ -23,7 +23,7 @@ sys.path.append(os.path.join(ROOT_DIR, "Manhattan_Graph_Environment", "gym_graph
 
 # class for DQN Agent
 class DQNAgent:
-    def __init__(self, ):
+    def __init__(self, env=GraphEnv):
         sys.path.insert(0,"")
         #Set trainer configuration
         self.trainer_config = DEFAULT_CONFIG.copy()
@@ -31,23 +31,23 @@ class DQNAgent:
         self.trainer_config["train_batch_size"] = 400
         self.trainer_config["gamma"] = 0.95
         self.trainer_config["n_step"] = 10
+        self.env = env
         # self.trainer_config["framework"] = "torch"
 
     def run_one_episode(self,reward_list,env_config):
         config={"use_config":True}
         
         # Initialize trainer
-        dqn_trainer=DQNTrainer(self.trainer_config,env=GraphEnv)
+        dqn_trainer=DQNTrainer(self.trainer_config,self.env)
         
         mode={ "env-name":"graphworld-v0",
         "env":GraphEnv,
         "iterations":1,
-
         }
         # file_name="tmp/rainbow/graphworld\checkpoint_000001\checkpoint-1"  
         file_name = os.path.join(ROOT_DIR, 'tmp', 'dqn', 'graphworld','checkpoint_000001','checkpoint-1')
         dqn_trainer.restore(file_name)
-        env = gym.make(mode["env-name"])
+        env = self.env
         state = env.reset()
         print("reset done")
 

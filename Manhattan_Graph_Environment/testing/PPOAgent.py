@@ -25,16 +25,17 @@ sys.path.append(os.path.join(ROOT_DIR, "Manhattan_Graph_Environment", "gym_graph
 
 # class for PPO Agent
 class PPOAgent:
-    def __init__(self, ):
+    def __init__(self, env):
         sys.path.insert(0,"")
         #Set trainer configuration
         self.trainer_config = DEFAULT_CONFIG.copy()
         # self.trainer_config["train_batch_size"] = 400
         # self.trainer_config["framework"] = "torch"
+        self.env = env
 
     def run_one_episode (self,reward_list,env_config):   
         # Initialize trainer
-        ppo_trainer=PPOTrainer(self.trainer_config,env=GraphEnv)
+        ppo_trainer=PPOTrainer(self.trainer_config,env=self.env)
         mode={ "env-name":"graphworld-v0",
         "env":GraphEnv,
         "iterations":1,
@@ -44,7 +45,7 @@ class PPOAgent:
 
         #Restore the Trainer
         ppo_trainer.restore(file_name)
-        env = gym.make(mode["env-name"])
+        env = self.env
         state = env.reset()
         print("reset done")
 

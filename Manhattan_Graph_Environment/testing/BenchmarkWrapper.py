@@ -35,11 +35,13 @@ import warnings
 
 class BenchmarkWrapper:
 
-    def __init__(self, agent_name=None):
+    def __init__(self, agent_name=None, env=GraphEnv):
         if (agent_name != None):
             self.name = agent_name
         else:
             self.name = sys.argv[2]
+        self.env = env
+        self.manhattan_graph = self.env.manhattan_graph
 
     # noinspection PyMethodMayBeStatic
     def file_read(self):
@@ -65,9 +67,8 @@ class BenchmarkWrapper:
     def proceed_order(self, order):
         print(order)
 
-        manhattan_graph = ManhattanGraph(filename='simple', num_hubs=70)
-        pick_up_hub_index = ManhattanGraph.get_hub_index_by_node_index(manhattan_graph, order.get('pickup_node'))
-        delivery_hub_index = ManhattanGraph.get_hub_index_by_node_index(manhattan_graph, order.get('delivery_node'))
+        pick_up_hub_index = ManhattanGraph.get_hub_index_by_node_index(self.manhattan_graph, order.get('pickup_node'))
+        delivery_hub_index = ManhattanGraph.get_hub_index_by_node_index(self.manhattan_graph, order.get('delivery_node'))
         # print(pick_up_hub_index,delivery_hub_index)
         env_config = {'pickup_hub_index': pick_up_hub_index,
                       'delivery_hub_index': delivery_hub_index,
@@ -78,36 +79,34 @@ class BenchmarkWrapper:
         with open('env_config.pkl', 'wb') as f:
             pickle.dump(env_config, f)
 
-        if self.name != "DQN" or self.name != "PPO" or self.name != "Rainbow":
-            env = GraphEnv(use_config=True)
 
         reward_list = []
 
         for i in range(1):
             if self.name == "random":
                 print("random")
-                reward_list = RandomAgent.run_one_episode(env, reward_list, env_config)
+                reward_list = RandomAgent.run_one_episode(self.env, reward_list, env_config)
             elif self.name == "cost":
                 print("cost")
-                reward_list = CostAgent.run_one_episode(env, reward_list, env_config)
+                reward_list = CostAgent.run_one_episode(self.env, reward_list, env_config)
             elif self.name == "DQN":
                 print("DQN")
-                dqn_Agent = DQNAgent()
+                dqn_Agent = DQNAgent(self.env)
                 reward_list = dqn_Agent.run_one_episode(reward_list,env_config)
             elif self.name == "PPO":
                 print("PPO")
-                ppo_Agent = PPOAgent()
+                ppo_Agent = PPOAgent(self.env)
                 reward_list = ppo_Agent.run_one_episode(reward_list,env_config)
             elif self.name == "Rainbow":
                 print("Rainbow")
-                Rainbow_Agent = RainbowAgent()
+                Rainbow_Agent = RainbowAgent(self.env)
                 reward_list = Rainbow_Agent.run_one_episode(reward_list, env_config)
             elif self.name == "Shares":
                 print("Shares")
-                reward_list = SharesAgent.run_one_episode(env,reward_list, env_config)
+                reward_list = SharesAgent.run_one_episode(self.env,reward_list, env_config)
             elif self.name == "Bookown":
                 print("Bookown")
-                reward_list = BookownAgent.run_one_episode(env, reward_list, env_config)
+                reward_list = BookownAgent.run_one_episode(self.env, reward_list, env_config)
         return reward_list
 
 """
