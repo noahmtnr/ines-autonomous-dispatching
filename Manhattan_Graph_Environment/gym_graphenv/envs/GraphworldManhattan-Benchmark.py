@@ -91,7 +91,7 @@ class GraphEnv(gym.Env):
 
         self.state = None
         self.state_of_delivery = DeliveryState.IN_DELIVERY
-        self.allow_bookown = 0
+        #self.allow_bookown = 0
         self.route_travel_distance=0
 
 
@@ -104,7 +104,7 @@ class GraphEnv(gym.Env):
             'current_hub': gym.spaces.Box(low=0, high=1, shape=(self.n_hubs,), dtype=np.float64),
             'final_hub': gym.spaces.Box(low=0, high=1, shape=(self.n_hubs,), dtype=np.float64),
             'distinction': gym.spaces.Box(low=np.zeros(self.n_hubs)-1, high=np.zeros(self.n_hubs)+1, shape=(self.n_hubs,), dtype=np.float64),
-            'allow_bookown': gym.spaces.Discrete(2)
+            #'allow_bookown': gym.spaces.Discrete(2)
         
         })
         self.rem_distance_values=[]
@@ -225,10 +225,10 @@ class GraphEnv(gym.Env):
         self.has_waited=False
         reward=0
 
-        if((self.deadline - self.time).total_seconds()/60 <= 120):
-            self.allow_bookown = 1
-        else:
-            self.allow_bookown = 0
+        # if((self.deadline - self.time).total_seconds()/60 <= 120):
+        #     self.allow_bookown = 1
+        # else:
+        #     self.allow_bookown = 0
 
       
         # new metrics for shares and bookowns
@@ -246,7 +246,7 @@ class GraphEnv(gym.Env):
             'current_hub' : self.one_hot(self.position).astype(np.float64),
             'final_hub' : self.one_hot(self.final_hub).astype(np.float64),
             'distinction' : self.learn_graph.adjacency_matrix('distinction')[self.position].astype(np.float64),
-            'allow_bookown': self.allow_bookown,
+            #'allow_bookown': self.allow_bookown,
             }
         self.rem_distance_values.extend(self.learn_graph.adjacency_matrix('remaining_distance')[self.position].astype(np.float64))
 
@@ -270,12 +270,12 @@ class GraphEnv(gym.Env):
         #self.done = False
 
         # if agent is in time window 2 hours before deadline, we just move him to the final hub
-        if((self.deadline - self.time).total_seconds()/60 <= 120):
-            self.allow_bookown = 1
-            action = self.final_hub
-            print("Force Manual Delivery")
-        else:
-            self.allow_bookown = 0
+        # if((self.deadline - self.time).total_seconds()/60 <= 120):
+        #     self.allow_bookown = 1
+        #     action = self.final_hub
+        #     print("Force Manual Delivery")
+        # else:
+        #     self.allow_bookown = 0
             
 
         # determine whether shared ride was useful (= whether remaining distance was reduced)
@@ -392,7 +392,7 @@ class GraphEnv(gym.Env):
             'current_hub' : self.one_hot(self.position).astype(np.float64),
             'final_hub' : self.one_hot(self.final_hub).astype(np.float64),
             'distinction' : self.learn_graph.adjacency_matrix('distinction')[self.position].astype(np.float64),
-            'allow_bookown': self.allow_bookown,
+            #'allow_bookown': self.allow_bookown,
             }
 
         # print("New State: ")        
@@ -458,26 +458,20 @@ class GraphEnv(gym.Env):
         if(self.position == self.final_hub):
             self.done = True
         # came to final hub 
-            if((self.deadline-self.time).total_seconds()/60 >= 120):
+            if((self.deadline-self.time).total_seconds()/60 >= 0):
                 # in time
                 state_of_delivery = DeliveryState.DELIVERED_ON_TIME
                 print(f"DELIVERED IN TIME AFTER {self.count_actions} ACTIONS (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown})")
                 if(action_type == ActionType.OWN):
-                    if(self.allow_bookown == 0):
-                        # strong punishment for bookown before 2h window before deadline
-                        reward = old_distinction[action]*100000
-                        reward += 10000
-                    else:
-                        reward = 0
+                    reward = 10000
                 elif(action_type == ActionType.SHARE):
                     # high reward if agent comes to final hub with shared ride
                     reward = 100000
-                    
+
             else:
-                # in time delivered with delivery time < 2 hours to deadline
-                state_of_delivery = DeliveryState.DELIVERED_ON_TIME
-                print(f"MANUAL DELIVERY WITH {(self.deadline-self.time).total_seconds()/60} MINUTES TO DEADLINE - ACTIONS (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown})")
-                reward = 0
+                state_of_delivery = DeliveryState.DELIVERED_WITH_DELAY
+                print(f"Delivered with DELAY AFTER {self.count_actions} ACTIONS (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown})")
+                reward = -10000
 
         # did not come to final hub:
         else:
@@ -487,13 +481,8 @@ class GraphEnv(gym.Env):
             if(action_type == ActionType.WAIT):
                 reward = 0
             elif(action_type == ActionType.OWN):
-                if(self.allow_bookown == 0):
-                    reward = old_distinction[action]*100000
-                else:
-                    # kann eigentlich nicht sein dieser Case
-                    reward = (distance_gained/100) * 1000
+                reward = old_distinction[action]*100000
             elif(action_type == ActionType.SHARE):
-
                 reward = (distance_gained/100) * 1000 + old_distinction[action]*10000
 
         print(self.old_position, "->", action, action_type, "D:", distance_gained, "R:", reward)
