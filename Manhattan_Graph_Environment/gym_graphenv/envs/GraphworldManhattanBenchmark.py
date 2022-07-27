@@ -101,7 +101,7 @@ class GraphEnv(gym.Env):
             {
             # 'cost': gym.spaces.Box(low=np.zeros(70)-10, high=np.zeros(70)+10, shape=(70,), dtype=np.float64),
             'remaining_distance': gym.spaces.Box(low=np.zeros(self.n_hubs)-200000, high=np.zeros(self.n_hubs)+200000, shape=(self.n_hubs,), dtype=np.float64),
-            'current_hub': gym.spaces.Box(low=0, high=1, shape=(self.n_hubs,), dtype=np.float64),
+            #'current_hub': gym.spaces.Box(low=0, high=1, shape=(self.n_hubs,), dtype=np.float64),
             'final_hub': gym.spaces.Box(low=0, high=1, shape=(self.n_hubs,), dtype=np.float64),
             'distinction': gym.spaces.Box(low=np.zeros(self.n_hubs)-1, high=np.zeros(self.n_hubs)+1, shape=(self.n_hubs,), dtype=np.float64),
             #'allow_bookown': gym.spaces.Discrete(2)
@@ -191,9 +191,7 @@ class GraphEnv(gym.Env):
         self.distance_reduced_with_shared=0 #to final hub
         self.distance_reduced_with_ownrides=0 #to final hub
 
-        print(f"Reset initialized pickup: {self.position}")
-        print(f"Reset initialized dropoff: {self.final_hub}")
-        print(f"Reset initialized time: {self.time}")
+        print(f"Reset pickup: {self.position} dropoff: {self.final_hub} time: {self.time}")
 
 
         learn_graph = LearnGraph(n_hubs=self.n_hubs, manhattan_graph=self.manhattan_graph, final_hub=self.final_hub)
@@ -243,7 +241,7 @@ class GraphEnv(gym.Env):
         self.state = {
             # 'cost' : ((self.learn_graph.adjacency_matrix('cost')[self.position]-self.mean1)/self.stdev1).astype(np.float64),
             'remaining_distance': ((self.learn_graph.adjacency_matrix('remaining_distance')[self.position]-self.rd_mean)/self.rd_stdev).astype(np.float64),
-            'current_hub' : self.one_hot(self.position).astype(np.float64),
+            #'current_hub' : self.one_hot(self.position).astype(np.float64),
             'final_hub' : self.one_hot(self.final_hub).astype(np.float64),
             'distinction' : self.learn_graph.adjacency_matrix('distinction')[self.position].astype(np.float64),
             #'allow_bookown': self.allow_bookown,
@@ -337,15 +335,19 @@ class GraphEnv(gym.Env):
                 elif(self.learn_graph.wait_till_departure_times[(self.position,action)] != self.WAIT_TIME_SECONDS and self.learn_graph.wait_till_departure_times[(self.position,action)] != 0):
                     step_duration = sum(route_travel_time)
                     # TODO: String conversion von departure time besser direkt beim erstellen der Matrix
-                    departure_time = datetime.strptime(self.learn_graph.wait_till_departure_times[(self.position,action)], '%Y-%m-%d %H:%M:%S')
+                    departure_time = self.learn_graph.wait_till_departure_times[(self.position,action)]
                     # print("Departure Time: ", departure_time)
                     self.current_wait = ( departure_time - self.time).seconds
-                    # step_duration += self.current_wait
                     self.time = departure_time
+                    # print("Travel Times ", route_travel_time)
+                    # print("Sum Travel Time ", sum(route_travel_time))
+                    # print("Current Wait ", self.current_wait)
+                    # print("Step Duration: ", step_duration)
+
                 if(self.shared_rides_mask[action] == 1):
                     self.count_share += 1
                     self.action_choice = "Share"
-                    print("action == share ")
+                    # print("action == share ")
                     # print(f"Rides Mask for Action {action}: {self.shared_rides_mask}")
                     
                     # check whether current action is useful
@@ -353,7 +355,6 @@ class GraphEnv(gym.Env):
                         self.count_shared_taken_useful += 1
                     self.distance_covered_with_shared+=self.route_travel_distance
                     self.distance_reduced_with_shared+=self.learn_graph.adjacency_matrix('remaining_distance')[self.old_position][action]
-
 
                 else:
                     self.count_bookown += 1
@@ -382,6 +383,7 @@ class GraphEnv(gym.Env):
             print("action: ",action)
             print("action space: ",self.action_space)
 
+        self.time += timedelta(seconds=step_duration)
         # refresh travel cost layer after each step
         self.learn_graph.add_travel_cost_layer(self.availableTrips(), self.distance_matrix)
         self.learn_graph.add_remaining_distance_layer(current_hub=self.position, distance_matrix=self.distance_matrix)
@@ -389,7 +391,7 @@ class GraphEnv(gym.Env):
         self.old_state = self.state
         self.state = {
             'remaining_distance': (((self.learn_graph.adjacency_matrix('remaining_distance')[self.position])-self.rd_mean)/self.rd_stdev).astype(np.float64),
-            'current_hub' : self.one_hot(self.position).astype(np.float64),
+            #'current_hub' : self.one_hot(self.position).astype(np.float64),
             'final_hub' : self.one_hot(self.final_hub).astype(np.float64),
             'distinction' : self.learn_graph.adjacency_matrix('distinction')[self.position].astype(np.float64),
             #'allow_bookown': self.allow_bookown,
@@ -398,7 +400,7 @@ class GraphEnv(gym.Env):
         # print("New State: ")        
         # print(self.state)
 
-        self.time += timedelta(seconds=step_duration)
+        #print("End Time ", self.time)
 
         self.count_actions += 1
 
@@ -414,6 +416,7 @@ class GraphEnv(gym.Env):
 
         if self.count_bookown > 0:
             self.booked_own = 1
+        # print(self.route_taken)
 
         # counting on step-base (not individual ride-base)
         if boolean_available_temp == True:
@@ -432,9 +435,8 @@ class GraphEnv(gym.Env):
         # print("In Step ", self.count_actions, " a useful share is available, number: ", self.boolean_useful_shares_available)            
 
         # print("Step End")
-        return self.state, reward,  self.done, {"timestamp": self.time,"step_travel_time":step_duration,"distance":self.distance_matrix[self.old_position][self.position], "count_hubs":self.count_hubs, "action": self.action_choice, "hub_index": action, "dist_covered_shares":self.distance_covered_with_shared,"dist_covered_bookown": self.distance_covered_with_ownrides}
+        return self.state, reward,  self.done, {"timestamp": self.time,"step_travel_time":step_duration,"distance":self.distance_matrix[self.old_position][self.position], "count_hubs":self.count_hubs, "action": self.action_choice, "hub_index": action,  "route": route_taken,"remaining_dist": self.learn_graph.adjacency_matrix('remaining_distance')[self.position][self.final_hub],"dist_covered_shares":self.distance_covered_with_shared,"dist_covered_bookown": self.distance_covered_with_ownrides}
 
-    
     def compute_reward(self, action):
         # cost_of_action = self.learn_graph.adjacency_matrix('cost')[self.old_position][action]
         distance_gained = self.old_state['remaining_distance'][self.position]
@@ -463,15 +465,15 @@ class GraphEnv(gym.Env):
                 state_of_delivery = DeliveryState.DELIVERED_ON_TIME
                 print(f"DELIVERED IN TIME AFTER {self.count_actions} ACTIONS (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown})")
                 if(action_type == ActionType.OWN):
-                    reward = 10000
+                    reward = 1000
                 elif(action_type == ActionType.SHARE):
                     # high reward if agent comes to final hub with shared ride
-                    reward = 100000
-
+                    reward = 10000
+                    
             else:
-                state_of_delivery = DeliveryState.DELIVERED_WITH_DELAY
-                print(f"Delivered with DELAY AFTER {self.count_actions} ACTIONS (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown})")
-                reward = -10000
+                state_of_delivery = DeliveryState.DELIVERED_ON_TIME
+                print(f"MANUAL DELIVERY WITH {(self.deadline-self.time).total_seconds()/60} MINUTES TO DEADLINE - ACTIONS (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown})")
+                reward = -1000
 
         # did not come to final hub:
         else:
@@ -479,13 +481,13 @@ class GraphEnv(gym.Env):
             self.done = False
             state_of_delivery = DeliveryState.IN_DELIVERY
             if(action_type == ActionType.WAIT):
-                reward = 0
+                reward = 100
             elif(action_type == ActionType.OWN):
-                reward = old_distinction[action]*100000
+                reward = (distance_gained/100) * 100
             elif(action_type == ActionType.SHARE):
-                reward = (distance_gained/100) * 1000 + old_distinction[action]*10000
+                reward = distance_gained * 100 + 100
 
-        print(self.old_position, "->", action, action_type, "D:", distance_gained, "R:", reward)
+        print(self.old_position, "->", action, "SHARE" if action_type == 1 else "BOOK" if action_type == 2 else "WAIT", "Distance:", distance_gained, "Reward:", reward)
 
         return reward, self.done, state_of_delivery
 
@@ -534,7 +536,7 @@ class GraphEnv(gym.Env):
                     isNotFinalNode = True
                     if isNotFinalNode:
                         index_in_route = route.index(position)
-                        position_timestamp = times[index_in_route]
+                        position_timestamp = datetime.strptime(times[index_in_route], '%Y-%m-%d %H:%M:%S')
                         route_to_target_node=route[index_in_route::]
                         hubsOnRoute = any(node in route_to_target_node for node in self.hubs)
                         if hubsOnRoute:
@@ -547,6 +549,7 @@ class GraphEnv(gym.Env):
                                     trip = {'departure_time': position_timestamp, 'target_hub': hub, 'route': route_to_target_hub, 'trip_row_id': tripId}
                                     list_trips.append(trip)
         self.available_actions = list_trips
+        # generate random shared rides for training
 
         # create index vector
         shared_rides_mask = np.zeros(self.n_hubs)
@@ -554,12 +557,51 @@ class GraphEnv(gym.Env):
             shared_rides_mask[self.manhattan_graph.get_hub_index_by_nodeid(list_trips[i]['target_hub'])] = 1
 
         self.shared_rides_mask = shared_rides_mask
+        self.available_actions += self.generate_rides() #Uses shared_rides_mask to oversample available shares and writes them into shared_rides_mask and available_actions
         # print(shared_rides_mask)
         #print(list_trips)
 
         executionTime = (time.time() - startTime)
         # print('found '+ str(len(list_trips)) +' trips, ' + 'current time: ' + str(self.time))
         return list_trips
+
+    def generate_rides(self,):
+        list_trips = []
+        depart_time_list = []
+        target_hub_list = []
+        route_list = []
+
+        # hubs where shared rides go to
+        shared_ride_hubs = []
+        for i in range(len(self.shared_rides_mask)):
+            if(self.shared_rides_mask[i] == 1):
+                shared_ride_hubs.append(i)
+        # create list of hubs where synthetic rides should go to
+        sampled_hub_list = np.random.choice(self.n_hubs,40,replace=False)
+        for i in range(len(sampled_hub_list)):
+            # create only shared rides to this hubs which are not already covered by a shared ride
+            if(sampled_hub_list[i] not in shared_ride_hubs):
+                target_hub_list.append(sampled_hub_list[i])
+
+        for i in range(len(target_hub_list)):
+            depart_time = self.time
+            depart_time += timedelta(seconds=180) # wait 3 minutes for departure of synthetic ride
+            depart_time_list.append(depart_time)
+
+            route = ox.shortest_path(self.manhattan_graph.inner_graph, self.manhattan_graph.get_nodeid_by_hub_index(self.position), self.manhattan_graph.get_nodeid_by_hub_index(target_hub_list[i]), weight='travel_time')
+            route_list.append(route)
+
+        # write all generated trips into a list of dicts
+        generated_trips_list = []
+        for i in range(len(target_hub_list)):
+            trip = {'departure_time': depart_time_list[i], 'target_hub': target_hub_list[i], 'route': route_list[i]}
+            generated_trips_list.append(trip)
+
+        # modify maks and available actions
+        for hub in target_hub_list:
+            self.shared_rides_mask[hub] = 1
+
+        return generated_trips_list
 
     def validateAction(self, action):
         return action < self.n_hubs
@@ -742,13 +784,15 @@ class GraphEnv(gym.Env):
 class ActionType:
     WAIT,SHARE,OWN = range(3)
 class DeliveryState:
-    DELIVERED_ON_TIME, DELIVERED_WITH_DELAY, NOT_DELIVERED, IN_DELIVERY = range(4)
+    DELIVERED_ON_TIME, DELIVERED_WITH_DELAY, NOT_DELIVERED, IN_DELIVERY, TERMINATED = range(5)
 
 class CustomCallbacks(DefaultCallbacks):
     last_count_delivered_on_time = 0
     last_count_delivered_with_delay = 0
     last_count_not_delivered = 0
+    last_count_terminated = 0
     count_not_delivered = 0
+    count_terminated = 0
     count_delivered_with_delay = 0
     count_delivered_on_time = 0
 
@@ -779,6 +823,7 @@ class CustomCallbacks(DefaultCallbacks):
         self.count_delivered_on_time = 0
         self.count_delivered_with_delay = 0
         self.count_not_delivered = 0
+        self.count_terminated = 0
 
         # metrics for shares and bookowns
         self.count_shared_available = 0
@@ -811,6 +856,7 @@ class CustomCallbacks(DefaultCallbacks):
         episode.custom_metrics["count_not_delivered"] = 0
         episode.custom_metrics["count_delivered_with_delay"] = 0
         episode.custom_metrics["count_delivered_on_time"] = 0
+        episode.custom_metrics["count_terminated"] = 0
 
         # metrics for shares and bookowns
         #episode.custom_metrics["count_shared_available"] = 0
@@ -905,6 +951,9 @@ class CustomCallbacks(DefaultCallbacks):
         elif (episode.env.state_of_delivery == DeliveryState.NOT_DELIVERED):
             self.count_not_delivered +=1
             episode.custom_metrics["count_not_delivered"] = self.count_not_delivered
+        elif (episode.env.state_of_delivery == DeliveryState.TERMINATED):
+            self.count_terminated +=1
+            episode.custom_metrics["count_terminated"] = self.count_terminated
 
         if (self.count_delivered_on_time==0):
             episode.custom_metrics["ratio_delivered_without_bookown_to_all_delivered"] = 0
@@ -974,6 +1023,7 @@ class CustomCallbacks(DefaultCallbacks):
         print("Abzug", self.last_count_not_delivered)
         """
 
+        result["count_terminated"] = result['custom_metrics']["count_terminated_max"] - CustomCallbacks.last_count_terminated
         result["count_not_delivered"] = result['custom_metrics']["count_not_delivered_max"] - CustomCallbacks.last_count_not_delivered
         # zum Vergleich ohne Abzug
         # result["count_not_delivered_first"] = result['custom_metrics']["count_not_delivered_max"]
@@ -981,6 +1031,7 @@ class CustomCallbacks(DefaultCallbacks):
         CustomCallbacks.last_count_not_delivered = CustomCallbacks.last_count_not_delivered + result["count_not_delivered"]
         CustomCallbacks.last_count_delivered_with_delay = CustomCallbacks.last_count_delivered_with_delay + result["count_delivered_with_delay"]
         CustomCallbacks.last_count_delivered_on_time = CustomCallbacks.last_count_delivered_on_time + result["count_delivered_on_time"]
+        CustomCallbacks.last_count_terminated = CustomCallbacks.last_count_terminated + result["count_terminated"]
 
         # metrics für shares and bookowns
         result["boolean_has_booked_any_own"] = result['custom_metrics']["boolean_has_booked_any_own_mean"] # - CustomCallbacks.last_count_bookowns
@@ -1003,4 +1054,3 @@ class CustomCallbacks(DefaultCallbacks):
         result['distance_reduced_with_shared']=result['custom_metrics']['distance_reduced_with_shared_mean']
         result['distance_reduced_with_ownrides_share']=result['custom_metrics']['distance_reduced_with_ownrides_share_mean']
         result['distance_reduced_with_shared_share']=result['custom_metrics']['distance_reduced_with_shared_share_mean']
-
