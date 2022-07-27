@@ -26,6 +26,8 @@ global number_share
 global start_hub
 global entered_hub
 global user_route
+global actions_list
+global rem_dist_list
 
 app = dash.Dash(__name__,  suppress_callback_exceptions = True)
 
@@ -71,10 +73,10 @@ def create_map_from_df(df_hubs, df_route=pd.DataFrame(), test_id=0):
 
     px.set_mapbox_access_token(open("Manhattan_Graph_Environment/mapbox_token").read())
     if not 'Rem. Distance' in df_hubs.columns:
-        fig = px.scatter_mapbox(df_hubs, lat="latitude", lon="longitude", hover_name ="id", color="action", color_discrete_sequence=['Red', 'Navy', 'LightPink','OliveDrab','LightSlateGrey', 'LightSkyBlue'], category_orders={'action': ['start', 'final','position','shared','book','hub']},#size="car_hours",
+        fig = px.scatter_mapbox(df_hubs, lat="latitude", lon="longitude", hover_name ="id", color="action", color_discrete_sequence=['Red', 'SaddleBrown', 'LightPink','OliveDrab','LightSlateGrey', 'LightSkyBlue'], category_orders={'action': ['start', 'final','position','shared','book','hub']},#size="car_hours",
                         color_continuous_scale=px.colors.cyclical.IceFire, size_max=30, zoom=11)
     else:
-        fig = px.scatter_mapbox(df_hubs, lat="latitude", lon="longitude", hover_name ="id", hover_data = ['Rem. Distance'], color="action", color_discrete_sequence=['Red', 'Navy', 'LightPink','Gainsboro','LightSlateGrey', 'LightSkyBlue'], category_orders={'action': ['start', 'final','position','shared','book','hub']},#size="car_hours",
+        fig = px.scatter_mapbox(df_hubs, lat="latitude", lon="longitude", hover_name ="id", hover_data = ['Rem. Distance'], color="action", color_discrete_sequence=['Red', 'SaddleBrown', 'LightPink','OliveDrab','LightSlateGrey', 'LightSkyBlue'], category_orders={'action': ['start', 'final','position','shared','book','hub']},#size="car_hours",
                     color_continuous_scale=px.colors.cyclical.IceFire, size_max=30, zoom=11)
     line_colors={
         -1.0:'Green',
@@ -216,8 +218,8 @@ html.Div(children=[
                
         html.H4('Actions taken:', id= 'actions-taken-titel'),
         html.Div(dcc.Graph(figure=create_piechart(), id='graph_actions2'), id='div-piechart2'),
-        #html.H4('Distance reduced:', id= 'distance-titel'),
-        #html.Div(dcc.Graph(figure=create_chart_reduced_distance(), id='graph_distance'), id='div-piechart-dist'),
+        html.H4('Distance reduced:', id= 'distance-titel2'),
+        html.Div(dcc.Graph(figure=create_chart_reduced_distance(), id='graph_distance2'), id='div-piechart-dist2'),
         html.H4('User route: ',  id='user-route-2'),
         
     
@@ -445,7 +447,7 @@ def start_order_2(value):
     Output(component_id='map-2', component_property='children'),
     #Output(component_id='shared', component_property='children'),
     Output(component_id='div-piechart2', component_property='children'),
-    #Output(component_id='div-piechart-dist', component_property='children'),
+    Output(component_id='div-piechart-dist2', component_property='children'),
     Output('current-time', 'children'),
     #Output('step-by-step', 'children'),
     Output('next-hub-input', 'value'),
@@ -459,6 +461,11 @@ def next_step(submit, input_value, start_dynamic=True):
     if input_value is None:
         return dash.no_update
     global entered_hub
+
+    global actions_list
+    global rem_dist_list
+    # actions_list = []
+    # rem_dist_list = []
 
     user_route.append(input_value)
 
@@ -507,7 +514,14 @@ def next_step(submit, input_value, start_dynamic=True):
         df_hubs['Rem. Distance'] = rem_distance
         df_route = pd.DataFrame()
 
-        return dcc.Graph(figure=create_map_from_df(df_hubs, df_route, test_id), id='my-graph'), dcc.Graph(figure=create_piechart(0,0,0), id='graph_actions2'), '', '', user_route_string
+        actions_list = []
+        actions_list.append('start')
+        rem_dist_list = []
+        rem_dist_list.append(rem_distance[env.final_hub])
+        print(f"Actions List Start: {actions_list}")
+        print(f"Rem Dist List Start: {rem_dist_list}")
+
+        return dcc.Graph(figure=create_map_from_df(df_hubs, df_route, test_id), id='my-graph'), dcc.Graph(figure=create_piechart(0,0,0), id='graph_actions2'), '', '', '', user_route_string
 
     else:
         shared_rides = list()
@@ -592,7 +606,26 @@ def next_step(submit, input_value, start_dynamic=True):
         else:
             number_share += 1
 
-        return dcc.Graph(figure=create_map_from_df(df_hubs, df_route, test_id), id='my-graph'), dcc.Graph(figure=create_piechart(number_wait,number_share,number_book), id='graph_actions2'), html.P("Current time: %s-%s-%s %s:%s" % (current_time.year, current_time.month, current_time.day, current_time.hour, current_time.minute)), '', user_route_string
+        # determine how much books and shareds have reduced the distance to the final hub
+        actions_list.append(current_action_string)
+        rem_dist_list.append(rem_distance[env.final_hub])
+        print(f"Actions List after Action: {actions_list}")
+        print(f"Rem Dist List after Action: {rem_dist_list}")
+        reduced_book = 0
+        reduced_share = 0
+        for i in range(len(rem_dist_list)-1):
+            if(actions_list[i+1] == 'Book'):
+                print(f"Reduced book vorher: {reduced_book}")
+                reduced_book += rem_dist_list[i] - rem_dist_list[i+1]    
+                print(f"diff zwischen zwei hubs: {rem_dist_list[i] - rem_dist_list[i+1]}")
+                print(f"Reduced book nachher: {reduced_book}")
+            elif(actions_list[i+1] == 'Share'):
+                print(f"Reduced share vorher: {reduced_share}")
+                reduced_share += rem_dist_list[i] - rem_dist_list[i+1]
+                print(f"diff zwischen zwei hubs: {rem_dist_list[i] - rem_dist_list[i+1]}")
+                print(f"Reduced share nachher: {reduced_share}")
+
+        return dcc.Graph(figure=create_map_from_df(df_hubs, df_route, test_id), id='my-graph'), dcc.Graph(figure=create_piechart(number_wait,number_share,number_book), id='graph_actions2'), dcc.Graph(figure=create_chart_reduced_distance(int(reduced_share),int(reduced_book)), id='graph_distance'), html.P("Current time: %s-%s-%s %s:%s" % (current_time.year, current_time.month, current_time.day, current_time.hour, current_time.minute)), '', user_route_string
 
 
 if __name__ == '__main__':
