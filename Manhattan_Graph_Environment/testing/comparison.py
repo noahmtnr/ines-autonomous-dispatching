@@ -276,14 +276,14 @@ env = GraphEnv(use_config=True) # use normal GraphWorld for RLs
 # RL agents
 #w3 = BenchmarkWrapper("PPO",env)
 # w4 = BenchmarkWrapper("DQN",env) # hat noch Fehler
-#w5 = BenchmarkWrapper("Rainbow",env)
+w5 = BenchmarkWrapper("Rainbow",env)
 
 from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattanBenchmark import GraphEnv # use Benchmark Graphworld for others
 env = GraphEnv(use_config=True)
 # benchmarks
 # w1 = BenchmarkWrapper("random",env)
 # w2 = BenchmarkWrapper("cost",env)
-w6 = BenchmarkWrapper("Shares",env)
+# w6 = BenchmarkWrapper("Shares",env)
 # w7 = BenchmarkWrapper("Bookown",env)
 # w8 = BenchmarkWrapper("SharesBookEnd",env)
 
@@ -292,7 +292,8 @@ w6 = BenchmarkWrapper("Shares",env)
 # c = Comparer(1,w1.name,w1)
 # c = Comparer(1,w2.name,w2)
 # c = Comparer(1,w7.name,w7)
-c = Comparer(1,w6.name,w6)
+# c = Comparer(1,w6.name,w6)
+c = Comparer(1,w5.name,w5)
 # c = Comparer(1,w8.name,w8)
 # c = Comparer(3,w5.name,w6.name,w7.name,w5,w6,w7)
 # c = Comparer(1,w4.name,w4)
@@ -303,8 +304,8 @@ c = Comparer(1,w6.name,w6)
 # c = Comparer(7,w1.name,w2.name,w3.name,w4.name,w5.name,w6.name,w7.name,w1,w2,w3,w4,w5,w6,w7)
 
 # compute the commparison
-# c.establish_compare_onetrip() # call when only one order is placed (adapt row reads to 1 row in BenchmarkWrapper.read_orders!)
-c.compare_multipletrips() # call when more than one order is placed (adapt row reads in BenchmarkWrapper.read_orders!)
+c.establish_compare_onetrip() # call when only one order is placed (adapt row reads to 1 row in BenchmarkWrapper.read_orders!)
+# c.compare_multipletrips() # call when more than one order is placed (adapt row reads in BenchmarkWrapper.read_orders!)
 
 
 

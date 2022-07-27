@@ -42,13 +42,26 @@ class BenchmarkWrapper:
 
     # noinspection PyMethodMayBeStatic
     def file_read(self):
+
+        # for testing random orders
         if len(sys.argv) > 1:
             first_arg = sys.argv[1]
             file_path = os.path.join(ROOT_DIR, "data", "others", 'random_orders.csv') + first_arg
-            orders = pd.read_csv(file_path, nrows=2)
+            orders = pd.read_csv(file_path, nrows=1)
         else:
             filepath = os.path.join(ROOT_DIR, "data", "others", 'random_orders.csv')
-            orders = pd.read_csv(filepath, nrows=2)
+            orders = pd.read_csv(filepath, nrows=1)
+
+        # for testing specific test orders
+        """
+        if len(sys.argv) > 1:
+            first_arg = sys.argv[1]
+            file_path = os.path.join(ROOT_DIR, "data", "others", 'test_orders.csv') + first_arg
+            orders = pd.read_csv(file_path, nrows=1)
+        else:
+            filepath = os.path.join(ROOT_DIR, "data", "others", 'test_orders.csv')
+            orders = pd.read_csv(filepath, nrows=1)
+        """
 
         return orders
 

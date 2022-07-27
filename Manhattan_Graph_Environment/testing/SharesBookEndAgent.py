@@ -40,6 +40,7 @@ class SharesBookEndAgent:
             # select most useful shared ride, otherwise wait
             best_gain = 0
             best_hub = 0
+            print("distinction: ", env.state["distinction"])
             for hub in range(env.action_space.n):
                 # check distance gained
                 if (env.state["remaining_distance"][hub] > 0) and (env.state["remaining_distance"][hub] > best_gain) and (env.state["distinction"][hub] == 1):
