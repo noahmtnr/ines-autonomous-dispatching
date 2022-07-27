@@ -28,7 +28,7 @@ class SharesBookEndAgent:
         route_timestamps = [datetime.strptime(env_config["pickup_timestamp"], '%Y-%m-%d %H:%M:%S')]
         done = False
         current_hub = env_config["pickup_hub_index"]
-        time_until_deadline = 0
+        time_until_deadline = timedelta(hours=24)
         count_shares = 0
         count_bookowns = 0
         count_wait = 0
@@ -42,7 +42,7 @@ class SharesBookEndAgent:
             best_hub = 0
             for hub in range(env.action_space.n):
                 # check distance gained
-                if (env.state["remaining_distance"][hub] > 0) and (env.state["remaining_distance"][hub] > best_gain):
+                if (env.state["remaining_distance"][hub] > 0) and (env.state["remaining_distance"][hub] > best_gain) and (env.state["distinction"][hub] == 1):
                     best_hub = hub
                     best_gain = env.state["remaining_distance"][hub]
 
@@ -87,7 +87,7 @@ class SharesBookEndAgent:
                 #     raise Exception("DID NOT ARRIVE IN FINAL HUB")
                 break
 
-        if(time_until_deadline.total_seconds()/60 <= 120):
+        if(time_until_deadline.total_seconds()/60 < 120):
             print("Force Manual Delivery")
             action = env_config["delivery_hub_index"]
             # action = final hub
@@ -99,10 +99,12 @@ class SharesBookEndAgent:
             sum_reward += reward
             sum_travel_time +=timedelta(seconds=info.get('step_travel_time'))
             delivey_time = datetime.strptime(env_config["delivery_timestamp"], '%Y-%m-%d %H:%M:%S')
-            time_until_deadline= delivey_time-sum_travel_time
+            time_until_deadline= timedelta(hours=24) - sum_travel_time
             sum_distance += info.get('distance')/1000
             number_hubs=info.get('count_hubs')
             action_choice = info.get("action")
+            dist_shares = info.get("dist_covered_shares")
+            dist_bookowns = info.get("dist_covered_bookown")
 
             if action_choice == "Share":
                 count_shares += 1
