@@ -2,6 +2,7 @@
 import sys
 import pandas as pd
 import numpy as np
+from datetime import datetime, timedelta
 from BenchmarkWrapper import BenchmarkWrapper
 from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv
 import operator
@@ -26,6 +27,10 @@ class Comparer:
         print("Names", self.agent_names)
         print("ARgs",self.agents_arg)
         Comparer.set_agents(self)
+
+
+    def Average(lst):
+        return sum(lst) / len(lst)
 
     def set_agents(self):
         self.agents = {}
@@ -206,7 +211,11 @@ class Comparer:
                 dist_array.append(dist)
                 # remaining time
                 time = current.get("time")
-                time_array.append(time)
+                try:
+                    date = datetime.strptime(time, '%H:%M:%S.%f')
+                except ValueError:
+                    date = datetime.strptime(time, '%H:%M:%S')
+                time_array.append(timedelta(hours=date.hour, minutes=date.minute, seconds=date.second).total_seconds())
                 # travelled hubs
                 num_hubs = current.get("hubs")
                 hubs_array.append(num_hubs)
@@ -230,31 +239,33 @@ class Comparer:
                 dist_shares_array.append(ratio_dist_shares)
                 dist_bookowns_array.append(ratio_dist_bookowns)
 
+            print("Reward-Array: ", reward_array)
+            print("Count Books Array: ", num_books_array)
+            print("Time Array: ", time_array)
+            for i in time_array:
+                print(type(i))
             # for one order
             # self.compare_dict[key]= [reward_array,route_array,dist_array,time_array,hubs_array,num_books_array,ratio_array,steps_array,dist_shares_array,dist_bookowns_array]
 
             # print(self.compare_dict)
 
             # compute the averages of each result array 
-            counter += 1
-            reward_mean = Average(reward_array)
-            dist_mean = Average(dist_array)
-            time_mean = Average(time_array)
-            num_hubs_mean = Average(hubs_array)
-            num_books_mean = Average(num_books_array)
-            ratio_mean = Average(ratio_array)
-            steps_mean = Average(steps_array)
-            dist_shares_mean = Average(dist_shares_array)
-            dist_bookowns_mean = Average(dist_bookowns_array)
+            # counter += 1
+            reward_mean = Comparer.Average(reward_array)
+            dist_mean = Comparer.Average(dist_array)
+            time_mean = Comparer.Average(time_array)
+            num_hubs_mean = Comparer.Average(hubs_array)
+            num_books_mean = Comparer.Average(num_books_array)
+            ratio_mean = Comparer.Average(ratio_array)
+            steps_mean = Comparer.Average(steps_array)
+            dist_shares_mean = Comparer.Average(dist_shares_array)
+            dist_bookowns_mean = Comparer.Average(dist_bookowns_array)
 
             self.compare_dict[key] = [reward_mean,route_array,dist_mean,time_mean,num_hubs_mean,num_books_mean,ratio_mean,steps_mean,dist_shares_mean,dist_bookowns_mean]
             print(self.compare_dict)
         
         # call comparer to get rankings
         Comparer.compare_onetrip(self)
-    
-    def Average(lst):
-        return sum(lst) / len(lst)
 
     def main():
         set_agents(self.num_agents,self.agents_arg)
@@ -292,8 +303,8 @@ c = Comparer(1,w6.name,w6)
 # c = Comparer(7,w1.name,w2.name,w3.name,w4.name,w5.name,w6.name,w7.name,w1,w2,w3,w4,w5,w6,w7)
 
 # compute the commparison
-c.establish_compare_onetrip() # call when only one order is placed
-# c.compare_multiple_trips() # call when more than one order is placed (adapt row reads in read_orders!)
+# c.establish_compare_onetrip() # call when only one order is placed (adapt row reads to 1 row in BenchmarkWrapper.read_orders!)
+c.compare_multipletrips() # call when more than one order is placed (adapt row reads in BenchmarkWrapper.read_orders!)
 
 
 

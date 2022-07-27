@@ -45,10 +45,10 @@ class BenchmarkWrapper:
         if len(sys.argv) > 1:
             first_arg = sys.argv[1]
             file_path = os.path.join(ROOT_DIR, "data", "others", 'random_orders.csv') + first_arg
-            orders = pd.read_csv(file_path, nrows=1)
+            orders = pd.read_csv(file_path, nrows=2)
         else:
             filepath = os.path.join(ROOT_DIR, "data", "others", 'random_orders.csv')
-            orders = pd.read_csv(filepath, nrows=1)
+            orders = pd.read_csv(filepath, nrows=2)
 
         return orders
 

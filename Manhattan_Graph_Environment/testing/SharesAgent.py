@@ -47,7 +47,8 @@ class SharesAgent:
                 # print(env.state["distinction"])
                 # print(env.state["remaining_distance"])
                 print("Distinction: ", env.state["distinction"])
-                if (env.state["remaining_distance"][hub] > 0) and (env.state["remaining_distance"][hub] > best_gain) and (env.state["distinction"][hub]==1):
+                if ((env.state["remaining_distance"][hub]) > 0) and ((env.state["remaining_distance"][hub]) > best_gain) and ((env.state["distinction"][hub]) == 1):
+                    print("Distinction for hub ", hub, " is ", env.state["distinction"][hub])
                     best_hub = hub
                     best_gain = env.state["remaining_distance"][hub]
 
@@ -64,7 +65,7 @@ class SharesAgent:
             route_timestamps.append(info.get('timestamp'))
             sum_travel_time +=timedelta(seconds=info.get('step_travel_time'))
             delivey_time = datetime.strptime(env_config["delivery_timestamp"], '%Y-%m-%d %H:%M:%S')
-            time_until_deadline= delivey_time-sum_travel_time
+            time_until_deadline= timedelta(hours=24)-sum_travel_time
             sum_distance += info.get('distance')/1000
             if old_hub!=current_hub:
                 number_hubs+=1
