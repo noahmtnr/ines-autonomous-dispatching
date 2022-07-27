@@ -6,6 +6,8 @@ import numpy as np
 import pandas as pd
 import json
 import os
+os.environ['HDF5_DISABLE_VERSION_CHECK']='2'
+os.environ['KMP_DUPLICATE_LIB_OK']='True'
 import shutil
 import gym
 import pickle
@@ -30,13 +32,30 @@ class TestOrders:
         self.trainer_config['num_workers'] = 1
         self.trainer_config["train_batch_size"] = 400
         self.trainer_config["gamma"] = 0.99
+        # rainbow_config["framework"] = "torch"
         self.trainer_config["callbacks"] = CustomCallbacks
-        self.trainer_config["hiddens"] = [600, 500, 400, 300, 120]
-        self.trainer_config["n_step"] = 3  # [between 1 and 10]  //was 5 and 7
+        self.trainer_config["hiddens"] = [180,150,100] # to try with 1024  //was also 516
+        self.trainer_config["model"] = {
+            # "custom_model": "my_tf_model",
+            "fcnet_activation": 'relu',
+        }
+
+        #num_gpus and other gpu parameters in order to train with gpu
+        self.trainer_config["num_gpus"] = int(os.environ.get("RLLIB_NUM_GPUS", "0"))
+
+        #rainbow parameters
+
+        # N-step Q learning
+        self.trainer_config["n_step"]= 4 #[between 1 and 10]  //was 5 and 7
+        # Whether to use noisy network
         self.trainer_config["noisy"] = True
-        self.trainer_config["num_atoms"] = 70  # [more than 1] //was 51,20
-        self.trainer_config["v_min"] = -210000
-        self.trainer_config["v_max"] = 210000  # (set v_min and v_max according to your expected range of returns).
+        # rainbow_config["sigma0"] = 0.2
+        # Number of atoms for representing the distribution of return. When
+        # this is greater than 1, distributional Q-learning is used.
+        # the discrete supports are bounded by v_min and v_max
+        self.trainer_config["num_atoms"] = 70 #[more than 1] //was 51,20
+        self.trainer_config["v_min"] =-15000
+        self.trainer_config["v_max"]=15000# (set v_min and v_max according to your expected range of returns).
 
         # here from trainRainbow die config
         # self.trainer_config["train_batch_size"] = 400
@@ -47,7 +66,7 @@ class TestOrders:
         # Initialize trainer
         rainbow_trainer = DQNTrainer(self.trainer_config, GraphEnv)
         # checkpoint anpassen
-        file_name = os.path.join(ROOT_DIR, 'tmp', 'rainbow', 'graphworld','checkpoint_000025','checkpoint-25')
+        file_name = os.path.join(ROOT_DIR, 'tmp', 'rainbow', 'graphworld','checkpoint_000030','checkpoint-30')
 
         # Restore the Trainer
         rainbow_trainer.restore(file_name)
@@ -114,10 +133,10 @@ class TestOrders:
 
 
 def create_test_order():
-    pickup_hub = 12
-    delivery_hub = 20
-    pickup_timestamp="2016-01-05 15:22:00"
-    delivery_timestamp="2016-01-06 03:22:00"
+    pickup_hub = 21
+    delivery_hub = 5
+    pickup_timestamp="2016-01-05 20:46:00"
+    delivery_timestamp="2016-01-06 08:46:00"
     env_config = {'pickup_hub_index': pickup_hub,
                       'delivery_hub_index': delivery_hub,
                       'pickup_timestamp':pickup_timestamp,
