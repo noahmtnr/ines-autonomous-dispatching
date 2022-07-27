@@ -305,7 +305,156 @@ class GraphEnv(gym.Env):
                     # TODO: String conversion von departure time besser direkt beim erstellen der Matrix
                     departure_time = datetime.strptime(self.learn_graph.wait_till_departure_times[(self.position,action)], '%Y-%m-%d %H:%M:%S')
                     self.current_wait = ( departure_time - self.time).seconds
-                    step_duration += self.current_wait
+                    # step_duration += self.current_wait
+                    self.time = departure_time
+                if(self.shared_rides_mask[action] == 1):
+                    self.count_share += 1
+                    self.action_choice = "Share"
+                    print("action == share ")
+                    # print(f"Rides Mask for Action {action}: {self.shared_rides_mask}")
+                    
+                    # check whether current action is useful
+                    if self.state["remaining_distance"][action] > 0:
+                        self.count_shared_taken_useful += 1
+                    self.distance_covered_with_shared+=self.route_travel_distance
+                    self.distance_reduced_with_shared+=self.learn_graph.adjacency_matrix('remaining_distance')[self.old_position][action]
+
+
+                else:
+                    self.count_bookown += 1
+                    self.action_choice = "Book"
+                    # print("action == book own ")
+                    # print(f"Rides Mask for Action {action}: {self.shared_rides_mask}")
+                    self.distance_covered_with_ownrides+=self.route_travel_distance
+                    self.distance_reduced_with_ownrides+=self.learn_graph.adjacency_matrix('remaining_distance')[self.old_position][action]
+
+                startTimeRide = time.time()
+                self.has_waited=False
+                self.count_hubs += 1
+
+
+                self.old_position = self.position
+                self.position = action
+
+                executionTimeRide = (time.time() - startTimeRide)
+                # print(f"Time Ride: {str(executionTimeRide)}")
+                pass
+
+        # brauchen wir nicht mehr oder??
+        else:
+            print("invalid action")
+            #print("avail actions: ",self.available_actions)
+            print("action: ",action)
+            print("action space: ",self.action_space)
+
+        # refresh travel cost layer after each step
+        self.learn_graph.add_travel_cost_layer(self.availableTrips(), self.distance_matrix)
+        self.learn_graph.add_remaining_distance_layer(current_hub=self.position, distance_matrix=self.distance_matrix)
+        startTimeLearn = time.time()
+        self.old_state = self.state
+        self.state = {
+            'remaining_distance': (((self.learn_graph.adjacency_matrix('remaining_distance')[self.position])-self.rd_mean)/self.rd_stdev).astype(np.float64),
+            'current_hub' : self.one_hot(self.position).astype(np.float64),
+            'final_hub' : self.one_hot(self.final_hub).astype(np.float64),
+            'distinction' : self.learn_graph.adjacency_matrix('distinction')[self.position].astype(np.float64),
+            'allow_bookown': self.allow_bookown,
+            }
+
+        # print("New State: ")        
+        # print(self.state)
+
+        self.time += timedelta(seconds=step_duration)
+
+        self.count_actions += 1
+
+        reward, self.done, self.state_of_delivery = self.compute_reward(action)
+
+        # if (self.done):
+        #      self.mean_rd=sum(self.rem_distance_values)/len(self.rem_distance_values)
+        #      #print("mean rd: ",self.mean_rd)
+        #      self.sd_rd=statistics.stdev(self.rem_distance_values)
+        #      #print("stdev rd: ",self.sd_rd)
+        #self.state_of_delivery = state_of_delivery
+        executionTime = (time.time() - startTime)
+
+        if self.count_bookown > 0:
+            self.booked_own = 1
+
+        # counting on step-base (not individual ride-base)
+        if boolean_available_temp == True:
+            self.boolean_shared_available += 1
+        if boolean_useful_temp == True:
+            self.boolean_useful_shares_available += 1
+
+        # test prints for counters
+        # print("Out of ", self.count_actions, " steps, in ", self.boolean_shared_available, " steps shared rides were available")
+        """
+        if self.boolean_shared_available == 1:
+            print("In Step ", self.count_actions, " some share is available, number: ", self.count_shared_available)
+        else:
+            print("In Step ", self.count_actions, " there is no share available")
+        """
+        # print("In Step ", self.count_actions, " a useful share is available, number: ", self.boolean_useful_shares_available)            
+
+        # print("Step End")
+        return self.state, reward,  self.done, {"timestamp": self.time,"step_travel_time":step_duration,"distance":self.distance_matrix[self.old_position][self.position], "count_hubs":self.count_hubs, "action": self.action_choice, "hub_index": action, "dist_covered_shares":self.distance_covered_with_shared,"dist_covered_bookown": self.distance_covered_with_ownrides}
+
+    # step method for benchmarks
+    def step(self, action: int, benchmark: bool):
+        startTime = time.time()
+        counter = 0
+        boolean_available_temp = False
+        boolean_useful_temp = False
+        for hub in self.shared_rides_mask:
+            if hub == 1:
+                # self.boolean_shared_available = 1
+                # count on step-base
+                boolean_available_temp = True
+                self.count_shared_available += 1
+                # check whether remaining distance decreases with new position
+                if self.state["remaining_distance"][counter] > 0:
+                    # count on ride-base
+                    self.count_shared_available_useful += 1
+                    # self.boolean_useful_shares_available = 1
+                    # count on step-base
+                    boolean_useful_temp = True
+
+        # set old position to current position before changing current position
+        self.old_position = self.position
+        step_duration = 0
+
+        if self.validateAction(action):
+            startTimeWait = time.time()
+            self.count_steps +=1
+            if(action == self.position):
+            # action = wait
+                step_duration = self.WAIT_TIME_SECONDS
+                self.has_waited=True
+                self.own_ride = False
+                self.count_wait += 1
+                self.action_choice = "Wait"
+                # print("action == wait ")
+                executionTimeWait = (time.time() - startTimeWait)
+                pass
+
+            # action = share ride or book own ride
+            else:
+                pickup_nodeid = self.manhattan_graph.get_nodeid_by_hub_index(self.position)
+                dropoff_nodeid = self.manhattan_graph.get_nodeid_by_hub_index(action)
+
+                route = ox.shortest_path(self.manhattan_graph.inner_graph, pickup_nodeid,  dropoff_nodeid, weight='travel_time')
+                route_travel_time = ox.utils_graph.get_route_edge_attributes(self.manhattan_graph.inner_graph,route,attribute='travel_time')
+                self.route_travel_distance = sum(ox.utils_graph.get_route_edge_attributes(self.manhattan_graph.inner_graph,route,attribute='length'))
+
+
+                if(self.learn_graph.wait_till_departure_times[(self.position,action)] == self.WAIT_TIME_SECONDS):
+                    step_duration = sum(route_travel_time)+ self.WAIT_TIME_SECONDS#we add 5 minutes (300 seconds) so the taxi can arrive
+                elif(self.learn_graph.wait_till_departure_times[(self.position,action)] != self.WAIT_TIME_SECONDS and self.learn_graph.wait_till_departure_times[(self.position,action)] != 0):
+                    step_duration = sum(route_travel_time)
+                    # TODO: String conversion von departure time besser direkt beim erstellen der Matrix
+                    departure_time = datetime.strptime(self.learn_graph.wait_till_departure_times[(self.position,action)], '%Y-%m-%d %H:%M:%S')
+                    self.current_wait = ( departure_time - self.time).seconds
+                    # step_duration += self.current_wait
                     self.time = departure_time
                 if(self.shared_rides_mask[action] == 1):
                     self.count_share += 1

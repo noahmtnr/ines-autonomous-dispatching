@@ -34,26 +34,29 @@ class SharesAgent:
         count_bookowns = 0
         count_wait = 0
         steps = 0
-        while not done:
+        number_hubs = 0
+        while (not done) or (steps<50):
             # visualize current situation
             # env.render()
-
+            old_hub = current_hub
             # select most useful shared ride, otherwise wait
             best_gain = 0
             best_hub = 0
             for hub in range(env.action_space.n):
-                # check distance gained
-                if (env.state["remaining_distance"][hub] > 0) and (env.state["remaining_distance"][hub] > best_gain):
+                # check distance gained and whether it is shared ride
+                # print(env.state["distinction"])
+                # print(env.state["remaining_distance"])
+                if (env.state["remaining_distance"][hub] > 0) and (env.state["remaining_distance"][hub] > best_gain) and (env.state["distinction"][hub]==1):
                     best_hub = hub
                     best_gain = env.state["remaining_distance"][hub]
 
             if best_gain <= 0:
-                action = current_hub
+                action = current_hub # wait
             else:
-                action = best_hub
+                action = best_hub # take the shared ride
 
             print(f"Our destination hub is: {action}")
-            state, reward, done, info = env.step(action)
+            state, reward, done, info = env.step(action,True)
 
             route.append(action)
             current_hub = action
@@ -62,7 +65,10 @@ class SharesAgent:
             delivey_time = datetime.strptime(env_config["delivery_timestamp"], '%Y-%m-%d %H:%M:%S')
             time_until_deadline= delivey_time-sum_travel_time
             sum_distance += info.get('distance')/1000
-            number_hubs=info.get('count_hubs')
+            if old_hub!=current_hub:
+                number_hubs+=1
+            dist_shares = info.get("dist_covered_shares")
+            dist_bookowns = info.get("dist_covered_bookown")
             # add reward
             sum_reward+=reward
 
@@ -87,9 +93,11 @@ class SharesAgent:
                 #     raise Exception("DID NOT ARRIVE IN FINAL HUB")
                 break
 
+        if steps>=50:
+            print("Not Delivered")
         if count_bookowns == 0:
             ratio = 0
         else:
             ratio = float(count_shares/count_bookowns)
-        reward_list={"pickup_hub":env_config['pickup_hub_index'],"delivery_hub":env_config['delivery_hub_index'],"reward":sum_reward, "hubs":number_hubs, "route":route, "time":str(sum_travel_time), "dist":sum_distance, "time_until_deadline":time_until_deadline, "timestamps":route_timestamps, "count_bookowns": count_bookowns, "steps": steps, "ratio_share_to_own": ratio}
+        reward_list={"pickup_hub":env_config['pickup_hub_index'],"delivery_hub":env_config['delivery_hub_index'],"reward":sum_reward, "hubs":number_hubs, "route":route, "time":str(sum_travel_time), "dist":sum_distance, "time_until_deadline":time_until_deadline, "timestamps":route_timestamps, "count_bookowns": count_bookowns, "steps": steps, "ratio_share_to_own": ratio,"dist_covered_shares": dist_shares, "dist_covered_bookown": dist_bookowns}
         return reward_list

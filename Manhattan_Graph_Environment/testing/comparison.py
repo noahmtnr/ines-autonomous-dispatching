@@ -90,12 +90,12 @@ class Comparer:
     def compare_onetrip(self):
 
         # show overview of all compared agents
-        print("Overview of Compared Agents")
+        print("\n Overview of Compared Agents")
         for elem in self.compare_dict.items():
             print(elem[0], " Agent: ", elem[1][7], " steps / ", elem[1][4], " hubs / ", elem[1][2], " distance / ", elem[1][3], " time / ", elem[1][0], " reward / ", elem[1][1], " route")
 
         # do ranking on each aspect
-        print("Rankings of Compared Agents")
+        print("\n Rankings of Compared Agents")
         # number of steps to compare
 
         # rank on hubs (min)
@@ -165,10 +165,10 @@ class Comparer:
         i = 1
         print("\n Ranking by Ratio Distance Reduced with Shares to Whole Distance")
         for elem in time_sort:
-            print(f"Rank {i}: {elem[0]} with travel time of {time_sort[i-1][1][8]}")
+            print(f"Rank {i}: {elem[0]} with ratio of {time_sort[i-1][1][8]}")
             i += 1
 
-    # this method does not work yet (state: 19.07.2022)
+    # in development (27.07.22)
     def compare_multipletrips(self):
         self.compare_dict = {}
         i = 1
@@ -204,12 +204,15 @@ class Comparer:
                 num_hubs = current.get("hubs")
                 hubs_array.append(num_hubs)
 
+                # ratio delivered without bookown to all delivered orders
+
             reward_mean = Average(reward_array)
             dist_mean = Average(dist_array)
             time_mean = Average(time_array)
             num_hubs_mean = Average(hubs_array)
             self.compare_dict.update({key,[reward_mean,dist_mean,time_mean,num_hubs_mean]})
         
+        # call comparer to get rankings
         Comparer.compare_onetrip(self)
     
     def Average(lst):
@@ -220,17 +223,21 @@ class Comparer:
 
 
 # possible agents to be compared
-#w1 = BenchmarkWrapper("random")
-#w2 = BenchmarkWrapper("cost")
-#w3 = BenchmarkWrapper("PPO")
-# w4 = BenchmarkWrapper("DQN") # hat noch Fehler
-#w5 = BenchmarkWrapper("Rainbow")
-#w6 = BenchmarkWrapper("Shares")
 env = GraphEnv(use_config=True)
-w7 = BenchmarkWrapper("Bookown",env)
+# w1 = BenchmarkWrapper("random",env)
+# w2 = BenchmarkWrapper("cost",env)
+#w3 = BenchmarkWrapper("PPO",env)
+# w4 = BenchmarkWrapper("DQN",env) # hat noch Fehler
+#w5 = BenchmarkWrapper("Rainbow",env)
+w6 = BenchmarkWrapper("Shares",env)
+# w7 = BenchmarkWrapper("Bookown",env)
+#w8 = BenchmarkWrapper("SharesBookEnd",env)
 
 # possible combinations of comparisons
-c = Comparer(1,w7.name,w7)
+# c = Comparer(1,w1.name,w1)
+# c = Comparer(1,w2.name,w2)
+# c = Comparer(1,w7.name,w7)
+c = Comparer(1,w6.name,w6)
 # c = Comparer(3,w5.name,w6.name,w7.name,w5,w6,w7)
 # c = Comparer(1,w4.name,w4)
 # c = Comparer(2,w3.name,w5.name,w3,w5)
