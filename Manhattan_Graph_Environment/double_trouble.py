@@ -88,6 +88,7 @@ def create_map_from_df(df_hubs, df_route=pd.DataFrame(), test_id=0):
         # Split up df into share & book own and fig.add_trace individually with color specified individually 
         fig.add_trace(go.Scattermapbox(
             mode = "lines",
+            name = 'route',
             # Change comment of following 2 lines if you want to show exact path of route
             lon = [df_route['longitude'][i] for i in range(len(df_route['longitude']))],
             lat = [df_route['latitude'][i] for i in range(len(df_route['latitude']))],
@@ -194,7 +195,7 @@ html.Div(children=[
         html.H4('Calculated route: ',  id='calc-route-1'),
         html.H4('Actions taken:', id= 'actions-taken-titel'),
         html.Div(dcc.Graph(figure=create_piechart(), id='graph_actions'), id='div-piechart'),
-        html.H4('Distance reduced:', id= 'distance-titel'),
+        html.H4('Distance reduced to final hub in meters:', id= 'distance-titel'),
         html.Div(dcc.Graph(figure=create_chart_reduced_distance(), id='graph_distance'), id='div-piechart-dist'),
     ], className='right-dashboard'),
      
@@ -218,7 +219,7 @@ html.Div(children=[
                
         html.H4('Actions taken:', id= 'actions-taken-titel'),
         html.Div(dcc.Graph(figure=create_piechart(), id='graph_actions2'), id='div-piechart2'),
-        html.H4('Distance reduced:', id= 'distance-titel2'),
+        html.H4('Distance reduced to final hub in meters:', id= 'distance-titel2'),
         html.Div(dcc.Graph(figure=create_chart_reduced_distance(), id='graph_distance2'), id='div-piechart-dist2'),
         html.H4('User route: ',  id='user-route-2'),
         
