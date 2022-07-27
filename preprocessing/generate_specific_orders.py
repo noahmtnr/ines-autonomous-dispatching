@@ -10,10 +10,10 @@ import pandas as pd
 #import dash_bootstrap_components as dbc
 import sys
 import ast
-from graphs.ManhattanGraph import ManhattanGraph
+sys.path.insert(0,"")
+#from graphs.ManhattanGraph import ManhattanGraph
 import pickle
-# sys.path.insert(0,"")
-from gym_graphenv.envs.GraphworldManhattan import GraphEnv
+from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv
 env = GraphEnv(use_config=True)
 import csv
 
@@ -30,7 +30,7 @@ test_orders=[]
 
 for i in range(len(pickup_hubs)):
      pickup_hubid=env.manhattan_graph.get_nodeid_by_hub_index(pickup_hubs[i])
-     delivery_hubid=env.manhattan_graph.get_nodeid_by_hub_index(pickup_hubs[i])
+     delivery_hubid=env.manhattan_graph.get_nodeid_by_hub_index(delivery_hubs[i])
      deadline=datetime.strptime(pickup_timestamp[i], date_format_str)+timedelta(hours=24)
      test_order={'pickup_node_id':pickup_hubid, 'delivery_node_id':delivery_hubid, 'pickup_timestamp':pickup_timestamp[i],'delivery_timestamp':deadline}
      test_orders.append(test_order)
