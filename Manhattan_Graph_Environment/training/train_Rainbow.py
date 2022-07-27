@@ -37,23 +37,47 @@ wandb.init(project="Comparison_Hypothese_Normalisiert", entity="hitchhike")
 #         super(CustomModel, self).__init__(obs_space, action_space, num_outputs, model_config, name)
 #         self.inputs = tf.keras.layers.Input(shape=obs_space.shape, name="final_hub")
 #         layer_1 = tf.keras.layers.Dense(
-#             70,
+#             600,
 #             name="my_layer1",
 #             activation=tf.nn.relu,
 #             kernel_initializer=normc_initializer(1.0),
 #         )(self.inputs)
+#         layer_2 = tf.keras.layers.Dense(
+#             500,
+#             name="my_layer2",
+#             activation=tf.nn.relu,
+#             kernel_initializer=normc_initializer(1.0),
+#         )(layer_1)
+#         layer_3 = tf.keras.layers.Dense(
+#             400,
+#             name="my_layer3",
+#             activation=tf.nn.relu,
+#             kernel_initializer=normc_initializer(1.0),
+#         )(layer_2)
+#         layer_4 = tf.keras.layers.Dense(
+#             300,
+#             name="my_layer4",
+#             activation=tf.nn.relu,
+#             kernel_initializer=normc_initializer(1.0),
+#         )(layer_3)
+#         layer_5 = tf.keras.layers.Dense(
+#             120,
+#             name="my_layer5",
+#             activation=tf.nn.relu,
+#             kernel_initializer=normc_initializer(1.0),
+#         )(layer_4)
 #         layer_out = tf.keras.layers.Dense(
 #             num_outputs,
 #             name="my_out",
 #             activation=None,
 #             kernel_initializer=normc_initializer(0.01),
-#         )(layer_1)
+#         )(layer_5)
 #         value_out = tf.keras.layers.Dense(
 #             1,
 #             name="value_out",
 #             activation=None,
 #             kernel_initializer=normc_initializer(0.01),
-#         )(layer_1)
+#         )(layer_5)
 #         self.base_model = tf.keras.Model(self.inputs, [layer_out, value_out])
 
 #     def forward(self, input_dict, state, seq_lens):
@@ -76,10 +100,10 @@ rainbow_config["train_batch_size"] = 400
 rainbow_config["gamma"] = 0.99
 # rainbow_config["framework"] = "torch"
 rainbow_config["callbacks"] = CustomCallbacks
-#rainbow_config["hiddens"] = [70] # to try with 1024  //was also 516
-# rainbow_config["model"] = {
-#     "custom_model": "my_tf_model",
-# }
+rainbow_config["hiddens"] = [600,500,400,300,120] # to try with 1024  //was also 516
+#rainbow_config["model"] = {
+    # "custom_model": "my_tf_model",
+#}
 
 #num_gpus and other gpu parameters in order to train with gpu
 #rainbow_config["num_gpus"] = int(os.environ.get("RLLIB_NUM_GPUS", "0"))
@@ -87,7 +111,7 @@ rainbow_config["callbacks"] = CustomCallbacks
 #rainbow parameters
 
 # N-step Q learning
-rainbow_config["n_step"]= 3 #[between 1 and 10]  //was 5 and 7
+rainbow_config["n_step"]= 4 #[between 1 and 10]  //was 5 and 7
 # Whether to use noisy network
 rainbow_config["noisy"] = True
 # rainbow_config["sigma0"] = 0.2
@@ -104,9 +128,9 @@ trainer = DQNTrainer(rainbow_config,GraphEnv )
 
 #Define the path where the results of the trainer should be saved
 checkpoint_root = "tmp/rainbow/graphworld"
-shutil.rmtree(checkpoint_root, ignore_errors=True, onerror=None)   # clean up old runs
+# shutil.rmtree(checkpoint_root, ignore_errors=True, onerror=None)   # clean up old runs
 ray_results = "{}/ray_results/".format(os.getenv("HOME"))
-shutil.rmtree(ray_results, ignore_errors=True, onerror=None)   # clean up old runs
+# shutil.rmtree(ray_results, ignore_errors=True, onerror=None)   # clean up old runs
 
 
 # Run trainer
@@ -114,9 +138,7 @@ shutil.rmtree(ray_results, ignore_errors=True, onerror=None)   # clean up old ru
 results = []
 episode_data = []
 episode_json = []
-
-n_iter = 30
-
+n_iter = 100
 for n in range(n_iter):
     result = trainer.train()
     results.append(result)

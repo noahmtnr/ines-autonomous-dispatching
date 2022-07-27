@@ -150,19 +150,19 @@ class DBConnection:
     self.mydb.commit()
 
   def getAllHubs(self):
-    sql = "SELECT * FROM HUBS"
+    sql = "SELECT * FROM HUBS ORDER BY id ASC"
 
     self.mycursor.execute(sql)
     result = self.mycursor.fetchall()
-    print(result)
-    return result
+    processed_hubs = []
+    
+    for hub in result:
+      processed_hubs.append(hub[0])
+    
+    return processed_hubs
 
 
   def close_connection(self):
     self.cursor.close()
     self.mydb.close()
 
-
-  
-# print(DB.getAvailableTrips(42430063, '2016-01-03 19:50:10', '2016-01-03 19:55:10'))
-# print(DB.getRouteFromTrip('id0000569'))
