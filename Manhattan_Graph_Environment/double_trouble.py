@@ -78,11 +78,11 @@ def create_map_from_df(df_hubs, df_route=pd.DataFrame(), test_id=0):
     else:
         fig = px.scatter_mapbox(df_hubs, lat="latitude", lon="longitude", hover_name ="id", hover_data = ['Rem. Distance'], color="action", color_discrete_sequence=['Red', 'SaddleBrown', 'LightPink','OliveDrab','LightSlateGrey', 'LightSkyBlue'], category_orders={'action': ['start', 'final','position','shared','book','hub']},#size="car_hours",
                     color_continuous_scale=px.colors.cyclical.IceFire, size_max=30, zoom=11)
-    line_colors={
-        -1.0:'Green',
-        1.0:'Red',
-        0.0:'Blue'
-    }
+    # line_colors={
+    #     -1.0:'Green',
+    #     1.0:'Red',
+    #     0.0:'Blue'
+    # }
     if(df_route.empty == False):
         #print(df_route)
         # Split up df into share & book own and fig.add_trace individually with color specified individually 
@@ -94,10 +94,14 @@ def create_map_from_df(df_hubs, df_route=pd.DataFrame(), test_id=0):
             lat = [df_route['latitude'][i] for i in range(len(df_route['latitude']))],
             #lon = [df_hubs['longitude'][i] for i in df_test['Hubs'][test_id]],
             #lat = [df_hubs['latitude'][i] for i in df_test['Hubs'][test_id]],
-            marker=go.scattermapbox.Marker(
-                size= 10,
-                color=[line_colors[df_route['action_type'][i]] for i in range(len(df_route['action_type']))],
-            ),
+            # marker=go.scattermapbox.Marker(
+            #     size= 10,
+            #     color=[line_colors[df_route['action_type'][i]] for i in range(len(df_route['action_type']))],
+            # ),
+            marker = {
+                'size': 10, 
+                'color': 'DodgerBlue'
+            },
             hovertext  = [manhattan_graph.get_hub_index_by_nodeid(n) for n in df_route['node_id']]
             ))
     return fig
