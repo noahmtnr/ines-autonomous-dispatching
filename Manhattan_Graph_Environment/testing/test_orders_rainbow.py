@@ -21,6 +21,7 @@ from config.definitions import ROOT_DIR
 from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
 from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv, CustomCallbacks
 sys.path.append(os.path.join(ROOT_DIR, "Manhattan_Graph_Environment", "gym_graphenv"))
+import wandb
 
 
 # class for Rainbow Agent
@@ -66,7 +67,7 @@ class TestOrders:
         # Initialize trainer
         rainbow_trainer = DQNTrainer(self.trainer_config, GraphEnv)
         # checkpoint anpassen
-        file_name = os.path.join(ROOT_DIR, 'tmp', 'rainbow', 'graphworld','checkpoint_000001','checkpoint-1')
+        file_name = os.path.join(ROOT_DIR, 'tmp', 'rainbow-new', 'rllib_checkpoint','checkpoint_000001','checkpoint-1')
         print(file_name)
 
         # Restore the Trainer

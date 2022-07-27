@@ -128,7 +128,7 @@ rainbow_config["v_max"]=15000# (set v_min and v_max according to your expected r
 trainer = DQNTrainer(rainbow_config,GraphEnv )
 
 #Define the path where the results of the trainer should be saved
-checkpoint_root = "tmp/rainbow/graphworld"
+checkpoint_root = "tmp/rainbow-new/rllib_checkpoint"
 # shutil.rmtree(checkpoint_root, ignore_errors=True, onerror=None)   # clean up old runs
 ray_results = "{}/ray_results/".format(os.getenv("HOME"))
 # shutil.rmtree(ray_results, ignore_errors=True, onerror=None)   # clean up old runs
@@ -208,8 +208,9 @@ for n in range(n_iter):
                }
     episode_data.append(episode)
     episode_json.append(json.dumps(episode))
-    file_name = trainer.save(checkpoint_root)
-    trainer.save(os.path.join(wandb.run.dir, "checkpoint"))
+    trainer.save(checkpoint_root)
+
+    #wandb.save(os.path.join(wandb.run.dir, "checkpoint"))
     # wandb.save(file_name)
     wandb.log({"n_trained_episodes": result['episodes_this_iter'],
                 "mean_reward": result['episode_reward_mean'],
@@ -251,4 +252,4 @@ for n in range(n_iter):
 
     })
 
-    print(f'{n + 1:3d}: Min/Mean/Max reward: {result["episode_reward_min"]:8.4f}/{result["episode_reward_mean"]:8.4f}/{result["episode_reward_max"]:8.4f}, len mean: {result["episode_len_mean"]:8.4f}. Checkpoint saved to {file_name}')
+    print(f'{n + 1:3d}: Min/Mean/Max reward: {result["episode_reward_min"]:8.4f}/{result["episode_reward_mean"]:8.4f}/{result["episode_reward_max"]:8.4f}, len mean: {result["episode_len_mean"]:8.4f}. Checkpoint saved to ?')
