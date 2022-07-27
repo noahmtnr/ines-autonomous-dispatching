@@ -41,7 +41,7 @@ class TestOrders:
         }
 
         #num_gpus and other gpu parameters in order to train with gpu
-        self.trainer_config["num_gpus"] = int(os.environ.get("RLLIB_NUM_GPUS", "0"))
+        # self.trainer_config["num_gpus"] = int(os.environ.get("RLLIB_NUM_GPUS", "0"))
 
         #rainbow parameters
 
@@ -66,7 +66,8 @@ class TestOrders:
         # Initialize trainer
         rainbow_trainer = DQNTrainer(self.trainer_config, GraphEnv)
         # checkpoint anpassen
-        file_name = os.path.join(ROOT_DIR, 'tmp', 'rainbow', 'graphworld','checkpoint_000030','checkpoint-30')
+        file_name = os.path.join(ROOT_DIR, 'tmp', 'rainbow', 'graphworld','checkpoint_000001','checkpoint-1')
+        print(file_name)
 
         # Restore the Trainer
         rainbow_trainer.restore(file_name)
