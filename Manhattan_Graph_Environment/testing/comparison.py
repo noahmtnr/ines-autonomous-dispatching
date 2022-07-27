@@ -3,8 +3,7 @@ import sys
 import pandas as pd
 import numpy as np
 from BenchmarkWrapper import BenchmarkWrapper
-from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
-from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv, CustomCallbacks
+from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv
 import operator
 sys.path.insert(0,"")
 
@@ -164,36 +163,44 @@ class Comparer:
         dist_reduce_sort = sorted(self.compare_dict.items(), key=lambda i: i[1][8], reverse=True)
         i = 1
         print("\n Ranking by Ratio Distance Reduced with Shares to Whole Distance")
-        for elem in time_sort:
-            print(f"Rank {i}: {elem[0]} with ratio of {time_sort[i-1][1][8]}")
+        for elem in dist_reduce_sort:
+            print(f"Rank {i}: {elem[0]} with ratio of {dist_reduce_sort[i-1][1][8]}")
             i += 1
 
-    # in development (27.07.22)
+    # compares multiple trips (by taking mean of results over the trips) for the agents
     def compare_multipletrips(self):
         self.compare_dict = {}
         i = 1
 
         # iterate over dictionary 
         for key in self.agents:
+            print("Ausgabe Zweite")
+            print(key, " : ", self.agents[key])
             array = self.agents[key].read_orders()
 
-            # get all orders
+            # get results of all orders in respective arrays for each agent
             reward_array = []
             # route_array = []
             dist_array = []
             time_array = []
             hubs_array = []
+            steps_array = []
+            num_books_array = []
+            ratio_array = []
+            dist_shares_array = []
+            route_array = []
+            dist_bookowns_array = []
 
-            print(f"Compare the agents for {len(array)} trips:")
-            for i in len(array):
-                current = array[i]
+            print(f"Compare the agents for {len(array)} trips.")
+            # get the only order
+            for current in array:
                 # get individual aspects out of dictionary
                 # reward
                 reward = current.get("reward")
                 reward_array.append(reward)
                 # route
-                # route = current.get("route")
-                # route_array.append(route)
+                route = current.get("route")
+                route_array.append(route) # necessary?
                 # distance
                 dist = current.get("dist")
                 dist_array.append(dist)
@@ -203,14 +210,45 @@ class Comparer:
                 # travelled hubs
                 num_hubs = current.get("hubs")
                 hubs_array.append(num_hubs)
+                # number of steps
+                num_steps = current.get("steps")
+                steps_array.append(num_steps)
+                # booked own
+                num_booked_own = current.get("count_bookowns")
+                num_books_array.append(num_booked_own)
+                # share to own ratio
+                ratio = current.get("ratio_share_to_own")
+                ratio_array.append(ratio)
 
-                # ratio delivered without bookown to all delivered orders
+                # distance covered with shares
+                dist_shares = current.get("dist_covered_shares")
+                # distance covered with bookowns
+                dist_bookowns = current.get("dist_covered_bookown")
+                # compute share of distance covered with shares and bookowns
+                ratio_dist_shares = float(dist_shares/dist)
+                ratio_dist_bookowns = float(dist_bookowns/dist)
+                dist_shares_array.append(ratio_dist_shares)
+                dist_bookowns_array.append(ratio_dist_bookowns)
 
+            # for one order
+            # self.compare_dict[key]= [reward_array,route_array,dist_array,time_array,hubs_array,num_books_array,ratio_array,steps_array,dist_shares_array,dist_bookowns_array]
+
+            # print(self.compare_dict)
+
+            # compute the averages of each result array 
+            counter += 1
             reward_mean = Average(reward_array)
             dist_mean = Average(dist_array)
             time_mean = Average(time_array)
             num_hubs_mean = Average(hubs_array)
-            self.compare_dict.update({key,[reward_mean,dist_mean,time_mean,num_hubs_mean]})
+            num_books_mean = Average(num_books_array)
+            ratio_mean = Average(ratio_array)
+            steps_mean = Average(steps_array)
+            dist_shares_mean = Average(dist_shares_array)
+            dist_bookowns_mean = Average(dist_bookowns_array)
+
+            self.compare_dict[key] = [reward_mean,route_array,dist_mean,time_mean,num_hubs_mean,num_books_mean,ratio_mean,steps_mean,dist_shares_mean,dist_bookowns_mean]
+            print(self.compare_dict)
         
         # call comparer to get rankings
         Comparer.compare_onetrip(self)
@@ -223,17 +261,23 @@ class Comparer:
 
 
 # possible agents to be compared
-env = GraphEnv(use_config=True)
-# w1 = BenchmarkWrapper("random",env)
-# w2 = BenchmarkWrapper("cost",env)
+env = GraphEnv(use_config=True) # use normal GraphWorld for RLs
+# RL agents
 #w3 = BenchmarkWrapper("PPO",env)
 # w4 = BenchmarkWrapper("DQN",env) # hat noch Fehler
 #w5 = BenchmarkWrapper("Rainbow",env)
+
+from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattanBenchmark import GraphEnv # use Benchmark Graphworld for others
+env = GraphEnv(use_config=True)
+# benchmarks
+# w1 = BenchmarkWrapper("random",env)
+# w2 = BenchmarkWrapper("cost",env)
 w6 = BenchmarkWrapper("Shares",env)
 # w7 = BenchmarkWrapper("Bookown",env)
 #w8 = BenchmarkWrapper("SharesBookEnd",env)
 
 # possible combinations of comparisons
+# for one agent: Comparer(1,nameAgent,AgentObjekt)
 # c = Comparer(1,w1.name,w1)
 # c = Comparer(1,w2.name,w2)
 # c = Comparer(1,w7.name,w7)
@@ -247,8 +291,8 @@ c = Comparer(1,w6.name,w6)
 # c = Comparer(7,w1.name,w2.name,w3.name,w4.name,w5.name,w6.name,w7.name,w1,w2,w3,w4,w5,w6,w7)
 
 # compute the commparison
-c.establish_compare_onetrip()
-# c.compare_multiple_trips()
+c.establish_compare_onetrip() # call when only one order is placed
+# c.compare_multiple_trips() # call when more than one order is placed (adapt row reads in read_orders!)
 
 
 

@@ -1,14 +1,9 @@
 import warnings
-
-
-
 warnings.filterwarnings('ignore')
 warnings.filterwarnings('ignore', category=UserWarning)
-
 import sys
 import os
 from unittest import result
-from DQNAgent import DQNAgent
 from config.definitions import ROOT_DIR
 
 sys.path.insert(0, "")
@@ -20,6 +15,7 @@ from RainbowAgent import RainbowAgent
 from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
 from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv, CustomCallbacks
 from PPOAgent import PPOAgent
+from DQNAgent import DQNAgent
 from BookownAgent import BookownAgent
 from SharesBookEndAgent import SharesBookEndAgent
 import numpy as np
@@ -36,13 +32,13 @@ import warnings
 
 class BenchmarkWrapper:
 
-    def __init__(self, agent_name, env=GraphEnv):
+    def __init__(self, agent_name, env):
         if (agent_name != None):
             self.name = agent_name
         else:
             self.name = sys.argv[2]
         self.env = env
-        self.manhattan_graph = self.env.get_Graph
+        self.manhattan_graph = self.env.get_Graph()
 
     # noinspection PyMethodMayBeStatic
     def file_read(self):
@@ -68,9 +64,9 @@ class BenchmarkWrapper:
     def proceed_order(self, order):
         print(order)
 
-        manhattan_graph = ManhattanGraph(filename='simple', num_hubs=120)
-        pick_up_hub_index = ManhattanGraph.get_hub_index_by_node_index(manhattan_graph,order.get('pickup_node'))
-        delivery_hub_index = ManhattanGraph.get_hub_index_by_node_index(manhattan_graph,order.get('delivery_node'))
+        # manhattan_graph = ManhattanGraph(filename='simple',hubs=120)
+        pick_up_hub_index = self.manhattan_graph.get_hub_index_by_node_index(order.get('pickup_node'))
+        delivery_hub_index = self.manhattan_graph.get_hub_index_by_node_index(order.get('delivery_node'))
         # print(pick_up_hub_index,delivery_hub_index)
         env_config = {'pickup_hub_index': pick_up_hub_index,
                       'delivery_hub_index': delivery_hub_index,

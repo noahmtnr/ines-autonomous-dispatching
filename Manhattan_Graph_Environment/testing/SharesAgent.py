@@ -1,7 +1,7 @@
 import sys
 sys.path.insert(0,"")
 from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
-from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv
+from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattanBenchmark import GraphEnv
 import numpy as np
 import pandas as pd
 import json
@@ -35,7 +35,7 @@ class SharesAgent:
         count_wait = 0
         steps = 0
         number_hubs = 0
-        while (not done) or (steps<50):
+        while (not done) and (steps<50):
             # visualize current situation
             # env.render()
             old_hub = current_hub
@@ -46,6 +46,7 @@ class SharesAgent:
                 # check distance gained and whether it is shared ride
                 # print(env.state["distinction"])
                 # print(env.state["remaining_distance"])
+                print("Distinction: ", env.state["distinction"])
                 if (env.state["remaining_distance"][hub] > 0) and (env.state["remaining_distance"][hub] > best_gain) and (env.state["distinction"][hub]==1):
                     best_hub = hub
                     best_gain = env.state["remaining_distance"][hub]
@@ -56,7 +57,7 @@ class SharesAgent:
                 action = best_hub # take the shared ride
 
             print(f"Our destination hub is: {action}")
-            state, reward, done, info = env.step(action,True)
+            state, reward, done, info = env.step(action)
 
             route.append(action)
             current_hub = action
@@ -82,6 +83,7 @@ class SharesAgent:
                 count_wait += 1
             steps += 1
             
+            print("Step: ", steps)
             if done:
                 print("DELIVERY DONE! sum_reward: ",sum_reward)
                 print("DELIVERY DONE! Route: ",route)
@@ -92,6 +94,9 @@ class SharesAgent:
                 # if action!=env_config["delivery_hub_index"]:
                 #     raise Exception("DID NOT ARRIVE IN FINAL HUB")
                 break
+
+        # TODO: for comparison
+        print("Ratio Shares to All Steps: ", float(count_shares/steps))
 
         if steps>=50:
             print("Not Delivered")
