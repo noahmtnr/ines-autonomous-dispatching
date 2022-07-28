@@ -95,6 +95,10 @@ class RainbowAgent:
         sum_travel_time = timedelta(seconds=0)
         print(sum_travel_time)
         sum_distance = 0
+        count_shares = 0
+        count_bookowns = 0
+        count_wait = 0
+        steps = 0
         results = []
         done = False
         while not done:

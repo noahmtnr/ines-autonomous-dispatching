@@ -32,7 +32,7 @@ class RandomAgent:
         count_wait = 0
         steps = 0
         done = False
-        while not done:
+        while (not done):
             action = env.action_space.sample()
             state, reward, done, info = env.step(action)
             route.append(action)

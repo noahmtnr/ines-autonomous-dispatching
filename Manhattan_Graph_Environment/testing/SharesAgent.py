@@ -35,7 +35,7 @@ class SharesAgent:
         count_wait = 0
         steps = 0
         number_hubs = 0
-        while (not done) and (steps<100):
+        while (not done) and (steps<200):
             # visualize current situation
             # env.render()
             old_hub = current_hub

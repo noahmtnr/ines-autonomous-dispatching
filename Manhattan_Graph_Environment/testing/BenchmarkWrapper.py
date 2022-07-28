@@ -75,11 +75,11 @@ class BenchmarkWrapper:
         return reward_list
 
     def proceed_order(self, order):
-        print(order)
+        print("Current Order: ", order)
 
         # manhattan_graph = ManhattanGraph(filename='simple',hubs=120)
-        pick_up_hub_index = self.manhattan_graph.get_hub_index_by_node_index(order.get('pickup_node'))
-        delivery_hub_index = self.manhattan_graph.get_hub_index_by_node_index(order.get('delivery_node'))
+        pick_up_hub_index = self.manhattan_graph.get_hub_index_by_nodeid(order.get('pickup_node'))
+        delivery_hub_index = self.manhattan_graph.get_hub_index_by_nodeid(order.get('delivery_node'))
         # print(pick_up_hub_index,delivery_hub_index)
         env_config = {'pickup_hub_index': pick_up_hub_index,
                       'delivery_hub_index': delivery_hub_index,
