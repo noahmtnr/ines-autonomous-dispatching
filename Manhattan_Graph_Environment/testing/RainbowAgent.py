@@ -49,7 +49,7 @@ class RainbowAgent:
                 "iterations": 1,
                 }
         # checkpoint anpassen
-        file_name = os.path.join(ROOT_DIR, 'tmp', 'rainbow', 'graphworld','checkpoint_000021','checkpoint-21')
+        file_name = os.path.join(ROOT_DIR, 'tmp', 'rainbow', 'graphworld','checkpoint_000081','checkpoint-81')
 
         # Restore the Trainer
         rainbow_trainer.restore(file_name)
