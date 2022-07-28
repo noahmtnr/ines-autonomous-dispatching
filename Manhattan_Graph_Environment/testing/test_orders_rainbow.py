@@ -67,7 +67,7 @@ class TestOrders:
         # Initialize trainer
         rainbow_trainer = DQNTrainer(self.trainer_config, GraphEnv)
         # checkpoint anpassen
-        file_name = os.path.join(ROOT_DIR, 'tmp', 'rainbow-new', 'rllib_checkpoint','checkpoint_000001','checkpoint-1')
+        file_name = os.path.join(ROOT_DIR, 'tmp', 'rainbow-new', 'rllib_checkpoint','checkpoint_000043','checkpoint-43')
         print(file_name)
 
         # Restore the Trainer
