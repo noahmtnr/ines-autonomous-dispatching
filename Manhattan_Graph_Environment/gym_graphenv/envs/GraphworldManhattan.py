@@ -114,6 +114,9 @@ class GraphEnv(gym.Env):
         self.distance_covered_with_shared=0
         self.distance_covered_with_ownrides=0
 
+    def get_Graph(self):
+        return self.manhattan_graph
+
     def one_hot(self, pos):
         one_hot_vector = np.zeros(len(self.hubs))
         one_hot_vector[pos] = 1
@@ -335,12 +338,8 @@ class GraphEnv(gym.Env):
                     departure_time = self.learn_graph.wait_till_departure_times[(self.position,action)]
                     # print("Departure Time: ", departure_time)
                     self.current_wait = ( departure_time - self.time).seconds
+                    # step_duration += self.current_wait
                     self.time = departure_time
-                    # print("Travel Times ", route_travel_time)
-                    # print("Sum Travel Time ", sum(route_travel_time))
-                    # print("Current Wait ", self.current_wait)
-                    # print("Step Duration: ", step_duration)
-
                 if(self.shared_rides_mask[action] == 1):
                     self.count_share += 1
                     self.action_choice = "Share"
@@ -352,6 +351,7 @@ class GraphEnv(gym.Env):
                         self.count_shared_taken_useful += 1
                     self.distance_covered_with_shared+=self.route_travel_distance
                     self.distance_reduced_with_shared+=self.learn_graph.adjacency_matrix('remaining_distance')[self.old_position][action]
+
 
                 else:
                     self.count_bookown += 1
@@ -380,7 +380,6 @@ class GraphEnv(gym.Env):
             print("action: ",action)
             print("action space: ",self.action_space)
 
-        self.time += timedelta(seconds=step_duration)
         # refresh travel cost layer after each step
         self.learn_graph.add_travel_cost_layer(self.availableTrips(), self.distance_matrix)
         self.learn_graph.add_remaining_distance_layer(current_hub=self.position, distance_matrix=self.distance_matrix)
@@ -397,7 +396,7 @@ class GraphEnv(gym.Env):
         # print("New State: ")        
         # print(self.state)
 
-        #print("End Time ", self.time)
+        self.time += timedelta(seconds=step_duration)
 
         self.count_actions += 1
 
@@ -411,7 +410,8 @@ class GraphEnv(gym.Env):
         #self.state_of_delivery = state_of_delivery
         executionTime = (time.time() - startTime)
 
-        # print(self.route_taken)
+        if self.count_bookown > 0:
+            self.booked_own = 1
 
         # counting on step-base (not individual ride-base)
         if boolean_available_temp == True:
@@ -430,9 +430,9 @@ class GraphEnv(gym.Env):
         # print("In Step ", self.count_actions, " a useful share is available, number: ", self.boolean_useful_shares_available)            
 
         # print("Step End")
-        return self.state, reward,  self.done, {"timestamp": self.time,"step_travel_time":step_duration,"distance":self.distance_matrix[self.old_position][self.position], "count_hubs":self.count_hubs, "action": self.action_choice, "hub_index": action, "route": route_taken,"remaining_dist": self.learn_graph.adjacency_matrix('remaining_distance')[self.position][self.final_hub]}
+        return self.state, reward,  self.done, {"timestamp": self.time,"step_travel_time":step_duration,"distance":self.distance_matrix[self.old_position][self.position], "count_hubs":self.count_hubs, "action": self.action_choice, "hub_index": action, "dist_covered_shares":self.distance_covered_with_shared,"dist_covered_bookown": self.distance_covered_with_ownrides}
 
-
+    
     def compute_reward(self, action):
         # cost_of_action = self.learn_graph.adjacency_matrix('cost')[self.old_position][action]
         distance_gained = self.old_state['remaining_distance'][self.position]
