@@ -430,7 +430,7 @@ class GraphEnv(gym.Env):
         # print("In Step ", self.count_actions, " a useful share is available, number: ", self.boolean_useful_shares_available)            
 
         # print("Step End")
-        return self.state, reward,  self.done, {"timestamp": self.time,"step_travel_time":step_duration,"distance":self.distance_matrix[self.old_position][self.position], "count_hubs":self.count_hubs, "action": self.action_choice, "hub_index": action, "route": route_taken, "dist_covered_shares":self.distance_covered_with_shared,"dist_covered_bookown": self.distance_covered_with_ownrides}
+        return self.state, reward,  self.done, {"timestamp": self.time,"step_travel_time":step_duration,"distance":self.distance_matrix[self.old_position][self.position], "count_hubs":self.count_hubs, "action": self.action_choice, "hub_index": action, "route": route_taken, "remaining_dist": self.learn_graph.adjacency_matrix('remaining_distance')[self.position][self.final_hub], "dist_covered_shares":self.distance_covered_with_shared,"dist_covered_bookown": self.distance_covered_with_ownrides}
 
     
     def compute_reward(self, action):
