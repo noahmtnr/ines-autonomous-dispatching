@@ -44,7 +44,7 @@ class BookownAgent:
             sum_reward += reward
             sum_travel_time +=timedelta(seconds=info.get('step_travel_time'))
             delivey_time = datetime.strptime(env_config["delivery_timestamp"], '%Y-%m-%d %H:%M:%S')
-            time_until_deadline= delivey_time-sum_travel_time
+            time_until_deadline= timedelta(hours=24)-sum_travel_time
             sum_distance += info.get('distance')/1000
             number_hubs=info.get('count_hubs')
             dist_shares = info.get("dist_covered_shares")

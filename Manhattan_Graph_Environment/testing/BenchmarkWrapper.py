@@ -4,9 +4,9 @@ warnings.filterwarnings('ignore', category=UserWarning)
 import sys
 import os
 from unittest import result
-from config.definitions import ROOT_DIR
 
 sys.path.insert(0, "")
+from config.definitions import ROOT_DIR
 sys.path.append(os.path.join(ROOT_DIR, "Manhattan_Graph_Environment", "gym_graphenv"))
 from RandomAgent import RandomAgent
 from CostAgent import CostAgent
@@ -43,6 +43,7 @@ class BenchmarkWrapper:
     # noinspection PyMethodMayBeStatic
     def file_read(self):
 
+        """
         # for testing random orders
         if len(sys.argv) > 1:
             first_arg = sys.argv[1]
@@ -51,9 +52,9 @@ class BenchmarkWrapper:
         else:
             filepath = os.path.join(ROOT_DIR, "data", "others", 'random_orders.csv')
             orders = pd.read_csv(filepath, nrows=1)
+        """
 
         # for testing specific test orders
-        """
         if len(sys.argv) > 1:
             first_arg = sys.argv[1]
             file_path = os.path.join(ROOT_DIR, "data", "others", 'test_orders.csv') + first_arg
@@ -61,7 +62,6 @@ class BenchmarkWrapper:
         else:
             filepath = os.path.join(ROOT_DIR, "data", "others", 'test_orders.csv')
             orders = pd.read_csv(filepath, nrows=1)
-        """
 
         return orders
 
