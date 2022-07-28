@@ -97,6 +97,6 @@ class DQNAgent:
 
             # print("sum_reward: ",sum_reward)
             # print("sum_reward: ",sum_reward, " time: ",env.time, "deadline time: ", env.deadline, "pickup time: ", env.pickup_time)
-        reward_list={"pickup_hub":env_config['pickup_hub_index'],"delivery_hub":env_config['delivery_hub_index'],"reward":sum_reward, "hubs":number_hubs, "route":route, "time":str(sum_travel_time), "dist":sum_distance, "time_until_deadline":time_until_deadline, "timestamps":route_timestamps,"dist_covered_shares": dist_shares, "dist_covered_bookown": dist_bookowns}
+        reward_list={"pickup_hub":env_config['pickup_hub_index'],"delivery_hub":env_config['delivery_hub_index'],"reward":sum_reward, "hubs":number_hubs, "route":route, "time":sum_travel_time, "dist":sum_distance, "time_until_deadline":time_until_deadline, "timestamps":route_timestamps,"dist_covered_shares": dist_shares, "dist_covered_bookown": dist_bookowns}
 
         return reward_list

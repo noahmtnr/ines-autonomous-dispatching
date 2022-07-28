@@ -211,11 +211,7 @@ class Comparer:
                 dist_array.append(dist)
                 # remaining time
                 time = current.get("time")
-                try:
-                    date = datetime.strptime(time, '%H:%M:%S.%f')
-                except ValueError:
-                    date = datetime.strptime(time, '%H:%M:%S')
-                time_array.append(timedelta(hours=date.hour, minutes=date.minute, seconds=date.second).total_seconds())
+                time_array.append(time.total_seconds())
                 # travelled hubs
                 num_hubs = current.get("hubs")
                 hubs_array.append(num_hubs)
