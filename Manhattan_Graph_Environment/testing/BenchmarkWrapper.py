@@ -4,9 +4,9 @@ warnings.filterwarnings('ignore', category=UserWarning)
 import sys
 import os
 from unittest import result
-from config.definitions import ROOT_DIR
 
 sys.path.insert(0, "")
+from config.definitions import ROOT_DIR
 sys.path.append(os.path.join(ROOT_DIR, "Manhattan_Graph_Environment", "gym_graphenv"))
 from RandomAgent import RandomAgent
 from CostAgent import CostAgent
@@ -43,6 +43,7 @@ class BenchmarkWrapper:
     # noinspection PyMethodMayBeStatic
     def file_read(self):
 
+        """
         # for testing random orders
         if len(sys.argv) > 1:
             first_arg = sys.argv[1]
@@ -51,17 +52,16 @@ class BenchmarkWrapper:
         else:
             filepath = os.path.join(ROOT_DIR, "data", "others", 'random_orders.csv')
             orders = pd.read_csv(filepath, nrows=1)
+        """
 
         # for testing specific test orders
-        """
         if len(sys.argv) > 1:
             first_arg = sys.argv[1]
             file_path = os.path.join(ROOT_DIR, "data", "others", 'test_orders.csv') + first_arg
-            orders = pd.read_csv(file_path, nrows=1)
+            orders = pd.read_csv(file_path, nrows=11)
         else:
             filepath = os.path.join(ROOT_DIR, "data", "others", 'test_orders.csv')
-            orders = pd.read_csv(filepath, nrows=1)
-        """
+            orders = pd.read_csv(filepath, nrows=11)
 
         return orders
 
@@ -75,11 +75,11 @@ class BenchmarkWrapper:
         return reward_list
 
     def proceed_order(self, order):
-        print(order)
+        print("Current Order: ", order)
 
         # manhattan_graph = ManhattanGraph(filename='simple',hubs=120)
-        pick_up_hub_index = self.manhattan_graph.get_hub_index_by_node_index(order.get('pickup_node'))
-        delivery_hub_index = self.manhattan_graph.get_hub_index_by_node_index(order.get('delivery_node'))
+        pick_up_hub_index = self.manhattan_graph.get_hub_index_by_nodeid(order.get('pickup_node'))
+        delivery_hub_index = self.manhattan_graph.get_hub_index_by_nodeid(order.get('delivery_node'))
         # print(pick_up_hub_index,delivery_hub_index)
         env_config = {'pickup_hub_index': pick_up_hub_index,
                       'delivery_hub_index': delivery_hub_index,

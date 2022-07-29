@@ -74,8 +74,8 @@ class Comparer:
 
                 # distance covered with shares
                 dist_shares = current.get("dist_covered_shares")
-                print(dist_shares)
-                print(type(dist_shares))
+                # print(dist_shares)
+                # print(type(dist_shares))
                 # distance covered with bookowns
                 dist_bookowns = current.get("dist_covered_bookown")
                 # compute share of distance covered with shares and bookowns
@@ -85,7 +85,7 @@ class Comparer:
                 # for one order
             self.compare_dict[key]= [reward,route,dist,time,num_hubs,num_booked_own,ratio,num_steps,ratio_dist_shares,ratio_dist_bookowns]
 
-            print(self.compare_dict)
+            # print(self.compare_dict)
 
             counter += 1
         
@@ -211,11 +211,7 @@ class Comparer:
                 dist_array.append(dist)
                 # remaining time
                 time = current.get("time")
-                try:
-                    date = datetime.strptime(time, '%H:%M:%S.%f')
-                except ValueError:
-                    date = datetime.strptime(time, '%H:%M:%S')
-                time_array.append(timedelta(hours=date.hour, minutes=date.minute, seconds=date.second).total_seconds())
+                time_array.append(time.total_seconds())
                 # travelled hubs
                 num_hubs = current.get("hubs")
                 hubs_array.append(num_hubs)
@@ -239,11 +235,11 @@ class Comparer:
                 dist_shares_array.append(ratio_dist_shares)
                 dist_bookowns_array.append(ratio_dist_bookowns)
 
-            print("Reward-Array: ", reward_array)
-            print("Count Books Array: ", num_books_array)
-            print("Time Array: ", time_array)
-            for i in time_array:
-                print(type(i))
+            # print("Reward-Array: ", reward_array)
+            # print("Count Books Array: ", num_books_array)
+            # print("Time Array: ", time_array)
+            # for i in time_array:
+            #     print(type(i))
             # for one order
             # self.compare_dict[key]= [reward_array,route_array,dist_array,time_array,hubs_array,num_books_array,ratio_array,steps_array,dist_shares_array,dist_bookowns_array]
 
@@ -262,7 +258,7 @@ class Comparer:
             dist_bookowns_mean = Comparer.Average(dist_bookowns_array)
 
             self.compare_dict[key] = [reward_mean,route_array,dist_mean,time_mean,num_hubs_mean,num_books_mean,ratio_mean,steps_mean,dist_shares_mean,dist_bookowns_mean]
-            print(self.compare_dict)
+            # print(self.compare_dict)
         
         # call comparer to get rankings
         Comparer.compare_onetrip(self)
@@ -281,11 +277,11 @@ w5 = BenchmarkWrapper("Rainbow",env)
 from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattanBenchmark import GraphEnv # use Benchmark Graphworld for others
 env = GraphEnv(use_config=True)
 # benchmarks
-# w1 = BenchmarkWrapper("random",env)
+w1 = BenchmarkWrapper("random",env)
 # w2 = BenchmarkWrapper("cost",env)
-# w6 = BenchmarkWrapper("Shares",env)
-# w7 = BenchmarkWrapper("Bookown",env)
-# w8 = BenchmarkWrapper("SharesBookEnd",env)
+w6 = BenchmarkWrapper("Shares",env)
+w7 = BenchmarkWrapper("Bookown",env)
+w8 = BenchmarkWrapper("SharesBookEnd",env)
 
 # possible combinations of comparisons
 # for one agent: Comparer(1,nameAgent,AgentObjekt)
@@ -293,19 +289,23 @@ env = GraphEnv(use_config=True)
 # c = Comparer(1,w2.name,w2)
 # c = Comparer(1,w7.name,w7)
 # c = Comparer(1,w6.name,w6)
-c = Comparer(1,w5.name,w5)
+# c = Comparer(1,w5.name,w5)
 # c = Comparer(1,w8.name,w8)
 # c = Comparer(3,w5.name,w6.name,w7.name,w5,w6,w7)
 # c = Comparer(1,w4.name,w4)
 # c = Comparer(2,w3.name,w5.name,w3,w5)
+# c = Comparer(4,w1.name,w6.name,w7.name,w8.name,w1,w6,w7,w8)
 # c = Comparer(3,w1.name,w2.name,w3.name,w1,w2,w3)
 # c = Comparer(6,w1.name,w2.name,w3.name,w5.name,w6.name,w7.name,w1,w2,w3,w5,w6,w7)
 # c = Comparer(5,w1.name,w2.name,w3.name,w4.name,w5.name,w1,w2,w3,w4,w5)
 # c = Comparer(7,w1.name,w2.name,w3.name,w4.name,w5.name,w6.name,w7.name,w1,w2,w3,w4,w5,w6,w7)
 
+# comparison of ALL benchmarks and rainbow
+c = Comparer(5,w1.name,w5.name,w6.name,w7.name,w8.name,w1,w5,w6,w7,w8)
+
 # compute the commparison
-c.establish_compare_onetrip() # call when only one order is placed (adapt row reads to 1 row in BenchmarkWrapper.read_orders!)
-# c.compare_multipletrips() # call when more than one order is placed (adapt row reads in BenchmarkWrapper.read_orders!)
+# c.establish_compare_onetrip() # call when only one order is placed (adapt row reads to 1 row in BenchmarkWrapper.read_orders!)
+c.compare_multipletrips() # call when more than one order is placed (adapt row reads in BenchmarkWrapper.read_orders!)
 
 
 
