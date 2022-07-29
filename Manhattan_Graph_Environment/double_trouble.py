@@ -41,7 +41,7 @@ entered_hub = False
 user_route = []
 
 # read test dataframe 
-filepath = "C:/Users/kirch/OneDrive/Dokumente/Uni/Mannheim/FSS2022/Teamproject/ines-autonomous-dispatching/Manhattan_Graph_Environment/test_orders_dashboard.csv" #"test_orders_dashboard.csv"
+filepath = "C:/Users/kirch/OneDrive/Dokumente/Uni/Mannheim/FSS2022/Teamproject/ines-autonomous-dispatching/Manhattan_Graph_Environment/test_orders_dashboard_noah.csv" #"test_orders_dashboard.csv"
 df_test = pd.read_csv(filepath)
 #df_test = pd.read_csv('D:/ines-autonomous-dispatching/Manhattan_Graph_Environment/test_orders_dashboard.csv')
 
@@ -192,7 +192,7 @@ html.Div(children=[
     ], className='left-dashboard', id='map-1'),
 
     html.Div(children=[
-        html.Div(dcc.Dropdown(['Test 1', 'Test 2', 'Test 3', 'Test 4'], placeholder="Select an order", id='dropdown1'), id='dd-output-container'),
+        html.Div(dcc.Dropdown(['Test 1', 'Test 2', 'Test 3', 'Test 4', 'Test 5'], placeholder="Select an order", id='dropdown1'), id='dd-output-container'),
         #html.Div(id='dd-output-container')),
 
         html.H4('CURRENT ORDER: ', id='destination-hub-1'),
@@ -214,7 +214,7 @@ html.Div(children=[
     ], className='left-dashboard', id='map-2'),
 
     html.Div(children=[
-        html.Div(dcc.Dropdown(['Test 1', 'Test 2', 'Test 3', 'Test 4'], placeholder="Select an order", id='dropdown2')),
+        html.Div(dcc.Dropdown(['Test 1', 'Test 2', 'Test 3', 'Test 4', 'Test 5'], placeholder="Select an order", id='dropdown2')),
 
         html.H4('CURRENT ORDER: ', id='destination-hub-2'),
         html.H4('Calculated route: ',  id='calc-route-2'),
@@ -263,11 +263,19 @@ def start_order_1(value):
             else:
                 if(value == 'Test 4'):
                     test_id = 3
+                else:
+                    if(value == 'Test 5'):
+                        test_id = 4
+                #     else:
+                #         if(value == 'Test 6'):
+                #             test_id = 5
 
-    start_hub = df_test['Hubs'][test_id][0] #list_actions[0] 
-    final_hub = df_test['Hubs'][test_id][-1] #list_actions[-1]
+    start_hub = df_test['Pickup Hub'][test_id] #list_actions[0] 
+    final_hub = df_test['Delivery Hub'][test_id] #list_actions[-1]
 
     # manipulate hubs dataframe based on start and final hub of test case
+    actions = ['hub' for i in range(92)]
+    df_hubs['action'] = actions
     df_hubs['action'][start_hub] = 'start'
     df_hubs['action'][final_hub] = 'final'
 
@@ -383,6 +391,9 @@ def start_order_2(value):
             else:
                 if(value == 'Test 4'):
                     test_id = 3
+                else:
+                    if(value == 'Test 5'):
+                        test_id = 4
     global entered_hub
     entered_hub = False
 
