@@ -1,3 +1,7 @@
+'''
+This file preprocesses taxi trips that have only pickup and dropoff coordinates 
+by adding the shortest path between them by adding nodes on the way.
+'''
 import osmnx as ox
 import networkx as nx
 import pandas as pd
@@ -7,10 +11,24 @@ import time
 class DataPreProcessing:
     
     def setup_graph():
+        """
+        This function loads a graph.
+        Returns:
+            .graphml: a graph with New York City street network 
+        """        
         graph = ox.io.load_graphml("data/graph/simple.graphml")
         return graph
 
     def setup_trips(nrows: int = None) -> pd.DataFrame():
+        """
+        This function loads taxi trips.
+
+        Args:
+            nrows (int, optional): number of rows that we want to load. Defaults to None)->pd.DataFrame(.
+
+        Returns:
+            dataframe: taxi trips
+        """        
         df = pd.read_csv(
             r"/Users/noah/OneDrive - Universität Mannheim/Uni/Mannheim/Team Project/nyc-taxi-trip-duration/train.csv",
             nrows=nrows,
@@ -18,6 +36,16 @@ class DataPreProcessing:
         return df
 
     def map_trips_to_nodes(graph, trips):
+        """
+        This function adds pickup and dropodd nodes  to trips that only have pickup and dropoff coordinates.
+
+        Args:
+            graph (.graphml): graph with New York City street network
+            trips (pandas.DataFrame): taxi trips
+
+        Returns:
+            pandas.Dataframe: taxi trips with added pickup and dropoff nodes 
+        """        
 
         start_time = time.time()
 
@@ -54,6 +82,17 @@ class DataPreProcessing:
         return trips
 
     def map_routes_to_trips(graph, trips):
+        """
+        This function add nodes on the shortest way between pickup and dropoff nodes.
+
+        Args:
+            graph (.graphml): graph with New York City street network
+            trips (pandas.DataFrame): taxi trips
+
+        Returns:
+            pandas.Dataframe: taxi trips with added nodes on the way of taxi
+
+        """        
 
         routes = []
         for index, row in trips.iterrows():
@@ -216,6 +255,15 @@ class DataPreProcessing:
         return route, str(timestamps_dict), route_length, pickup_node_id, dropoff_node_id
 
     def get_coordinates_of_node(node_id): 
+        """
+        Gets coordinates of node
+
+        Args:
+            node_id (int): node id 
+
+        Returns:
+            list: list with coordinates
+        """        
         # manhattangraph = ManhattanGraph(filename='simple', num_hubs=70)
         graph = ox.io.load_graphml("data/graph/simple.graphml")
         nodes = graph.nodes()
@@ -223,15 +271,44 @@ class DataPreProcessing:
         return coordinates
     
     def getNearestNodeId(pickup_longitude, pickup_latitude):
+        """
+        Get node id of a nearest node to some coordinates
+
+        Args:
+            pickup_longitude (int): longitude of a given point
+            pickup_latitude (int): latitude of a given point
+
+        Returns:
+            int: node id
+        """        
         graph = ox.io.load_graphml("data/graph/simple.graphml")
         pickup_node_id = ox.distance.nearest_nodes(graph, pickup_longitude, pickup_latitude)
         return pickup_node_id
 
     def get_node_index_by_coordinates(longitude, latitude):
+        """
+        Get node index by coordinates
+
+        Args:
+            longitude (int): longitude of a given point
+            latitude (int): latitude of a given point
+
+        Returns:
+            list: node index
+        """        
         graph = ox.io.load_graphml("data/graph/simple.graphml")
         node_id = ox.distance.nearest_nodes(graph, longitude, latitude)
         return list(graph.nodes()).index(node_id)
 
     def get_node_index_by_id(id):
+        """
+        Get node index by node id
+
+        Args:
+            id (int): node id
+
+        Returns:
+            int: node index
+        """        
         x, y = DataPreProcessing.get_coordinates_of_node(id)
         return DataPreProcessing.get_node_index_by_coordinates(x, y)
