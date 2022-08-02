@@ -66,16 +66,18 @@ This section delineates basic terms and principles, as well as a tutorial for in
 
 gitignore, yaml-files
 
+## Environment and Reinforcement Learning
+### whatever for environment
+### Observation Space
+### Action Space
+### Agents 
+DQN, PPO, Rainbow
 
 ## Instruction for Training
 
-### Agents
-
-DQN, PPO, Rainbow
-
 ### Parameters
 
-	Iterations, hidden layers, activation function, number of steps, ...
+	agents,Iterations, hidden layers, activation function, number of steps, ...
 
 ### Execution of Training
 
