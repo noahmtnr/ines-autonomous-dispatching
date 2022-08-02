@@ -100,13 +100,14 @@ rainbow_config["train_batch_size"] = 400
 rainbow_config["gamma"] = 0.99
 # rainbow_config["framework"] = "torch"
 rainbow_config["callbacks"] = CustomCallbacks
-rainbow_config["hiddens"] = [600,500,400,300,120] # to try with 1024  //was also 516
-#rainbow_config["model"] = {
+rainbow_config["hiddens"] = [180,150,100] # to try with 1024  //was also 516
+rainbow_config["model"] = {
     # "custom_model": "my_tf_model",
-#}
+    "fcnet_activation": 'relu',
+}
 
 #num_gpus and other gpu parameters in order to train with gpu
-#rainbow_config["num_gpus"] = int(os.environ.get("RLLIB_NUM_GPUS", "0"))
+rainbow_config["num_gpus"] = int(os.environ.get("RLLIB_NUM_GPUS", "0"))
 
 #rainbow parameters
 
@@ -119,15 +120,15 @@ rainbow_config["noisy"] = True
 # this is greater than 1, distributional Q-learning is used.
 # the discrete supports are bounded by v_min and v_max
 rainbow_config["num_atoms"] = 70 #[more than 1] //was 51,20
-rainbow_config["v_min"] =-20010000
-rainbow_config["v_max"]=210000 # (set v_min and v_max according to your expected range of returns).
+rainbow_config["v_min"] =-15000
+rainbow_config["v_max"]=15000# (set v_min and v_max according to your expected range of returns).
 
 
 # Initialize trainer
 trainer = DQNTrainer(rainbow_config,GraphEnv )
 
 #Define the path where the results of the trainer should be saved
-checkpoint_root = "tmp/rainbow/graphworld"
+checkpoint_root = "tmp/rainbow-new/rllib_checkpoint"
 # shutil.rmtree(checkpoint_root, ignore_errors=True, onerror=None)   # clean up old runs
 ray_results = "{}/ray_results/".format(os.getenv("HOME"))
 # shutil.rmtree(ray_results, ignore_errors=True, onerror=None)   # clean up old runs
@@ -174,6 +175,7 @@ for n in range(n_iter):
                'count_steps_min': float(result["count_steps_min"]),
                'count_steps_max': float(result["count_steps_max"]),
                'count_steps_mean': float(result["count_steps_mean"]),
+               'count_terminated': int(result["count_terminated"]),
                'count_delivered_on_time': int(result["count_delivered_on_time"]),
                'count_delivered_with_delay': int(result["count_delivered_with_delay"]),
                'count_not_delivered': int(result["count_not_delivered"]),
@@ -206,8 +208,9 @@ for n in range(n_iter):
                }
     episode_data.append(episode)
     episode_json.append(json.dumps(episode))
-    file_name = trainer.save(checkpoint_root)
-    trainer.save(os.path.join(wandb.run.dir, "checkpoint"))
+    trainer.save(checkpoint_root)
+
+    #wandb.save(os.path.join(wandb.run.dir, "checkpoint"))
     # wandb.save(file_name)
     wandb.log({"n_trained_episodes": result['episodes_this_iter'],
                 "mean_reward": result['episode_reward_mean'],
@@ -221,6 +224,7 @@ for n in range(n_iter):
                 "share_to_own_ratio_max": result['share_to_own_ratio_max'],
                 "share_to_own_ratio_mean": result['share_to_own_ratio_mean'],
                 'count_steps_mean': result["count_steps_mean"],
+                'count_terminated': result["count_terminated"],
                 'count_delivered_on_time': result["count_delivered_on_time"],
                 'count_delivered_with_delay': result["count_delivered_with_delay"],
                 'count_not_delivered': result["count_not_delivered"],
@@ -248,4 +252,4 @@ for n in range(n_iter):
 
     })
 
-    print(f'{n + 1:3d}: Min/Mean/Max reward: {result["episode_reward_min"]:8.4f}/{result["episode_reward_mean"]:8.4f}/{result["episode_reward_max"]:8.4f}, len mean: {result["episode_len_mean"]:8.4f}. Checkpoint saved to {file_name}')
+    print(f'{n + 1:3d}: Min/Mean/Max reward: {result["episode_reward_min"]:8.4f}/{result["episode_reward_mean"]:8.4f}/{result["episode_reward_max"]:8.4f}, len mean: {result["episode_len_mean"]:8.4f}. Checkpoint saved to ?')

@@ -22,15 +22,11 @@ p {
 }
 
 #destination-hub-1 {
-  /* background-color: beige;
-  border-style: solid;
-  border-color: blueviolet; */
-
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   transition: 0.3s;
   border-radius: 5px; /* 5px rounded corners */
   background-color: rgb(255, 255, 255);
-  height: 150px;
+  height: 120px;
   padding-top: 10px;
   padding-bottom: 10px;
   margin-top: 10px;
@@ -51,15 +47,11 @@ p {
 }
 
 #destination-hub-2 {
-  /* background-color: beige;
-  border-style: solid;
-  border-color: blueviolet; */
-
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   transition: 0.3s;
   border-radius: 5px; /* 5px rounded corners */
   background-color: rgb(255, 255, 255);
-  height: 150px;
+  height: 120px;
   padding-top: 10px;
   padding-bottom: 10px;
   margin-top: 10px;
@@ -67,17 +59,8 @@ p {
   padding-right: 10px;
 }
 
-#available-shared {
-  /* background-color: beige;
-  border-style: solid;
-  border-color: blueviolet; */
-
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  transition: 0.3s;
-  border-radius: 5px; /* 5px rounded corners */
-  background-color: rgb(255, 255, 255);
-  height: 50px;
-  padding-top: 30px;
+#next-hub-input {
+  height: 20px;
 }
 
 #actions-taken-titel {
@@ -86,17 +69,35 @@ p {
   margin-right: 20px;
   padding-left: 10px;
   padding-right: 10px;
+  margin-top: 20px;
+}
+
+#distance-titel {
+  background-color: rgb(255, 255, 255);
+  display: inline;
+  margin-right: 20px;
+  margin-top: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-right: 10px;
 }
 
 #graph_actions {
   height: 200px;
   width: 200px;
   margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 #graph_actions2 {
   height: 200px;
   width: 200px;
+  margin-top: 10px;
+}
+
+#graph_distance {
+  height: 200px;
+  width: 400px;
   margin-top: 20px;
 }
 
@@ -114,10 +115,6 @@ p {
 }
 
 #calc-route-1 {
-  /* background-color: beige;
-  border-style: solid;
-  border-color: blueviolet; */
-
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   transition: 0.3s;
   border-radius: 5px; /* 5px rounded corners */
@@ -130,10 +127,18 @@ p {
 }
 
 #calc-route-2 {
-  /* background-color: beige;
-  border-style: solid;
-  border-color: blueviolet; */
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+  border-radius: 5px; /* 5px rounded corners */
+  background-color: rgb(255, 255, 255);
+  height: 70px;
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  overflow-y: scroll;
+}
 
+#user-route-2 {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   transition: 0.3s;
   border-radius: 5px; /* 5px rounded corners */
@@ -154,7 +159,7 @@ p {
   width: 30%;
   margin-left: 30px;
   margin-right: 0px;
-  margin-top: 50px;
+  margin-top: 0px;
   padding: 10px 10px;
   display: inline-block;
   vertical-align: top;
