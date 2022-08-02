@@ -1,3 +1,10 @@
+"""
+Benchmark Agent.
+Books 1 own ride from the start to the final hub. Finished.
+Methods: run_one_episode
+"""
+
+# imports
 import sys
 sys.path.insert(0,"")
 from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
@@ -15,9 +22,15 @@ import ray
 import warnings
 warnings.filterwarnings('ignore')
 
-
+# class definition
 class BookownAgent:
-
+    """
+    Runs the agent in the environment (by taking steps according to policy of agent) until it reaches the final hub.
+    :param env: 
+    :param reward_list:
+    :param env_config:
+    :return: dictionary containing results of run.
+    """
     def run_one_episode (env,reward_list,env_config):
         route = [env_config["pickup_hub_index"]]
         route_timestamps=[]
@@ -33,12 +46,16 @@ class BookownAgent:
         count_wait = 0
         steps = 0
         done = False
+
+        # run until finished
         while not done:
+            # select final hub as action
             action = env_config["delivery_hub_index"]
-            # action = final hub
             state, reward, done, info = env.step(action)
             done = True
             route.append(action)
+
+            # get information of the action
             print("Timestamps",info.get('timestamp') )
             route_timestamps.append(info.get('timestamp'))
             sum_reward += reward
@@ -75,8 +92,10 @@ class BookownAgent:
             ratio = 0
         else:
             ratio = float(count_shares/count_bookowns)
+
+        # results of the agent's run
         reward_list={"pickup_hub":env_config['pickup_hub_index'],"delivery_hub":env_config['delivery_hub_index'],"reward":sum_reward, "hubs":number_hubs, "route":route, "time":sum_travel_time, "dist":sum_distance, "time_until_deadline":time_until_deadline, "timestamps":route_timestamps, "count_bookowns": count_bookowns, "steps": steps, "ratio_share_to_own": ratio,"dist_covered_shares": dist_shares, "dist_covered_bookown": dist_bookowns}
-        print(reward_list)
+        # print(reward_list)
         return reward_list
 
     

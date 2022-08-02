@@ -1,3 +1,8 @@
+"""
+Comparer Class.
+Compares multiple agents on multiple performance metrics.
+"""
+
 # imports
 import sys
 import pandas as pd
@@ -8,8 +13,13 @@ from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import Gr
 import operator
 sys.path.insert(0,"")
 
-# define class
+# class definition
 class Comparer:
+    """
+    Init Method of Class.
+    :param num_agents: integer (the number of agents to be compared)
+    :param agents_arg: object(s) (the BenchmarkWrapper objects of the agents)
+    """
     def __init__(self,num_agents,*agents_arg):
         self.num_agents = num_agents
         self.agent_names = []
@@ -28,10 +38,17 @@ class Comparer:
         print("ARgs",self.agents_arg)
         Comparer.set_agents(self)
 
-
+    """
+    Computes the average of a list.
+    :param lst: array
+    :return: float
+    """
     def Average(lst):
         return sum(lst) / len(lst)
 
+    """
+    Makes a list of the agents with names and objects.
+    """
     def set_agents(self):
         self.agents = {}
         # go through all agents
@@ -43,6 +60,9 @@ class Comparer:
             self.agents[self.agent_names[i]] = self.agents_arg[i]
         # print("Agentlist",self.agents)
 
+    """
+    Summarizes each agent's performance for one trip concerning multiple metrics.
+    """
     def establish_compare_onetrip(self):
         self.compare_dict = {}
         i = 1
@@ -91,6 +111,10 @@ class Comparer:
         
         Comparer.compare_onetrip(self)
     
+    """
+    Compares the performance of multiple agents by establishing rankings for each metric seperately.
+    The best agent is at rank 1 of the respective metric.
+    """
     def compare_onetrip(self):
 
         # show overview of all compared agents
@@ -172,7 +196,10 @@ class Comparer:
             print(f"Rank {i}: {elem[0]} with ratio of {dist_reduce_sort[i-1][1][8]}")
             i += 1
 
-    # compares multiple trips (by taking mean of results over the trips) for the agents
+    """
+    Summarizes each agent's performance for multiple trips concerning multiple metrics.
+    Computes the mean of the performance for each metric for each agent.
+    """
     def compare_multipletrips(self):
         self.compare_dict = {}
         i = 1
@@ -263,10 +290,16 @@ class Comparer:
         # call comparer to get rankings
         Comparer.compare_onetrip(self)
 
+    """
+    Main Method.
+    """
     def main():
         set_agents(self.num_agents,self.agents_arg)
 
 
+"""
+Configuring which agents are to be compared and running the comparison.
+"""
 # possible agents to be compared
 env = GraphEnv(use_config=True) # use normal GraphWorld for RLs
 # RL agents
