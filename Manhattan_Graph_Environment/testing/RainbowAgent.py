@@ -1,3 +1,8 @@
+"""
+Rainbow Agent.
+Is an extended DQN.
+"""
+
 # imports
 import sys
 
@@ -21,8 +26,12 @@ from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import Gr
 sys.path.append(os.path.join(ROOT_DIR, "Manhattan_Graph_Environment", "gym_graphenv"))
 
 
-# class for Rainbow Agent
+# class definition
 class RainbowAgent:
+    """
+    Init Method of Class
+    : param env: Environment Object
+    """
     def __init__(self, env):
         sys.path.insert(0, "")
         # Set trainer configuration
@@ -59,6 +68,13 @@ class RainbowAgent:
         # self.trainer_config["train_batch_size"] = 400
         # self.trainer_config["framework"] = "torch"
 
+    """
+    Runs the agent in the environment (by taking steps according to policy of agent) until it reaches the final hub.
+    :param env: 
+    :param reward_list:
+    :param env_config:
+    :return: dictionary containing results of run.
+    """
     def run_one_episode(self, reward_list, env_config):
         # # Initialize trainer
         rainbow_trainer = DQNTrainer(self.trainer_config, GraphEnv)
@@ -74,7 +90,7 @@ class RainbowAgent:
         print(env.position)
         print("reset done")
 
-        # get information
+        # initialize arrays
         list_nodes=[]
         list_hubs=[env.position]
         list_actions=["start"]
@@ -101,7 +117,10 @@ class RainbowAgent:
         steps = 0
         results = []
         done = False
+
+        # run until finished
         while not done:
+            # take some action
             action = rainbow_trainer.compute_action(obs)
             state, reward, done, info = env.step(action)
             sum_reward += reward
@@ -120,7 +139,7 @@ class RainbowAgent:
             list_actions.append(info["action"])
             rem_dist.append(info["remaining_dist"])
 
-            # get data from action
+            # get information from action
             route.append(action)
             route_timestamps.append(info.get('timestamp'))
 
@@ -163,6 +182,8 @@ class RainbowAgent:
             ratio = float(count_shares/count_bookowns)
             # print("sum_reward: ",sum_reward)
             # print("sum_reward: ",sum_reward, " time: ",env.time, "deadline time: ", env.deadline, "pickup time: ", env.pickup_time)
+        
+        # results of the agent's run
         reward_list = {"pickup_hub": env_config['pickup_hub_index'], "delivery_hub": env_config['delivery_hub_index'],
                        "reward": sum_reward, "hubs": number_hubs, "route": route, "time": sum_travel_time,
                        "dist": sum_distance, "time_until_deadline": time_until_deadline, "timestamps": route_timestamps,

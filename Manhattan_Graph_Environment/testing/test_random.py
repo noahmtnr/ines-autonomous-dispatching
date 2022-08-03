@@ -1,3 +1,8 @@
+"""
+Test Class for Random Agent.
+"""
+
+# imports
 import numpy as np
 import pandas as pd
 import json
@@ -19,6 +24,11 @@ env=GraphEnv()
 
 env.availableTrips()
 
+"""
+Run the random agent for 30 steps.
+:param: Environment Object
+:return: Float (sum of the agent's reward)
+"""
 def run_one_episode (env):
     env.reset()
     sum_reward = 0

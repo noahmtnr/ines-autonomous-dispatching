@@ -74,58 +74,116 @@ gitignore, yaml-files
 DQN, PPO, Rainbow
 
 ## Instruction for Training
+There are 5 different files for training:
+- custom_actions.py: instantiates environment before executing custom or random actions (no training, more for debugging)
+- train_DQN.py: run to train agent using DQN algorithm
+- train_PPO.py: run to train agent using PPO algorithm
+- train_Rainbow.py: run to train agent using Rainbow algorithm
+- train_Rainbow_custom_unnormalized: run to train agent using Rainbow algorithm with custom Neural Network architecture implemented in Tensorflow
+
+However, the best training results seen so far were achieved by using train_Rainbow.py. Therefore, we highly recommend using this algorithm for the Manhattan Environment. The following "Parameters" section describes how to adapt the training file.
 
 ### Parameters
+In train_Rainbow.py you can set the following hyperparameters for the Rainbow algorithm:
+- "framework": by default Tensorflow, use "torch" if you want to use PyTorch
+- "num_workers": set to >0 if you wan multiple-process operation
+- "hiddens": define number of neurons and layers in list, e.g. [100,50] for neural network with 2 hidden layers consisting of 100 and 50 neurons respectively
+- "fcnet_activation": define activation function, e.g. "relu"
+- "train_batch_size": batch size used for training
+- "gamma": discount factor of the Markov Decision Process
+- "num_atoms": number of atoms for representing the distribution of return; when this is greater than 1, distributional Q-learning is used
+- "v_min" and "v_max": expected range of reward returns
 
-	agents,Iterations, hidden layers, activation function, number of steps, ...
+Other training hyperparameters: 
+- "n_iter": number of training iterations
 
-### Execution of Training
+Further settings:
+- "wandb.login()": set your personal wandb key in order to see the training metrics in the wandb dashboard
+- "wandb.init()": define the name of your wandb project
 
-	- takes about 5 hours for 100 iterations, depends on number of hubs and deadline used
-
+The checkpoints of the training are saved in /tmp/rainbow-new/rllib_checkpoint which can then be used for testing.
 
 ### Results of Training
+The actions and corresponding routes can be found in log-files on WandB. To open a log-file, first select a project, then select a run and then select "Logs" on the menu bar on the left.
+	
+Multiple WandB metrics (https://wandb.ai/hitchhike/projects) are used to measure the training performance: 
 
-	@ Maren \\
+**Episodes and Steps.**
+- *count_steps_mean* : Average number of steps the agent takes for one order.
+- *n_trained_episodes*: Number of episodes the agent trained.
+
+**Delivered and Not Deliver.**
+- *count_terminated* : Number of orders that was terminated (interrupted because bookown was made).
+- *count_delivered_on_time* : Number of orders that was delivered within the pre-specified period of delivery.
+- *count_delivered_with_delay* : Number of orders that was deliverd within 12 hours after the pre-specified period of delivery.
+- *count_not_deliverd* : Number of orders that was not delivered within the pre-specified period of delivery (plus 12 hours).
+- *share_delivered_on_time* : Ratio of orders that was delivered on time to the total number of orders.
+
+**Available and Useful Trips.** 
+Available equals the shared trips that were available to an agent in one run.
+Available useful equals the useful shared trips available. Useful means that taking the respective trip reduces the remaining distance to the final hub.
 	
-	The orders trained on, as well as the actions and corresponding routes can be found in log-files in the following path: HIER FILEPATH. 
-	
-	Multiple WandB metrics are used to measure the training performance: 
-	Files: GraphWorldManhattan and train[...],
-	Output: HIER LINK ZU WANDB. \\
-**Available and Useful Trips.** Available equals the shared trips that were available to an agent in one run.
-	Available useful equals the useful shared trips available. Useful means that taking the respective trip reduces the remaining distance to the final hub.
-	*ratio_shared_available_to_all_steps* Ratio of the number of steps where any kind of shared trip is available to the number of steps in total. Shows how often shared trips are possible. Reflects the sparseness of trips over time.\\
-	*shared\_available_useful_to_shared_available* Ratio of the number of steps where useful trips are available ...
-  
+- *count_shared_available* : Number of steps in which any shared ride is available.
+- *ratio_shared_available_to_all_steps* : Ratio of the number of steps where any kind of shared trip is available to the number of steps in total. Shows how often shared trips are possible. Reflects the sparseness of trips over time.
+- *count_shared_available_useful* : Number of steps in which any useful shared ride is available.
+- *shared_available_useful_to_shared_available* : Ratio of the number of steps where useful trips are available to the number of steps where any shared ride is available.
+- *shared_taken_to_shared_available* : Ratio of the number of steps where a shared ride is taken to the number of steps where any shared ride is available.
+- *ratio_shared_available_to_all_steps* : Ratio of the number of steps where a shared ride is available to the total number of steps.
+- *shared_taken_useful_to_shared_available_useful* : Ratio of the number of steps where a useful shared ride is taken to the number of steps where a useful shared ride is available.
   
   
   **Reward**
+  - *mean_reward* : Average reward an agent received for the episode.
+  - *max_reward* : Maximum reward an agent received for the episode.
   
-  
+
   **Bookowns, Shares and Waits.**
-
-
-
-**Delivered and Not Deliver.**
-
+  - *boolean_has_booked_any_own*:
+  - *ratio_delivered_without_bookown_to_all_delivered* :
+  - *share_of_bookown_mean* :
+  - *share_mean* :
+  - *share_to_own_ratio_mean* :
+  - *share_to_own_ratio_max* :
+  - *wait_mean* :
+  - *share_of_wait_mean* :
+  - *share_of_share_mean* :
+  - *own_mean* :
+  
+  Example from WandB: 
+  ![grafik](https://user-images.githubusercontent.com/93478758/182628279-220e1217-2c11-4bc5-ab97-57f666af62ff.png)
+  
 
 **Distance Reduced.**
-
+- *distance_reduced_with_ownrides* :
+- *bookown_distance_not_covered* :
+- *distance_reduced_with_shared* :
+- *bookown_distance_not_covered_share* :
+- *distance_reduced_with_shared_share* :
 
 
 ### Instructions for Testing
 
-###Agents
-###Benchamrks
-###Results of Testing
+Testing can be done for one agent in more detail (see section "Detailled Individual Testing") or by comparing multiple agents on multiple metrics more generelly (see section "Benchmarking and Comparison")
 
-**Metrics and Ranking**
+**Benchmarks and Comparison** 
+We have multiple benchmarks to which a Reinforcement Learning Agent can be compared to.
+- Bookown Agent: Books 1 own ride from the start to the final hub. Finished.
+- Random Agent: Takes a random action (i.e., chooses any of the hubs) in each step.
+- Shares Agent: Takes the shared ride that reduces the remaining distance the most in each step. If no shared ride is available, the agent waits at the current hub.
+- SharedBookEnd Agent: Takes the shared ride that reduces the remaining distance the most in each step. If no shared ride is available, the agent waits at the current hub. If the agent hasn't reached the final hub two hours before deadline, he is forced to book an own ride to the final hub.
 
-**Dashboards and Visualisation**
+Note that the Cost Agent is no longer in use as the observation space changed over the course of the project.
 
 
 
+**Detailled Individual Testing**
+The dashboard can be used to visually understand the actions that our trained agent has taken in test orders. It consists if two tabs: static and interactive. The static visualization shows the route the agent has taken on the map of New York, as well as some order statistics such as number of actions taken. In the interactive tab, the user can manually perform actions and compare them to the actions taken by the agent on different test cases. The following GIF demonstrates how to operate in the interactive tab:
+
+![](https://github.com/noahmtnr/ines-autonomous-dispatching/blob/comments/Dashboard.gif)
+
+
+
+PLEASE REMOVE THIS:
 ## Package Installation process:
 
 Donwload Anaconda: https://www.anaconda.com/products/individual

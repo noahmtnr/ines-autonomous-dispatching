@@ -1,3 +1,7 @@
+"""
+Testing the BenchmarkWrapper for multiple agents.
+"""
+
 # imports
 import sys
 import pandas as pd
@@ -7,6 +11,10 @@ from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import Gr
 import operator
 sys.path.insert(0,"")
 
+"""
+Main Method.
+Applies BenchmarkWrapper on random, cost, rainbow and shares.
+"""
 def main():
     env = GraphEnv(use_config=True)
 

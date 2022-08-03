@@ -1,3 +1,9 @@
+
+"""
+DQN (Deep-Q Network) Agent.
+Is a model-free, online, off-policy reinforcement learning method.
+"""
+
 # imports
 import sys
 sys.path.insert(0,"")
@@ -21,7 +27,7 @@ from config.definitions import ROOT_DIR
 sys.path.append(os.path.join(ROOT_DIR, "Manhattan_Graph_Environment", "gym_graphenv"))
 
 
-# class for DQN Agent
+# class definition
 class DQNAgent:
     def __init__(self, env=GraphEnv):
         sys.path.insert(0,"")
@@ -34,6 +40,13 @@ class DQNAgent:
         self.env = env
         # self.trainer_config["framework"] = "torch"
 
+    """
+    Runs the agent in the environment (by taking steps according to policy of agent) until it reaches the final hub.
+    :param env: 
+    :param reward_list:
+    :param env_config:
+    :return: dictionary containing results of run.
+    """
     def run_one_episode(self,reward_list,env_config):
         config={"use_config":True}
         
@@ -60,7 +73,10 @@ class DQNAgent:
         sum_distance = 0
         results = []
         done = False
+
+        # run until finished
         while not done:
+            # take some action
             action = dqn_trainer.compute_action(state)
             state, reward, done, info = env.step(action)
             sum_reward += reward
@@ -70,11 +86,10 @@ class DQNAgent:
                 state = env.reset()
                 sum_reward = 0
 
-            # get data from action
+            # get information of the action
             route.append(action)
             route_timestamps.append(info.get('timestamp'))
 
-            
             sum_travel_time +=timedelta(seconds=info.get('step_travel_time'))
             delivey_time = datetime.strptime(env_config["delivery_timestamp"], '%Y-%m-%d %H:%M:%S')
             time_until_deadline= delivey_time-sum_travel_time
@@ -97,6 +112,8 @@ class DQNAgent:
 
             # print("sum_reward: ",sum_reward)
             # print("sum_reward: ",sum_reward, " time: ",env.time, "deadline time: ", env.deadline, "pickup time: ", env.pickup_time)
+        
+        # results of the agent's run
         reward_list={"pickup_hub":env_config['pickup_hub_index'],"delivery_hub":env_config['delivery_hub_index'],"reward":sum_reward, "hubs":number_hubs, "route":route, "time":sum_travel_time, "dist":sum_distance, "time_until_deadline":time_until_deadline, "timestamps":route_timestamps,"dist_covered_shares": dist_shares, "dist_covered_bookown": dist_bookowns}
 
         return reward_list
