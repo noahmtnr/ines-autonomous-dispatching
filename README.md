@@ -111,56 +111,56 @@ Files: GraphWorldManhattan and train[...],
 Output: https://wandb.ai/hitchhike/projects
 
 **Episodes and Steps.**
-*count_steps_mean* : Average number of steps the agent takes for one order.
-*n_trained_episodes*: Number of episodes the agent trained.
+- *count_steps_mean* : Average number of steps the agent takes for one order.
+- *n_trained_episodes*: Number of episodes the agent trained.
 
 **Delivered and Not Deliver.**
--	*count_terminated* : Number of orders that was terminated (interrupted because bookown was made).
-*count_delivered_on_time* : Number of orders that was delivered within the pre-specified period of delivery.
-*count_delivered_with_delay* : Number of orders that was deliverd within 12 hours after the pre-specified period of delivery.
-*count_not_deliverd* : Number of orders that was not delivered within the pre-specified period of delivery (plus 12 hours).
-*share_delivered_on_time* : Ratio of orders that was delivered on time to the total number of orders.
+- *count_terminated* : Number of orders that was terminated (interrupted because bookown was made).
+- *count_delivered_on_time* : Number of orders that was delivered within the pre-specified period of delivery.
+- *count_delivered_with_delay* : Number of orders that was deliverd within 12 hours after the pre-specified period of delivery.
+- *count_not_deliverd* : Number of orders that was not delivered within the pre-specified period of delivery (plus 12 hours).
+- *share_delivered_on_time* : Ratio of orders that was delivered on time to the total number of orders.
 
 **Available and Useful Trips.** 
 Available equals the shared trips that were available to an agent in one run.
 Available useful equals the useful shared trips available. Useful means that taking the respective trip reduces the remaining distance to the final hub.
 	
-*count_shared_available* :
-*ratio_shared_available_to_all_steps* : Ratio of the number of steps where any kind of shared trip is available to the number of steps in total. Shows how often shared trips are possible. Reflects the sparseness of trips over time.
-*count_shared_available_useful* :
-*shared_available_useful_to_shared_available* : Ratio of the number of steps where useful trips are available to the number of steps where any shared ride is available.
-*shared_taken_to_shared_available* :
-*ratio_shared_available_to_all_steps* :
-*shared_taken_useful_to_shared_available_useful* :
+- *count_shared_available* :
+- *ratio_shared_available_to_all_steps* : Ratio of the number of steps where any kind of shared trip is available to the number of steps in total. Shows how often shared trips are possible. Reflects the sparseness of trips over time.
+- *count_shared_available_useful* :
+- *shared_available_useful_to_shared_available* : Ratio of the number of steps where useful trips are available to the number of steps where any shared ride is available.
+- *shared_taken_to_shared_available* :
+- *ratio_shared_available_to_all_steps* :
+- *shared_taken_useful_to_shared_available_useful* :
   
   
   **Reward**
-  *mean_reward* : Average reward an agent received for the episode.
-  *max_reward* : Maximum reward an agent received for the episode.
+  - *mean_reward* : Average reward an agent received for the episode.
+  - *max_reward* : Maximum reward an agent received for the episode.
   
 
   **Bookowns, Shares and Waits.**
-  *boolean_has_booked_any_own*:
-  *ratio_delivered_without_bookown_to_all_delivered* :
-  *share_of_bookown_mean* :
-  *share_mean* :
-  *share_to_own_ratio_mean* :
-  *share_to_own_ratio_max* :
-  *wait_mean* :
-  *share_of_wait_mean* :
-  *share_of_share_mean* :
-  *own_mean* :
+  - *boolean_has_booked_any_own*:
+  - *ratio_delivered_without_bookown_to_all_delivered* :
+  - *share_of_bookown_mean* :
+  - *share_mean* :
+  - *share_to_own_ratio_mean* :
+  - *share_to_own_ratio_max* :
+  - *wait_mean* :
+  - *share_of_wait_mean* :
+  - *share_of_share_mean* :
+  - *own_mean* :
   
   Example from WandB: 
   ![grafik](https://user-images.githubusercontent.com/93478758/182628279-220e1217-2c11-4bc5-ab97-57f666af62ff.png)
   
 
 **Distance Reduced.**
-*distance_reduced_with_ownrides* :
-*bookown_distance_not_covered* :
-*distance_reduced_with_shared* :
-*bookown_distance_not_covered_share* :
-*distance_reduced_with_shared_share* :
+- *distance_reduced_with_ownrides* :
+- *bookown_distance_not_covered* :
+- *distance_reduced_with_shared* :
+- *bookown_distance_not_covered_share* :
+- *distance_reduced_with_shared_share* :
 
 
 ### Instructions for Testing
