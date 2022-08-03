@@ -8,7 +8,7 @@ import urllib
 from datetime import datetime, timedelta
 from folium import plugins, folium
 from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
-from Manhattan_Graph_Environment.graphs.Hubs_Graph  import HubsGraph
+from Manhattan_Graph_Environment.graphs.HubsGraph  import HubsGraph
 from benchmarking.BenchmarkWrapper import BenchmarkWrapper
 sys.path.insert(0,"")
 from preprocessing.data_preprocessing import DataPreProcessing
