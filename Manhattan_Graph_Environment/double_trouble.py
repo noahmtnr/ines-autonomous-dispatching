@@ -1,3 +1,4 @@
+# Imports
 from calendar import c
 from datetime import datetime, timedelta
 from distutils.log import debug
@@ -15,6 +16,8 @@ from graphs.ManhattanGraph import ManhattanGraph
 import pickle
 # sys.path.insert(0,"")
 from gym_graphenv.envs.GraphworldManhattan import GraphEnv
+
+# Define variables
 env = GraphEnv(use_config=True)
 env.reset()
 hubs = env.hubs
@@ -70,6 +73,16 @@ image_path = 'assets/ines_image.jpeg'
 
 # Function to create map
 def create_map_from_df(df_hubs, df_route=pd.DataFrame(), test_id=0):
+    """This function creates the map of New York for the dashboard
+
+    Args:
+        df_hubs (pandas dataframe): each hub is assigned to a specific action at the current time step
+        df_route (pandas dataframe, optional): exact route of order using coordinates
+        test_id (int, optional): test case which was chosen by user in dashboard
+
+    Returns:
+        plotly express: figure of New York
+    """
 
     px.set_mapbox_access_token(open("Manhattan_Graph_Environment/mapbox_token").read())
     if not 'Rem. Distance' in df_hubs.columns:
