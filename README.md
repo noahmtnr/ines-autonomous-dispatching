@@ -147,7 +147,7 @@ The checkpoints of the training are saved in /tmp/rainbow-new/rllib_checkpoint w
 **Metrics and Ranking**
 
 **Dashboards and Visualisation**
-![](https://github.com/noahmtnr/ines-autonomous-dispatching/blob/comments/Animation.gif)
+![](https://github.com/noahmtnr/ines-autonomous-dispatching/blob/comments/Dashboard.gif)
 
 
 ## Package Installation process:
