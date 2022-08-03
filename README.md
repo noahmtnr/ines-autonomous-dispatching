@@ -164,10 +164,12 @@ Available useful equals the useful shared trips available. Useful means that tak
 ### Instructions for Testing
 
 ###Agents
-###Benchamrks
+###Benchmarks
 ###Results of Testing
 
+
 **Metrics and Ranking**
+The output of testing can be seen in the console (further explanation follows in this section) and in the dashboard (see next section).
 
 **Dashboards and Visualisation**
 The dashboard can be used to visually understand the actions that our trained agent has taken in test orders. It consists if two tabs: static and interactive. The static visualization shows the route the agent has taken on the map of New York, as well as some order statistics such as number of actions taken. In the interactive tab, the user can manually perform actions and compare them to the actions taken by the agent on different test cases. The following GIF demonstrates how to operate in the interactive tab:
