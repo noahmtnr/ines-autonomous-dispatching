@@ -13,9 +13,9 @@ class LearnGraph:
         self.final_hub = final_hub
         for node in self.G.nodes():
             self.G.add_edge(node, node)
-        self.wait_till_departure_times = {}#np.zeros((70,70))
+        self.wait_till_departure_times = {}
         self.list_hubs = self.manhattan_graph.hubs
-        ox.save_graphml(self.G, filepath="./data/graph/learn.graphml")
+        #ox.save_graphml(self.G, filepath="./data/graph/learn.graphml")
 
     def adjacency_matrix(self, layer: str):
         """Returns the adjacency matrix of one of the layers cost, distinction and remaining_distance.
