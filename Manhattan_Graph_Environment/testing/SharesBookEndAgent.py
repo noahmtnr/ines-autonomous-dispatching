@@ -1,3 +1,10 @@
+"""
+SharesBookEnd Agent.
+Takes the shared ride that reduces the remaining distance the most in each step.
+If no shared ride is available, the agent waits at the current hub.
+If the agent hasn't reached the final hub two hours before deadline, he is forced to book an own ride to the final hub.
+"""
+
 import sys
 sys.path.insert(0,"")
 from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
@@ -17,6 +24,13 @@ warnings.filterwarnings('ignore')
 
 class SharesBookEndAgent:
 
+    """
+    Runs the agent in the environment (by taking steps according to policy of agent) until it reaches the final hub.
+    :param env: 
+    :param reward_list:
+    :param env_config:
+    :return: dictionary containing results of run.
+    """
     def run_one_episode (env,reward_list,env_config):
         env.reset()
         print("reset done")
@@ -33,6 +47,8 @@ class SharesBookEndAgent:
         count_bookowns = 0
         count_wait = 0
         steps = 0
+
+        # run until finished or two hours before deadline are reached
         while (not done) and (time_until_deadline.total_seconds()/60 >= 120):
             # visualize current situation
             # env.render()
@@ -55,6 +71,7 @@ class SharesBookEndAgent:
             print(f"Our destination hub is: {action}")
             state, reward, done, info = env.step(action)
 
+            # get information from action
             route.append(action)
             current_hub = action
             route_timestamps.append(info.get('timestamp'))
@@ -88,6 +105,7 @@ class SharesBookEndAgent:
                 #     raise Exception("DID NOT ARRIVE IN FINAL HUB")
                 break
 
+        # agent needs to book own ride if deadline is closer than 2 hours
         if(time_until_deadline.total_seconds()/60 < 120):
             print("Force Manual Delivery")
             action = env_config["delivery_hub_index"]
@@ -119,5 +137,7 @@ class SharesBookEndAgent:
             ratio = 0
         else:
             ratio = float(count_shares/count_bookowns)
+        
+        # results of the agent's run
         reward_list={"pickup_hub":env_config['pickup_hub_index'],"delivery_hub":env_config['delivery_hub_index'],"reward":sum_reward, "hubs":number_hubs, "route":route, "time":sum_travel_time, "dist":sum_distance, "time_until_deadline":time_until_deadline, "timestamps":route_timestamps, "count_bookowns": count_bookowns, "steps": steps, "ratio_share_to_own": ratio,"dist_covered_shares": dist_shares, "dist_covered_bookown": dist_bookowns}
         return reward_list

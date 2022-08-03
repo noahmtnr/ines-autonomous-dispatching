@@ -1,3 +1,7 @@
+"""
+Test File for creating orders and testing the rainbow agent on the orders.
+"""
+
 # imports
 import csv
 import sys
@@ -24,8 +28,11 @@ sys.path.append(os.path.join(ROOT_DIR, "Manhattan_Graph_Environment", "gym_graph
 import wandb
 
 
-# class for Rainbow Agent
+# class definition
 class TestOrders:
+    """
+    Init Method of Class
+    """
     def __init__(self, ):
         sys.path.insert(0, "")
         # Set trainer configuration
@@ -62,6 +69,9 @@ class TestOrders:
         # self.trainer_config["train_batch_size"] = 400
         # self.trainer_config["framework"] = "torch"
 
+    """
+    Run the agent on the orders.
+    """
     def test_order(self):
         
         # Initialize trainer
@@ -133,7 +143,9 @@ class TestOrders:
         #                "dist": sum_distance, "time_until_deadline": time_until_deadline, "timestamps": route_timestamps}
         return list_hubs, list_actions, list_nodes, rem_dist
 
-
+"""
+Create one test order.
+"""
 def create_test_order():
     pickup_hub = 21
     delivery_hub = 5
@@ -152,7 +164,9 @@ def create_test_order():
     list_hubs, list_actions, list_nodes, rem_dist = test.test_order()
     write_in_file_orders(list_hubs,list_actions,list_nodes,pickup_hub,delivery_hub,pickup_timestamp,delivery_timestamp,rem_dist)
 
-
+"""
+Write a new order into a file with orders.
+"""
 def write_in_file_orders(hubs,actions,nodes,pickup_hub,delivery_hub,pickup_timestamp,delivery_timestamp,rem_dist):
     
     filepath = os.path.join(ROOT_DIR, 'data', 'others', 'test_orders_dashboard.csv')
@@ -172,4 +186,5 @@ def write_in_file_orders(hubs,actions,nodes,pickup_hub,delivery_hub,pickup_times
         writer.writerows(row_list)
    
 
+# call the method
 create_test_order()
