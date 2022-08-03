@@ -163,20 +163,27 @@ Available useful equals the useful shared trips available. Useful means that tak
 
 ### Instructions for Testing
 
-###Agents
-###Benchmarks
-###Results of Testing
+Testing can be done for one agent in more detail (see section "Detailled Individual Testing") or by comparing multiple agents on multiple metrics more generelly (see section "Benchmarking and Comparison")
+
+**Benchmarks and Comparison** 
+We have multiple benchmarks to which a Reinforcement Learning Agent can be compared to.
+- Bookown Agent: Books 1 own ride from the start to the final hub. Finished.
+- Random Agent: Takes a random action (i.e., chooses any of the hubs) in each step.
+- Shares Agent: Takes the shared ride that reduces the remaining distance the most in each step. If no shared ride is available, the agent waits at the current hub.
+- SharedBookEnd Agent: Takes the shared ride that reduces the remaining distance the most in each step. If no shared ride is available, the agent waits at the current hub. If the agent hasn't reached the final hub two hours before deadline, he is forced to book an own ride to the final hub.
+
+Note that the Cost Agent is no longer in use as the observation space changed over the course of the project.
 
 
-**Metrics and Ranking**
-The output of testing can be seen in the console (further explanation follows in this section) and in the dashboard (see next section).
 
-**Dashboards and Visualisation**
+**Detailled Individual Testing**
 The dashboard can be used to visually understand the actions that our trained agent has taken in test orders. It consists if two tabs: static and interactive. The static visualization shows the route the agent has taken on the map of New York, as well as some order statistics such as number of actions taken. In the interactive tab, the user can manually perform actions and compare them to the actions taken by the agent on different test cases. The following GIF demonstrates how to operate in the interactive tab:
 
 ![](https://github.com/noahmtnr/ines-autonomous-dispatching/blob/comments/Dashboard.gif)
 
 
+
+PLEASE REMOVE THIS:
 ## Package Installation process:
 
 Donwload Anaconda: https://www.anaconda.com/products/individual
