@@ -104,35 +104,62 @@ Further settings:
 The checkpoints of the training are saved in /tmp/rainbow-new/rllib_checkpoint which can then be used for testing.
 
 ### Results of Training
+The orders trained on, as well as the actions and corresponding routes can be found in log-files in the following path: HIER FILEPATH. 
+	
+Multiple WandB metrics are used to measure the training performance: 
+Files: GraphWorldManhattan and train[...],
+Output: https://wandb.ai/hitchhike/projects
 
-	@ Maren \\
-	
-	The orders trained on, as well as the actions and corresponding routes can be found in log-files in the following path: HIER FILEPATH. 
-	
-	Multiple WandB metrics are used to measure the training performance: 
-	Files: GraphWorldManhattan and train[...],
-	Output: HIER LINK ZU WANDB. \\
 **Available and Useful Trips.** Available equals the shared trips that were available to an agent in one run.
 	Available useful equals the useful shared trips available. Useful means that taking the respective trip reduces the remaining distance to the final hub.
-	*ratio_shared_available_to_all_steps* Ratio of the number of steps where any kind of shared trip is available to the number of steps in total. Shows how often shared trips are possible. Reflects the sparseness of trips over time.\\
-	*shared\_available_useful_to_shared_available* Ratio of the number of steps where useful trips are available ...
-  
+	
+	*count_shared_available* :
+	*ratio_shared_available_to_all_steps* : Ratio of the number of steps where any kind of shared trip is available to the number of steps in total. Shows how often shared trips are possible. Reflects the sparseness of trips over time.\\
+	*count_shared_available_useful* :
+	*shared\_available_useful_to_shared_available* : Ratio of the number of steps where useful trips are available to the number of steps where any shared ride is available.
+	*shared_taken_to_shared_available* :
+	*ratio_shared_available_to_all_steps* :
+	*shared_taken_useful_to_shared_available_useful* :
   
   
   **Reward**
+  *mean_reward* :
+  *max_reward* :
   
   
   **Bookowns, Shares and Waits.**
   ![grafik](https://user-images.githubusercontent.com/93478758/182628279-220e1217-2c11-4bc5-ab97-57f666af62ff.png)
-
+  *boolean_has_booked_any_own*:
+  *ratio_delivered_without_bookown_to_all_delivered* :
+  *share_of_bookown_mean* :
+  *share_mean* :
+  *share_to_own_ratio_mean* :
+  *share_to_own_ratio_max* :
+  *wait_mean* :
+  *share_of_wait_mean* :
+  *share_of_share_mean* :
+  *own_mean* :
 
 
 
 **Delivered and Not Deliver.**
+*count_terminated* : 
+*count_delivered_on_time* :
+*count_delivered_with_delay* :
+*count_not_deliverd* :
+*share_delivered_on_time* :
 
 
 **Distance Reduced.**
+*distance_reduced_with_ownrides* :
+*bookown_distance_not_covered* :
+*distance_reduced_with_shared* :
+*bookown_distance_not_covered_share* :
+*distance_reduced_with_shared_share* :
 
+**Episodes and Steps.**
+*count_steps_mean* :
+*n_trained_episodes*: 
 
 
 ### Instructions for Testing
