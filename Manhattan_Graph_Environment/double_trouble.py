@@ -106,6 +106,17 @@ def create_map_from_df(df_hubs, df_route=pd.DataFrame(), test_id=0):
 
 # Function to create piechart of actions
 def create_piechart(wait=0, share=0, book=0):
+    """Function creates piechart of number of actions
+
+    Args:
+        wait (int, optional): number of wait actions
+        share (int, optional): number of shared rides
+        book (int, optional): number of books
+
+    Returns:
+        plotly express: figure of piechart
+    """
+
     colors = ['LightSteelBlue', 'Gainsboro', 'LightSlateGrey']
     labels = ['wait','share','book']
     values = [wait,share,book]
@@ -118,6 +129,16 @@ def create_piechart(wait=0, share=0, book=0):
 
 # Function to create piechart of reduced distance
 def create_chart_reduced_distance(share=0, book=0):
+    """Function creates bar chart of distance reduced
+
+    Args:
+        share (int, optional): distance reduced to final hub using shared rides
+        book (int, optional): distance reduced to final hub using own rides
+
+    Returns:
+        plotly express: bar chart
+    """
+
     labels = ['share','book']
     colors = ['Gainsboro', 'LightSlateGrey']
     values = [share,book]
@@ -155,12 +176,13 @@ def create_chart_reduced_distance(share=0, book=0):
     
     return fig
 
+
+# define layout of dashboard
 app.layout = html.Div([
     html.Div(
         html.Img(src=image_path, style={'width': '300px', 'display': 'inline-block', 'vertical-align': 'top', 'height': 'auto'}), id='image', style={'width':'300px','float':'right'}),
     html.Div(
         html.H1('Hitchhike Dashboard'), style={'width': '49%', 'display': 'inline-block'}),
-     # html.Div(
     dcc.Tabs(id="tabs-example", value='tab-1-example', children=[
         dcc.Tab(label='Static Visualization', value='tab-1-example', className = 'tab-label'),
         dcc.Tab(label='Interactive Visualization', value='tab-2-example', className = 'tab-label'),
@@ -174,7 +196,19 @@ app.layout = html.Div([
 
 @app.callback(Output('tabs-content-example', 'children'),
               Input('tabs-example', 'value'))
+
+# renders basic visualization
 def render_content(tab):
+    """Function creates basic layout of dashboard when opened
+
+    Args:
+        tab (user input): user can choose static or dynamic tab in dashboard
+
+    Returns:
+        html: website of corresponding tab
+    """
+
+    # defines layout of static tab
     if tab == 'tab-1-example':
         return html.Div(children=[
 
@@ -196,6 +230,7 @@ html.Div(children=[
 ], className = 'main-body'
 )
 
+    # defines layout of dynamic tab
     elif tab == 'tab-2-example':
         return html.Div(children=[
 html.Div(children=[
@@ -233,7 +268,18 @@ html.Div(children=[
     Input('dropdown1', 'value'),
     prevent_initial_call=True
 )
+
+# shows order in static tab
 def start_order_1(value):
+    """Function shows route and statistics for chosen order
+
+    Args:
+        value (user input): user can choose between multiple test cases
+
+    Returns:
+        html: website showing chosen order
+    """
+
     if(value =='Test 1'):
         test_id = 0
     else:
@@ -334,7 +380,18 @@ def start_order_1(value):
     Input('dropdown2', 'value'),
     prevent_initial_call=True
 )
+
+# shows order in dynamic tab
 def start_order_2(value):
+    """Function updates dynamic tab based on chosen order by user
+
+    Args:
+        value (user input): user can choose between multiple orders
+
+    Returns:
+        html: updated dashboard showing the initial situation of the order (but no final route in map yet)
+    """
+
     start_dynamic = True
     global test_id
     global taken_steps
@@ -434,7 +491,20 @@ def start_order_2(value):
     Input(component_id='next-hub-input', component_property='value'),
     prevent_initial_call=True
 )
+
+# user can determine next hub where agent should go to
 def next_step(submit, input_value, start_dynamic=True):
+    """Function updates taken route by user inputs
+
+    Args:
+        submit (user input): enter button to accept user input
+        input_value (user input): user can choose between 92 hubs
+        start_dynamic (bool, optional): not relevant anymore
+
+    Returns:
+        html: updated dashboard showing route taken so far on map and in statistics
+    """
+
     if input_value is None:
         return dash.no_update
     global entered_hub
@@ -572,5 +642,6 @@ def next_step(submit, input_value, start_dynamic=True):
         return dcc.Graph(figure=create_map_from_df(df_hubs, df_route, test_id), id='my-graph'), dcc.Graph(figure=create_piechart(number_wait,number_share,number_book), id='graph_actions2'), dcc.Graph(figure=create_chart_reduced_distance(int(reduced_share),int(reduced_book)), id='graph_distance'), html.P("Current time: %s-%s-%s %s:%s" % (current_time.year, current_time.month, current_time.day, current_time.hour, current_time.minute)), '', user_route_string
 
 
+# run dashboard
 if __name__ == '__main__':
     app.run_server()
