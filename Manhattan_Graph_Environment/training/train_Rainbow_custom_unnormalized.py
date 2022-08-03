@@ -1,3 +1,4 @@
+# imports
 import numpy as np
 import pandas as pd
 import json
@@ -6,14 +7,10 @@ import shutil
 import sys
 import gym
 import wandb
-
 # CHANGES HERE
 # uncomment if error appears
-import os
 os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 # CHANGES END HERE
-
-
 import ray
 from ray.rllib.agents.dqn import DQNTrainer, DEFAULT_CONFIG
 from ray.rllib.models import ModelCatalog
@@ -22,15 +19,15 @@ import tensorflow as tf
 from tensorflow import keras
 from keras.layers import Dense,LSTM,GRU,Dropout, Flatten
 from ray.rllib.models.tf.misc import normc_initializer
-
 sys.path.insert(0,"")
-
 from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
 from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv, CustomCallbacks
 
+# login wandb
 wandb.login(key="93aab2bcc48447dd2e8f74124d0258be2bf93859")
 wandb.init(project="Custom_Model", entity="hitchhike")
 
+# custom Rainbow model (this won't work with the current obsrevation space)
 class CustomModel(TFModelV2):
     def __init__(self, obs_space, action_space, num_outputs, model_config, name):
         super(CustomModel, self).__init__(obs_space, action_space, num_outputs, model_config, name)
@@ -66,10 +63,8 @@ ModelCatalog.register_custom_model("my_tf_model", CustomModel)
 
 env=GraphEnv()
 
-
 # Initialize Ray
 ray.init()
-
 
 rainbow_config = DEFAULT_CONFIG.copy()
 rainbow_config['num_workers'] = 3
@@ -77,7 +72,7 @@ rainbow_config["train_batch_size"] = 400
 rainbow_config["gamma"] = 0.99
 # rainbow_config["framework"] = "torch"
 rainbow_config["callbacks"] = CustomCallbacks
-rainbow_config["hiddens"] = [70] # to try with 1024  //was also 516
+rainbow_config["hiddens"] = [70] 
 rainbow_config["model"] = {
     "custom_model": "my_tf_model",
 }
@@ -86,7 +81,6 @@ rainbow_config["model"] = {
 #rainbow_config["num_gpus"] = int(os.environ.get("RLLIB_NUM_GPUS", "0")) 
 
 #rainbow parameters
-
 # N-step Q learning
 rainbow_config["n_step"]= 3 #[between 1 and 10]  //was 5 and 7
 # Whether to use noisy network
@@ -99,7 +93,6 @@ rainbow_config["num_atoms"] = 70 #[more than 1] //was 51,20
 rainbow_config["v_min"] =-10000
 rainbow_config["v_max"]=10000 # (set v_min and v_max according to your expected range of returns).
 
-
 # Initialize trainer
 trainer = DQNTrainer(rainbow_config,GraphEnv )
 
@@ -111,7 +104,6 @@ shutil.rmtree(ray_results, ignore_errors=True, onerror=None)   # clean up old ru
 
 
 # Run trainer
-
 results = []
 episode_data = []
 episode_json = []
