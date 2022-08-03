@@ -115,7 +115,7 @@ Output: https://wandb.ai/hitchhike/projects
 *n_trained_episodes*: Number of episodes the agent trained.
 
 **Delivered and Not Deliver.**
-*count_terminated* : Number of orders that was terminated (interrupted because bookown was made).
+-	*count_terminated* : Number of orders that was terminated (interrupted because bookown was made).
 *count_delivered_on_time* : Number of orders that was delivered within the pre-specified period of delivery.
 *count_delivered_with_delay* : Number of orders that was deliverd within 12 hours after the pre-specified period of delivery.
 *count_not_deliverd* : Number of orders that was not delivered within the pre-specified period of delivery (plus 12 hours).
