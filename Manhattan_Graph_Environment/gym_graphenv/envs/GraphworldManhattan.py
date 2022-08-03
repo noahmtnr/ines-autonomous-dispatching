@@ -200,7 +200,7 @@ class GraphEnv(gym.Env):
 
 
         self.LEARNGRAPH_FIRST_INIT_DONE = True
-        self.learn_graph.add_travel_cost_layer(self.availableTrips(), self.distance_matrix)
+        self.learn_graph.add_travel_cost_and_distinction_layer(self.availableTrips(), self.distance_matrix)
         self.learn_graph.add_remaining_distance_layer(current_hub=self.position, distance_matrix=self.distance_matrix)
 
         self.count_hubs = 0
@@ -357,7 +357,7 @@ class GraphEnv(gym.Env):
             print("action space: ",self.action_space)
 
         # refresh travel cost layer after each step
-        self.learn_graph.add_travel_cost_layer(self.availableTrips(), self.distance_matrix)
+        self.learn_graph.add_travel_cost_and_distinction_layer(self.availableTrips(), self.distance_matrix)
         self.learn_graph.add_remaining_distance_layer(current_hub=self.position, distance_matrix=self.distance_matrix)
 
         startTimeLearn = time.time()

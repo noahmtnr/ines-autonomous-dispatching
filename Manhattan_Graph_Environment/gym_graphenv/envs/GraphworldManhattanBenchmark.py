@@ -118,24 +118,36 @@ class GraphEnv(gym.Env):
         return self.manhattan_graph
 
     def one_hot(self, pos):
+        """Returns a one hot vector with 1 at position pos.
+
+        Args:
+            pos (int): Number represented by the one hot vector
+
+        Returns:
+            array([ 0.,  0.,  1.,  0.,  0.]): Vector of floats 
+        """
         one_hot_vector = np.zeros(len(self.hubs))
         one_hot_vector[pos] = 1
         return one_hot_vector
 
     def reset(self, start_parameters:{}=None) :
-        ##start_parameters requires: dropoff, pickup, time, deadline
-        # Example:
-        # pickup = 25
-        # dropoff = 70
-        # time = datetime.strptime('2016-01-03 14:00:00', '%Y-%m-%d %H:%M:%S')
-        # deadline = datetime.strptime('2016-01-03 17:00:00', '%Y-%m-%d %H:%M:%S')
-        # env.reset({'time': time,'dropoff':dropoff,'pickup':pickup})
-        ############################
+        """
+        Reset function used to reset the environment. 
+        If start_parameters is given, resets to the passed order. Else if self.env_config is given, resets to the order given in the env_config. Else initializes order with random pickup, dropoff and time
+        Has to be called once after initializing environment to initialize state. Called by ray rllib agent once after setup and at the end of every episode.
 
-        # two cases depending if we have env config
-        #super().reset()
+        Args:
+            start_parameters (None, optional): Optional dictionary of order parameters to reset the environment to. Dictionary has to consist of: .
+                {
+                    pickup: int (hubId of the pickup hub, example: 25),
+                    dropoff: int (hubId of the dropoff hub, example: 70),
+                    time = datetime (example: datetime.strptime('2016-01-03 14:00:00', '%Y-%m-%d %H:%M:%S'))
+                    deadline = datetime (example: datetime.strptime('2016-01-03 17:00:00', '%Y-%m-%d %H:%M:%S'))
+                }
+        Returns:
+            self.state
+        """
 
-        #self.done = False
         resetExecutionStart = time.time()
 
         pickup_day = np.random.randint(low=1,high=14)
@@ -202,7 +214,7 @@ class GraphEnv(gym.Env):
 
 
         self.LEARNGRAPH_FIRST_INIT_DONE = True
-        self.learn_graph.add_travel_cost_layer(self.availableTrips(), self.distance_matrix)
+        self.learn_graph.add_travel_cost_and_distinction_layer(self.availableTrips(), self.distance_matrix)
         self.learn_graph.add_remaining_distance_layer(current_hub=self.position, distance_matrix=self.distance_matrix)
 
         self.count_hubs = 0
@@ -385,7 +397,7 @@ class GraphEnv(gym.Env):
 
         self.time += timedelta(seconds=step_duration)
         # refresh travel cost layer after each step
-        self.learn_graph.add_travel_cost_layer(self.availableTrips(), self.distance_matrix)
+        self.learn_graph.add_travel_cost_and_distinction_layer(self.availableTrips(), self.distance_matrix)
         self.learn_graph.add_remaining_distance_layer(current_hub=self.position, distance_matrix=self.distance_matrix)
         startTimeLearn = time.time()
         self.old_state = self.state
@@ -438,7 +450,15 @@ class GraphEnv(gym.Env):
         return self.state, reward,  self.done, {"timestamp": self.time,"step_travel_time":step_duration,"distance":self.distance_matrix[self.old_position][self.position], "count_hubs":self.count_hubs, "action": self.action_choice, "hub_index": action,  "route": route_taken,"remaining_dist": self.learn_graph.adjacency_matrix('remaining_distance')[self.position][self.final_hub],"dist_covered_shares":self.distance_covered_with_shared,"dist_covered_bookown": self.distance_covered_with_ownrides}
 
     def compute_reward(self, action):
-        # cost_of_action = self.learn_graph.adjacency_matrix('cost')[self.old_position][action]
+        """ Computes the reward for an action given the state.
+
+        Args:
+            action (int): _description_
+
+        Returns:
+            _type_: _description_
+        """
+
         distance_gained = self.old_state['remaining_distance'][self.position]
         old_distinction = self.old_state['distinction']
         cost_of_action = self.learn_graph.adjacency_matrix('cost')[self.old_position][action]
@@ -491,31 +511,17 @@ class GraphEnv(gym.Env):
 
         return reward, self.done, state_of_delivery
 
-    def get_available_actions(self):
-        """ Returns the available actions at the current position. Uses a simplified action space with moves to all direct neighbors allowed.
-        Returns:
-            list: list of nodeIds of direct neighbors
-        """
-
-        startTime = time.time()
-
-        wait = [{'type': 'wait'}]
-        ownRide = [{'type': 'ownRide'}]
-        available_rides = list(self.availableTrips(10))
-
-        executionTime = (time.time() - startTime)
-        # print('get_available_actions() Execution time: ' + str(executionTime) + ' seconds')
-
-        available_actions = [wait,ownRide,*available_rides]
-        self.available_actions = available_actions
-
-        return available_actions
-
     def availableTrips(self, time_window=5):
-        """ Returns a list of all available trips at the current node and within the next 5 minutes. Includes the time of departure from the current node as well as the target node of the trip.
+        """Returns a list of all available trips at the current node and within the next time_window minutes. For each shared ride available, includes the time of departure from the current node, the target node of the ride and the route to the target node.
+
+        Args:
+            time_window (int, optional): Time window in which to look for available rides. Defaults to 5.
+            oversample_by_n_rides (int, optional): Number of synthetically generated rides that should be added to available rides from db. Defaults to 0.
+
         Returns:
-            list: [departure_time,target_node]
+            [{'departure_time': datetime, 'target_hub': int, 'route': [int]}]: List of available shared rides
         """
+
         startTime = time.time()
         list_trips=[]
         position=self.manhattan_graph.get_nodeid_by_hub_index(self.position)
@@ -565,7 +571,15 @@ class GraphEnv(gym.Env):
         # print('found '+ str(len(list_trips)) +' trips, ' + 'current time: ' + str(self.time))
         return list_trips
 
-    def generate_rides(self,):
+    def generate_rides(self, n_rides: int = 40):
+        """Function used in training to increase the number of available shared rides available at each step. Returns n_rides synthetic rides in a list of the same format as availableTrips() returns.
+
+        Args:
+            n_rides (int, optional): Number of rides that should be generated. Defaults to 40.
+
+        Returns:
+            [{'departure_time': datetime, 'target_hub': int, 'route': [int]}]: List of generated rides
+        """
         list_trips = []
         depart_time_list = []
         target_hub_list = []
@@ -585,29 +599,38 @@ class GraphEnv(gym.Env):
 
         for i in range(len(target_hub_list)):
             depart_time = self.time
-            depart_time += timedelta(seconds=180) # wait 3 minutes for departure of synthetic ride
+            depart_time += timedelta(seconds=180) # add 3 minutes wait time until departure of synthetic ride
             depart_time_list.append(depart_time)
 
             route = ox.shortest_path(self.manhattan_graph.inner_graph, self.manhattan_graph.get_nodeid_by_hub_index(self.position), self.manhattan_graph.get_nodeid_by_hub_index(target_hub_list[i]), weight='travel_time')
             route_list.append(route)
 
-        # write all generated trips into a list of dicts
         generated_trips_list = []
         for i in range(len(target_hub_list)):
             trip = {'departure_time': depart_time_list[i], 'target_hub': target_hub_list[i], 'route': route_list[i]}
             generated_trips_list.append(trip)
 
-        # modify maks and available actions
         for hub in target_hub_list:
             self.shared_rides_mask[hub] = 1
 
         return generated_trips_list
 
     def validateAction(self, action):
+        """Validates if given action is valid 
+        Args:
+            action (int): final hub to move to
+
+        Returns:
+            boolean: is action valid or not
+        """
         return action < self.n_hubs
 
     def read_config(self):
-        #filepath = os.path.join(ROOT_DIR,'env_config.pkl')
+        """Reads config file that includes preset order parameters (pickup,dropoff and time) and writes it into self.env_config
+
+        Returns:
+            dict: retrieved config dictionary
+        """
         filepath = "env_config.pkl"
         with open(filepath,'rb') as f:
             loaded_dict = pickle.load(f)
@@ -615,12 +638,8 @@ class GraphEnv(gym.Env):
         return loaded_dict
 
 
-    def render(self, visualize_actionspace: bool = False):
-        """_summary_
-        Args:
-            visualize_actionspace (bool, optional): _description_. Defaults to False.
-        Returns:
-            _type_: _description_
+    def render(self):
+        """Renders the current state of the environment in a plotly figure.
         """
 
         shared_rides = list()
@@ -628,13 +647,10 @@ class GraphEnv(gym.Env):
        
         for i, trip in enumerate(self.availableTrips()):
             shared_ids.append(trip['target_hub'])
-          
-        #print('Shared: ', shared_ids)
-
+        
         all_hubs = self.hubs
         book_own_ids = list(set(all_hubs) - set(shared_ids))
-        #print('Book owns: ', book_own_ids)
-           
+    
         position = self.manhattan_graph.get_nodeid_by_index(self.position)
         final = self.manhattan_graph.get_nodeid_by_index(self.final_hub)
         start = self.manhattan_graph.get_nodeid_by_index(self.start_hub)
@@ -670,117 +686,10 @@ class GraphEnv(gym.Env):
         graph = self.manhattan_graph.inner_graph
 
         px.set_mapbox_access_token(open("mapbox_token").read())
-        #df = px.data.carshare()
         fig = px.scatter_mapbox(df, lat="latitude", lon="longitude", hover_name ="id", color="actions", #size="car_hours",
                   color_continuous_scale=px.colors.cyclical.IceFire, size_max=15, zoom=10)  
         fig.show()
-
-        #fig, ax = ox.plot_graph(graph, figsize=(25,25), bgcolor='#89cff0',node_color=colors, node_size = node_sizes, edge_linewidth=1, show=False, save=True, filepath='try1.png')
-        
-        # nx.draw_circular(graph, with_labels = True)
-        # plt.savefig("nx2.png")
-        # gdf_nodes = ox.graph_to_gdfs(graph, edges=False, node_geometry=False)[["x", "y"]]
-        # west, south = gdf_nodes.min()
-        # east, north = gdf_nodes.max()
-
-        
-
-        # fig = px.scatter_geo(df,lat='latitude',lon='longitude', hover_name="id")
-        # fig.update_layout(title = 'World map', title_x=0.5)
-        # fig.show()
-
-        # print('west', west)
-        # print('east', east)
-        # print('south', south)
-        # print('north', north)
-
-        # fig = plt.figure(figsize=(8, 8))
-        # m = Basemap(projection='lcc', resolution=None,
-        #             width=8E6, height=8E6, 
-        #             lat_0=south, lon_0=west)
-        # m.etopo(scale=0.5, alpha=0.5)
-
-        # Map (long, lat) to (x, y) for plotting
-        
-
-        # rx = -486.913544
-        # ry = 188.544021
-
-        # rrx = 0.1517852
-        # rry = 0.2168104
-
-        # total_vertical = abs(north - south) 
-        # total_horizontal = abs(east - west)
-
-        # upper_mapx = 2712
-        # upper_mapy = 5662
-
-        # img = Image.open('try1.png')
-        # d1 = ImageDraw.Draw(img)
-
-        # for hub in self.hubs:
-        #     print('Hub:', hub)
-        #     index = self.manhattan_graph.get_hub_index_by_nodeid(hub)
-        #     hub_x = self.manhattan_graph.get_node_by_index(index)['x']
-        #     hub_y = self.manhattan_graph.get_node_by_index(index)['y']
-        #     print(hub_x, hub_y)
-            # x, y = m(hub_x, hub_y)
-            # plt.plot(x, y, 'ok', markersize=5)
-            # plt.text(x, y, str(index), fontsize=12)
-            #ax.annotate(str(index), (hub_x, hub_y))
-
-            # x1 = hub_x/rx
-            # y1 = hub_y/ry
-
-            # print(x1, y1)
-
-            # final_x = x1/rrx
-            # final_y = y1/rry
-
-            #r= 6.371
-
-
-            # final_x = -(hub_x)/total_horizontal * upper_mapx/1000
-            # final_y = (hub_y)/total_vertical * upper_mapy/1000
-
-            # final_x = -r * hub_x * math.cos(total_vertical/2)*10
-            # final_y = r * hub_y*10
-
-            #final_x = hub_x/west + 1
-            #final_y = hub_y/north
-
-
-            # final_x = hub_x + west
-            # final_y = hub_y - south
-
-            #print(final_x, final_y)
-            #d1.text((final_x, final_y), str(index), fill=(255, 0, 0))
-            
-           
-            # d1.text((28, 36), "Hello, TutorialsPoint!", fill=(255, 0, 0))
-            # d1.text((0, 0), "Hello, 0", fill=(255, 0, 0))
-            # d1.text((2000, 5000), "AAAAaaaaaa", fill=(255, 0, 0))
-
-        #img.show()
-        #img.save("try1.png")
-            #fig.text(final_x, final_y, str(index), style = 'normal', fontsize = 10, color = "green")
-        
-        # fig.text(1, 1, '1,1', style = 'normal', fontsize = 10, color = "green")
-        # fig.text(0, 0, '0,0', style = 'normal', fontsize = 10, color = "green")
-
-        # fig.text(0.5, 0.5, '0.5,0.5', style = 'normal', fontsize = 10, color = "green")
-
-
-        # current_pos_y = self.manhattan_graph.get_node_by_index(self.position)['y']
-        # print("Legend HUBS:")
-        # print(Fore.RED + 'RED - SHARED')
-        # print(Fore.CYAN + 'TURQUISE - BOOK OWN')
-        # print(Fore.MAGENTA + 'LILA - CURRENT')
-        # print(Fore.GREEN + 'GREEN - START')
-        # print(Fore.BLUE + 'BLUE - FINAL')
-        # fig.show()
-        # plt.show()
-
+    
 class ActionType:
     WAIT,SHARE,OWN = range(3)
 class DeliveryState:

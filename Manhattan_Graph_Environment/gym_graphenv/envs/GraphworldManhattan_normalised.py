@@ -1,13 +1,3 @@
-
-
-
-
-#THIS IS ONLY EXAMPLE HOW TO NORMALISE - DO NOT USE IT - THE ENV IS NOT UP TO DATE
-
-
-
-
-
 from xml.dom.pulldom import parseString
 import numpy as np
 import osmnx as ox
@@ -48,6 +38,8 @@ from Manhattan_Graph_Environment.database_connection import DBConnection
 # END OF CHANGES
 
 class GraphEnv(gym.Env):
+    """THIS IS ONLY EXAMPLE HOW TO NORMALISE - DO NOT USE IT - THE ENV IS NOT UP TO DATE
+    """
 
     REWARD_AWAY = -1
     REWARD_GOAL = 100
@@ -195,7 +187,7 @@ class GraphEnv(gym.Env):
         
 
         self.LEARNGRAPH_FIRST_INIT_DONE = True
-        self.learn_graph.add_travel_cost_layer(self.availableTrips(), self.distance_matrix)
+        self.learn_graph.add_travel_cost_and_distinction_layer(self.availableTrips(), self.distance_matrix)
         self.learn_graph.add_remaining_distance_layer(current_hub=self.position, distance_matrix=self.distance_matrix)
 
         self.count_hubs = 0
@@ -307,7 +299,7 @@ class GraphEnv(gym.Env):
                 # Instead of cumulating trip duration here we add travel_time 
                 # self.total_travel_time += timedelta(seconds=travel_time)     
                 # refresh travel cost layer after each step
-                # self.learn_graph.add_travel_cost_layer(self.availableTrips())
+                # self.learn_graph.add_travadd_travel_cost_and_distinction_layerel_cost_layer(self.availableTrips())
                 # self.state = {'cost' : self.learn_graph.adjacency_matrix('cost')[self.position].astype(int),'current_hub' : self.one_hot(self.position).astype(int), 'final_hub' : self.one_hot(self.final_hub).astype(int)}
                 executionTimeRide = (time.time() - startTimeRide)
                 #print(f"Time Ride: {str(executionTimeRide)}")
@@ -320,7 +312,7 @@ class GraphEnv(gym.Env):
 
         
         # refresh travel cost layer after each step
-        self.learn_graph.add_travel_cost_layer(self.availableTrips(), self.distance_matrix)
+        self.learn_graph.add_travel_cost_and_distinction_layer(self.availableTrips(), self.distance_matrix)
         self.learn_graph.add_remaining_distance_layer(current_hub=self.position, distance_matrix=self.distance_matrix)
         startTimeLearn = time.time()
         self.state = {'cost' : ((self.learn_graph.adjacency_matrix('cost')[self.position]-self.mean1)/self.stdev1).astype(np.float64),'remaining_distance': ((self.learn_graph.adjacency_matrix('remaining_distance')[self.position]-self.mean2)/self.stdev2).astype(np.float64),'current_hub' : self.one_hot(self.position).astype(np.float64), 'final_hub' : self.one_hot(self.final_hub).astype(np.float64)}

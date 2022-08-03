@@ -5,6 +5,8 @@ from datetime import datetime, timedelta
 #graph to be used: full.graphml (all nodes)
 #if we use small_manhattan.graphml, we do not have all nodes which are in the trips and then we get Key Error
 class HubsGraph:
+    """Copy of an old state of ManhattanGraph used in API to map coordinates to closest hub. Not fully up to date.
+    """
 
     def __init__(self, filename, num_hubs):
         filepath = ("data/graph/%s.graphml") % (filename)
@@ -15,8 +17,6 @@ class HubsGraph:
      
         #trips for simple graph, only the first 5000 rows
         all_trips = pd.read_csv('data/trips/preprocessed_trips.csv', nrows=100)
-        print(all_trips.head())
-        #self.trips = self.prefilter_trips(all_trips, start_time).reset_index(drop=True)
         self.trips =  all_trips
         #compute trip length and add to csv
         #generate random passenger count between 1 and 4 and add to csv
@@ -25,20 +25,14 @@ class HubsGraph:
             current_route_string = self.trips.iloc[i]["route"]
             string_split = current_route_string.replace('[','').replace(']','').split(',')
             current_route = [int(el) for el in string_split]
-            #print(current_route)
             route_length = 0
             for j in range(len(current_route)-1):
-                #print(self.inner_graph.nodes()[current_route[j]])
-                #print(current_route[j])
-                #print(self.get_node_by_nodeid(current_route[j]))
-                #print(self.nodes())
                 route_length += ox.distance.great_circle_vec(self.inner_graph.nodes()[current_route[j]]['y'], self.inner_graph.nodes()[current_route[j]]['x'],
                 self.inner_graph.nodes()[current_route[j+1]]['y'], self.inner_graph.nodes()[current_route[j+1]]['x'])
             route_length_column.append(route_length)
 
             self.trips["route_length"]=route_length_column
 
-            # add mobility providers randomly
             provider_column=[]
             totalprice_column=[]
             x = pd.read_csv("Provider.csv")
