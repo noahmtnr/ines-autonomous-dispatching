@@ -123,6 +123,8 @@ The checkpoints of the training are saved in /tmp/rainbow-new/rllib_checkpoint w
   
   
   **Bookowns, Shares and Waits.**
+  ![grafik](https://user-images.githubusercontent.com/93478758/182628279-220e1217-2c11-4bc5-ab97-57f666af62ff.png)
+
 
 
 
