@@ -103,11 +103,6 @@ Further settings:
 
 The checkpoints of the training are saved in /tmp/rainbow-new/rllib_checkpoint which can then be used for testing.
 
-### Execution of Training
-
-	- takes about 5 hours for 100 iterations, depends on number of hubs and deadline used
-
-
 ### Results of Training
 
 	@ Maren \\
