@@ -74,10 +74,34 @@ gitignore, yaml-files
 DQN, PPO, Rainbow
 
 ## Instruction for Training
+There are 5 different files for training:
+- custom_actions.py: instantiates environment before executing custom or random actions (no training, more for debugging)
+- train_DQN.py: run to train agent using DQN algorithm
+- train_PPO.py: run to train agent using PPO algorithm
+- train_Rainbow.py: run to train agent using Rainbow algorithm
+- train_Rainbow_custom_unnormalized: run to train agent using Rainbow algorithm with custom Neural Network architecture implemented in Tensorflow
+
+However, the best training results seen so far were achieved by using train_Rainbow.py. Therefore, we highly recommend using this algorithm for the Manhattan Environment. The following "Parameters" section describes how to adapt the training file.
 
 ### Parameters
+In train_Rainbow.py you can set the following hyperparameters for the Rainbow algorithm:
+- "framework": by default Tensorflow, use "torch" if you want to use PyTorch
+- "num_workers": set to >0 if you wan multiple-process operation
+- "hiddens": define number of neurons and layers in list, e.g. [100,50] for neural network with 2 hidden layers consisting of 100 and 50 neurons respectively
+- "fcnet_activation": define activation function, e.g. "relu"
+- "train_batch_size": batch size used for training
+- "gamma": discount factor of the Markov Decision Process
+- "num_atoms": number of atoms for representing the distribution of return; when this is greater than 1, distributional Q-learning is used
+- "v_min" and "v_max": expected range of reward returns
 
-	agents,Iterations, hidden layers, activation function, number of steps, ...
+Other training hyperparameters: 
+- "n_iter": number of training iterations
+
+Further settings:
+- "wandb.login()": set your personal wandb key in order to see the training metrics in the wandb dashboard
+- "wandb.init()": define the name of your wandb project
+
+The checkpoints of the training are saved in /tmp/rainbow-new/rllib_checkpoint which can then be used for testing.
 
 ### Execution of Training
 
