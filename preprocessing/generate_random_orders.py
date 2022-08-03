@@ -1,3 +1,9 @@
+"""
+This scipt generates random orders that need to delievered for testing the system
+and saves them to "random_orders.csv" file in data folder.
+The orders are in 2016 as we used taxi trips from this year.     
+
+"""
 import numpy as np
 from datetime import datetime, timedelta
 import random
@@ -6,7 +12,6 @@ import csv
 
 sys.path.insert(0,"")
 
-#here sth needs to be fixed
 from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv
 env=GraphEnv()
 

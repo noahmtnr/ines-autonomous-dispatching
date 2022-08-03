@@ -1,23 +1,40 @@
-# ACHTUNG! funktioniert nicht wegen ImportFehler scikit-learn
+'''
+This file prepares taxi data to a format suitable for saving them in a database.
+'''
 
 # imports and load dataset
-import importlib
 import pandas as pd
 import numpy as np
 import osmnx as ox
-import networkx as nx
 import pandas as pd
-import time
-from datetime import date,timedelta,datetime
-#import importlib
-#mapping = importlib.import_module("ines-autonomous-dispatching.mapping")
-from mapping import setup_graph
-#map_routes_to_trips,map_trips_to_nodes,setup_graph
 from data_preprocessing import DataPreProcessing #map_routes_to_trips_with_timestamps
 
 
 # apply preprocessing to specific data of one month in a year
 def preprocess(month,year):
+    """
+    Applies preprocessing to specific data of one month in a year.
+
+    Args:
+        month (int): chosen month
+        year (int): chosen year
+
+      
+        pickup_days = []
+        pickup_hours = []
+        pickup_minutes = []
+        for index, row in df.iterrows():
+            pickup_days.append(row['Trip_Pickup_DateTime'].day)
+            pickup_hours.append(row['Trip_Pickup_DateTime'].hour)
+            pickup_minutes.append(row['Trip_Pickup_DateTime'].minute)
+        df['pickup_day']=pickup_days
+        df['pickup_hour']=pickup_hours
+        df['pickup_minute']=pickup_minutes
+    
+
+    Returns:
+        pandas.DataFrame: preprocessed data from a chosen month
+    """    
     # depending on month and year, load the respective dataset
     # month = '03' # example: March
     # year = '2009' # example: year 2009
@@ -41,18 +58,7 @@ def preprocess(month,year):
     df['Trip_Pickup_DateTime']=pd.to_datetime(df['Trip_Pickup_DateTime'])
     df['Trip_Dropoff_DateTime']=pd.to_datetime(df['Trip_Dropoff_DateTime'])
 
-    """
-    pickup_days = []
-    pickup_hours = []
-    pickup_minutes = []
-    for index, row in df.iterrows():
-        pickup_days.append(row['Trip_Pickup_DateTime'].day)
-        pickup_hours.append(row['Trip_Pickup_DateTime'].hour)
-        pickup_minutes.append(row['Trip_Pickup_DateTime'].minute)
-    df['pickup_day']=pickup_days
-    df['pickup_hour']=pickup_hours
-    df['pickup_minute']=pickup_minutes
-    """
+  
 
     # rename columns to be similar to those of Kaggle
     df.rename(columns={'vendor_name': 'vendor_id', 'Passenger_Count': 'passenger_count', 'Trip_Pickup_DateTime': 'pickup_datetime', 'Trip_Dropoff_DateTime': 'dropoff_datetime', 'Start_Lon': 'pickup_longitude', 'Start_Lat': 'pickup_latitude', 'End_Lon': 'dropoff_longitude', 'End_Lat': 'dropoff_latitude'},inplace=True)
