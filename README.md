@@ -62,10 +62,46 @@ Donwload Anaconda: https://www.anaconda.com/products/individual
 
 ## Repository Structure
 
+This repository has the following folders:
+
+**Manhattan_Graph_Environment**  – the main folder with the up-to-date version of environment and training and testing files:
+
+- **assets** is a folder with styling for dashboard
+	
+- **graphs** is a folder with files to create graphs used for representing the New York City
+	
+- **gym_graphenv** is a folder with RL Environment 
+	
+- **testing** is a folder with files to run tests
+	
+- **training** is a folder with files to run training of agents
+	
+**archive** – contains old files that are not anymore in use 
+
+**config** – a folder with necessary configuration
+
+**data** – a folder with data:
+
+- **graphs** contains  graphml files for representing the New York City
+	
+- **hubs**  contains files with coordiantes of hubs
+	
+- **others**  contains other data files
+	
+- **trips** contains data files with Taxi trips
+	
+**doc** - a folder with additional documentation
+
+**hubs definition** – a folder with files that were used to determine the location of hubs
+
+**preprocessing**  - a folder with files used to preprocess taxi trips and generate orders
+
+**tmp** – a folder that contains checkpoints that can be used for testing the agent
 
 ## Database 
 
-The mySQL database can be accessed either through a local instance or a remote db on the azure cloud. To inspect the schemas, a tool like MySQLWorkbench comes in handy.
+For training and testing we used a MySQL database for retrieving our hubs and trip data.
+The MySQL database can be accessed either through a database installed on the local machine or through a remote database in the azure cloud. To inspect the schemas, a tool like MySQLWorkbench can help.
 To connect, use the following credentials:
 host="mannheimprojekt.mysql.database.azure.com"
 user="mannheim"
@@ -82,28 +118,42 @@ Views:
 * filtered_trips_view: filters all on route locations from trips_routes by hubs
 * filtered_trips_view_1,filtered_trips_view_2,filtered_trips_view_3, ..., :range-partitions filtered_trips_view by biweekly timewindows retrieved in runtime for training/testing within a two weeks window
 
-### Environment 
-
-### RL Algorithms
-
-### Visualization
-
-### APIs
-
-### Training
-
-### Testing
-
-### Other Files
-
-gitignore, yaml-files
-
 ## Environment and Reinforcement Learning
-### whatever for environment
-### Observation Space
+
+In this paragraph, we present what our RL setting looks like.
+
+### Agent
+
+Our agent is an intelligent box that can make decisions on its own. After arriving at a hub, it looks at the observation space and chooses one action from the action space. It learns thanks to the RL methods by looking at the reward that it receives after each step.
+
 ### Action Space
-### Agents 
-DQN, PPO, Rainbow
+
+We modelled action space to be a one-hot-encoded vector of the length of the number of hubs. It illustrates that the agent can move to every other hub and itself (by waiting). The action taken by the agent is always a number that is equal to the number of the hub it is brought to.
+
+### Observation Space
+
+Our observation space consists of the following elements:
+-	‘remaining_distance’ is a vector of the length of the number of hubs. It tells the agent how far from the destination hub each hub is.
+-	‘final_hub’ is a one-hot-encoded vector that tells the agent which is the destination hub.
+-	‘distinction’ is a binary vector of the length of action space. Each value in it shows what kind of action it is. If there is -1, it means that it is ‘book own ride’, 0 – ‘wait’ and 1 – ‘take a shared ride’.
+-	‘allow_bookown’ is a vector of length 2 which indicates whether ‘book own rode’ is at all allowed.
+
+Observation space is updated after each step as most information changes then.
+
+### RL Methods 
+
+For the training of our agent, we used the following methods:
+
+- [Proximal Policy Optimization (PPO)](https://arxiv.org/pdf/1707.06347.pdf) - a policy gradient method for reinforcement learning. 
+
+
+- [Deep Q-Network (DQN )](https://arxiv.org/pdf/1312.5602v1.pdf) - approximates a state-value function in a Q-Learning framework with a neural network.
+
+
+- [Rainbow DQN ](https://arxiv.org/pdf/1710.02298v1.pdf) - an extended DQN that combines several improvements into a single learner.
+
+
+
 
 ## Instruction for Training
 There are 5 different files for training:
