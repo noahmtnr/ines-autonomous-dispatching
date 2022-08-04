@@ -165,7 +165,7 @@ Available useful equals the useful shared trips available. Useful means that tak
 
 Testing can be done for one agent in more detail (see section "Detailled Individual Testing") or by comparing multiple agents on multiple metrics more generelly (see section "Benchmarking and Comparison")
 
-**Benchmarks and Comparison** 
+**Configuring Benchmarks and Running Comparison** 
 We have multiple benchmarks to which a Reinforcement Learning Agent can be compared to.
 - Bookown Agent: Books 1 own ride from the start to the final hub. Finished.
 - Random Agent: Takes a random action (i.e., chooses any of the hubs) in each step.
@@ -174,7 +174,28 @@ We have multiple benchmarks to which a Reinforcement Learning Agent can be compa
 
 Note that the Cost Agent is no longer in use as the observation space changed over the course of the project.
 
+For these agents and the RL agents, one can run a comparison which tests all agents for certain orders and outputs rankings for multiple metrics on the performance of the agents on these orders.
+The following steps need to be conducted in order to run the comparison:
+1. Open the BenchmarkWrapper.py file in the testing folder. 
+2. Go to the method file_read(self).
+3. If you want to test on random orders, then uncomment the first section of the method and comment out the second section. If you want to test on specific orders (which we have selected previously), then comment out the first section and uncomment the second section of the method.
+Specify the number of orders you want to test by changing the parameter "nrows" to the respective number of orders.
+4. Open the comparison.py file in the testing folder. 
+5. Move to the end of the file and configure which agents you want to compare by removing the hashtags for comments or commenting out certain agents.
+Then select a comparer. Currently the comparer for 5 agents (random, rainbow, shares, bookown, sharesbookend) is enabled.
+6. Run the comparison.py file. Depending on the number of agents and the number of orders to be tested this might take a while (approx. 3 hours for 5 agents and 11 orders).
 
+**Results of Comparison**
+Finally, the comparison outputs an overview of all agents, as well as multiple rankings on performance metrics.
+These metrics are:
+- Number of hubs travelled.
+- Distance travelled.
+- Number of Book Owns.
+- Ratio of Shares to Book Owns.
+- Reward.
+- Travel Time.
+- Ratio Distance Reduced with Shares to  Whole Distance.
+The rankings always show the best agent on rank 1.
 
 **Detailled Individual Testing**
 The dashboard can be used to visually understand the actions that our trained agent has taken in test orders. It consists if two tabs: static and interactive. The static visualization shows the route the agent has taken on the map of New York, as well as some order statistics such as number of actions taken. In the interactive tab, the user can manually perform actions and compare them to the actions taken by the agent on different test cases. The following GIF demonstrates how to operate in the interactive tab:
