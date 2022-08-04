@@ -44,7 +44,6 @@ entered_hub = False
 user_route = []
 
 # read test dataframe 
-#filepath = "C:/Users/kirch/OneDrive/Dokumente/Uni/Mannheim/FSS2022/Teamproject/ines-autonomous-dispatching/Manhattan_Graph_Environment/test_orders_dashboard_noah.csv" 
 filepath = "test_orders_dashboard_noah.csv"
 df_test = pd.read_csv(filepath)
 

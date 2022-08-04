@@ -30,7 +30,8 @@ class DataPreProcessing:
             dataframe: taxi trips
         """        
         df = pd.read_csv(
-            r"/Users/noah/OneDrive - Universität Mannheim/Uni/Mannheim/Team Project/nyc-taxi-trip-duration/train.csv",
+            # train.csv path has to be changed to train.csv downloaded from https://www.kaggle.com/competitions/nyc-taxi-trip-duration/data
+            r"path_to_file/train.csv",
             nrows=nrows,
         )
         return df
