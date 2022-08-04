@@ -106,7 +106,7 @@ The checkpoints of the training are saved in /tmp/rainbow-new/rllib_checkpoint w
 ### Results of Training
 The actions and corresponding routes can be found in log-files on WandB. To open a log-file, first select a project, then select a run and then select "Logs" on the menu bar on the left.
 	
-Multiple WandB metrics (https://wandb.ai/hitchhike/projects) are used to measure the training performance: 
+Multiple WandB metrics (see https://wandb.ai/hitchhike/Comparison_Hypothese_Normalisiert) are used to measure the training performance: 
 
 **Episodes and Steps.**
 - *count_steps_mean* : Average number of steps the agent takes for one order.
