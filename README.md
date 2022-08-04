@@ -18,7 +18,7 @@ Lukas Kirchdorfer, lkirchdo@mail.uni-mannheim.de
 University of Mannheim, August 7th, 2022
 
 
-## Intoduction
+## Introduction
 
 ### Problem Definition
 
@@ -46,9 +46,41 @@ This section delineates basic terms and principles, as well as a tutorial for in
 
 ### Tutorials for Required Installations
 
+Donwload Anaconda: https://www.anaconda.com/products/individual
+
+1. Install Python version 3.9 in anaconda prompt
+
+- $ conda install python = 3.9
+
+3. create new environment
+
+- $ conda install -n ines-ad requirements.txt
+
+4. activate environment
+
+- $ conda activate ines-ad
 
 ## Repository Structure
 
+
+## Database 
+
+The mySQL database can be accessed either through a local instance or a remote db on the azure cloud. To inspect the schemas, a tool like MySQLWorkbench comes in handy.
+To connect, use the following credentials:
+host="mannheimprojekt.mysql.database.azure.com"
+user="mannheim"
+password="Projekt2022"
+database="mannheimprojekt"
+
+The database consists of 
+Tables:
+* hubs: nodeids of all hubs (used for views and retrieved in runtime)
+* trips: entire trip data for all trips
+* trips_routes: locations of all taxis at all times with reference to trip (used to identify share opportunities for package)
+
+Views:
+* filtered_trips_view: filters all on route locations from trips_routes by hubs
+* filtered_trips_view_1,filtered_trips_view_2,filtered_trips_view_3, ..., :range-partitions filtered_trips_view by biweekly timewindows retrieved in runtime for training/testing within a two weeks window
 
 ### Environment 
 
@@ -138,27 +170,27 @@ Available useful equals the useful shared trips available. Useful means that tak
   
 
 **Bookowns, Shares and Waits.**
-- *boolean_has_booked_any_own*:
-- *ratio_delivered_without_bookown_to_all_delivered* :
-- *share_of_bookown_mean* :
-- *share_mean* :
-- *share_to_own_ratio_mean* :
-- *share_to_own_ratio_max* :
-- *wait_mean* :
-- *share_of_wait_mean* :
-- *share_of_share_mean* :
-- *own_mean* :
+- *boolean_has_booked_any_own*: States whether an own taxi ride was booked for an order
+- *ratio_delivered_without_bookown_to_all_delivered* : Share of total rides that was delivered without any own rides booked
+- *share_of_bookown_mean* : Average share of own rides to all steps taken for orders
+- *share_mean* : Average number of own rides taken for orders
+- *share_to_own_ratio_mean* : Average ratio of share rides to own rides, i.e. how many share rides where taken per own ride
+- *share_to_own_ratio_max* : Maximum ratio of share rides to own rides, i.e. how many share rides where taken per own ride
+- *wait_mean* :  Average number of wait steps taken for orders
+- *share_of_wait_mean* : Average share of wait steos to all steps taken for orders
+- *share_of_share_mean* : Average share of shared rides to all steps taken for orders
+- *own_mean* : Average number of own rides taken for orders
   
   Example from WandB: 
   ![grafik](https://user-images.githubusercontent.com/93478758/182628279-220e1217-2c11-4bc5-ab97-57f666af62ff.png)
   
 
 **Distance Reduced.**
-- *distance_reduced_with_ownrides* :
-- *bookown_distance_not_covered* :
-- *distance_reduced_with_shared* :
-- *bookown_distance_not_covered_share* :
-- *distance_reduced_with_shared_share* :
+- *distance_reduced_with_ownrides* : Distance to final hub reduced by booking own taxi rides, i.e. shortest-path-from-pickup-to-dropoff - distance-covered-with-shared-rides 
+- *bookown_distance_not_covered* : how much distance we don't have to ride with book own 
+- *distance_reduced_with_shared* : Distance to final hub reduced by sharing existing taxi rides, i.e. shortest-path-from-pickup-to-dropoff - distance-covered-with-own-rides 
+- *bookown_distance_not_covered_share* : how much distance (in % of total distance) we don't have to ride with book own 
+- *distance_reduced_with_shared_share* : Share of total distance from pickup to dropoff that was reduced by sharing rides
 
 
 ### Instructions for Testing
@@ -207,35 +239,3 @@ The dashboard can be used to visually understand the actions that our trained ag
 
 
 
-PLEASE REMOVE THIS:
-## Package Installation process:
-
-Donwload Anaconda: https://www.anaconda.com/products/individual
-
-1. Install Python version 3.9 in anaconda prompt
-
-- $ conda install python = 3.9
-
-3. create new environment
-
-- open anaconda prompt
-- $ conda config --prepend channels conda-forge
-- $ conda create -n teamproject --strict-channel-priority osmnx
-- $ conda activate teamproject
-- open anaconda navigator, select environment teamproject in the drop down menu and install Jupyter Notebook
-
-4. Install pytorch within teamproject environment
-
-- $ pip3 install torch torchvision torchaudio
-
-5. Install open AI gym
-
-- $ pip install pygame
-- $ pip install gym
-
-6. Install RLlib within teamproject env
-
-- $ pip install -U ray
-- $ pip install ray[rllib]
-
-7. setuptools~=61.2.0
