@@ -49,22 +49,43 @@ This section delineates basic terms and principles, as well as a tutorial for in
 
 ## Repository Structure
 
+This repository has the following folders:
 
-### Environment 
+**Manhattan_Graph_Environment**  – the main folder with the up-to-date version of environment and training and testing files:
 
-### RL Algorithms
+- **assets** is a folder with styling for dashboard
+	
+- **graphs** is a folder with files to create graphs used for representing the New York City
+	
+- **gym_graphenv** is a folder with RL Environment 
+	
+- **testing** is a folder with files to run tests
+	
+- **training** is a folder with files to run training of agents
+	
+**archive** – contains old files that are not anymore in use 
 
-### Visualization
+**config** – a folder with necessary configuration
 
-### APIs
+**data** – a folder with data:
 
-### Training
+- **graphs** contains  graphml files for representing the New York City
+	
+- **hubs**  contains files with coordiantes of hubs
+	
+- **others**  contains other data files
+	
+- **trips** contains data files with Taxi trips
+	
+**doc** - a folder with additional documentation
 
-### Testing
+**hubs definition** – a folder with files that were used to determine the location of hubs
 
-### Other Files
+**preprocessing**  - a folder with files used to preprocess taxi trips and generate orders
 
-gitignore, yaml-files
+**tmp** – a folder that contains checkpoints that can be used for testing the agent
+
+
 
 ## Environment and Reinforcement Learning
 
