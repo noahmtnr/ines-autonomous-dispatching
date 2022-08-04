@@ -67,11 +67,41 @@ This section delineates basic terms and principles, as well as a tutorial for in
 gitignore, yaml-files
 
 ## Environment and Reinforcement Learning
-### whatever for environment
-### Observation Space
+
+In this paragraph, we present what our RL setting looks like.
+
+### Agent
+
+Our agent is an intelligent box that can make decisions on its own. After arriving at a hub, it looks at the observation space and chooses one action from the action space. It learns thanks to the RL methods by looking at the reward that it receives after each step.
+
 ### Action Space
-### Agents 
-DQN, PPO, Rainbow
+
+We modelled action space to be a one-hot-encoded vector of the length of the number of hubs. It illustrates that the agent can move to every other hub and itself (by waiting). The action taken by the agent is always a number that is equal to the number of the hub it is brought to.
+
+### Observation Space
+
+Our observation space consists of the following elements:
+-	‘remaining_distance’ is a vector of the length of the number of hubs. It tells the agent how far from the destination hub each hub is.
+-	‘final_hub’ is a one-hot-encoded vector that tells the agent which is the destination hub.
+-	‘distinction’ is a binary vector of the length of action space. Each value in it shows what kind of action it is. If there is -1, it means that it is ‘book own ride’, 0 – ‘wait’ and 1 – ‘take a shared ride’.
+-	‘allow_bookown’ is a vector of length 2 which indicates whether ‘book own rode’ is at all allowed.
+
+Observation space is updated after each step as most information changes then.
+
+### RL Methods 
+
+For the training of our agent, we used the following methods:
+
+- [Proximal Policy Optimization (PPO)](https://arxiv.org/pdf/1707.06347.pdf) - a policy gradient method for reinforcement learning. 
+
+
+- [Deep Q-Network (DQN )](https://arxiv.org/pdf/1312.5602v1.pdf) - approximates a state-value function in a Q-Learning framework with a neural network.
+
+
+- [Rainbow DQN ](https://arxiv.org/pdf/1710.02298v1.pdf) - an extended DQN that combines several improvements into a single learner.
+
+
+
 
 ## Instruction for Training
 There are 5 different files for training:
