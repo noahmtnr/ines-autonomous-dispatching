@@ -132,22 +132,22 @@ Available useful equals the useful shared trips available. Useful means that tak
 - *shared_taken_useful_to_shared_available_useful* : Ratio of the number of steps where a useful shared ride is taken to the number of steps where a useful shared ride is available.
   
   
-  **Reward**
-  - *mean_reward* : Average reward an agent received for the episode.
-  - *max_reward* : Maximum reward an agent received for the episode.
+**Reward**
+- *mean_reward* : Average reward an agent received for the episode.
+- *max_reward* : Maximum reward an agent received for the episode.
   
 
-  **Bookowns, Shares and Waits.**
-  - *boolean_has_booked_any_own*:
-  - *ratio_delivered_without_bookown_to_all_delivered* :
-  - *share_of_bookown_mean* :
-  - *share_mean* :
-  - *share_to_own_ratio_mean* :
-  - *share_to_own_ratio_max* :
-  - *wait_mean* :
-  - *share_of_wait_mean* :
-  - *share_of_share_mean* :
-  - *own_mean* :
+**Bookowns, Shares and Waits.**
+- *boolean_has_booked_any_own*:
+- *ratio_delivered_without_bookown_to_all_delivered* :
+- *share_of_bookown_mean* :
+- *share_mean* :
+- *share_to_own_ratio_mean* :
+- *share_to_own_ratio_max* :
+- *wait_mean* :
+- *share_of_wait_mean* :
+- *share_of_share_mean* :
+- *own_mean* :
   
   Example from WandB: 
   ![grafik](https://user-images.githubusercontent.com/93478758/182628279-220e1217-2c11-4bc5-ab97-57f666af62ff.png)
@@ -163,9 +163,9 @@ Available useful equals the useful shared trips available. Useful means that tak
 
 ### Instructions for Testing
 
-Testing can be done for one agent in more detail (see section "Detailled Individual Testing") or by comparing multiple agents on multiple metrics more generelly (see section "Benchmarking and Comparison")
+Testing can be done for one agent in more detail (see section "Detailled Individual Testing") or by comparing multiple agents on multiple metrics more generelly (see section "Benchmarking and Comparison").
 
-**Configuring Benchmarks and Running Comparison** 
+**Configuring Agents and Running Comparison** 
 We have multiple benchmarks to which a Reinforcement Learning Agent can be compared to.
 - Bookown Agent: Books 1 own ride from the start to the final hub. Finished.
 - Random Agent: Takes a random action (i.e., chooses any of the hubs) in each step.
@@ -174,7 +174,10 @@ We have multiple benchmarks to which a Reinforcement Learning Agent can be compa
 
 Note that the Cost Agent is no longer in use as the observation space changed over the course of the project.
 
-For these agents and the RL agents, one can run a comparison which tests all agents for certain orders and outputs rankings for multiple metrics on the performance of the agents on these orders.
+For the Reinforcement Learning Agent, one can configure the training checkpoint from which the agent should be restored and tested on.
+For this, navigate to the file of the respective agent in the testing folder. Go to the method run_one_episode(). Adapt the file_name (i.e., file path) to your selected checkpoint.
+
+For the benchmark agents and the RL agents, one can run a comparison which tests all agents for certain orders and outputs rankings for multiple metrics on the performance of the agents on these orders.
 The following steps need to be conducted in order to run the comparison:
 1. Open the BenchmarkWrapper.py file in the testing folder. 
 2. Go to the method file_read(self).
