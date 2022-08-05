@@ -1,9 +1,8 @@
-import networkx as nx
-import pandas as pd
-import osmnx as ox
-import folium
-from IPython.display import IFrame
 import random
+
+import networkx as nx
+import osmnx as ox
+import pandas as pd
 
 # Smallest Graph
 # location = 'Meinheim, Bayern, Germany'

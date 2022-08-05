@@ -3,21 +3,14 @@ Test Class for DQN Agent.
 """
 
 # imports
-import numpy as np
-import pandas as pd
-import json
-import os
-import shutil
 import sys
+
 import gym
-
 import ray
-
 from ray.rllib.agents.dqn import DQNTrainer, DEFAULT_CONFIG
 
 sys.path.insert(0,"")
 
-from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
 from gym_graphenv.envs.GraphworldManhattan import GraphEnv
 
 env=GraphEnv()

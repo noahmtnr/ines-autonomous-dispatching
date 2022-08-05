@@ -1,12 +1,10 @@
-import gym
-import ray
 import ray.rllib.agents.dqn as dqn
 from ray import serve
+from ray.rllib.agents.dqn import DEFAULT_CONFIG
 from starlette.requests import Request
-from ray.rllib.agents.dqn import DQNTrainer, DEFAULT_CONFIG
+
 from gym_graphenv.envs.GraphworldManhattan import GraphEnv
-import gym
-import requests
+
 # checkpoint_path = "C:\\Users\\cosmi\\Documents\\Mannheim\\ines-autonomous-dispatching\\results\\tmp\\dqn\\graphworld\\checkpoint_000001\\checkpoint-1"
 
 checkpoint_path = '/Users/noah/Desktop/Repositories/ines-autonomous-dispatching/Manhattan_Graph_Environment/training/results/tmp/dqn/graphworld/checkpoint_000001/checkpoint-1'

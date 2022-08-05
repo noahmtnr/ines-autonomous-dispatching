@@ -5,12 +5,10 @@ Compares multiple agents on multiple performance metrics.
 
 # imports
 import sys
-import pandas as pd
-import numpy as np
-from datetime import datetime, timedelta
+
 from BenchmarkWrapper import BenchmarkWrapper
 from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv
-import operator
+
 sys.path.insert(0,"")
 
 # class definition

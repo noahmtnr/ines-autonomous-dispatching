@@ -1,26 +1,18 @@
 # imports
-import numpy as np
-import pandas as pd
 import json
-import shutil
-import sys
-import gym
-import wandb
 # CHANGES HERE
 # uncomment if error appears
 import os
+import sys
+
+import wandb
+
 os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 # CHANGES END HERE
 import ray
 from ray.rllib.agents.dqn import DQNTrainer, DEFAULT_CONFIG
-from ray.rllib.models import ModelCatalog
-from ray.rllib.models.tf.tf_modelv2 import TFModelV2
-import tensorflow as tf
-from tensorflow import keras
-from keras.layers import Dense,LSTM,GRU,Dropout, Flatten
-from ray.rllib.models.tf.misc import normc_initializer
+
 sys.path.insert(0,"")
-from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
 from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv, CustomCallbacks
 
 # login wandb

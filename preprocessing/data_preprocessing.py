@@ -2,11 +2,13 @@
 This file preprocesses taxi trips that have only pickup and dropoff coordinates 
 by adding the shortest path between them by adding nodes on the way.
 '''
-import osmnx as ox
-import networkx as nx
-import pandas as pd
-from datetime import timedelta,datetime
 import time
+from datetime import timedelta
+
+import networkx as nx
+import osmnx as ox
+import pandas as pd
+
 
 class DataPreProcessing:
     

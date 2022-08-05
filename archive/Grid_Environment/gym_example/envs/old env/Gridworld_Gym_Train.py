@@ -1,10 +1,9 @@
-from doctest import Example
 import gym
-import gym_example
+
+
 # from ray.tune.registry import register_env
 # import ray
 # import ray.rllib.agents.ppo as ppo
-from gym_example.envs.Gridworld_Gym import Gridworld_v0
 def run_one_episode (env):
     env.reset()
     sum_reward = 0

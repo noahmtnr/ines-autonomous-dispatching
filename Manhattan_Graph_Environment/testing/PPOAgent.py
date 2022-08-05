@@ -7,23 +7,15 @@ PPO (Proximal Policy Optimization) Agent.
 import sys
 sys.path.insert(0,"")
 # print("System path",sys.path)
-from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
 
-import numpy as np
-import pandas as pd
-import json
 import os
-import shutil
-import gym
-import pickle
 from datetime import datetime, timedelta
 from config.definitions import ROOT_DIR
-import random
-import ray
 import warnings
 warnings.filterwarnings('ignore')
 from ray.rllib.agents.ppo import PPOTrainer, DEFAULT_CONFIG
-from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv, CustomCallbacks
+from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv
+
 sys.path.append(os.path.join(ROOT_DIR, "Manhattan_Graph_Environment", "gym_graphenv"))
 
 

@@ -1,11 +1,12 @@
 # imports
 import sys
+
 import numpy as np
+
 sys.path.insert(0, "")
 import os;
 os.environ['HDF5_DISABLE_VERSION_CHECK'] = '2'
-from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
-from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv, CustomCallbacks
+from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv
 
 # initialize environment
 env = GraphEnv()

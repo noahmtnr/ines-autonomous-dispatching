@@ -3,11 +3,11 @@ This file prepares taxi data to a format suitable for saving them in a database.
 '''
 
 # imports and load dataset
-import pandas as pd
 import numpy as np
 import osmnx as ox
 import pandas as pd
-from data_preprocessing import DataPreProcessing #map_routes_to_trips_with_timestamps
+
+from data_preprocessing import DataPreProcessing  # map_routes_to_trips_with_timestamps
 
 
 # apply preprocessing to specific data of one month in a year

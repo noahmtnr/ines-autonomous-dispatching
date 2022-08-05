@@ -1,35 +1,21 @@
-from xml.dom.pulldom import parseString
+import numpy as np
+import pickle
+import random
+import sys
+import time
+from datetime import datetime, timedelta
+
+import gym
+import modin.pandas as pd
 import numpy as np
 import osmnx as ox
-import networkx as nx
-import folium
-from folium.plugins import MarkerCluster
-from datetime import datetime, timedelta
-from array import array
-import gym
-from gym.utils import seeding
-import random
-import modin.pandas as pd
+# from mpl_toolkits.basemap import Basemap
+import plotly.express as px
 from gym import spaces
-from pandas import Timestamp
-import time
-import pickle
-import logging
-import json
-import os
-import matplotlib.pyplot as plt
-import networkx as nx 
-from colorama import Fore, Back, Style
-import sys
-from PIL import Image, ImageDraw
-import math 
-import plotly.express as px
-#from mpl_toolkits.basemap import Basemap
-import plotly.express as px
+
 RAY_ENABLE_MAC_LARGE_OBJECT_STORE=1.
 sys.path.insert(0,"")
 # from config.definitions import ROOT_DIR
-import statistics
 ROOT_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
 # from config.definitions import ROOT_DIR
 from typing import Dict
@@ -44,7 +30,6 @@ from ray.rllib.policy import Policy
 # CHANGES
 from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
 from Manhattan_Graph_Environment.graphs.LearnGraph import LearnGraph
-from Manhattan_Graph_Environment.OneHotVector import OneHotVector
 from Manhattan_Graph_Environment.database_connection import DBConnection
 # END OF CHANGES
 

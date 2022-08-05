@@ -1,7 +1,10 @@
-import osmnx as ox
-import pandas as pd
 import random
 from datetime import datetime, timedelta
+
+import osmnx as ox
+import pandas as pd
+
+
 #graph to be used: full.graphml (all nodes)
 #if we use small_manhattan.graphml, we do not have all nodes which are in the trips and then we get Key Error
 class HubsGraph:

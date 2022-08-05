@@ -1,7 +1,8 @@
-import osmnx as ox
-import networkx as nx
-import pandas as pd
 from datetime import timedelta
+
+import networkx as nx
+import osmnx as ox
+import pandas as pd
 
 
 def setup_graph():

@@ -1,21 +1,19 @@
-from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph 
-#from asyncio.windows_events import NULL
-import sys
-import matplotlib.pyplot as plot
-from numpy import double
-import osmnx as ox
-import os
-import urllib
 import datetime
+import os
+# from asyncio.windows_events import NULL
+import sys
+
 import folium
 from folium import plugins
+from numpy import double
+
+from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
+
 sys.path.insert(0,"")
 from preprocessing.data_preprocessing import DataPreProcessing
-from flask import Flask, jsonify, request, render_template, redirect
+from flask import Flask, request, render_template
 import pandas as pd
 #import mysql.connector
-import json
-from folium.plugins import MarkerCluster
 import osmnx as nx
 import preprocessing.timestamps_mapping as timestamps_mapping
 

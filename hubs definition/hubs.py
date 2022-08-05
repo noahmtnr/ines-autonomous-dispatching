@@ -1,9 +1,10 @@
-from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
-import pandas as pd
 import warnings
+
+import pandas as pd
+
+from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
+
 warnings.filterwarnings("ignore")
-import folium
-from folium.plugins import MarkerCluster
 import numpy as np
 #from IPython.display import display
 

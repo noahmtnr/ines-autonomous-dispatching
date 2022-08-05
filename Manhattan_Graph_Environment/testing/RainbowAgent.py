@@ -7,21 +7,12 @@ Is an extended DQN.
 import sys
 
 sys.path.insert(0, "")
-import numpy as np
-import pandas as pd
-import json
 import os
-import shutil
-import gym
-import pickle
 from datetime import datetime, timedelta
-import random
-import ray
 import warnings
 warnings.filterwarnings('ignore')
 from ray.rllib.agents.dqn import DQNTrainer, DEFAULT_CONFIG
 from config.definitions import ROOT_DIR
-from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
 from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv, CustomCallbacks
 sys.path.append(os.path.join(ROOT_DIR, "Manhattan_Graph_Environment", "gym_graphenv"))
 

@@ -1,8 +1,9 @@
-from time import time
-import pandas as pd
-from datetime import datetime
-import mysql.connector
 import time
+from datetime import datetime
+from time import time
+
+import mysql.connector
+import pandas as pd
 
 
 class DBConnection:

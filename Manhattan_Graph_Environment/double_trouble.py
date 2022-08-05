@@ -1,8 +1,7 @@
 # Imports
-from calendar import c
+import os
 from datetime import datetime, timedelta
-from distutils.log import debug
-import os 
+
 os.environ['HDF5_DISABLE_VERSION_CHECK']='2'
 import dash
 from dash import html
@@ -10,9 +9,7 @@ from dash import dcc, Input, Output
 import plotly.express as px
 import plotly.graph_objects as go
 import pandas as pd
-import sys
 import ast
-from graphs.ManhattanGraph import ManhattanGraph
 import pickle
 # sys.path.insert(0,"")
 from gym_graphenv.envs.GraphworldManhattan import GraphEnv

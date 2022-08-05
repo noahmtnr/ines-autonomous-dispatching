@@ -1,22 +1,18 @@
-import sys
-import matplotlib.pyplot as plot
-from numpy import double
-import osmnx as ox
 import os
-from datetime import datetime
+import sys
 import urllib
-from datetime import datetime, timedelta
+from datetime import timedelta
+
+import osmnx as ox
 from folium import plugins, folium
-from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
-from Manhattan_Graph_Environment.graphs.HubsGraph  import HubsGraph
-from benchmarking.BenchmarkWrapper import BenchmarkWrapper
+from numpy import double
+
+from Manhattan_Graph_Environment.graphs.HubsGraph import HubsGraph
+
 sys.path.insert(0,"")
 from preprocessing.data_preprocessing import DataPreProcessing
-from flask import Flask, jsonify, request, render_template, redirect
-import pandas as pd
+from flask import Flask, request, render_template
 import mysql.connector
-from Manhattan_Graph_Environment.graphs.LearnGraph import LearnGraph
-import json
 from benchmarking.BenchmarkWrapper import BenchmarkWrapper
 
 from datetime import datetime

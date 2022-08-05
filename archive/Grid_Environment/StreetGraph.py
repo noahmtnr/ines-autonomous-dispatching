@@ -2,7 +2,6 @@ import sys
 sys.path.insert(0,"../..")
 
 import osmnx as ox
-import networkx as nx
 import pandas as pd
 import random
 import numpy as np

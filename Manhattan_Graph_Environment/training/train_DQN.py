@@ -1,12 +1,9 @@
 # imports
-import numpy as np
-import pandas as pd
 import json
 import os
 import shutil
 import sys
-import gym
-import wandb
+
 # CHANGES HERE
 # uncomment if error appears
 # import os
@@ -14,8 +11,10 @@ import wandb
 # CHANGES END HERE
 import ray
 from ray.rllib.agents.dqn import DQNTrainer, DEFAULT_CONFIG
+
+import wandb
+
 sys.path.insert(0,"")
-from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
 from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv, CustomCallbacks
 
 # login wandb

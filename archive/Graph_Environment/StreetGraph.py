@@ -1,9 +1,10 @@
-import osmnx as ox
-import networkx as nx
-import pandas as pd
 import random
-import numpy as np
 from datetime import datetime, timedelta
+
+import numpy as np
+import osmnx as ox
+import pandas as pd
+
 
 class StreetGraph:
 

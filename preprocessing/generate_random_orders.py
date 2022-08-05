@@ -4,11 +4,12 @@ and saves them to "random_orders.csv" file in data folder.
 The orders are in 2016 as we used taxi trips from this year.     
 
 """
-import numpy as np
-from datetime import datetime, timedelta
+import csv
 import random
 import sys
-import csv
+from datetime import datetime, timedelta
+
+import numpy as np
 
 sys.path.insert(0,"")
 

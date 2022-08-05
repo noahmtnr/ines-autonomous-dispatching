@@ -1,11 +1,10 @@
-from datetime import datetime, timedelta
-import gym
-from gym.utils import seeding
-import numpy as np
-import random
-import pandas as pd
-from gym import spaces
 import itertools
+from datetime import datetime, timedelta
+
+import gym
+import numpy as np
+import pandas as pd
+
 
 class Gridworld_v1(gym.Env): # define custom environment as subclass of gym.Env
     # GLOBAL VARIABLES:

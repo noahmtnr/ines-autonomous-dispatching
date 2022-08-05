@@ -4,11 +4,10 @@ Testing the BenchmarkWrapper for multiple agents.
 
 # imports
 import sys
-import pandas as pd
-import numpy as np
+
 from BenchmarkWrapper import BenchmarkWrapper
 from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv
-import operator
+
 sys.path.insert(0,"")
 
 """

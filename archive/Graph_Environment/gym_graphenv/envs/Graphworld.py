@@ -1,18 +1,11 @@
-from xml.dom.pulldom import parseString
 import numpy as np
 from StreetGraph import StreetGraph
-import osmnx as ox
-import networkx as nx
-import folium
-from folium.plugins import MarkerCluster
-from datetime import datetime, timedelta
-from array import array
-from datetime import datetime, timedelta
 import gym
-from gym.utils import seeding
-import random
+import numpy as np
+import osmnx as ox
 import pandas as pd
-from gym import spaces
+from StreetGraph import StreetGraph
+
 
 class GraphEnv(gym.Env):
 

@@ -1,8 +1,8 @@
+import os
+from datetime import datetime, timedelta
+
 import osmnx as ox
 import pandas as pd
-import random
-from datetime import datetime, timedelta
-import os
 
 ROOT_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), '../..'))
 
