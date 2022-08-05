@@ -4,18 +4,19 @@ import gym
 # from ray.tune.registry import register_env
 # import ray
 # import ray.rllib.agents.ppo as ppo
-def run_one_episode (env):
+def run_one_episode(env):
     env.reset()
     sum_reward = 0
     for i in range(env.MAX_STEPS):
         action = env.action_space.sample()
         state, reward, done, info = env.step(action)
-        sum_reward+=reward
-        #print(sum_reward)
-        #env.render()
+        sum_reward += reward
+        # print(sum_reward)
+        # env.render()
         if done:
             break
     return sum_reward
+
 
 env = gym.make("gridworld-v0")
 sum_reward = run_one_episode(env)

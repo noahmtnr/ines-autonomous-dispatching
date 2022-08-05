@@ -1,5 +1,6 @@
 import sys
-sys.path.insert(0,"../..")
+
+sys.path.insert(0, "../..")
 
 import osmnx as ox
 import pandas as pd
@@ -9,16 +10,16 @@ from datetime import datetime, timedelta
 
 from preprocessing.data_preprocessing import DataPreProcessing
 
+
 class StreetGraph:
 
     def __init__(self, filename):
         filepath = ("../../data/graph/%s.graphml") % (filename)
         self.inner_graph = ox.load_graphml(filepath)
-        self.inner_graph = ox.add_edge_speeds(self.inner_graph,fallback=30)
+        self.inner_graph = ox.add_edge_speeds(self.inner_graph, fallback=30)
         self.inner_graph = ox.add_edge_travel_times(self.inner_graph)
         ox.utils_graph.remove_isolated_nodes(self.inner_graph)
         self.generate_random_trips(4000)
-
 
     def generate_random_trips(self, n: int = 2000):
         """Generates random trips within the graph and stores them in self.trips. The trips are randomly spread across January 2022.
@@ -48,21 +49,21 @@ class StreetGraph:
         nodeA = []
         nodeB = []
         for i in range(n):
-            if random_nodes[i]==random_nodes2[i]:
-                random_nodes2[i]=random.choice(sequence)
+            if random_nodes[i] == random_nodes2[i]:
+                random_nodes2[i] = random.choice(sequence)
             trip_id.append(i)
-        
+
         trips["tripid"] = trip_id
         trips["pickup_node"] = random_nodes
         trips["dropoff_node"] = random_nodes2
 
         pickup_day = [1 for i in range(n)]
-        pickup_hour =  np.random.randint(24, size=n)
+        pickup_hour = np.random.randint(24, size=n)
         pickup_minute = np.random.randint(60, size=n)
         pickup_datetimes = []
 
         for i in range(len(pickup_hour)):
-            pickup_datetime=datetime(2022,1,1,pickup_hour[i],pickup_minute[i],0)
+            pickup_datetime = datetime(2022, 1, 1, pickup_hour[i], pickup_minute[i], 0)
             pickup_datetimes.append(pickup_datetime)
 
         trips['pickup_day'] = pickup_day
@@ -80,12 +81,13 @@ class StreetGraph:
                     graph, trips.loc[index, "pickup_node"], trips.loc[index, "dropoff_node"], weight='travel_time'
                 )
                 routes.append(route)
-                travel_times = ox.utils_graph.get_route_edge_attributes(graph,route,attribute='travel_time')
+                travel_times = ox.utils_graph.get_route_edge_attributes(graph, route, attribute='travel_time')
                 pickup_datetime = trips.loc[index, "pickup_datetime"]
                 dropoff_datetime = pickup_datetime + timedelta(seconds=sum(travel_times))
-                trip_duration = (dropoff_datetime-pickup_datetime).total_seconds()
-                
-                timestamps_dict = DataPreProcessing.map_nodes_to_timestaps(graph, route, pickup_datetime, dropoff_datetime, trip_duration)
+                trip_duration = (dropoff_datetime - pickup_datetime).total_seconds()
+
+                timestamps_dict = DataPreProcessing.map_nodes_to_timestaps(graph, route, pickup_datetime,
+                                                                           dropoff_datetime, trip_duration)
 
                 dropoff_datetimes.append(dropoff_datetime)
                 trip_durations.append(trip_duration)

@@ -5,11 +5,11 @@ Test Class for Random Agent.
 # imports
 import sys
 
-sys.path.insert(0,"")
+sys.path.insert(0, "")
 
 from gym_graphenv.envs.GraphworldManhattan import GraphEnv
 
-env=GraphEnv()
+env = GraphEnv()
 
 env.availableTrips()
 
@@ -18,7 +18,9 @@ Run the random agent for 30 steps.
 :param: Environment Object
 :return: Float (sum of the agent's reward)
 """
-def run_one_episode (env):
+
+
+def run_one_episode(env):
     env.reset()
     sum_reward = 0
     for i in range(30):
@@ -26,14 +28,17 @@ def run_one_episode (env):
         print(env.available_actions)
         action = env.action_space.sample()
         state, reward, done, info = env.step(action)
-        sum_reward+=reward
-        #env.render()
+        sum_reward += reward
+        # env.render()
         if done:
-            print("DELIVERY DONE! sum_reward: ",sum_reward, " time: ",env.time,  "deadline time: ", env.deadline,"pickup time: ", env.pickup_time )
+            print("DELIVERY DONE! sum_reward: ", sum_reward, " time: ", env.time, "deadline time: ", env.deadline,
+                  "pickup time: ", env.pickup_time)
             break
 
-        print("sum_reward: ",sum_reward, " time: ",env.time, "deadline time: ", env.deadline, "pickup time: ", env.pickup_time)
+        print("sum_reward: ", sum_reward, " time: ", env.time, "deadline time: ", env.deadline, "pickup time: ",
+              env.pickup_time)
     return sum_reward
+
 
 for i in range(10):
     run_one_episode(env)

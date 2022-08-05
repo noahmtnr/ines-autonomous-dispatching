@@ -9,7 +9,8 @@ import sys
 from BenchmarkWrapper import BenchmarkWrapper
 from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv
 
-sys.path.insert(0,"")
+sys.path.insert(0, "")
+
 
 # class definition
 class Comparer:
@@ -18,7 +19,8 @@ class Comparer:
     :param num_agents: integer (the number of agents to be compared)
     :param agents_arg: object(s) (the BenchmarkWrapper objects of the agents)
     """
-    def __init__(self,num_agents,*agents_arg):
+
+    def __init__(self, num_agents, *agents_arg):
         self.num_agents = num_agents
         self.agent_names = []
         self.agents_arg = []
@@ -26,14 +28,14 @@ class Comparer:
         print(num_agents)
         print(agents_arg)
         i = 0
-        while i < (self.num_agents*2):
+        while i < (self.num_agents * 2):
             if i < self.num_agents:
                 self.agent_names.append(agents_arg[i])
             else:
                 self.agents_arg.append(agents_arg[i])
             i += 1
         print("Names", self.agent_names)
-        print("ARgs",self.agents_arg)
+        print("ARgs", self.agents_arg)
         Comparer.set_agents(self)
 
     """
@@ -41,12 +43,14 @@ class Comparer:
     :param lst: array
     :return: float
     """
+
     def Average(lst):
         return sum(lst) / len(lst)
 
     """
     Makes a list of the agents with names and objects.
     """
+
     def set_agents(self):
         self.agents = {}
         # go through all agents
@@ -61,6 +65,7 @@ class Comparer:
     """
     Summarizes each agent's performance for one trip concerning multiple metrics.
     """
+
     def establish_compare_onetrip(self):
         self.compare_dict = {}
         i = 1
@@ -97,28 +102,31 @@ class Comparer:
                 # distance covered with bookowns
                 dist_bookowns = current.get("dist_covered_bookown")
                 # compute share of distance covered with shares and bookowns
-                ratio_dist_shares = float(dist_shares/dist)
-                ratio_dist_bookowns = float(dist_bookowns/dist)
+                ratio_dist_shares = float(dist_shares / dist)
+                ratio_dist_bookowns = float(dist_bookowns / dist)
 
                 # for one order
-            self.compare_dict[key]= [reward,route,dist,time,num_hubs,num_booked_own,ratio,num_steps,ratio_dist_shares,ratio_dist_bookowns]
+            self.compare_dict[key] = [reward, route, dist, time, num_hubs, num_booked_own, ratio, num_steps,
+                                      ratio_dist_shares, ratio_dist_bookowns]
 
             # print(self.compare_dict)
 
             counter += 1
-        
+
         Comparer.compare_onetrip(self)
-    
+
     """
     Compares the performance of multiple agents by establishing rankings for each metric seperately.
     The best agent is at rank 1 of the respective metric.
     """
+
     def compare_onetrip(self):
 
         # show overview of all compared agents
         print("\n Overview of Compared Agents")
         for elem in self.compare_dict.items():
-            print(elem[0], " Agent: ", elem[1][7], " steps / ", elem[1][4], " hubs / ", elem[1][2], " distance / ", elem[1][3], " time / ", elem[1][0], " reward / ", elem[1][1], " route")
+            print(elem[0], " Agent: ", elem[1][7], " steps / ", elem[1][4], " hubs / ", elem[1][2], " distance / ",
+                  elem[1][3], " time / ", elem[1][0], " reward / ", elem[1][1], " route")
 
         # do ranking on each aspect
         print("\n Rankings of Compared Agents")
@@ -141,7 +149,7 @@ class Comparer:
             i += 1
 
         # whether has booked any own rides and how many (min)
-        booked_own_sort = sorted(self.compare_dict.items(),key=lambda i: i[1][5])
+        booked_own_sort = sorted(self.compare_dict.items(), key=lambda i: i[1][5])
         i = 1
         print("\n Ranking by Number of booked owns")
         for elem in booked_own_sort:
@@ -161,7 +169,7 @@ class Comparer:
         i = 1
         print("\n Ranking by Reward")
         for elem in reward_sort:
-            print(f"Rank {i}: {elem[0]} with reward of {reward_sort[i-1][1][0]}")
+            print(f"Rank {i}: {elem[0]} with reward of {reward_sort[i - 1][1][0]}")
             i += 1
 
         # rank on time (min)
@@ -169,9 +177,9 @@ class Comparer:
         i = 1
         print("\n Ranking by Travel Time")
         for elem in time_sort:
-            print(f"Rank {i}: {elem[0]} with travel time of {time_sort[i-1][1][3]}")
+            print(f"Rank {i}: {elem[0]} with travel time of {time_sort[i - 1][1][3]}")
             i += 1
-        
+
         # display the route each agent took
         # TODO - do the visualization of Aga & Denisa here
         # Route bekommen (Liste von Hub IDs): self.compare_dict.items()[1
@@ -191,13 +199,14 @@ class Comparer:
         i = 1
         print("\n Ranking by Ratio Distance Reduced with Shares to Whole Distance")
         for elem in dist_reduce_sort:
-            print(f"Rank {i}: {elem[0]} with ratio of {dist_reduce_sort[i-1][1][8]}")
+            print(f"Rank {i}: {elem[0]} with ratio of {dist_reduce_sort[i - 1][1][8]}")
             i += 1
 
     """
     Summarizes each agent's performance for multiple trips concerning multiple metrics.
     Computes the mean of the performance for each metric for each agent.
     """
+
     def compare_multipletrips(self):
         self.compare_dict = {}
         i = 1
@@ -230,7 +239,7 @@ class Comparer:
                 reward_array.append(reward)
                 # route
                 route = current.get("route")
-                route_array.append(route) # necessary?
+                route_array.append(route)  # necessary?
                 # distance
                 dist = current.get("dist")
                 dist_array.append(dist)
@@ -255,8 +264,8 @@ class Comparer:
                 # distance covered with bookowns
                 dist_bookowns = current.get("dist_covered_bookown")
                 # compute share of distance covered with shares and bookowns
-                ratio_dist_shares = float(dist_shares/dist)
-                ratio_dist_bookowns = float(dist_bookowns/dist)
+                ratio_dist_shares = float(dist_shares / dist)
+                ratio_dist_bookowns = float(dist_bookowns / dist)
                 dist_shares_array.append(ratio_dist_shares)
                 dist_bookowns_array.append(ratio_dist_bookowns)
 
@@ -282,37 +291,41 @@ class Comparer:
             dist_shares_mean = Comparer.Average(dist_shares_array)
             dist_bookowns_mean = Comparer.Average(dist_bookowns_array)
 
-            self.compare_dict[key] = [reward_mean,route_array,dist_mean,time_mean,num_hubs_mean,num_books_mean,ratio_mean,steps_mean,dist_shares_mean,dist_bookowns_mean]
+            self.compare_dict[key] = [reward_mean, route_array, dist_mean, time_mean, num_hubs_mean, num_books_mean,
+                                      ratio_mean, steps_mean, dist_shares_mean, dist_bookowns_mean]
             # print(self.compare_dict)
-        
+
         # call comparer to get rankings
         Comparer.compare_onetrip(self)
 
     """
     Main Method.
     """
+
     def main():
-        set_agents(self.num_agents,self.agents_arg)
+        set_agents(self.num_agents, self.agents_arg)
 
 
 """
 Configuring which agents are to be compared and running the comparison.
 """
 # possible agents to be compared
-env = GraphEnv(use_config=True) # use normal GraphWorld for RLs
+env = GraphEnv(use_config=True)  # use normal GraphWorld for RLs
 # RL agents
-#w3 = BenchmarkWrapper("PPO",env)
+# w3 = BenchmarkWrapper("PPO",env)
 # w4 = BenchmarkWrapper("DQN",env) # hat noch Fehler
-w5 = BenchmarkWrapper("Rainbow",env)
+w5 = BenchmarkWrapper("Rainbow", env)
 
-from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattanBenchmark import GraphEnv # use Benchmark Graphworld for others
+from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattanBenchmark import \
+    GraphEnv  # use Benchmark Graphworld for others
+
 env = GraphEnv(use_config=True)
 # benchmarks
-w1 = BenchmarkWrapper("random",env)
+w1 = BenchmarkWrapper("random", env)
 # w2 = BenchmarkWrapper("cost",env)
-w6 = BenchmarkWrapper("Shares",env)
-w7 = BenchmarkWrapper("Bookown",env)
-w8 = BenchmarkWrapper("SharesBookEnd",env)
+w6 = BenchmarkWrapper("Shares", env)
+w7 = BenchmarkWrapper("Bookown", env)
+w8 = BenchmarkWrapper("SharesBookEnd", env)
 
 # possible combinations of comparisons
 # for one agent: Comparer(1,nameAgent,AgentObjekt)
@@ -332,11 +345,8 @@ w8 = BenchmarkWrapper("SharesBookEnd",env)
 # c = Comparer(7,w1.name,w2.name,w3.name,w4.name,w5.name,w6.name,w7.name,w1,w2,w3,w4,w5,w6,w7)
 
 # comparison of ALL benchmarks and rainbow
-c = Comparer(5,w1.name,w5.name,w6.name,w7.name,w8.name,w1,w5,w6,w7,w8)
+c = Comparer(5, w1.name, w5.name, w6.name, w7.name, w8.name, w1, w5, w6, w7, w8)
 
 # compute the commparison
 # c.establish_compare_onetrip() # call when only one order is placed (adapt row reads to 1 row in BenchmarkWrapper.read_orders!)
-c.compare_multipletrips() # call when more than one order is placed (adapt row reads in BenchmarkWrapper.read_orders!)
-
-
-
+c.compare_multipletrips()  # call when more than one order is placed (adapt row reads in BenchmarkWrapper.read_orders!)

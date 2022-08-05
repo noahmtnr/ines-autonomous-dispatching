@@ -1,66 +1,67 @@
 <!DOCTYPE html>
 
 <head>
-  <title>Test</title>
-  <meta charset="utf-8" />
+    <title>Test</title>
+    <meta charset="utf-8"/>
 </head>
 <body>
-  <h1>Welcome! Find a taxi trip</h1>
-  <form action="http://127.0.0.1:5000/order">
-    <textarea id="fromAddress" rows="3" cols="25"></textarea>
-    <br />
+<h1>Welcome! Find a taxi trip</h1>
+<form action="http://127.0.0.1:5000/order">
+    <textarea cols="25" id="fromAddress" rows="3"></textarea>
+    <br/>
 
-    <textarea id="toAddress" rows="3" cols="25"></textarea>
-    <br />
-    <input type="button" onclick="GetLocation()" value="Get Location" />
-    <br><input name="pickup_long" id="pickup_long" type="hidden" value="" />
-    <br><input name="pickup_lat" id="pickup_lat" type="hidden" value="" />
+    <textarea cols="25" id="toAddress" rows="3"></textarea>
+    <br/>
+    <input onclick="GetLocation()" type="button" value="Get Location"/>
+    <br><input id="pickup_long" name="pickup_long" type="hidden" value=""/>
+    <br><input id="pickup_lat" name="pickup_lat" type="hidden" value=""/>
 
-    <input name="dropoff_long" id="dropoff_long" type="hidden" value="" />
-    <input name="dropoff_lat" id="dropoff_lat" type="hidden" value="" />
+    <input id="dropoff_long" name="dropoff_long" type="hidden" value=""/>
+    <input id="dropoff_lat" name="dropoff_lat" type="hidden" value=""/>
     <script
-      type="text/javascript"
-      src="http://maps.googleapis.com/maps/api/js?key=AIzaSyA7DnzvbeVppf-GO2xlHFpZZ_DQTwz4Urw&sensor=false"
+            src="http://maps.googleapis.com/maps/api/js?key=AIzaSyA7DnzvbeVppf-GO2xlHFpZZ_DQTwz4Urw&sensor=false"
+            type="text/javascript"
     ></script>
     <script type="text/javascript">
-      function GetLocation() {
-        var geocoder = new google.maps.Geocoder();
-        var from_address = document.getElementById("fromAddress").value;
-        var to_address = document.getElementById("toAddress").value;
-        geocoder.geocode({ address: from_address }, function (results, status) {
-          if (status == google.maps.GeocoderStatus.OK) {
-            var latitude = results[0].geometry.location.lat();
-            var longitude = results[0].geometry.location.lng();
-            alert("Latitude: " + latitude + "\nLongitude: " + longitude);
-            document.getElementById("pickup_long").value = longitude;
-            document.getElementById("pickup_lat").value = latitude;
-          } else {
-            alert("Request failed.");
-          }
-        });
+        function GetLocation() {
+            var geocoder = new google.maps.Geocoder();
+            var from_address = document.getElementById("fromAddress").value;
+            var to_address = document.getElementById("toAddress").value;
+            geocoder.geocode({address: from_address}, function (results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    var latitude = results[0].geometry.location.lat();
+                    var longitude = results[0].geometry.location.lng();
+                    alert("Latitude: " + latitude + "\nLongitude: " + longitude);
+                    document.getElementById("pickup_long").value = longitude;
+                    document.getElementById("pickup_lat").value = latitude;
+                } else {
+                    alert("Request failed.");
+                }
+            });
 
-        geocoder.geocode({ address: to_address }, function (results, status) {
-          if (status == google.maps.GeocoderStatus.OK) {
-            var latitude = results[0].geometry.location.lat();
-            var longitude = results[0].geometry.location.lng();
-            alert("Latitude: " + latitude + "\nLongitude: " + longitude);
-            document.getElementById("dropoff_long").value = longitude;
-            document.getElementById("dropoff_lat").value = latitude;
-          } else {
-            alert("Request failed.");
-          }
-        });
-      }
-      //-->
+            geocoder.geocode({address: to_address}, function (results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    var latitude = results[0].geometry.location.lat();
+                    var longitude = results[0].geometry.location.lng();
+                    alert("Latitude: " + latitude + "\nLongitude: " + longitude);
+                    document.getElementById("dropoff_long").value = longitude;
+                    document.getElementById("dropoff_lat").value = latitude;
+                } else {
+                    alert("Request failed.");
+                }
+            });
+        }
+
+        //-->
     </script>
     <label for="start_date">Pickup time:</label>
-    <input type="text" id="start_date" name="start_date" /><br /><br />
+    <input id="start_date" name="start_date" type="text"/><br/><br/>
 
     <label for="delivery_date">Delivery time:</label>
-    <input type="text" id="delivery_date" name="delivery_date" /><br /><br />
+    <input id="delivery_date" name="delivery_date" type="text"/><br/><br/>
 
-    <input type="submit" value="Submit" />
-  </form>
+    <input type="submit" value="Submit"/>
+</form>
 
-  <!-- <button><a href="/my-link/">Click me</a></button> -->
+<!-- <button><a href="/my-link/">Click me</a></button> -->
 </body>

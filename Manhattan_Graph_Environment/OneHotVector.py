@@ -1,6 +1,7 @@
 import gym
 import numpy as np
 
+
 class OneHotVector(gym.Space):
     """
     {0,...,1,...,0}
@@ -8,6 +9,7 @@ class OneHotVector(gym.Space):
     Example usage:
     self.observation_space = OneHotVector(size=4)
     """
+
     def __init__(self, size=None):
         assert isinstance(size, int) and size > 0
         self.size = size

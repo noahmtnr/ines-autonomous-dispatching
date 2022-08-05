@@ -5,6 +5,7 @@ Methods: file_read, read_orders, proceed_order
 
 # imports
 import warnings
+
 warnings.filterwarnings('ignore')
 warnings.filterwarnings('ignore', category=UserWarning)
 import sys
@@ -12,6 +13,7 @@ import os
 
 sys.path.insert(0, "")
 from config.definitions import ROOT_DIR
+
 sys.path.append(os.path.join(ROOT_DIR, "Manhattan_Graph_Environment", "gym_graphenv"))
 from RandomAgent import RandomAgent
 from CostAgent import CostAgent
@@ -34,6 +36,7 @@ class BenchmarkWrapper:
         can be DQN, PPO, rainbow for an RL Agent
     : param env: Environment Object
     """
+
     def __init__(self, agent_name, env):
         if (agent_name != None):
             self.name = agent_name
@@ -48,6 +51,7 @@ class BenchmarkWrapper:
     Method has no parameters.
     :return: Pandas DataFrame containing orders
     """
+
     def file_read(self):
 
         # use if you want to test randomly generated orders which are saved in random_orders csv file
@@ -79,6 +83,7 @@ class BenchmarkWrapper:
     Method has no parameters.
     :return: Array containing the orders, each as dictionary.
     """
+
     def read_orders(self):
         reward_list = []
         orders = self.file_read()
@@ -93,6 +98,7 @@ class BenchmarkWrapper:
     :param order: dictionary containing the current order.
     :return: dictionary with results of testing of the agent.
     """
+
     def proceed_order(self, order):
         # output the current order
         print("Current Order: ", order)
@@ -111,7 +117,6 @@ class BenchmarkWrapper:
         with open('env_config.pkl', 'wb') as f:
             pickle.dump(env_config, f)
 
-
         reward_list = []
 
         # selects an agent depending on the name
@@ -125,24 +130,24 @@ class BenchmarkWrapper:
             elif self.name == "DQN":
                 print("DQN")
                 dqn_Agent = DQNAgent(self.env)
-                reward_list = dqn_Agent.run_one_episode(reward_list,env_config)
+                reward_list = dqn_Agent.run_one_episode(reward_list, env_config)
             elif self.name == "PPO":
                 print("PPO")
                 ppo_Agent = PPOAgent(self.env)
-                reward_list = ppo_Agent.run_one_episode(reward_list,env_config)
+                reward_list = ppo_Agent.run_one_episode(reward_list, env_config)
             elif self.name == "Rainbow":
                 print("Rainbow")
                 Rainbow_Agent = RainbowAgent(self.env)
                 reward_list = Rainbow_Agent.run_one_episode(reward_list, env_config)
             elif self.name == "Shares":
                 print("Shares")
-                reward_list = SharesAgent.run_one_episode(self.env,reward_list, env_config)
+                reward_list = SharesAgent.run_one_episode(self.env, reward_list, env_config)
             elif self.name == "Bookown":
                 print("Bookown")
                 reward_list = BookownAgent.run_one_episode(self.env, reward_list, env_config)
             elif self.name == "SharesBookEnd":
                 print("Shares with Book Own at End")
-                reward_list = SharesBookEndAgent.run_one_episode(self.env,reward_list,env_config)
+                reward_list = SharesBookEndAgent.run_one_episode(self.env, reward_list, env_config)
         return reward_list
 
 

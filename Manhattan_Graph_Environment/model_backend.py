@@ -14,11 +14,11 @@ rainbow_config["train_batch_size"] = 400
 rainbow_config["gamma"] = 0.99
 # rainbow_config["framework"] = "torch"
 # rainbow_config["callbacks"] = CustomCallbacks
-rainbow_config["n_step"]= 3 #[between 1 and 10]  //was 5 and 7
+rainbow_config["n_step"] = 3  # [between 1 and 10]  //was 5 and 7
 rainbow_config["noisy"] = True
-rainbow_config["num_atoms"] = 70 #[more than 1] //was 51,20
-rainbow_config["v_min"] =-15000
-rainbow_config["v_max"]=10000 # (set v_min and v_max according to your expected range of returns).
+rainbow_config["num_atoms"] = 70  # [more than 1] //was 51,20
+rainbow_config["v_min"] = -15000
+rainbow_config["v_max"] = 10000  # (set v_min and v_max according to your expected range of returns).
 
 
 @serve.deployment(route_prefix="/graphworld-rainbow")
@@ -35,8 +35,9 @@ class ServeRainbowModel:
         obs = json_input["observation"]
 
         action = self.trainer.compute_single_action(obs)
-        
+
         return {"action": int(action)}
+
 
 serve.start()
 ServeRainbowModel.deploy(checkpoint_path)
@@ -50,13 +51,13 @@ ServeRainbowModel.deploy(checkpoint_path)
 # list_actions=["start"]
 # action_list=[0,7,1,1,13]
 # for i in action_list:
-   
+
 
 #     # print(f"-> Sending observation {obs}")
 #     # resp = requests.get(
 #     #     "http://localhost:8000/graphworld-rainbow", json={"observation": obs.tolist()}
 #     # )
-   
+
 #     # print(f"<- Received response {resp.json()}")
 #     resp={'action': i}
 #     action = resp["action"]
@@ -68,7 +69,7 @@ ServeRainbowModel.deploy(checkpoint_path)
 #         print(list_nodes)
 #     list_hubs.append(action)
 #     list_actions.append(info["action"])
-    
+
 
 #     print("infos",info)
 #     print("hubs",list_hubs)

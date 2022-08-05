@@ -11,13 +11,13 @@ import pandas as pd
 
 
 class DataPreProcessing:
-    
+
     def setup_graph():
         """
         This function loads a graph.
         Returns:
             .graphml: a graph with New York City street network 
-        """        
+        """
         graph = ox.io.load_graphml("data/graph/simple.graphml")
         return graph
 
@@ -30,7 +30,7 @@ class DataPreProcessing:
 
         Returns:
             dataframe: taxi trips
-        """        
+        """
         df = pd.read_csv(
             # train.csv path has to be changed to train.csv downloaded from https://www.kaggle.com/competitions/nyc-taxi-trip-duration/data
             r"path_to_file/train.csv",
@@ -48,7 +48,7 @@ class DataPreProcessing:
 
         Returns:
             pandas.Dataframe: taxi trips with added pickup and dropoff nodes 
-        """        
+        """
 
         start_time = time.time()
 
@@ -64,13 +64,13 @@ class DataPreProcessing:
         p_lat = trips["pickup_latitude"]
         d_lat = trips["dropoff_latitude"]
         d_long = trips["dropoff_longitude"]
-        
+
         dropoff_nodes, dropoff_distances = ox.distance.nearest_nodes(
             graph, d_long, d_lat, return_dist=True
         )
         pickup_nodes, pickup_distances = ox.distance.nearest_nodes(
-                graph, p_long, p_lat, return_dist=True
-            )
+            graph, p_long, p_lat, return_dist=True
+        )
 
         trips["pickup_node"] = pickup_nodes
         trips["dropoff_node"] = dropoff_nodes
@@ -95,7 +95,7 @@ class DataPreProcessing:
         Returns:
             pandas.Dataframe: taxi trips with added nodes on the way of taxi
 
-        """        
+        """
 
         routes = []
         for index, row in trips.iterrows():
@@ -131,7 +131,7 @@ class DataPreProcessing:
         def to_string(timestamp):
             return timestamp.strftime('%Y-%m-%d %X')
 
-        return list(map( to_string, timestamps))
+        return list(map(to_string, timestamps))
 
     def relative_edge_travel_time(graph, route_nodes, start_time, end_time):
         """
@@ -145,11 +145,11 @@ class DataPreProcessing:
         """
         timestamps = [start_time]
 
-        route_edge_travel_times = ox.utils_graph.get_route_edge_attributes(graph,route_nodes,attribute='travel_time')
+        route_edge_travel_times = ox.utils_graph.get_route_edge_attributes(graph, route_nodes, attribute='travel_time')
 
-        actual_travel_time = end_time-start_time
+        actual_travel_time = end_time - start_time
         free_flow_travel_time = round(sum(route_edge_travel_times))
-        
+
         # work around for preventing division by zero
         if free_flow_travel_time == 0:
             free_flow_travel_time = 1
@@ -157,7 +157,8 @@ class DataPreProcessing:
         actual_edge_travel_speed = []
 
         for x in route_edge_travel_times:
-            def proportion_of_actual_travel_time(x): return x/free_flow_travel_time * actual_travel_time
+            def proportion_of_actual_travel_time(x): return x / free_flow_travel_time * actual_travel_time
+
             actual_edge_travel_speed.append(proportion_of_actual_travel_time(x).total_seconds())
 
         return actual_edge_travel_speed
@@ -205,9 +206,10 @@ class DataPreProcessing:
                 )
                 routes.append(route)
 
-                timestamps_dict = DataPreProcessing.map_nodes_to_timestaps(graph, route, trips.loc[index, "pickup_datetime"],
-                                                         trips.loc[index, "dropoff_datetime"]
-                                                         , trips.loc[index, "trip_duration"])
+                timestamps_dict = DataPreProcessing.map_nodes_to_timestaps(graph, route,
+                                                                           trips.loc[index, "pickup_datetime"],
+                                                                           trips.loc[index, "dropoff_datetime"]
+                                                                           , trips.loc[index, "trip_duration"])
 
                 node_timestamps.append(timestamps_dict)
 
@@ -224,8 +226,9 @@ class DataPreProcessing:
         )
 
         return trips
-    
-    def map_oneRoute_to_oneTrip_with_timestamps(pickup_longitude, pickup_latitude, dropoff_longitude, dropoff_latitude, pickup_datetime, dropoff_datetime, trip_duration):
+
+    def map_oneRoute_to_oneTrip_with_timestamps(pickup_longitude, pickup_latitude, dropoff_longitude, dropoff_latitude,
+                                                pickup_datetime, dropoff_datetime, trip_duration):
         """
         Adds for the trips data the route and the timestamp for each node
 
@@ -234,10 +237,10 @@ class DataPreProcessing:
         :return: the trips in addition having the route and the timestamp for each node from the route
         """
         graph = ox.io.load_graphml("data/graph/simple.graphml")
-        
+
         pickup_node = (pickup_longitude, pickup_latitude)
         dropoff_node = (dropoff_longitude, dropoff_latitude)
-        pickup_node_id = ox.distance.nearest_nodes(graph,pickup_longitude, pickup_latitude)
+        pickup_node_id = ox.distance.nearest_nodes(graph, pickup_longitude, pickup_latitude)
         print(pickup_node_id)
         dropoff_node_id = ox.distance.nearest_nodes(graph, dropoff_longitude, dropoff_latitude)
         print(dropoff_node_id)
@@ -245,19 +248,21 @@ class DataPreProcessing:
             graph, pickup_node_id, dropoff_node_id
         )
 
-        timestamps_dict = DataPreProcessing.map_nodes_to_timestaps(graph, route, pickup_datetime, dropoff_datetime, trip_duration)
+        timestamps_dict = DataPreProcessing.map_nodes_to_timestaps(graph, route, pickup_datetime, dropoff_datetime,
+                                                                   trip_duration)
 
         route_length = 0
-        for j in range(len(route)-1):
-                #print(self.inner_graph.nodes()[current_route[j]])
-                route_length += ox.distance.great_circle_vec(graph.nodes()[route[j]]["y"], graph.nodes()[route[j]]["x"],
-                graph.nodes()[route[j+1]]["y"], graph.nodes()[route[j+1]]["x"])
+        for j in range(len(route) - 1):
+            # print(self.inner_graph.nodes()[current_route[j]])
+            route_length += ox.distance.great_circle_vec(graph.nodes()[route[j]]["y"], graph.nodes()[route[j]]["x"],
+                                                         graph.nodes()[route[j + 1]]["y"],
+                                                         graph.nodes()[route[j + 1]]["x"])
         print(route)
         print(timestamps_dict)
 
         return route, str(timestamps_dict), route_length, pickup_node_id, dropoff_node_id
 
-    def get_coordinates_of_node(node_id): 
+    def get_coordinates_of_node(node_id):
         """
         Gets coordinates of node
 
@@ -266,13 +271,13 @@ class DataPreProcessing:
 
         Returns:
             list: list with coordinates
-        """        
+        """
         # manhattangraph = ManhattanGraph(filename='simple', num_hubs=70)
         graph = ox.io.load_graphml("data/graph/simple.graphml")
         nodes = graph.nodes()
         coordinates = [nodes[node_id]['x'], nodes[node_id]['y']]
         return coordinates
-    
+
     def getNearestNodeId(pickup_longitude, pickup_latitude):
         """
         Get node id of a nearest node to some coordinates
@@ -283,7 +288,7 @@ class DataPreProcessing:
 
         Returns:
             int: node id
-        """        
+        """
         graph = ox.io.load_graphml("data/graph/simple.graphml")
         pickup_node_id = ox.distance.nearest_nodes(graph, pickup_longitude, pickup_latitude)
         return pickup_node_id
@@ -298,7 +303,7 @@ class DataPreProcessing:
 
         Returns:
             list: node index
-        """        
+        """
         graph = ox.io.load_graphml("data/graph/simple.graphml")
         node_id = ox.distance.nearest_nodes(graph, longitude, latitude)
         return list(graph.nodes()).index(node_id)
@@ -312,6 +317,6 @@ class DataPreProcessing:
 
         Returns:
             int: node index
-        """        
+        """
         x, y = DataPreProcessing.get_coordinates_of_node(id)
         return DataPreProcessing.get_node_index_by_coordinates(x, y)

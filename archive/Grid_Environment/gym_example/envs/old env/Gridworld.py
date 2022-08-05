@@ -1,51 +1,51 @@
 import numpy as np
 
-# global variables
-#board_rows = 3
-#board_colsboard_cols = 4
 
-#LOSE_position = (1, 3)
-#start_hub = (2, 0)
-#DETERMINISTIC = True
+# global variables
+# board_rows = 3
+# board_colsboard_cols = 4
+
+# LOSE_position = (1, 3)
+# start_hub = (2, 0)
+# DETERMINISTIC = True
 
 class Environment:
 
-    def __init__(self, position, final_hub, board_rows, board_cols): # TODO: add action space -> import gym.spaces -> action_space = Discrete(3)
+    def __init__(self, position, final_hub, board_rows,
+                 board_cols):  # TODO: add action space -> import gym.spaces -> action_space = Discrete(3)
         # self.board = np.zeros([board_rows,board_cols])
         # self.board[final_hub] = 2
         # self.board[position] = 1
-        #self.reward = 0
+        # self.reward = 0
         self.start_hub = position
         self.position = position
         self.final_hub = final_hub
         self.board_rows = board_rows
         self.board_cols = board_cols
-        #self.determine = DETERMINISTIC
-
+        # self.determine = DETERMINISTIC
 
     # def isEndFunc(self):
     #     if (self.position == self.final_hub):
     #         self.isEnd = True
 
-
     def makeMove(self, action):
-        #need to determine what object (if any) is in the new grid spot the player is moving to
-        #actions in {u,d,l,r}
+        # need to determine what object (if any) is in the new grid spot the player is moving to
+        # actions in {u,d,l,r}
         oldposition = self.position
 
-        if action == 'u' or action == 1: #up
+        if action == 'u' or action == 1:  # up
             nxtposition = (self.position[0] - 1, self.position[1])
-        elif action == 'd' or action == 2: #down
+        elif action == 'd' or action == 2:  # down
             nxtposition = (self.position[0] + 1, self.position[1])
-        elif action == 'l' or action == 3: #left
+        elif action == 'l' or action == 3:  # left
             nxtposition = (self.position[0], self.position[1] - 1)
-        elif action == 'r' or action == 4: #right
+        elif action == 'r' or action == 4:  # right
             nxtposition = (self.position[0], self.position[1] + 1)
         else:
             pass
 
-        if (nxtposition[0] >= 0) and (nxtposition[0] <= (self.board_rows -1)):
-            if (nxtposition[1] >= 0) and (nxtposition[1] <= (self.board_cols -1)):
+        if (nxtposition[0] >= 0) and (nxtposition[0] <= (self.board_rows - 1)):
+            if (nxtposition[1] >= 0) and (nxtposition[1] <= (self.board_cols - 1)):
                 if nxtposition != (1, 1):
                     self.position = nxtposition
 
@@ -53,18 +53,18 @@ class Environment:
 
     def isDone(self):
         return self.position == self.final_hub
-    
-    def reward(self): # TODO: extend function: should not return 0 reward if position is a second time on start_hub
+
+    def reward(self):  # TODO: extend function: should not return 0 reward if position is a second time on start_hub
         if self.isDone():
             return 10
-        elif self.position == self.start_hub: 
+        elif self.position == self.start_hub:
             return 0
         else:
             return -1
 
     def visualize(self):
         # TODO: extend to visualize both agent position and start/final hub even if equal
-        self.board = np.zeros([self.board_rows,self.board_cols])
+        self.board = np.zeros([self.board_rows, self.board_cols])
         self.board[self.start_hub] = 1
         self.board[self.final_hub] = 2
         self.board[self.position] = 3
@@ -72,7 +72,7 @@ class Environment:
         for i in range(0, self.board_rows):
             print('-----------------')
             out = '| '
-            for j in range(0,self.board_cols):
+            for j in range(0, self.board_cols):
                 if self.board[i, j] == 1:
                     token = 'S'
                 if self.board[i, j] == 2:

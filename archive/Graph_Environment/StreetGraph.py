@@ -11,12 +11,11 @@ class StreetGraph:
     def __init__(self, filename, num_trips, fin_hub, num_hubs):
         filepath = ("../../data/graph/%s.graphml") % (filename)
         self.inner_graph = ox.load_graphml(filepath)
-        self.inner_graph = ox.add_edge_speeds(self.inner_graph,fallback=30)
+        self.inner_graph = ox.add_edge_speeds(self.inner_graph, fallback=30)
         self.inner_graph = ox.add_edge_travel_times(self.inner_graph)
         ox.utils_graph.remove_isolated_nodes(self.inner_graph)
         self.generate_random_trips(num_trips)
         self.generate_hubs(fin_hub, num_hubs)
-
 
     def generate_hubs(self, fin_hub, num_hubs: int = 5):
         """Generates random bubs within the graph
@@ -29,9 +28,9 @@ class StreetGraph:
             self.hubs(list): List of hubs in graph
         """
         random.seed(42)
-        hubs = random.sample(self.nodes(),num_hubs) 
+        hubs = random.sample(self.nodes(), num_hubs)
         final_hub = self.get_nodeid_by_index(fin_hub)
-        if(final_hub not in hubs):
+        if (final_hub not in hubs):
             hubs.append(final_hub)
         self.hubs = hubs
 
@@ -65,21 +64,21 @@ class StreetGraph:
         nodeA = []
         nodeB = []
         for i in range(n):
-            if random_nodes[i]==random_nodes2[i]:
-                random_nodes2[i]=random.choice(sequence)
+            if random_nodes[i] == random_nodes2[i]:
+                random_nodes2[i] = random.choice(sequence)
             trip_id.append(i)
-        
+
         trips["tripid"] = trip_id
         trips["pickup_node"] = random_nodes
         trips["dropoff_node"] = random_nodes2
 
         pickup_day = [1 for i in range(n)]
-        pickup_hour =  np.random.randint(24, size=n)
+        pickup_hour = np.random.randint(24, size=n)
         pickup_minute = np.random.randint(60, size=n)
         pickup_datetimes = []
 
         for i in range(len(pickup_hour)):
-            pickup_datetime=datetime(2022,1,1,pickup_hour[i],pickup_minute[i],0)
+            pickup_datetime = datetime(2022, 1, 1, pickup_hour[i], pickup_minute[i], 0)
             pickup_datetimes.append(pickup_datetime)
 
         trips['pickup_day'] = pickup_day
@@ -97,11 +96,11 @@ class StreetGraph:
                     graph, trips.loc[index, "pickup_node"], trips.loc[index, "dropoff_node"], weight='travel_time'
                 )
                 routes.append(route)
-                travel_times = ox.utils_graph.get_route_edge_attributes(graph,route,attribute='travel_time')
+                travel_times = ox.utils_graph.get_route_edge_attributes(graph, route, attribute='travel_time')
                 pickup_datetime = trips.loc[index, "pickup_datetime"]
                 dropoff_datetime = pickup_datetime + timedelta(seconds=sum(travel_times))
-                trip_duration = (dropoff_datetime-pickup_datetime).total_seconds()
-                
+                trip_duration = (dropoff_datetime - pickup_datetime).total_seconds()
+
                 timestamps_dict = map_nodes_to_timestaps(route, pickup_datetime, dropoff_datetime, trip_duration)
 
                 dropoff_datetimes.append(dropoff_datetime)
@@ -119,40 +118,39 @@ class StreetGraph:
 
         # compute trip length and add to csv
         # generate random passenger count between 1 and 4 and add to csv
-        route_length_column=[]
-        passenger_count_column=[]
+        route_length_column = []
+        passenger_count_column = []
         for i in trips.index:
             current_route = trips.iloc[i]["route"]
             route_length = 0
-            for j in range(len(current_route)-1):
-                #print(self.inner_graph.nodes()[current_route[j]])
-                route_length += ox.distance.great_circle_vec(self.inner_graph.nodes()[current_route[j]]["y"], self.inner_graph.nodes()[current_route[j]]["x"],
-                self.inner_graph.nodes()[current_route[j+1]]["y"], self.inner_graph.nodes()[current_route[j+1]]["x"])
+            for j in range(len(current_route) - 1):
+                # print(self.inner_graph.nodes()[current_route[j]])
+                route_length += ox.distance.great_circle_vec(self.inner_graph.nodes()[current_route[j]]["y"],
+                                                             self.inner_graph.nodes()[current_route[j]]["x"],
+                                                             self.inner_graph.nodes()[current_route[j + 1]]["y"],
+                                                             self.inner_graph.nodes()[current_route[j + 1]]["x"])
             route_length_column.append(route_length)
-            passenger_count_column.append(random.randint(1,4))
+            passenger_count_column.append(random.randint(1, 4))
 
-        trips["route_length"]=route_length_column
-        trips["passenger_count"]=passenger_count_column
+        trips["route_length"] = route_length_column
+        trips["passenger_count"] = passenger_count_column
 
-        
         # add mobility providers randomly
-        provider_column=[]
-        totalprice_column=[]
+        provider_column = []
+        totalprice_column = []
         x = pd.read_csv("Provider.csv")
         for i in trips.index:
             provider_id = x['id'].sample(n=1).iloc[0]
             provider_column.append(provider_id)
-            selected_row = x[x['id']==provider_id]
+            selected_row = x[x['id'] == provider_id]
             basic_price = selected_row['basic_cost']
             km_price = selected_row['cost_per_km']
             leng = trips.iloc[0]['route_length']
             # note that internal distance unit is meters in OSMnx
-            total_price = basic_price + km_price*leng/1000
+            total_price = basic_price + km_price * leng / 1000
             totalprice_column.append(total_price.iloc[0])
-        trips["provider"]=provider_column
-        trips["total_price"]=totalprice_column
-
-
+        trips["provider"] = provider_column
+        trips["total_price"] = totalprice_column
 
         trips.to_csv("trips_meinheim.csv")
         self.trips = trips
@@ -179,6 +177,7 @@ class StreetGraph:
 
     def get_index_by_nodeid(self, nodeid: int):
         return self.get_nodeids_list().index(nodeid)
+
 
 def map_nodes_to_timestaps(route_nodes, pickup_time, dropoff_time, duration):
     timestamps = []
