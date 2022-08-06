@@ -17,7 +17,7 @@ sys.path.insert(0, "")
 # CHANGES
 from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
 from Manhattan_Graph_Environment.graphs.LearnGraph import LearnGraph
-from Manhattan_Graph_Environment.database_connection import DBConnection
+from Manhattan_Graph_Environment.DatabaseConnection import DBConnection
 
 
 # END OF CHANGES
