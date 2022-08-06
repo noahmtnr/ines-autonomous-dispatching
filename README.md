@@ -357,7 +357,7 @@ metrics are:
 
 **Detailled Individual Testing**
 The dashboard can be used to visually understand the actions that our trained agent has taken in test orders. To open
-the dashboard locally in your browser, you just need to run the file double_trouble.py. The dashboard consists of two
+the dashboard locally in your browser, you just need to run the file Dashboard.py. The dashboard consists of two
 tabs: static and interactive. The static visualization shows the route that the agent has taken on the map of New York,
 as well as some order statistics such as number of actions taken. In the interactive tab, the user can manually perform
 actions and compare them to the actions taken by the agent on different test cases. The following GIF demonstrates how
