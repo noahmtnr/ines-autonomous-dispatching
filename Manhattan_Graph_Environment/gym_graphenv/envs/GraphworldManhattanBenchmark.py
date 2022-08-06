@@ -884,13 +884,6 @@ class CustomCallbacks(DefaultCallbacks):
         # zum Vergleich ohne Abzug später
         # episode.custom_metrics["count_not_delivered_first"] = self.count_not_delivered
 
-        # how much distance (in % of total distance) we don't have to ride with book own
-        episode.custom_metrics['bookown_distance_not_covered_share'] = 1 - (
-                    episode.env.distance_covered_with_ownrides / episode.env.shortest_distance)
-        # how much distance we don't have to ride with book own
-        episode.custom_metrics[
-            'bookown_distance_not_covered'] = episode.env.shortest_distance - episode.env.distance_covered_with_ownrides
-
         episode.custom_metrics['distance_reduced_with_ownrides'] = episode.env.distance_reduced_with_ownrides
         episode.custom_metrics['distance_reduced_with_shared'] = episode.env.distance_reduced_with_shared
 
@@ -980,9 +973,6 @@ class CustomCallbacks(DefaultCallbacks):
             "ratio_delivered_without_bookown_to_all_delivered_mean"]
 
         # metrics about bookown distance reduced and rem distance reduced
-        result['bookown_distance_not_covered_share'] = result['custom_metrics'][
-            'bookown_distance_not_covered_share_mean']
-        result['bookown_distance_not_covered'] = result['custom_metrics']['bookown_distance_not_covered_mean']
         result['distance_reduced_with_ownrides'] = result['custom_metrics']['distance_reduced_with_ownrides_mean']
         result['distance_reduced_with_shared'] = result['custom_metrics']['distance_reduced_with_shared_mean']
         result['distance_reduced_with_ownrides_share'] = result['custom_metrics'][

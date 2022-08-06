@@ -299,10 +299,8 @@ trips available. Useful means that taking the respective trip reduces the remain
 
 - *distance_reduced_with_ownrides* : Distance to final hub reduced by booking own taxi rides, i.e.
   shortest-path-from-pickup-to-dropoff - distance-covered-with-shared-rides
-- *bookown_distance_not_covered* : how much distance we don't have to ride with book own
 - *distance_reduced_with_shared* : Distance to final hub reduced by sharing existing taxi rides, i.e.
   shortest-path-from-pickup-to-dropoff - distance-covered-with-own-rides
-- *bookown_distance_not_covered_share* : how much distance (in % of total distance) we don't have to ride with book own
 - *distance_reduced_with_shared_share* : Share of total distance from pickup to dropoff that was reduced by sharing
   rides
 
