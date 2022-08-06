@@ -4,9 +4,6 @@ from datetime import datetime, timedelta
 import osmnx as ox
 import pandas as pd
 
-
-# graph to be used: full.graphml (all nodes)
-# if we use small_manhattan.graphml, we do not have all nodes which are in the trips and then we get Key Error
 class HubsGraph:
     """Copy of an old state of ManhattanGraph used in API to map coordinates to closest hub. Not fully up to date.
     """
@@ -98,51 +95,6 @@ class HubsGraph:
     def getNearestNode(self, pickup_longitude, pickup_latitude):
         pickup_node_id = ox.distance.nearest_nodes(self.inner_graph, pickup_longitude, pickup_latitude)
         return pickup_node_id
-
-        # def get_coordinates_of_node_by_hub_index(self, node_index): 
-        #     # manhattangraph = ManhattanGraph(filename='simple', num_hubs=70)
-        #     nodes = self.inner_graph.nodes()
-        #     get_node_by_index(node_index):
-
-        #     return [nodes[node_id]['x'], nodes[node_id]['y']]       
-
-        # self.generate_hubs(fin_hub, num_hubs)
-
-        # def generate_hubs(self, fin_hub, num_hubs: int = 70):#, opt: int = 0):
-        #     # the code below is for loading the hubs specified in data/trips/manual_hubs.csv
-        #     """Generates random bubs within the graph
-
-        #     Args:e
-        #         fin_hub (int): index_id of final hub
-        #         num_hubs (int, optional): Number of hubs to create. Defaults to 5.
-
-        #     Returns:
-        #         self.hubs(list): List of hubs in graph
-        #     """
-        #     # the code below is for mapping the pre-defined hubs (customer/store/trips) to nodes in the graph
-        #     hubs_file = pd.read_csv("data/hubs/new_hubs.CSV")
-        #     hubs = []
-        #     i=0
-        #     for row in hubs_file.index:    
-        #         hubs.append(ox.get_nearest_node(self.inner_graph,(hubs_file.loc[row,"latitude"], hubs_file.loc[row,"longitude"])))
-        #     # if opt == 0:
-        #     #     # the code below is for mapping the pre-defined hubs (customer/store/trips) to nodes in the graph
-        #     #     hubs_file = pd.read_csv("data/hubs/manual_hubs.CSV")
-        #     #     hubs = []
-        #     #     i=0
-        #     #     for row in hubs_file.index:    
-        #     #         hubs.append(ox.get_nearest_node(self.inner_graph,(hubs_file.loc[row,"latitude"], hubs_file.loc[row,"longitude"])))
-        #     #         #hubs.append(hubs_file.loc[row])
-        #     # else:
-        #     #     hubs_file = pd.read_csv('rl/Manhattan_Graph_Environment/top_nodes.csv')
-        #     #     hubs = []
-        #     #     i=0
-        #     #     for row in hubs_file.index:    
-        #     #         hubs.append(hubs_file.loc[row])
-
-        #     self.hubs = random.sample(hubs,num_hubs)
-        #     #self.hubs = hubs
-        #     return self.hubs
 
         def setup_trips(self, start_time: datetime):
             """Read trips information of Kaggle file in self.trips.
