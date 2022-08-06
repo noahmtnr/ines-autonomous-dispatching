@@ -79,7 +79,7 @@ Donwload Anaconda: https://www.anaconda.com/products/individual
 
 3. create new environment
 
-- $ conda install -n ines-ad requirements.txt
+- $ conda create --name ines-ad --file requirements.txt
 
 4. activate environment
 
