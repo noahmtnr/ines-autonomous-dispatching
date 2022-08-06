@@ -1,6 +1,5 @@
 import time
 from datetime import datetime
-from time import time
 
 import mysql.connector
 import pandas as pd
@@ -66,7 +65,6 @@ class DBConnection:
         Returns:
             list: available trips
         """
-        startTime = time.time()
         sql = "select * from PREFILTERED_TRIPS_VIEW_01 where route_node = %s and date_time between %s and %s"
         val = (start_node, start_date, end_date)
         tripsId_list = []
@@ -75,8 +73,7 @@ class DBConnection:
         self.mycursor.execute(sql, val)
 
         result = self.mycursor.fetchall()
-        executionTime = (time.time() - startTime)
-        print('DB: fetch_all_available_trips() Execution time: ' + str(executionTime) + ' seconds')
+        print('DB: fetch_available_trips_at_node() loaded ' + str(len(result)) + ' trips')
         return result
 
     def fetch_all_available_trips(self, start_date, end_date):
@@ -89,7 +86,6 @@ class DBConnection:
         Returns:
             list: available trips
         """
-        startTime = time.time()
         sql = "select * from PREFILTERED_TRIPS_VIEW_01 where date_time between %s and %s"
         val = (start_date, end_date)
         tripsId_list = []
@@ -98,9 +94,7 @@ class DBConnection:
         self.mycursor.execute(sql, val)
 
         result = self.mycursor.fetchall()
-        executionTime = (time.time() - startTime)
-        print('DB: fetch_all_available_trips() Execution time: ' + str(executionTime) + ' seconds')
-        print("loaded " + str(len(result)) + " trips")
+        print('DB: fetch_all_available_trips() loaded ' + str(len(result)) + ' trips')
         return result
 
     def fetch_route_from_trip(self, trip_id):
@@ -112,7 +106,6 @@ class DBConnection:
         Returns:
             _type_: _description_
         """
-        startTime = time.time()
         sql = "select route_node, date_time from mannheimprojekt.TRIPS_ROUTES where id = %s order by date_time"
         val = (trip_id,)
         nodes_list = []
@@ -121,8 +114,6 @@ class DBConnection:
         for result in self.mycursor:
             nodes_list.append(result[0])
             time_list.append(result[1].strftime("%Y-%m-%d %H:%M:%S"))
-        executionTime = (time.time() - startTime)
-        # print('DB: fetch_route_from_trip() Execution time: ' + str(executionTime) + ' seconds')
         return nodes_list, time_list
 
     def populate_database(self):
