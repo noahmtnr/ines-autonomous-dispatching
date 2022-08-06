@@ -4,7 +4,8 @@
 cache/
 */.cache/*
 
-rl/env/__pycache__
+*/__pycache__/*
+__pychache__/
 
 .DS_Store
 

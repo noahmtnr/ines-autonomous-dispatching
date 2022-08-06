@@ -1,21 +1,19 @@
-import numpy as np
-import pandas as pd
-import json
-import os
-import shutil
+"""
+Test Class for DQN Agent.
+"""
+
+# imports
 import sys
+
 import gym
-
 import ray
-
 from ray.rllib.agents.dqn import DQNTrainer, DEFAULT_CONFIG
 
-sys.path.insert(0,"")
+sys.path.insert(0, "")
 
-from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
 from gym_graphenv.envs.GraphworldManhattan import GraphEnv
 
-env=GraphEnv()
+env = GraphEnv()
 
 file_name = "results/tmp/dqn/graphworld"
 
@@ -25,9 +23,9 @@ trainer_config["train_batch_size"] = 400
 trainer_config["gamma"] = 0.95
 trainer_config["n_step"] = 10
 trainer_config["framework"] = "torch"
-#num_gpus and other gpu parameters in order to train with gpu
+# num_gpus and other gpu parameters in order to train with gpu
 
-trainer = DQNTrainer(trainer_config,GraphEnv )
+trainer = DQNTrainer(trainer_config, GraphEnv)
 trainer.restore(file_name)
 env = gym.make("graphworld-v0")
 state = env.reset()
@@ -38,7 +36,7 @@ for step in range(n_step):
     action = trainer.compute_action(state)
     state, reward, done, info = env.step(action)
     sum_reward += reward
-    #env.render()
+    # env.render()
     if done == 1:
         print("cumulative reward", sum_reward)
         state = env.reset()

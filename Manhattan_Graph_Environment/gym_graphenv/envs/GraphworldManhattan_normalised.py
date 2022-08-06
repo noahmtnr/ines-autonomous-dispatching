@@ -1,74 +1,50 @@
+import pickle
+import random
+import sys
+import time
+from datetime import datetime, timedelta
 
-
-
-
-#THIS IS ONLY EXAMPLE HOW TO NORMALISE - DO NOT USE IT - THE ENV IS NOT UP TO DATE
-
-
-
-
-
-from xml.dom.pulldom import parseString
+import folium
+import gym
 import numpy as np
 import osmnx as ox
-import networkx as nx
-import folium
-from folium.plugins import MarkerCluster
-from datetime import datetime, timedelta
-from array import array
-import gym
-from gym.utils import seeding
-import random
-import modin.pandas as pd
 from gym import spaces
-from pandas import Timestamp
-import time
-import pickle
-import logging
-import json
-import statistics
-from config.definitions import ROOT_DIR, CustomCallbacks
-from typing import Dict
 
-from ray.rllib.agents.callbacks import DefaultCallbacks
-from ray.rllib.evaluation import Episode, RolloutWorker
-from ray.rllib.env import BaseEnv
-from ray.rllib.policy import Policy
+from config.definitions import ROOT_DIR
 
-import sys
-
-from torch import float64
-sys.path.insert(0,"")
+sys.path.insert(0, "")
 
 # CHANGES
 from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
 from Manhattan_Graph_Environment.graphs.LearnGraph import LearnGraph
-from Manhattan_Graph_Environment.OneHotVector import OneHotVector
-from Manhattan_Graph_Environment.database_connection import DBConnection
+from Manhattan_Graph_Environment.DatabaseConnection import DBConnection
+
+
 # END OF CHANGES
 
 class GraphEnv(gym.Env):
+    """THIS IS ONLY EXAMPLE HOW TO NORMALISE - DO NOT USE IT - THE ENV IS NOT UP TO DATE
+    """
 
     REWARD_AWAY = -1
     REWARD_GOAL = 100
-    
-    def __init__(self, use_config: bool = True ):
+
+    def __init__(self, use_config: bool = True):
         DB_LOWER_BOUNDARY = '2016-01-01 00:00:00'
         DB_UPPER_BOUNDARY = '2016-01-14 23:59:59'
         self.LEARNGRAPH_FIRST_INIT_DONE = False
-        #print("USE CONFIG", use_config)
-
+        # print("USE CONFIG", use_config)
 
         # f = open('graphworld_config.json')
         # data = json.load(f)
         # use_config=data['use_config']
         # print(use_config)
 
-        if(use_config):
+        if (use_config):
             self.env_config = self.read_config()
         else:
-             self.env_config = None
-    
+            self.env_config = None
+
         self.n_hubs = 70
         self.distance_matrix = None
 
@@ -78,20 +54,18 @@ class GraphEnv(gym.Env):
         # graph_meinheim = StreetGraph(filename='meinheim', num_trips=4000, fin_hub=self.final_hub, num_hubs=5)
 
         manhattan_graph = ManhattanGraph(filename='simple', num_hubs=self.n_hubs)
-        #manhattan_graph.setup_trips(self.START_TIME)
+        # manhattan_graph.setup_trips(self.START_TIME)
         self.manhattan_graph = manhattan_graph
 
         self.hubs = manhattan_graph.hubs
 
-        self.trips = self.DB.getAvailableTrips(DB_LOWER_BOUNDARY, DB_UPPER_BOUNDARY)
-        #print(f"Initialized with {len(self.trips)} taxi rides within two weeks")
-
+        self.trips = self.DB.fetch_all_available_trips(DB_LOWER_BOUNDARY, DB_UPPER_BOUNDARY)
+        # print(f"Initialized with {len(self.trips)} taxi rides within two weeks")
 
         self.state = None
 
-      
-        self.action_space = gym.spaces.Discrete(self.n_hubs) 
-        
+        self.action_space = gym.spaces.Discrete(self.n_hubs)
+
         # self.observation_space = spaces.Dict(dict(
         #     #layer_one = spaces.Box(low=0, high=100, shape=(1,self.n_hubs), dtype=np.int32),
         #     cost = gym.spaces.Discrete(self.n_hubs),
@@ -106,29 +80,27 @@ class GraphEnv(gym.Env):
         # )
 
         self.observation_space = spaces.Dict(
-            {#'cost': gym.spaces.Discrete(self.n_hubs), 
-            #'current_hub': OneHotVector(self.n_hubs),
-            #'final_hub': OneHotVector(self.n_hubs)
-            'cost': gym.spaces.Box(low=np.zeros(70)-10, high=np.zeros(70)+10, shape=(70,), dtype=np.float64),
-            'remaining_distance': gym.spaces.Box(low=np.zeros(70)-10, high=np.zeros(70)+10, shape=(70,), dtype=np.float64),
-            'current_hub': gym.spaces.Box(low=0, high=1, shape=(70,), dtype=np.float64),
-            'final_hub': gym.spaces.Box(low=0, high=1, shape=(70,), dtype=np.float64)
-#            'observations': self.observation_space
-            #'current_hub': gym.spaces.Discrete(self.n_hubs),
-            #'final_hub': gym.spaces.Discrete(self.n_hubs)
-        })
+            {  # 'cost': gym.spaces.Discrete(self.n_hubs),
+                # 'current_hub': OneHotVector(self.n_hubs),
+                # 'final_hub': OneHotVector(self.n_hubs)
+                'cost': gym.spaces.Box(low=np.zeros(70) - 10, high=np.zeros(70) + 10, shape=(70,), dtype=np.float64),
+                'remaining_distance': gym.spaces.Box(low=np.zeros(70) - 10, high=np.zeros(70) + 10, shape=(70,),
+                                                     dtype=np.float64),
+                'current_hub': gym.spaces.Box(low=0, high=1, shape=(70,), dtype=np.float64),
+                'final_hub': gym.spaces.Box(low=0, high=1, shape=(70,), dtype=np.float64)
+                #            'observations': self.observation_space
+                # 'current_hub': gym.spaces.Discrete(self.n_hubs),
+                # 'final_hub': gym.spaces.Discrete(self.n_hubs)
+            })
 
-        self.cost_values=[]
-        self.rem_distance_values=[]
-        self.curent_hub_values=[]
-        self.final_hub_values=[]
-        self.mean1=6779.17
-        self.mean2=13653.00
-        self.stdev1=4433.51
-        self.stdev2=6809.79
-
-
-
+        self.cost_values = []
+        self.rem_distance_values = []
+        self.curent_hub_values = []
+        self.final_hub_values = []
+        self.mean1 = 6779.17
+        self.mean2 = 13653.00
+        self.stdev1 = 4433.51
+        self.stdev2 = 6809.79
 
     def one_hot(self, pos):
         one_hot_vector = np.zeros(len(self.hubs))
@@ -137,37 +109,37 @@ class GraphEnv(gym.Env):
 
     def reset(self):
         # two cases depending if we have env config 
-        #super().reset()
+        # super().reset()
 
         resetExecutionStart = time.time()
 
-        pickup_day = np.random.randint(low=1,high=14)
-        pickup_hour =  np.random.randint(24)
-        pickup_minute = np.random.randint(60) 
-        self.START_TIME = datetime(2016,1,pickup_day,pickup_hour,pickup_minute,0).strftime('%Y-%m-%d %H:%M:%S')
+        pickup_day = np.random.randint(low=1, high=14)
+        pickup_hour = np.random.randint(24)
+        pickup_minute = np.random.randint(60)
+        self.START_TIME = datetime(2016, 1, pickup_day, pickup_hour, pickup_minute, 0).strftime('%Y-%m-%d %H:%M:%S')
 
         if (self.env_config == None or self.env_config == {}):
-            #print("Started Reset() without config")
-            #self.final_hub = self.manhattan_graph.get_nodeids_list().index(random.sample(self.hubs,1)[0])
-            self.final_hub = random.randint(0,self.n_hubs-1)
-            #self.start_hub = self.manhattan_graph.get_nodeids_list().index(random.sample(self.hubs,1)[0])
-            self.start_hub = random.randint(0,self.n_hubs-1)
+            # print("Started Reset() without config")
+            # self.final_hub = self.manhattan_graph.get_nodeids_list().index(random.sample(self.hubs,1)[0])
+            self.final_hub = random.randint(0, self.n_hubs - 1)
+            # self.start_hub = self.manhattan_graph.get_nodeids_list().index(random.sample(self.hubs,1)[0])
+            self.start_hub = random.randint(0, self.n_hubs - 1)
 
             # just in case ;)
-            if(self.start_hub == self.final_hub):
-                self.start_hub = random.randint(0,self.n_hubs-1)
+            if (self.start_hub == self.final_hub):
+                self.start_hub = random.randint(0, self.n_hubs - 1)
 
             self.position = self.start_hub
 
-        # time for pickup
-            self.pickup_time = datetime.strptime(self.START_TIME,'%Y-%m-%d %H:%M:%S')
+            # time for pickup
+            self.pickup_time = datetime.strptime(self.START_TIME, '%Y-%m-%d %H:%M:%S')
             self.time = self.pickup_time
             self.total_travel_time = 0
-            self.deadline=self.pickup_time+timedelta(hours=12)
-            self.current_wait = 1 ## to avoid dividing by 0
-            #self.manhattan_graph.setup_trips(self.START_TIME)
+            self.deadline = self.pickup_time + timedelta(hours=12)
+            self.current_wait = 1  ## to avoid dividing by 0
+            # self.manhattan_graph.setup_trips(self.START_TIME)
         else:
-            #print("Started Reset() with config")
+            # print("Started Reset() with config")
             self.final_hub = self.env_config['delivery_hub_index']
 
             self.start_hub = self.env_config['pickup_hub_index']
@@ -177,25 +149,21 @@ class GraphEnv(gym.Env):
             self.pickup_time = self.env_config['pickup_timestamp']
             self.time = datetime.strptime(self.pickup_time, '%Y-%m-%d %H:%M:%S')
             self.total_travel_time = 0
-            self.deadline=datetime.strptime(self.env_config['delivery_timestamp'], '%Y-%m-%d %H:%M:%S')
+            self.deadline = datetime.strptime(self.env_config['delivery_timestamp'], '%Y-%m-%d %H:%M:%S')
             self.current_wait = 0
 
-
-
-        #print(f"Reset initialized pickup: {self.position}")
-        #print(f"Reset initialized dropoff: {self.final_hub}")
-        #print(f"Reset initialized time: {self.time}")
-        
+        # print(f"Reset initialized pickup: {self.position}")
+        # print(f"Reset initialized dropoff: {self.final_hub}")
+        # print(f"Reset initialized time: {self.time}")
 
         learn_graph = LearnGraph(n_hubs=self.n_hubs, manhattan_graph=self.manhattan_graph, final_hub=self.final_hub)
         self.learn_graph = learn_graph
 
-        if(self.LEARNGRAPH_FIRST_INIT_DONE == False):
+        if (self.LEARNGRAPH_FIRST_INIT_DONE == False):
             self.distance_matrix = self.learn_graph.fill_distance_matrix()
-        
 
         self.LEARNGRAPH_FIRST_INIT_DONE = True
-        self.learn_graph.add_travel_cost_layer(self.availableTrips(), self.distance_matrix)
+        self.learn_graph.add_travel_cost_and_distinction_layer(self.availableTrips(), self.distance_matrix)
         self.learn_graph.add_remaining_distance_layer(current_hub=self.position, distance_matrix=self.distance_matrix)
 
         self.count_hubs = 0
@@ -212,23 +180,25 @@ class GraphEnv(gym.Env):
         self.current_trip = None
 
         self.own_ride = False
-        self.has_waited=False
-        reward=0
-        #self.available_actions = self.get_available_actions()
+        self.has_waited = False
+        reward = 0
+        # self.available_actions = self.get_available_actions()
 
         self.state = {
-            'cost' : ((self.learn_graph.adjacency_matrix('cost')[self.position]-self.mean1)/self.stdev1).astype(np.float64),
-            'remaining_distance': ((self.learn_graph.adjacency_matrix('remaining_distance')[self.position]-self.mean2)/self.stdev2).astype(np.float64),
-            'current_hub' : self.one_hot(self.position).astype(np.float64), 
-            'final_hub' : self.one_hot(self.final_hub).astype(np.float64)
-            }
+            'cost': ((self.learn_graph.adjacency_matrix('cost')[self.position] - self.mean1) / self.stdev1).astype(
+                np.float64),
+            'remaining_distance': ((self.learn_graph.adjacency_matrix('remaining_distance')[
+                                        self.position] - self.mean2) / self.stdev2).astype(np.float64),
+            'current_hub': self.one_hot(self.position).astype(np.float64),
+            'final_hub': self.one_hot(self.final_hub).astype(np.float64)
+        }
         # self.cost_values.extend(self.learn_graph.adjacency_matrix('cost')[self.position].astype(int))
         # self.rem_distance_values.extend(self.learn_graph.adjacency_matrix('remaining_distance')[self.position].astype(int))
         # self.curent_hub_values.extend(self.one_hot(self.position).astype(int))
         # self.final_hub_values.extend( self.one_hot(self.final_hub).astype(int))
 
         resetExecutionTime = (time.time() - resetExecutionStart)
-        #print(f"Reset() Execution Time: {str(resetExecutionTime)}")
+        # print(f"Reset() Execution Time: {str(resetExecutionTime)}")
         return self.state
 
     def step(self, action: int):
@@ -243,63 +213,67 @@ class GraphEnv(gym.Env):
 
         startTime = time.time()
 
-        done =  False
+        done = False
 
         # set old position to current position before changing current position
         self.old_position = self.position
-        #availableActions = self.available_actions
+        # availableActions = self.available_actions
         step_duration = 0
 
         if self.validateAction(action):
             startTimeWait = time.time()
-            if(action == self.position):
-            # action = wait
+            if (action == self.position):
+                # action = wait
                 step_duration = 300
-                self.has_waited=True
+                self.has_waited = True
                 self.own_ride = False
                 self.count_wait += 1
                 self.action_choice = "Wait"
-                #print("action == wait ")
+                # print("action == wait ")
                 executionTimeWait = (time.time() - startTimeWait)
-                #print(f"Time Wait: {str(executionTimeWait)}")
+                # print(f"Time Wait: {str(executionTimeWait)}")
                 pass
 
             # action = share ride or book own ride
             else:
-                if(self.shared_rides_mask[action] == 1):
+                if (self.shared_rides_mask[action] == 1):
                     self.count_share += 1
                     self.action_choice = "Share"
-                    #print("action == share ")
+                    # print("action == share ")
                 else:
                     self.count_bookown += 1
                     self.action_choice = "Book"
-                    #print("action == book own ")
+                    # print("action == book own ")
                 startTimeRide = time.time()
-                self.has_waited=False
+                self.has_waited = False
                 self.count_hubs += 1
-                #self.own_ride = True                
+                # self.own_ride = True
                 # Step Zeit vorrübergehend auskommentiert bis Zeit im State vorhanden ist
                 pickup_nodeid = self.manhattan_graph.get_nodeid_by_hub_index(self.position)
                 dropoff_nodeid = self.manhattan_graph.get_nodeid_by_hub_index(action)
                 # pickup_node_index = self.manhattan_graph.get_index_by_nodeid(pickup_nodeid)
                 # dropoff_node_index = self.manhattan_graph.get_index_by_nodeid(dropoff_nodeid)
-                route = ox.shortest_path(self.manhattan_graph.inner_graph, pickup_nodeid,  dropoff_nodeid, weight='travel_time')
-                route_travel_time = ox.utils_graph.get_route_edge_attributes(self.manhattan_graph.inner_graph,route,attribute='travel_time')
+                route = ox.shortest_path(self.manhattan_graph.inner_graph, pickup_nodeid, dropoff_nodeid,
+                                         weight='travel_time')
+                route_travel_time = ox.utils_graph.get_route_edge_attributes(self.manhattan_graph.inner_graph, route,
+                                                                             attribute='travel_time')
 
-                if(self.learn_graph.wait_till_departure_times[(self.position,action)] == 300):
-                    step_duration = sum(route_travel_time)+300 #we add 5 minutes (300 seconds) so the taxi can arrive
-                elif(self.learn_graph.wait_till_departure_times[(self.position,action)] != 300 and self.learn_graph.wait_till_departure_times[(self.position,action)] != 0):
+                if (self.learn_graph.wait_till_departure_times[(self.position, action)] == 300):
+                    step_duration = sum(
+                        route_travel_time) + 300  # we add 5 minutes (300 seconds) so the taxi can arrive
+                elif (self.learn_graph.wait_till_departure_times[(self.position, action)] != 300 and
+                      self.learn_graph.wait_till_departure_times[(self.position, action)] != 0):
                     step_duration = sum(route_travel_time)
                     # TODO: String conversion von departure time besser direkt beim erstellen der Matrix
-                    departure_time = datetime.strptime(self.learn_graph.wait_till_departure_times[(self.position,action)], '%Y-%m-%d %H:%M:%S')
-                    self.current_wait = ( departure_time - self.time).seconds
+                    departure_time = datetime.strptime(
+                        self.learn_graph.wait_till_departure_times[(self.position, action)], '%Y-%m-%d %H:%M:%S')
+                    self.current_wait = (departure_time - self.time).seconds
                     step_duration += self.current_wait
                     self.time = departure_time
-                
+
                 self.old_position = self.position
                 self.position = action
-                
-                
+
                 # Increase global time state by the time waited for the taxi to arrive at our location
                 # self.current_wait = (selected_trip['departure_time']-self.time).seconds
                 # self.time = selected_trip['departure_time']
@@ -307,23 +281,27 @@ class GraphEnv(gym.Env):
                 # Instead of cumulating trip duration here we add travel_time 
                 # self.total_travel_time += timedelta(seconds=travel_time)     
                 # refresh travel cost layer after each step
-                # self.learn_graph.add_travel_cost_layer(self.availableTrips())
+                # self.learn_graph.add_travadd_travel_cost_and_distinction_layerel_cost_layer(self.availableTrips())
                 # self.state = {'cost' : self.learn_graph.adjacency_matrix('cost')[self.position].astype(int),'current_hub' : self.one_hot(self.position).astype(int), 'final_hub' : self.one_hot(self.final_hub).astype(int)}
                 executionTimeRide = (time.time() - startTimeRide)
-                #print(f"Time Ride: {str(executionTimeRide)}")
-                pass 
-        #else:
-            #print("invalid action")
-            #print("avail actions: ",self.available_actions)
-            #print("action: ",action)
-            #print("action space: ",self.action_space)
+                # print(f"Time Ride: {str(executionTimeRide)}")
+                pass
+                # else:
+            # print("invalid action")
+            # print("avail actions: ",self.available_actions)
+            # print("action: ",action)
+            # print("action space: ",self.action_space)
 
-        
         # refresh travel cost layer after each step
-        self.learn_graph.add_travel_cost_layer(self.availableTrips(), self.distance_matrix)
+        self.learn_graph.add_travel_cost_and_distinction_layer(self.availableTrips(), self.distance_matrix)
         self.learn_graph.add_remaining_distance_layer(current_hub=self.position, distance_matrix=self.distance_matrix)
         startTimeLearn = time.time()
-        self.state = {'cost' : ((self.learn_graph.adjacency_matrix('cost')[self.position]-self.mean1)/self.stdev1).astype(np.float64),'remaining_distance': ((self.learn_graph.adjacency_matrix('remaining_distance')[self.position]-self.mean2)/self.stdev2).astype(np.float64),'current_hub' : self.one_hot(self.position).astype(np.float64), 'final_hub' : self.one_hot(self.final_hub).astype(np.float64)}
+        self.state = {
+            'cost': ((self.learn_graph.adjacency_matrix('cost')[self.position] - self.mean1) / self.stdev1).astype(
+                np.float64), 'remaining_distance': ((self.learn_graph.adjacency_matrix('remaining_distance')[
+                                                         self.position] - self.mean2) / self.stdev2).astype(np.float64),
+            'current_hub': self.one_hot(self.position).astype(np.float64),
+            'final_hub': self.one_hot(self.final_hub).astype(np.float64)}
         executionTimeLearn = (time.time() - startTimeLearn)
         # print(f"Time Adj Matrix: {str(executionTimeLearn)}")
 
@@ -333,24 +311,23 @@ class GraphEnv(gym.Env):
 
         reward, done = self.compute_reward(action)
 
-        #if (done):
-            # self.mean_1=sum(self.cost_values)/len(self.cost_values)
-            # print("mean 1: ",self.mean_1)
-            # self.mean_2=sum(self.rem_distance_values)/len(self.rem_distance_values)
-            # print("mean 2: ",self.mean_2)
-            # self.mean_3=sum(self.curent_hub_values)/len(self.curent_hub_values)
-            # print("mean 3: ",self.mean_3)
-            # self.mean_4=sum(self.final_hub_values)/len(self.final_hub_values)
-            # print("mean 4: ",self.mean_4)
-            # self.sd_1=statistics.stdev(self.cost_values)
-            # print("stdev 1: ",self.sd_1)
-            # self.sd_2=statistics.stdev(self.rem_distance_values)
-            # print("stdev 2: ",self.sd_2)
-            # self.sd_3=statistics.stdev(self.curent_hub_values)
-            # print("stdev 3: ",self.sd_3)
-            # self.sd_4=statistics.stdev(self.final_hub_values)
-            # print("stdev 4: ",self.sd_4)
-            
+        # if (done):
+        # self.mean_1=sum(self.cost_values)/len(self.cost_values)
+        # print("mean 1: ",self.mean_1)
+        # self.mean_2=sum(self.rem_distance_values)/len(self.rem_distance_values)
+        # print("mean 2: ",self.mean_2)
+        # self.mean_3=sum(self.curent_hub_values)/len(self.curent_hub_values)
+        # print("mean 3: ",self.mean_3)
+        # self.mean_4=sum(self.final_hub_values)/len(self.final_hub_values)
+        # print("mean 4: ",self.mean_4)
+        # self.sd_1=statistics.stdev(self.cost_values)
+        # print("stdev 1: ",self.sd_1)
+        # self.sd_2=statistics.stdev(self.rem_distance_values)
+        # print("stdev 2: ",self.sd_2)
+        # self.sd_3=statistics.stdev(self.curent_hub_values)
+        # print("stdev 3: ",self.sd_3)
+        # self.sd_4=statistics.stdev(self.final_hub_values)
+        # print("stdev 4: ",self.sd_4)
 
         executionTime = (time.time() - startTime)
         # print('Step() Execution time: ' + str(executionTime) + ' seconds')
@@ -363,47 +340,48 @@ class GraphEnv(gym.Env):
         #     if (self.learn_graph.adjacency_matrix('remaining_distance')[self.position].astype(int)[i]>self.max_values[1]):
         #         self.max_values[1]=self.learn_graph.adjacency_matrix('remaining_distance')[self.position].astype(int)[i]
 
-        #if (done):
+        # if (done):
         #     print("max values: ", self.max_values)
 
-        #print(self.state)
+        # print(self.state)
 
-        return self.state, reward,  done, {"timestamp": self.time,"step_travel_time":step_duration,"distance":self.distance_matrix[self.old_position][self.position], "count_hubs":self.count_hubs, "action": self.action_choice, "hub_index": action}
+        return self.state, reward, done, {"timestamp": self.time, "step_travel_time": step_duration,
+                                          "distance": self.distance_matrix[self.old_position][self.position],
+                                          "count_hubs": self.count_hubs, "action": self.action_choice,
+                                          "hub_index": action}
 
-    
     def compute_reward(self, action):
         cost_of_action = self.learn_graph.adjacency_matrix('cost')[self.old_position][action]
-        #print(self.old_position, "->", action, cost_of_action)
+        # print(self.old_position, "->", action, cost_of_action)
         done = False
         # if delay is greater than 2 hours (=120 minutes), terminate training episode
-        if((self.time-self.deadline).total_seconds()/60 >= 120):
+        if ((self.time - self.deadline).total_seconds() / 60 >= 120):
             done = True
             reward = -(cost_of_action / 100) - 10000
-            #print("BOX WAS NOT DELIVERED until 2 hours after deadline")
+            # print("BOX WAS NOT DELIVERED until 2 hours after deadline")
         # if box is delivered to final hub in time
         if (self.position == self.final_hub and self.time <= self.deadline):
-            #print(f"DELIVERED IN TIME AFTER {self.count_actions} ACTIONS (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown}")
+            # print(f"DELIVERED IN TIME AFTER {self.count_actions} ACTIONS (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown}")
             reward = 1000
             reward -= (cost_of_action / 100)
             done = True
         # if box is delivered to final hub with delay
-        elif(self.position == self.final_hub and (self.time-self.deadline).total_seconds()/60 < 120): #self.time > self.deadline):
+        elif (self.position == self.final_hub and (
+                self.time - self.deadline).total_seconds() / 60 < 120):  # self.time > self.deadline):
             overtime = self.time - self.deadline
-            #print(f"DELIVERED AFTER {self.count_actions} ACTIONS (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown} WITH DELAY: {overtime}")
-            overtime = round(overtime.total_seconds()/60)
+            # print(f"DELIVERED AFTER {self.count_actions} ACTIONS (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown} WITH DELAY: {overtime}")
+            overtime = round(overtime.total_seconds() / 60)
             reward = 1000 - overtime
             reward -= (cost_of_action / 100)
             done = True
         # if box is not delivered to final hub
-        elif(done==False):
+        elif (done == False):
             reward = -(cost_of_action / 100)
-            #print(f"INTERMEDIATE STEP ACTIONS: (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown}")
-            #done = False
-        
+            # print(f"INTERMEDIATE STEP ACTIONS: (#wait: {self.count_wait}, #share: {self.count_share}, #book own: {self.count_bookown}")
+            # done = False
 
         return reward, done
-        
-    
+
     # def compute_reward(self, done):
     #     """ Computes the reward for each step
     #     Args:
@@ -509,8 +487,6 @@ class GraphEnv(gym.Env):
     #     print('Compute_reward() Execution time: ' + str(executionTime) + ' seconds')
     #     return reward, done
 
-
-
     def get_available_actions(self):
         """ Returns the available actions at the current position. Uses a simplified action space with moves to all direct neighbors allowed.
         Returns:
@@ -522,21 +498,20 @@ class GraphEnv(gym.Env):
         wait = [{'type': 'wait'}]
         ownRide = [{'type': 'ownRide'}]
         available_rides = list(self.availableTrips(10))
-        
-        executionTime = (time.time() - startTime)
-        #print('get_available_actions() Execution time: ' + str(executionTime) + ' seconds')
 
-        available_actions = [wait,ownRide,*available_rides]
+        executionTime = (time.time() - startTime)
+        # print('get_available_actions() Execution time: ' + str(executionTime) + ' seconds')
+
+        available_actions = [wait, ownRide, *available_rides]
         self.available_actions = available_actions
         return available_actions
 
-    
     # def availableTrips(self, time_window=5):
     #     Returns a list of all available trips at the current node and within the next 5 minutes. Includes the time of departure from the current node as well as the target node of the trip.
 
     #     Returns:
     #         list: [departure_time,target_node]
-        
+
     #     list_trips=[]
     #     position=self.manhattan_graph.get_nodeid_by_index(self.position)
     #     position_str=str(position)
@@ -547,7 +522,7 @@ class GraphEnv(gym.Env):
 
     #     grid=self.manhattan_graph.trips
     #     paths=grid['route_timestamps']
-        
+
     #     row_id = -1
     #     for index in range(len(paths)):
     #         row_id += 1
@@ -580,38 +555,38 @@ class GraphEnv(gym.Env):
     #     self.available_actions = list_trips
     #     print(list_trips)
     #     return list_trips
-    
+
     def availableTrips(self, time_window=5):
         """ Returns a list of all available trips at the current node and within the next 5 minutes. Includes the time of departure from the current node as well as the target node of the trip.
         Returns:
             list: [departure_time,target_node]
         """
         startTime = time.time()
-        list_trips=[]
-        position=self.manhattan_graph.get_nodeid_by_hub_index(self.position)
-        position_str=str(position)
-        final_hub_postion=self.manhattan_graph.get_nodeid_by_index(self.final_hub)
+        list_trips = []
+        position = self.manhattan_graph.get_nodeid_by_hub_index(self.position)
+        position_str = str(position)
+        final_hub_postion = self.manhattan_graph.get_nodeid_by_index(self.final_hub)
 
-        start_timestamp=self.time
+        start_timestamp = self.time
         end_timestamp = self.time + timedelta(minutes=time_window)
-        
-        #list of trip id's that are in current position in that timewindow
+
+        # list of trip id's that are in current position in that timewindow
         trips = self.trips
         # print("Trips about to be filtered:")
         # print(trips)
         for tripId, nodeId, timestamp in trips:
-            if(nodeId == position):
+            if (nodeId == position):
                 if timestamp <= end_timestamp and timestamp >= start_timestamp:
-            
-                    #trip_target_node = grid['dropoff_node'][index]
-                    #isNotFinalNode = str(tupel_position) != str(trip_target_node)
 
-                    route, times = self.DB.getRouteFromTrip(tripId)
+                    # trip_target_node = grid['dropoff_node'][index]
+                    # isNotFinalNode = str(tupel_position) != str(trip_target_node)
+
+                    route, times = self.DB.fetch_route_from_trip(tripId)
                     isNotFinalNode = True
                     if isNotFinalNode:
                         index_in_route = route.index(position)
                         position_timestamp = times[index_in_route]
-                        route_to_target_node=route[index_in_route::]
+                        route_to_target_node = route[index_in_route::]
                         hubsOnRoute = any(node in route_to_target_node for node in self.hubs)
                         if hubsOnRoute:
                             route_hubs = [node for node in route_to_target_node if node in self.hubs]
@@ -619,8 +594,9 @@ class GraphEnv(gym.Env):
                                 index_hub_in_route = route.index(hub)
                                 index_hub_in_route += 1
                                 route_to_target_hub = route[index_in_route:index_hub_in_route]
-                                if(hub != position):
-                                    trip = {'departure_time': position_timestamp, 'target_hub': hub, 'route': route_to_target_hub, 'trip_row_id': tripId}
+                                if (hub != position):
+                                    trip = {'departure_time': position_timestamp, 'target_hub': hub,
+                                            'route': route_to_target_hub, 'trip_row_id': tripId}
                                     list_trips.append(trip)
         self.available_actions = list_trips
 
@@ -630,23 +606,22 @@ class GraphEnv(gym.Env):
             shared_rides_mask[self.manhattan_graph.get_hub_index_by_nodeid(list_trips[i]['target_hub'])] = 1
 
         self.shared_rides_mask = shared_rides_mask
-        #print(shared_rides_mask)
-        #print(list_trips)
+        # print(shared_rides_mask)
+        # print(list_trips)
 
         executionTime = (time.time() - startTime)
-        #print('found '+ str(len(list_trips)) +' trips, ' + 'current time: ' + str(self.time))
+        # print('found '+ str(len(list_trips)) +' trips, ' + 'current time: ' + str(self.time))
         return list_trips
 
     def validateAction(self, action):
         return action < self.n_hubs
 
     def read_config(self):
-        filepath = os.path.join(ROOT_DIR,'env_config.pkl')
-        with open(filepath,'rb') as f:
+        filepath = os.path.join(ROOT_DIR, 'env_config.pkl')
+        with open(filepath, 'rb') as f:
             loaded_dict = pickle.load(f)
         self.env_config = loaded_dict
         return loaded_dict
-        
 
     def render(self, visualize_actionspace: bool = False):
         """_summary_
@@ -661,45 +636,50 @@ class GraphEnv(gym.Env):
         final_hub_y = self.manhattan_graph.get_node_by_index(self.final_hub)['y']
         start_hub_x = self.manhattan_graph.get_node_by_index(self.start_hub)['x']
         start_hub_y = self.manhattan_graph.get_node_by_index(self.start_hub)['y']
-        
+
         # current_pos_x = list(self.manhattan_graph.nodes())[self.position]['x']
         # current_pos_y = list(self.manhattan_graph.nodes())[self.position]['y']
         # final_hub_x = list(self.manhattan_graph.nodes())[self.final_hub]['x']
         # final_hub_y = list(self.manhattan_graph.nodes())[self.final_hub]['y']
         # start_hub_x = list(self.manhattan_graph.nodes())[self.start_hub]['x']
         # start_hub_y = list(self.manhattan_graph.nodes())[self.start_hub]['y']
-        
+
         # Create plot
-        plot = ox.plot_graph_folium(self.manhattan_graph.inner_graph,fit_bounds=True, weight=2, color="#333333")
+        plot = ox.plot_graph_folium(self.manhattan_graph.inner_graph, fit_bounds=True, weight=2, color="#333333")
 
-
-        #Place markers for the random hubs
+        # Place markers for the random hubs
         for hub in self.hubs:
             hub_node = self.manhattan_graph.get_node_by_nodeid(hub)
             hub_pos_x = hub_node['x']
             hub_pos_y = hub_node['y']
             popup = "HUB %d" % (hub)
-            folium.Marker(location=[hub_pos_y, hub_pos_x],popup=popup, icon=folium.Icon(color='orange', prefix='fa', icon='cube')).add_to(plot)
+            folium.Marker(location=[hub_pos_y, hub_pos_x], popup=popup,
+                          icon=folium.Icon(color='orange', prefix='fa', icon='cube')).add_to(plot)
 
         # Place markers for start, final and current position
-        folium.Marker(location=[final_hub_y, final_hub_x], icon=folium.Icon(color='red', prefix='fa', icon='flag-checkered')).add_to(plot)
-        folium.Marker(location=[start_hub_y, start_hub_x], popup = f"Pickup time: {self.pickup_time.strftime('%m/%d/%Y, %H:%M:%S')}", icon=folium.Icon(color='lightblue', prefix='fa', icon='caret-right')).add_to(plot)
-        folium.Marker(location=[current_pos_y, current_pos_x], popup = f"Current time: {self.time.strftime('%m/%d/%Y, %H:%M:%S')}", icon=folium.Icon(color='lightgreen', prefix='fa',icon='cube')).add_to(plot)
-        
+        folium.Marker(location=[final_hub_y, final_hub_x],
+                      icon=folium.Icon(color='red', prefix='fa', icon='flag-checkered')).add_to(plot)
+        folium.Marker(location=[start_hub_y, start_hub_x],
+                      popup=f"Pickup time: {self.pickup_time.strftime('%m/%d/%Y, %H:%M:%S')}",
+                      icon=folium.Icon(color='lightblue', prefix='fa', icon='caret-right')).add_to(plot)
+        folium.Marker(location=[current_pos_y, current_pos_x],
+                      popup=f"Current time: {self.time.strftime('%m/%d/%Y, %H:%M:%S')}",
+                      icon=folium.Icon(color='lightgreen', prefix='fa', icon='cube')).add_to(plot)
 
-        if(visualize_actionspace):
+        if (visualize_actionspace):
             for i, trip in enumerate(self.availableTrips()):
-                target_hub=self.manhattan_graph.get_node_by_nodeid(trip['target_hub'])
+                target_hub = self.manhattan_graph.get_node_by_nodeid(trip['target_hub'])
                 target_node_x = target_hub['x']
                 target_node_y = target_hub['y']
                 popup = "%s: go to node %d" % (i, trip['target_hub'])
-                folium.Marker(location=[target_node_y, target_node_x], popup = popup, tooltip=str(i)).add_to(plot)
-                ox.plot_route_folium(G=self.manhattan_graph.inner_graph,route=trip['route'],route_map=plot)
+                folium.Marker(location=[target_node_y, target_node_x], popup=popup, tooltip=str(i)).add_to(plot)
+                ox.plot_route_folium(G=self.manhattan_graph.inner_graph, route=trip['route'], route_map=plot)
         # Plot
         # pos_to_final = nx.shortest_path(self.manhattan_graph.inner_graph, self.manhattan_graph.get_nodeid_by_index(self.start_hub), self.manhattan_graph.get_nodeid_by_index(self.final_hub), weight="travel_time")
         # if(not len(pos_to_final)< 2):
 
         return plot
+
+
 class DeliveryState:
     DELIVERED_ON_TIME, DELIVERED_WITH_DELAY, NOT_DELIVERED, IN_DELIVERY = range(4)
-

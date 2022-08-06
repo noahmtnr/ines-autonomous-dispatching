@@ -1,36 +1,41 @@
+"""
+Wrapper Class for Abstraction of Benchmark and RL Agents
+Methods: file_read, read_orders, proceed_order
+"""
+
+# imports
 import warnings
+
 warnings.filterwarnings('ignore')
 warnings.filterwarnings('ignore', category=UserWarning)
 import sys
 import os
-from unittest import result
 
-sys.path.insert(0, "")
 from config.definitions import ROOT_DIR
+sys.path.insert(0, "")
 sys.path.append(os.path.join(ROOT_DIR, "Manhattan_Graph_Environment", "gym_graphenv"))
+
 from RandomAgent import RandomAgent
 from CostAgent import CostAgent
 from SharesAgent import SharesAgent
 from RainbowAgent import RainbowAgent
-from Manhattan_Graph_Environment.graphs.ManhattanGraph import ManhattanGraph
-from Manhattan_Graph_Environment.gym_graphenv.envs.GraphworldManhattan import GraphEnv, CustomCallbacks
 from PPOAgent import PPOAgent
 from DQNAgent import DQNAgent
 from BookownAgent import BookownAgent
 from SharesBookEndAgent import SharesBookEndAgent
-import numpy as np
 import pandas as pd
-import json
-import shutil
-import gym
 import pickle
-from datetime import datetime, timedelta
-import random
-import ray
-import warnings
 
 
+# class definition
 class BenchmarkWrapper:
+    """
+    Init Method of Class
+    :param agent_name: String
+        can be random, cost, Bookown, SharesBookEnd for a Benchmark Agent
+        can be DQN, PPO, rainbow for an RL Agent
+    : param env: Environment Object
+    """
 
     def __init__(self, agent_name, env):
         if (agent_name != None):
@@ -40,9 +45,16 @@ class BenchmarkWrapper:
         self.env = env
         self.manhattan_graph = self.env.get_Graph()
 
-    # noinspection PyMethodMayBeStatic
+    """
+    Reads the first X lines of an orders file.
+    The number of lines can be changed by adapting nrows when reading csv.
+    Method has no parameters.
+    :return: Pandas DataFrame containing orders
+    """
+
     def file_read(self):
 
+        # use if you want to test randomly generated orders which are saved in random_orders csv file
         """
         # for testing random orders
         if len(sys.argv) > 1:
@@ -54,6 +66,7 @@ class BenchmarkWrapper:
             orders = pd.read_csv(filepath, nrows=1)
         """
 
+        # use if you want to test specific orders which are saved in test_orders csv file
         # for testing specific test orders
         if len(sys.argv) > 1:
             first_arg = sys.argv[1]
@@ -65,6 +78,12 @@ class BenchmarkWrapper:
 
         return orders
 
+    """
+    Reads the lines of the file and itemizes it into nodes and timestamps of the order.
+    Method has no parameters.
+    :return: Array containing the orders, each as dictionary.
+    """
+
     def read_orders(self):
         reward_list = []
         orders = self.file_read()
@@ -74,9 +93,17 @@ class BenchmarkWrapper:
             reward_list.append(self.proceed_order(order))
         return reward_list
 
+    """
+    Initializes an Agent depending on the name given.
+    :param order: dictionary containing the current order.
+    :return: dictionary with results of testing of the agent.
+    """
+
     def proceed_order(self, order):
+        # output the current order
         print("Current Order: ", order)
 
+        # configures the environment
         # manhattan_graph = ManhattanGraph(filename='simple',hubs=120)
         pick_up_hub_index = self.manhattan_graph.get_hub_index_by_nodeid(order.get('pickup_node'))
         delivery_hub_index = self.manhattan_graph.get_hub_index_by_nodeid(order.get('delivery_node'))
@@ -90,9 +117,9 @@ class BenchmarkWrapper:
         with open('env_config.pkl', 'wb') as f:
             pickle.dump(env_config, f)
 
-
         reward_list = []
 
+        # selects an agent depending on the name
         for i in range(1):
             if self.name == "random":
                 print("random")
@@ -103,26 +130,30 @@ class BenchmarkWrapper:
             elif self.name == "DQN":
                 print("DQN")
                 dqn_Agent = DQNAgent(self.env)
-                reward_list = dqn_Agent.run_one_episode(reward_list,env_config)
+                reward_list = dqn_Agent.run_one_episode(reward_list, env_config)
             elif self.name == "PPO":
                 print("PPO")
                 ppo_Agent = PPOAgent(self.env)
-                reward_list = ppo_Agent.run_one_episode(reward_list,env_config)
+                reward_list = ppo_Agent.run_one_episode(reward_list, env_config)
             elif self.name == "Rainbow":
                 print("Rainbow")
                 Rainbow_Agent = RainbowAgent(self.env)
                 reward_list = Rainbow_Agent.run_one_episode(reward_list, env_config)
             elif self.name == "Shares":
                 print("Shares")
-                reward_list = SharesAgent.run_one_episode(self.env,reward_list, env_config)
+                reward_list = SharesAgent.run_one_episode(self.env, reward_list, env_config)
             elif self.name == "Bookown":
                 print("Bookown")
                 reward_list = BookownAgent.run_one_episode(self.env, reward_list, env_config)
             elif self.name == "SharesBookEnd":
                 print("Shares with Book Own at End")
-                reward_list = SharesBookEndAgent.run_one_episode(self.env,reward_list,env_config)
+                reward_list = SharesBookEndAgent.run_one_episode(self.env, reward_list, env_config)
         return reward_list
 
+
+"""
+Main-Method for testing the BenchmarkWrapper.
+"""
 """
 def main():
     # benchmark = BenchmarkWrapper("random")
