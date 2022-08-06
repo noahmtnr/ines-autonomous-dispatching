@@ -126,11 +126,7 @@ files:
 
 For training and testing we used a MySQL database for retrieving our hubs and trip data. The MySQL database can be
 accessed either through a database installed on the local machine or through a remote database in the azure cloud. To
-inspect the schemas, a tool like MySQLWorkbench can help. To connect, use the following credentials:
-host="mannheimprojekt.mysql.database.azure.com"
-user="mannheim"
-password="Projekt2022"
-database="mannheimprojekt"
+inspect the schemas, a tool like MySQLWorkbench can help. To connect, use the login credentials you can find in the DatabaseConnection.py file.
 
 The database consists of Tables:
 
