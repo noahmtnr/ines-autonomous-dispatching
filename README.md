@@ -67,8 +67,6 @@ displayed on a dashboard (more on that in section "Instructions for Testing").
 This section delineates basic terms and principles, as well as a tutorial for installing all required libraries and
 systems. It serves to support the understanding of the following sections and the execution of the system.
 
-### Term Definitions
-
 ### Tutorials for Required Installations
 
 Donwload Anaconda: https://www.anaconda.com/products/individual
