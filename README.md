@@ -65,7 +65,7 @@ displayed on a dashboard (more on that in section "Instructions for Testing").
 ## Foundation/Pre-Work
 
 This section delineates basic terms and principles, as well as a tutorial for installing all required libraries and
-systems. It serves to support the understanding of the following sections and the execution of the system.
+systems. It serves to support the understanding of the repository and the execution of the system.
 
 ### Tutorials for Required Installations
 
@@ -116,7 +116,7 @@ files:
 
 **doc** - a folder with additional documentation
 
-**hubs definition** – a folder with files that were used to determine the location of hubs
+**hubs_definition** – a folder with files that were used to determine the location of hubs
 
 **preprocessing**  - a folder with files used to preprocess taxi trips and generate orders
 
