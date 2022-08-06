@@ -8,13 +8,11 @@ import gym
 import modin.pandas as pd
 import numpy as np
 import osmnx as ox
-# from mpl_toolkits.basemap import Basemap
 import plotly.express as px
 from gym import spaces
 
 RAY_ENABLE_MAC_LARGE_OBJECT_STORE = 1.
 sys.path.insert(0, "")
-# from config.definitions import ROOT_DIR
 ROOT_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
 from typing import Dict
 

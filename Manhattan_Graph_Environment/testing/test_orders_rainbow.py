@@ -2,15 +2,14 @@
 Test File for creating orders and testing the rainbow agent on the orders.
 """
 
-# imports
 import csv
 import sys
-
 sys.path.insert(0, "")
-import os
 
+import os
 os.environ['HDF5_DISABLE_VERSION_CHECK'] = '2'
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
+
 import pickle
 import warnings
 

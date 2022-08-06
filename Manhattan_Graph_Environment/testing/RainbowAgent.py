@@ -3,10 +3,9 @@ Rainbow Agent.
 Is an extended DQN.
 """
 
-# imports
 import sys
-
 sys.path.insert(0, "")
+
 import os
 from datetime import datetime, timedelta
 import warnings

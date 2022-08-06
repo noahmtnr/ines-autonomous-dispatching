@@ -11,10 +11,10 @@ warnings.filterwarnings('ignore', category=UserWarning)
 import sys
 import os
 
-sys.path.insert(0, "")
 from config.definitions import ROOT_DIR
-
+sys.path.insert(0, "")
 sys.path.append(os.path.join(ROOT_DIR, "Manhattan_Graph_Environment", "gym_graphenv"))
+
 from RandomAgent import RandomAgent
 from CostAgent import CostAgent
 from SharesAgent import SharesAgent

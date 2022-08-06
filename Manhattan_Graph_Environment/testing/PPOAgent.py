@@ -2,12 +2,8 @@
 PPO (Proximal Policy Optimization) Agent.
 """
 
-# imports
-
 import sys
-
 sys.path.insert(0, "")
-# print("System path",sys.path)
 
 import os
 from datetime import datetime, timedelta
