@@ -59,7 +59,7 @@ class GraphEnv(gym.Env):
 
         self.hubs = manhattan_graph.hubs
 
-        self.trips = self.DB.getAvailableTrips(DB_LOWER_BOUNDARY, DB_UPPER_BOUNDARY)
+        self.trips = self.DB.fetch_all_available_trips(DB_LOWER_BOUNDARY, DB_UPPER_BOUNDARY)
         # print(f"Initialized with {len(self.trips)} taxi rides within two weeks")
 
         self.state = None
@@ -581,7 +581,7 @@ class GraphEnv(gym.Env):
                     # trip_target_node = grid['dropoff_node'][index]
                     # isNotFinalNode = str(tupel_position) != str(trip_target_node)
 
-                    route, times = self.DB.getRouteFromTrip(tripId)
+                    route, times = self.DB.fetch_route_from_trip(tripId)
                     isNotFinalNode = True
                     if isNotFinalNode:
                         index_in_route = route.index(position)

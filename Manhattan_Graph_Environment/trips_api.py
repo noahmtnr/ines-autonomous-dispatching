@@ -19,12 +19,12 @@ from datetime import datetime
 
 # creating a Flask app
 mydb = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="rootroot",
-    database="mannheimprojekt",
-    auth_plugin='mysql_native_password')
-mycursor = mydb.cursor()
+        host="mannheimprojekt.mysql.database.azure.com",
+        user="mannheim",
+        password="Projekt2022",
+        database="mannheimprojekt",
+        auth_plugin='mysql_native_password'
+    )
 
 
 def getTrips(start_node, start_date, end_date):
@@ -112,40 +112,6 @@ def search():
     print(DataPreProcessing.get_coordinates_of_node(42444043))
     return buildFolium(lines)
 
-
-# @app.route('/search', methods=['GET'])
-# def search():
-#     answear = {}
-
-#     args = request.args
-#     start_node_long = args.get('pickup_long')
-#     start_node_lat = args.get('pickup_lat')
-#     start_date = args.get('start_date')
-
-
-#     new_start_node_long = float(start_node_long or 0)
-#     # print(new_start_node_long)
-#     new_start_node_lat = float(start_node_lat or 0) 
-#     # print(new_start_node_lat)
-#     new_start_node = DataPreProcessing.getNearestNodeId(new_start_node_long, new_start_node_lat)
-#     # print(new_start_node)
-
-#     new_start_date = urllib.parse.unquote(start_date)
-
-#     start_date_format = datetime.strptime(new_start_date, "%Y-%m-%d %H:%M:%S")
-#     end_date_format = start_date_format + timedelta(minutes=10)
-#     # print(new_start_node, new_start_date, end_date_format)
-#     myList = getTrips(new_start_node, new_start_date, end_date_format)
-#     route = []
-#     times = []
-#     for trip in myList:
-#       route, times = getRouteFromTrip(trip)
-#       print(type(times[0]))
-#       answear[trip] = {'route': route, 'timestamps': times}
-#     lines = buildLines(route, times)
-
-#     return buildFolium(lines)
-
 @app.route('/order', methods=['GET'])
 def addOrder():
     data = request.args
@@ -229,23 +195,21 @@ def buildLines(routes, timestamps):
         print("Helo", [timestamps[i], timestamps[i + 1]], type(timestamps[i]))
         element["color"] = "blue"
         list_elements.append(element)
-    # print(list_elements)
     return list_elements
 
 
 @app.route('/addTrip', methods=['POST'])
 def addTrip():
-    # content_type = request.headers.get('Content-Type')
-
     data = request.form
     pickup_longitude = double(data.get('pickup_long') or 0)
     pickup_latitude = double(data.get('pickup_lat') or 0)
     dropoff_longitude = double(data.get('dropoff_long') or 0)
     dropoff_latitude = double(data.get('dropoff_lat') or 0)
-    # print(pickup_longitude, pickup_latitude, dropoff_longitude, dropoff_latitude)
     pickup_datetime = datetime.strptime(data.get('pickup_date') or "", "%Y-%m-%d %H:%M:%S")
     dropoff_datetime = datetime.strptime(data.get('dropoff_date') or "", "%Y-%m-%d %H:%M:%S")
+
     trip_duration = (dropoff_datetime - pickup_datetime).total_seconds()
+
     route, timestamps, route_length, pickup_node, dropoff_node = DataPreProcessing.map_oneRoute_to_oneTrip_with_timestamps(
         pickup_longitude, pickup_latitude, dropoff_longitude, dropoff_latitude, pickup_datetime, dropoff_datetime,
         trip_duration)
@@ -256,7 +220,6 @@ def addTrip():
                     (float(data.get('total_price') or 0)))
     timestamps = timestamps.replace(': \'', ' : \'')
     timestamps = timestamps.strip("{}")
-    # print("Timestamps: ", timestamps)
     insertIntoTripsRoutes(data.get('id'), timestamps)
     return "Success"
 

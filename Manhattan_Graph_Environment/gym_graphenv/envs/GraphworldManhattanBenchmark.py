@@ -59,14 +59,14 @@ class GraphEnv(gym.Env):
         self.distance_matrix = None
 
         self.DB = DBConnection()
-        hubs = self.DB.getAllHubs()
+        hubs = self.DB.fetch_all_hubs()
         manhattan_graph = ManhattanGraph(filename='simple', hubs=hubs)
         # manhattan_graph.setup_trips(self.START_TIME)
         self.manhattan_graph = manhattan_graph
 
         self.hubs = manhattan_graph.hubs
 
-        self.trips = self.DB.getAvailableTrips(DB_LOWER_BOUNDARY, DB_UPPER_BOUNDARY)
+        self.trips = self.DB.fetch_all_available_trips(DB_LOWER_BOUNDARY, DB_UPPER_BOUNDARY)
         print(f"Initialized with {len(self.hubs)} hubs and {len(self.trips)} taxi rides within two weeks")
         # print(f"Initialized with {len(self.hubs)} hubs")
 
@@ -535,7 +535,7 @@ class GraphEnv(gym.Env):
             if (nodeId == position):
                 if timestamp <= end_timestamp and timestamp >= start_timestamp:
 
-                    route, times = self.DB.getRouteFromTrip(tripId)
+                    route, times = self.DB.fetch_route_from_trip(tripId)
                     isNotFinalNode = True
                     if isNotFinalNode:
                         index_in_route = route.index(position)

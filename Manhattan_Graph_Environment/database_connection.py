@@ -28,7 +28,7 @@ class DBConnection:
         print("Using remote db")
         self.mycursor = self.mydb.cursor()
 
-    def insertIntoTripsRoutes(self, tripId, listTrips):
+    def insert_into_trips_routes(self, tripId, listTrips):
         """ Helper function to fill trips_routes table
 
         Args:
@@ -43,10 +43,10 @@ class DBConnection:
             self.mycursor.execute(sql, val)
         self.mydb.commit()
 
-    def insertIntoTrips(self, id, vendor_id, pickup_datetime, dropoff_datetime, passenger_count, pickup_longitude,
-                        pickup_latitude, dropoff_longitude, dropoff_latitude, store_and_fwd_flag, trip_duration,
-                        pickup_node, dropoff_node, pickup_distance, dropoff_distance, route_length, provider,
-                        total_price):
+    def insert_into_trips(self, id, vendor_id, pickup_datetime, dropoff_datetime, passenger_count, pickup_longitude,
+                          pickup_latitude, dropoff_longitude, dropoff_latitude, store_and_fwd_flag, trip_duration,
+                          pickup_node, dropoff_node, pickup_distance, dropoff_distance, route_length, provider,
+                          total_price):
         """ Helper function to write trip into trips table"""
 
         sql = "INSERT INTO TRIPS VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
@@ -56,7 +56,7 @@ class DBConnection:
         self.mycursor.execute(sql, val)
         self.mydb.commit()
 
-    def getAvailableTripsAtNode(self, start_node, start_date, end_date):
+    def fetch_available_trips_at_node(self, start_node, start_date, end_date):
         """Fetches all available trips at a node for a given time window defined by start and end timestamps. Still missing a mapping function that maps the query to the correct partition of the prefiltered_trips_view. Currently only a few 2 weeks windows can be queried (see README>Database).
 
         Args:
@@ -76,10 +76,10 @@ class DBConnection:
 
         result = self.mycursor.fetchall()
         executionTime = (time.time() - startTime)
-        print('DB: getAvailableTrips() Execution time: ' + str(executionTime) + ' seconds')
+        print('DB: fetch_all_available_trips() Execution time: ' + str(executionTime) + ' seconds')
         return result
 
-    def getAvailableTrips(self, start_date, end_date):
+    def fetch_all_available_trips(self, start_date, end_date):
         """Fetches all available trips for a given time window defined by start and end timestamps. Still missing a mapping function that maps the query to the correct partition of the prefiltered_trips_view. Currently only a few 2 weeks windows can be queried (see README>Database).
 
         Args:
@@ -99,11 +99,11 @@ class DBConnection:
 
         result = self.mycursor.fetchall()
         executionTime = (time.time() - startTime)
-        print('DB: getAvailableTrips() Execution time: ' + str(executionTime) + ' seconds')
+        print('DB: fetch_all_available_trips() Execution time: ' + str(executionTime) + ' seconds')
         print("loaded " + str(len(result)) + " trips")
         return result
 
-    def getRouteFromTrip(self, trip_id):
+    def fetch_route_from_trip(self, trip_id):
         """Gets detailed route information for a given trip_id like pickup, dropoff coordinates, passenger count, total price.
 
         Args:
@@ -122,13 +122,12 @@ class DBConnection:
             nodes_list.append(result[0])
             time_list.append(result[1].strftime("%Y-%m-%d %H:%M:%S"))
         executionTime = (time.time() - startTime)
-        # print('DB: getRouteFromTrip() Execution time: ' + str(executionTime) + ' seconds')
+        # print('DB: fetch_route_from_trip() Execution time: ' + str(executionTime) + ' seconds')
         return nodes_list, time_list
 
-    def populateDatabase(self):
+    def populate_database(self):
         """Reads raw trips from file and writes them into trips table
         """
-        self.initialiazeTables()
         full_df = pd.read_csv('rl/Graph_Environment/trips_kaggle_providers.csv')
 
         # data for each trip
@@ -138,21 +137,21 @@ class DBConnection:
              'pickup_node', 'dropoff_node', 'pickup_distance', 'dropoff_distance', 'route_length', 'provider',
              'total_price']]
 
-        trips_df.apply(lambda row: self.insertIntoTrips(row['id'], row['vendor_id'], row['pickup_datetime'],
-                                                        row['dropoff_datetime'], row['passenger_count'],
-                                                        row['pickup_longitude'], row['pickup_latitude'],
-                                                        row['dropoff_longitude'], row['dropoff_latitude'],
-                                                        row['store_and_fwd_flag'], row['trip_duration'],
-                                                        row['pickup_node'], row['dropoff_node'], row['pickup_distance'],
-                                                        row['dropoff_distance'], row['route_length'],
-                                                        row['provider'], row['total_price']), axis=1)
+        trips_df.apply(lambda row: self.insert_into_trips(row['id'], row['vendor_id'], row['pickup_datetime'],
+                                                          row['dropoff_datetime'], row['passenger_count'],
+                                                          row['pickup_longitude'], row['pickup_latitude'],
+                                                          row['dropoff_longitude'], row['dropoff_latitude'],
+                                                          row['store_and_fwd_flag'], row['trip_duration'],
+                                                          row['pickup_node'], row['dropoff_node'], row['pickup_distance'],
+                                                          row['dropoff_distance'], row['route_length'],
+                                                          row['provider'], row['total_price']), axis=1)
         # trip with route and timestamps
         rest_df = full_df[['id', 'route_timestamps']]
         rest_df['route_timestamps'] = rest_df['route_timestamps'].apply(lambda x: x.replace(': \'', ' : \''))
         rest_df['route_timestamps'] = (rest_df['route_timestamps'].apply(lambda x: x.strip("{}")))
-        rest_df.apply(lambda row: self.insertIntoTripsRoutes(row['id'], row['route_timestamps']), axis=1)
+        rest_df.apply(lambda row: self.insert_into_trips_routes(row['id'], row['route_timestamps']), axis=1)
 
-    def writeHubsToDB(self, hubs):
+    def write_hubs_to_db(self, hubs):
         """Helper function to write into hubs table.
 
         Args:
@@ -165,7 +164,7 @@ class DBConnection:
 
         self.mydb.commit()
 
-    def getAllHubs(self):
+    def fetch_all_hubs(self):
         """Retrieves all hubs
 
         Returns:

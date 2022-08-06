@@ -50,14 +50,14 @@ class GraphEnv(gym.Env):
         self.distance_matrix = None
 
         self.DB = DBConnection()
-        hubs = self.DB.getAllHubs()
+        hubs = self.DB.fetch_all_hubs()
         manhattan_graph = ManhattanGraph(filename='simple', hubs=hubs)
         self.manhattan_graph = manhattan_graph
 
         self.hubs = manhattan_graph.hubs
         self.n_hubs = len(hubs)
 
-        self.trips = self.DB.getAvailableTrips(DB_LOWER_BOUNDARY, DB_UPPER_BOUNDARY)
+        self.trips = self.DB.fetch_all_available_trips(DB_LOWER_BOUNDARY, DB_UPPER_BOUNDARY)
         print(f"Initialized with {len(self.hubs)} hubs and {len(self.trips)} taxi rides within two weeks")
 
         self.state = None
@@ -145,8 +145,6 @@ class GraphEnv(gym.Env):
                 pickup_day = np.random.randint(low=1, high=14)
                 pickup_hour = np.random.randint(24)
                 pickup_minute = np.random.randint(60)
-                # start_time = datetime(2016,1,pickup_day,pickup_hour,pickup_minute,0).strftime('%Y-%m-%d %H:%M:%S')
-                # self.pickup_time = datetime.strptime(self.START_TIME,'%Y-%m-%d %H:%M:%S')
                 self.pickup_time = datetime(2016, 1, pickup_day, pickup_hour, pickup_minute, 0)
                 self.time = self.pickup_time
                 self.total_travel_time = 0
@@ -477,7 +475,7 @@ class GraphEnv(gym.Env):
         for tripId, nodeId, timestamp in trips:
             if (nodeId == position):
                 if timestamp <= end_timestamp and timestamp >= start_timestamp:
-                    route, times = self.DB.getRouteFromTrip(tripId)
+                    route, times = self.DB.fetch_route_from_trip(tripId)
                     isNotFinalNode = True
                     if isNotFinalNode:
                         index_in_route = route.index(position)
