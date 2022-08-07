@@ -24,9 +24,9 @@ In today's delivery systems, customers order at a store and the store then uses 
 delivery provider (e.g., Lieferando for food delivery) to deliver the order within a certain deadline to the customer.
 While these delivery services provide a fast and reliable delivery for the customers, they come with multiple issues.
 They cause a high amount of commercial trips, lead to more vehicles on the roads and require parking space, which is
-spares in big cities. The deliveries also increase environmental pollution due to their emissions. For small local
-stores, using an own or external delivery provider might also proof to be too expensive, but not offering delivery
-services could be critical to the store's success as fast online trade is becoming more and more important. In order to
+sparse in big cities. The deliveries also increase environmental pollution due to their emissions. For small local
+stores, using their own or external delivery provider might also prove to be too expensive. However, offering delivery
+services could be crucial for the store's success as fast online trade is becoming more and more important. In order to
 overcome these problems, an alternative to traditional delivery systems is needed.
 
 ### Goals
@@ -49,14 +49,13 @@ mostly travelled nodes by the taxis. The graph provides the environment for deli
 location of delivery are put in as coordinates, which are mapped to the nearest node, which then is mapped to the
 nearest hub. At the current status, we only provide hub-to-hub delivery, which is why this mapping needs to be done.
 Having the mapping of start and final position on the graph, we initialize the time with the current time and keep track
-of the deadline (24 hours) to which the box has to be delivered, otherwise the delivery is conceived as failed. Having
+of the deadline (by default 24 hours after start) to which the box has to be delivered, otherwise the delivery is conceived as failed. Having
 the current position and time as input, we aim to push the box into the direction of the final hub by only taking
 available shared rides. The available rides are provided from the historical taxi trip data of the city of New York,
 which was pre-processed and saved into a database. The database is efficiently accessed via SQL views and queries to get
 the available trips (and respective timestamps). Having access to the available trips at a certain hub at a certain
 time, the box autonomously decides whether to wait, take a trip to some hub, or, in case the deadline is only 2 hours
-away, book an own trip directly to the final hub. For this, the box is implemented as a Reinforcement Learning Agent (
-more on that in section "Term Definitions"). It is trained on the historical trip data and its performance in this
+away, book an own trip directly to the final hub. For this, the box is implemented as a Reinforcement Learning Agent (more on that in section "Environment and Reinforcement Learning"). It is trained on the historical trip data and its performance in this
 training is measured with multiple metrics (more on that in section "Instructions for Training"). In order to finally
 test the performance on new random and specific custom orders (which we generate), an agent can be compared with
 benchmarks and other RL agents regarding multiple metrics and the agent's performance and routes taken are visually
@@ -100,19 +99,19 @@ files:
 
 - **training** is a folder with files to run training of agents
 
-**archive** – contains old files that are not anymore in use
+**archive** – contains old files that are not in use anymore 
 
-**config** – a folder with necessary configuration
+**config** – a folder with necessary configurations
 
 **data** – a folder with data:
 
-- **graphs** contains graphml files for representing the New York City
+- **graphs** contains graphml files for representing New York City
 
 - **hubs**  contains files with coordiantes of hubs
 
 - **others**  contains other data files
 
-- **trips** contains data files with Taxi trips
+- **trips** contains data files with taxi trips
 
 **doc** - a folder with additional documentation
 
@@ -120,7 +119,7 @@ files:
 
 **preprocessing**  - a folder with files used to preprocess taxi trips and generate orders
 
-**tmp** – a folder that contains checkpoints that can be used for testing the agent
+**tmp** – a folder that contains checkpoints from training that can be used for testing the agent
 
 ## Database
 
@@ -153,7 +152,7 @@ receives after each step.
 
 ### Action Space
 
-We modelled action space to be a one-hot-encoded vector of the length of the number of hubs. It illustrates that the
+We modelled the action space to be a vector of the length of the number of hubs. It illustrates that the
 agent can move to every other hub and itself (by waiting). The action taken by the agent is always a number that is
 equal to the number of the hub it is brought to.
 
@@ -166,9 +165,9 @@ Our observation space consists of the following elements:
 - ‘final_hub’ is a one-hot-encoded vector that tells the agent which is the destination hub.
 - ‘distinction’ is a binary vector of the length of action space. Each value in it shows what kind of action it is. If
   there is -1, it means that it is ‘book own ride’, 0 – ‘wait’ and 1 – ‘take a shared ride’.
-- ‘allow_bookown’ is a vector of length 2 which indicates whether ‘book own rode’ is at all allowed.
+- ‘allow_bookown’ is a vector of length 2 which indicates whether ‘book own ride’ is allowed at the current time step.
 
-Observation space is updated after each step as most information changes then.
+The observation space (state) is updated after each step as most information changes then.
 
 ### RL Methods
 
@@ -189,7 +188,7 @@ For the training of our agent, we used the following methods:
 
 There are 5 different files for training:
 
-- custom_actions.py: instantiates environment before executing custom or random actions (no training, more for
+- custom_actions.py: instantiates the environment before executing custom or random actions (no training, more for
   debugging)
 - train_DQN.py: run to train agent using DQN algorithm
 - train_PPO.py: run to train agent using PPO algorithm
@@ -240,15 +239,15 @@ training performance:
 - *count_steps_mean* : Average number of steps the agent takes for one order.
 - *n_trained_episodes*: Number of episodes the agent trained.
 
-**Delivered and Not Deliver.**
+**Delivered and Not Delivered.**
 
-- *count_terminated* : Number of orders that was terminated (interrupted because bookown was made).
-- *count_delivered_on_time* : Number of orders that was delivered within the pre-specified period of delivery.
-- *count_delivered_with_delay* : Number of orders that was deliverd within 12 hours after the pre-specified period of
+- *count_terminated* : Number of orders terminated (interrupted because bookown was made).
+- *count_delivered_on_time* : Number of orders delivered within the pre-specified period of delivery.
+- *count_delivered_with_delay* : Number of orders deliverd within 12 hours after the pre-specified period of
   delivery.
-- *count_not_deliverd* : Number of orders that was not delivered within the pre-specified period of delivery (plus 12
+- *count_not_deliverd* : Number of orders not delivered within the pre-specified period of delivery (plus 12
   hours).
-- *share_delivered_on_time* : Ratio of orders that was delivered on time to the total number of orders.
+- *share_delivered_on_time* : Ratio of orders delivered on time to the total number of orders.
 
 **Available and Useful Trips.**
 Available equals the shared trips that were available to an agent in one run. Available useful equals the useful shared
@@ -269,8 +268,8 @@ trips available. Useful means that taking the respective trip reduces the remain
 
 **Reward**
 
-- *mean_reward* : Average reward an agent received for the episode.
-- *max_reward* : Maximum reward an agent received for the episode.
+- *mean_reward* : Average reward an agent received during the iteration.
+- *max_reward* : Maximum reward an agent received during the iteration.
 
 **Bookowns, Shares and Waits.**
 
